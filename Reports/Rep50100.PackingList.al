@@ -342,6 +342,8 @@ report 50100 "NTS Packing List"
                         }
                         column(LineCount; LineCount)
                         { }
+                        column(SerialLotNo; SerialLotNo)
+                        { }
                         dataitem(AsmLoop; "Integer")
                         {
                             DataItemTableView = SORTING(Number);
@@ -757,7 +759,7 @@ report 50100 "NTS Packing List"
         PONumberCaptionLbl: Label 'CUSTOMER P/O #';
         SalesPersonCaptionLbl: Label 'SalesPerson';
         ShipCaptionLbl: Label 'Ship to Address';
-        ShipmentCaptionLbl: Label 'Packing List';
+        ShipmentCaptionLbl: Label 'PACKING LIST';
         ShipmentNumberCaptionLbl: Label 'SHIPMENT #';
         ShipmentDateCaptionLbl: Label 'ORDER DATE';
         PageCaptionLbl: Label 'Page:';
@@ -791,6 +793,7 @@ report 50100 "NTS Packing List"
         QuantityCaptionLbl: Label 'Quantity';
         SerialNoCaptionLbl: Label 'Serial No.';
         LotNoCaptionLbl: Label 'Lot No.';
+        SerialLotNo: Text;
         NoCaptionLbl: Label 'No.';
         TempTrackingSpecBuffer: Record "Tracking Specification" temporary;
         LotNo: Text;
@@ -834,6 +837,14 @@ report 50100 "NTS Packing List"
         TempTrackingSpecBuffer.DeleteAll();
 
         ItemTrackDocMgmt.RetrieveDocumentItemTracking(TempTrackingSpecBuffer, "Sales Shipment Header"."No.", DATABASE::"Sales Shipment Header", 0);
+        Clear(SerialLotNo);
+        if TempTrackingSpecBuffer.FindSet() then
+            repeat
+                if TempTrackingSpecBuffer."Serial No." <> '' then
+                    SerialLotNo += TempTrackingSpecBuffer."Serial No."
+                else
+                    SerialLotNo += TempTrackingSpecBuffer."Lot No.";
+            until TempTrackingSpecBuffer.Next() = 0;
     end;
 }
 
