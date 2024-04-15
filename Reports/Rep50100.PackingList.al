@@ -395,6 +395,9 @@ report 50100 "NTS Packing List"
                             { }
                             column(Lot_Serial_Caption; Lot_Serial_CaptionLbl)
                             { }
+                            column(ExpirationDate; TempTrackingSpecBuffer."Expiration Date")
+                            { }
+
                             trigger OnAfterGetRecord()
                             begin
                                 if Number = 1 then begin
