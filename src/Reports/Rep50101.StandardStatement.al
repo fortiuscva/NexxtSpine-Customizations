@@ -1,7 +1,8 @@
 report 50101 "NTS Standard Statement"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = './src/Reports/NTSCustomerStatement.rdl';
+    RDLCLayout = './src/Reports/Layout/NTSCustomerStatement.rdl';
+
     Caption = 'NTS Customer Statement';
     ApplicationArea = all;
     UsageCategory = Administration;
@@ -258,6 +259,10 @@ report 50101 "NTS Standard Statement"
                         column(CurrencyCode3; CurrencyCode3)
                         {
                         }
+                        column(CurrencySymbol3; Currency.Symbol)
+                        {
+
+                        }
                         column(CustBalance_CustLedgEntryHdr; CustBalance)
                         {
                         }
@@ -410,7 +415,7 @@ report 50101 "NTS Standard Statement"
                                     CurrencyCode3 := GLSetup."LCY Code"
                                 end else
                                     CurrencyCode3 := TempCurrency2.Code;
-
+                                if Currency.Get(CurrencyCode3) then;
                                 IsFirstPrintLine := true;
                             end;
                         }
@@ -720,8 +725,12 @@ report 50101 "NTS Standard Statement"
                         column(AgingDateHeader4; AgingDateHeader4)
                         {
                         }
+                        column(CurrencySymbol; Currency.Symbol)
+                        {
 
+                        }
                         trigger OnAfterGetRecord()
+
                         begin
                             if Number = 1 then begin
                                 ClearCompanyPicture();
@@ -733,6 +742,9 @@ report 50101 "NTS Standard Statement"
                             AgingBandCurrencyCode := TempAgingBandBuf."Currency Code";
                             if AgingBandCurrencyCode = '' then
                                 AgingBandCurrencyCode := GLSetup."LCY Code";
+                            if AgingBandCurrencyCode <> '' then
+                                if Currency.Get(AgingBandCurrencyCode) then;
+
                         end;
                     }
 
@@ -1058,6 +1070,8 @@ report 50101 "NTS Standard Statement"
 
     var
         GLSetup: Record "General Ledger Setup";
+
+        Currency: Record Currency;
         SalesSetup: Record "Sales & Receivables Setup";
         SavedCompanyInfo: Record "Company Information";
         SavedCompanyInfo1: Record "Company Information";
@@ -1120,7 +1134,7 @@ report 50101 "NTS Standard Statement"
         DuePostingDateLbl: Label 'Due Date,Posting Date';
         WriteoffsLbl: Label 'Application Writeoffs';
         PeriodSeparatorLbl: Label '-%1', Comment = 'Negating the period length: %1 is the period length';
-        StatementCaptionLbl: Label 'Statement';
+        StatementCaptionLbl: Label 'STATEMENT';
         PhoneNo_CompanyInfoCaptionLbl: Label 'Phone No.';
         VATRegNo_CompanyInfoCaptionLbl: Label 'VAT Registration No.';
         GiroNo_CompanyInfoCaptionLbl: Label 'Giro No.';
