@@ -1,8 +1,8 @@
-report 50101 "NTS NT Standard Statement"
+report 50101 "NTS Standard Statement"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './Reports/NTSCustomerStatement.rdl';
-    Caption = 'Customer Statement';
+    Caption = 'NTS Customer Statement';
     ApplicationArea = all;
     UsageCategory = Administration;
 
