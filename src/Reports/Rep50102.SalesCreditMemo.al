@@ -1,7 +1,7 @@
 report 50102 "NTS Sales Credit Memo"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = './Reports/NTSSalesCreditMemo.rdl';
+    RDLCLayout = './Src/Reports/NTSSalesCreditMemo.rdl';
     Caption = 'NTS Sales Credit Memo';
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;

@@ -1,7 +1,7 @@
 report 50100 "NTS Packing List"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = './Reports/PackingList.rdl';
+    RDLCLayout = './src/Reports/PackingList.rdl';
     Caption = 'Packing List';
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;
