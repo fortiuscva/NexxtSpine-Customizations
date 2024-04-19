@@ -4,7 +4,7 @@ pageextension 50149 "NTS Posted Sales Invoice Ext" extends "Posted Sales Invoice
     {
         addafter("Order No.")
         {
-            field("NTS Promised Delivery Date"; Rec."NTS Requested Delivery Date")
+            field("NTS Requested Delivery Date"; Rec."NTS Requested Delivery Date")
             {
                 ToolTip = 'Requested Delivery Date';
                 ApplicationArea = all;
