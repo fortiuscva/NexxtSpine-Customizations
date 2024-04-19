@@ -1,7 +1,8 @@
 report 50102 "NTS Sales Credit Memo"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = './Src/Reports/NTSSalesCreditMemo.rdl';
+    RDLCLayout = './src/Reports/Layout/NTSSalesCreditMemo.rdl';
+
     Caption = 'NTS Sales Credit Memo';
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;
@@ -17,8 +18,6 @@ report 50102 "NTS Sales Credit Memo"
             column(No_SalesCrMemoHeader; "No.")
             {
             }
-
-
             dataitem("Sales Cr.Memo Line"; "Sales Cr.Memo Line")
             {
                 DataItemLink = "Document No." = field("No.");
