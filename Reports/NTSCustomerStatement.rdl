@@ -27,6 +27,36 @@
         <Field Name="AccountNo">
           <DataField>AccountNo</DataField>
         </Field>
+        <Field Name="Total_Caption2">
+          <DataField>Total_Caption2</DataField>
+        </Field>
+        <Field Name="DueDateCaption">
+          <DataField>DueDateCaption</DataField>
+        </Field>
+        <Field Name="SurgeryDateLbl">
+          <DataField>SurgeryDateLbl</DataField>
+        </Field>
+        <Field Name="DocumentLbl">
+          <DataField>DocumentLbl</DataField>
+        </Field>
+        <Field Name="PurchaseOrderNoLbl">
+          <DataField>PurchaseOrderNoLbl</DataField>
+        </Field>
+        <Field Name="OriginalAmtLbl">
+          <DataField>OriginalAmtLbl</DataField>
+        </Field>
+        <Field Name="CurrentBalanceLbl">
+          <DataField>CurrentBalanceLbl</DataField>
+        </Field>
+        <Field Name="AccountNoLbl">
+          <DataField>AccountNoLbl</DataField>
+        </Field>
+        <Field Name="PaymentTermsLbl">
+          <DataField>PaymentTermsLbl</DataField>
+        </Field>
+        <Field Name="StatementDateLbl">
+          <DataField>StatementDateLbl</DataField>
+        </Field>
         <Field Name="CompanyPicture">
           <DataField>CompanyPicture</DataField>
         </Field>
@@ -107,9 +137,6 @@
         </Field>
         <Field Name="EndDate">
           <DataField>EndDate</DataField>
-        </Field>
-        <Field Name="HeaderText7">
-          <DataField>HeaderText7</DataField>
         </Field>
         <Field Name="HeaderText6">
           <DataField>HeaderText6</DataField>
@@ -212,9 +239,6 @@
         </Field>
         <Field Name="CompanyLegalOffice_Lbl">
           <DataField>CompanyLegalOffice_Lbl</DataField>
-        </Field>
-        <Field Name="Total_Caption2">
-          <DataField>Total_Caption2</DataField>
         </Field>
         <Field Name="Currency2Code_CustLedgEntryHdr">
           <DataField>Currency2Code_CustLedgEntryHdr</DataField>
@@ -472,7 +496,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>7.32669cm</Height>
+                  <Height>8.22628cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -504,17 +528,16 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText1.Value</Value>
+                                                    <Value>=Fields!HeaderText1.Value + "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                       <Format>d</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Left</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -560,17 +583,16 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText2.Value</Value>
+                                                    <Value>=Fields!HeaderText2.Value+ "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                       <Format>d</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -616,17 +638,16 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText3.Value</Value>
+                                                    <Value>=Fields!HeaderText3.Value + "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                       <Format>d</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -686,7 +707,7 @@
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -741,7 +762,7 @@
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -796,7 +817,7 @@
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1011,17 +1032,16 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText4.Value</Value>
+                                                    <Value>=Fields!HeaderText4.Value+ "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                       <Format>d</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1067,17 +1087,16 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText5.Value</Value>
+                                                    <Value>=Fields!HeaderText5.Value+ "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                       <Format>d</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1123,17 +1142,16 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText6.Value</Value>
+                                                    <Value>=Fields!HeaderText6.Value+ "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                       <Format>d</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1193,7 +1211,7 @@
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1248,7 +1266,7 @@
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1301,7 +1319,7 @@
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1359,9 +1377,9 @@
                                 </TablixMembers>
                               </TablixRowHierarchy>
                               <KeepTogether>true</KeepTogether>
-                              <Top>4.02645cm</Top>
-                              <Height>2.92982cm</Height>
-                              <Width>10.89116cm</Width>
+                              <Top>5.29645cm</Top>
+                              <Height>2.92983cm</Height>
+                              <Width>10.89115cm</Width>
                               <Style>
                                 <Border>
                                   <Style>Dotted</Style>
@@ -1544,30 +1562,27 @@ Cstr(Fields!AccountNo.Value ))
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>2.20311cm</Width>
+                                    <Width>2.69311cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.74623cm</Width>
+                                    <Width>3.23623cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>3.70451cm</Width>
+                                    <Width>4.19451cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.15079cm</Width>
+                                    <Width>2.64079cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.06334cm</Width>
+                                    <Width>2.55334cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.56831cm</Width>
-                                  </TablixColumn>
-                                  <TablixColumn>
-                                    <Width>1.79981cm</Width>
+                                    <Width>2.28981cm</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
                                   <TablixRow>
-                                    <Height>0.635cm</Height>
+                                    <Height>0.89958cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -1578,14 +1593,17 @@ Cstr(Fields!AccountNo.Value ))
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Surgery Date</Value>
+                                                    <Value>=Fields!SurgeryDateLbl.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
-                                                <Style />
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
                                               </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox135</rd:DefaultName>
@@ -1613,6 +1631,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1630,14 +1649,17 @@ Cstr(Fields!AccountNo.Value ))
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Invoice/Credit Number</Value>
+                                                    <Value>=Fields!DocumentLbl.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
-                                                <Style />
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
                                               </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox139</rd:DefaultName>
@@ -1665,6 +1687,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1682,14 +1705,17 @@ Cstr(Fields!AccountNo.Value ))
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Purchase Order Number</Value>
+                                                    <Value>=Fields!PurchaseOrderNoLbl.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
-                                                <Style />
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
                                               </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox141</rd:DefaultName>
@@ -1717,6 +1743,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1734,14 +1761,17 @@ Cstr(Fields!AccountNo.Value ))
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Due Date</Value>
+                                                    <Value>=Fields!DueDateCaption.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
-                                                <Style />
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
                                               </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox143</rd:DefaultName>
@@ -1769,6 +1799,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1786,14 +1817,17 @@ Cstr(Fields!AccountNo.Value ))
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Original Amount</Value>
+                                                    <Value>=Fields!OriginalAmtLbl.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
-                                                <Style />
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
                                               </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox146</rd:DefaultName>
@@ -1821,58 +1855,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
-                                              <PaddingLeft>2pt</PaddingLeft>
-                                              <PaddingRight>2pt</PaddingRight>
-                                              <PaddingTop>2pt</PaddingTop>
-                                              <PaddingBottom>2pt</PaddingBottom>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
-                                          <Textbox Name="Textbox150">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value>Remaining Amount</Value>
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style />
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>Textbox147</rd:DefaultName>
-                                            <Style>
-                                              <Border>
-                                                <Style>Solid</Style>
-                                              </Border>
-                                              <TopBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </TopBorder>
-                                              <BottomBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </BottomBorder>
-                                              <LeftBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </LeftBorder>
-                                              <RightBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </RightBorder>
+                                              <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1890,14 +1873,17 @@ Cstr(Fields!AccountNo.Value ))
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Running Amount</Value>
+                                                    <Value>=Fields!CurrentBalanceLbl.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
-                                                <Style />
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
                                               </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox148</rd:DefaultName>
@@ -1925,6 +1911,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -2200,58 +2187,6 @@ Cstr(Fields!AccountNo.Value ))
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="Textbox482">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value />
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style />
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>Textbox482</rd:DefaultName>
-                                            <Style>
-                                              <Border>
-                                                <Style>Solid</Style>
-                                              </Border>
-                                              <TopBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </TopBorder>
-                                              <BottomBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </BottomBorder>
-                                              <LeftBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </LeftBorder>
-                                              <RightBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </RightBorder>
-                                              <PaddingLeft>2pt</PaddingLeft>
-                                              <PaddingRight>2pt</PaddingRight>
-                                              <PaddingTop>2pt</PaddingTop>
-                                              <PaddingBottom>2pt</PaddingBottom>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
                                           <Textbox Name="Textbox483">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
@@ -2325,7 +2260,7 @@ Cstr(Fields!AccountNo.Value ))
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Left</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -2345,6 +2280,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <BackgroundColor>=IIF(Rownumber(nothing) mod 2 ,"White","WhiteSmoke")</BackgroundColor>
                                               <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -2367,7 +2303,7 @@ Cstr(Fields!AccountNo.Value ))
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Left</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -2382,6 +2318,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <BackgroundColor>=IIF(Rownumber(nothing) mod 2 ,"White","WhiteSmoke")</BackgroundColor>
                                               <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
@@ -2405,7 +2342,7 @@ Cstr(Fields!AccountNo.Value ))
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Left</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -2420,6 +2357,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <BackgroundColor>=IIF(Rownumber(nothing) mod 2 ,"White","WhiteSmoke")</BackgroundColor>
                                               <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
@@ -2445,7 +2383,7 @@ Cstr(Fields!AccountNo.Value ))
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Left</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -2460,6 +2398,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <BackgroundColor>=IIF(Rownumber(nothing) mod 2 ,"White","WhiteSmoke")</BackgroundColor>
                                               <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
@@ -2485,7 +2424,7 @@ Cstr(Fields!AccountNo.Value ))
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -2500,46 +2439,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
-                                              <VerticalAlign>Middle</VerticalAlign>
-                                              <PaddingLeft>5pt</PaddingLeft>
-                                              <PaddingRight>5pt</PaddingRight>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
-                                          <Textbox Name="textbox87">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value>=Fields!RemainAmt_DtldCustLedgEntries.Value</Value>
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!RemainAmt_DtldCustLedgEntriesFormat.Value</Format>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style>
-                                                  <TextAlign>Right</TextAlign>
-                                                </Style>
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>textbox87</rd:DefaultName>
-                                            <ZIndex>1</ZIndex>
-                                            <Style>
-                                              <Border>
-                                                <Style>None</Style>
-                                              </Border>
-                                              <RightBorder>
-                                                <Color>Black</Color>
-                                                <Style>Solid</Style>
-                                                <Width>1pt</Width>
-                                              </RightBorder>
+                                              <BackgroundColor>=IIF(Rownumber(nothing) mod 2 ,"White","WhiteSmoke")</BackgroundColor>
                                               <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
@@ -2565,7 +2465,7 @@ Cstr(Fields!AccountNo.Value ))
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -2574,16 +2474,12 @@ Cstr(Fields!AccountNo.Value ))
                                               <Border>
                                                 <Style>None</Style>
                                               </Border>
-                                              <BottomBorder>
-                                                <Color>Black</Color>
-                                                <Style>Dotted</Style>
-                                                <Width>1pt</Width>
-                                              </BottomBorder>
                                               <RightBorder>
                                                 <Color>Black</Color>
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
+                                              <BackgroundColor>=IIF(Rownumber(nothing) mod 2 ,"White","WhiteSmoke")</BackgroundColor>
                                               <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>5pt</PaddingLeft>
                                             </Style>
@@ -2624,7 +2520,7 @@ Cstr(Fields!AccountNo.Value ))
                                               </Border>
                                               <TopBorder>
                                                 <Color>Black</Color>
-                                                <Style>Dotted</Style>
+                                                <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </TopBorder>
                                               <VerticalAlign>Middle</VerticalAlign>
@@ -2662,7 +2558,7 @@ Cstr(Fields!AccountNo.Value ))
                                               </Border>
                                               <TopBorder>
                                                 <Color>Black</Color>
-                                                <Style>Dotted</Style>
+                                                <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </TopBorder>
                                               <VerticalAlign>Middle</VerticalAlign>
@@ -2701,7 +2597,7 @@ Cstr(Fields!AccountNo.Value ))
                                               </Border>
                                               <TopBorder>
                                                 <Color>Black</Color>
-                                                <Style>Dotted</Style>
+                                                <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </TopBorder>
                                               <VerticalAlign>Middle</VerticalAlign>
@@ -2740,7 +2636,7 @@ Cstr(Fields!AccountNo.Value ))
                                               </Border>
                                               <TopBorder>
                                                 <Color>Black</Color>
-                                                <Style>Dotted</Style>
+                                                <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </TopBorder>
                                               <VerticalAlign>Middle</VerticalAlign>
@@ -2779,46 +2675,7 @@ Cstr(Fields!AccountNo.Value ))
                                               </Border>
                                               <TopBorder>
                                                 <Color>Black</Color>
-                                                <Style>Dotted</Style>
-                                                <Width>1pt</Width>
-                                              </TopBorder>
-                                              <VerticalAlign>Middle</VerticalAlign>
-                                              <PaddingLeft>5pt</PaddingLeft>
-                                              <PaddingRight>5pt</PaddingRight>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
-                                          <Textbox Name="Textbox74">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value />
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                      <FontWeight>Bold</FontWeight>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style>
-                                                  <TextAlign>Right</TextAlign>
-                                                </Style>
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>Textbox74</rd:DefaultName>
-                                            <Style>
-                                              <Border>
-                                                <Style>None</Style>
-                                              </Border>
-                                              <TopBorder>
-                                                <Color>Black</Color>
-                                                <Style>Dotted</Style>
+                                                <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </TopBorder>
                                               <VerticalAlign>Middle</VerticalAlign>
@@ -2855,6 +2712,11 @@ Cstr(Fields!AccountNo.Value ))
                                               <Border>
                                                 <Style>None</Style>
                                               </Border>
+                                              <TopBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>1pt</Width>
+                                              </TopBorder>
                                               <VerticalAlign>Middle</VerticalAlign>
                                               <PaddingLeft>5pt</PaddingLeft>
                                             </Style>
@@ -3022,37 +2884,6 @@ Cstr(Fields!AccountNo.Value ))
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="Textbox89">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value />
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                      <FontWeight>Bold</FontWeight>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style>
-                                                  <TextAlign>Right</TextAlign>
-                                                </Style>
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>Textbox89</rd:DefaultName>
-                                            <Style>
-                                              <VerticalAlign>Middle</VerticalAlign>
-                                              <PaddingLeft>5pt</PaddingLeft>
-                                              <PaddingRight>5pt</PaddingRight>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
                                           <Textbox Name="Textbox90">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
@@ -3084,7 +2915,7 @@ Cstr(Fields!AccountNo.Value ))
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.64382cm</Height>
+                                    <Height>0.72319cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -3211,44 +3042,13 @@ Cstr(Fields!AccountNo.Value ))
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="textbox28">
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value />
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                      <FontWeight>Bold</FontWeight>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style>
-                                                  <TextAlign>Right</TextAlign>
-                                                </Style>
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>textbox28</rd:DefaultName>
-                                            <ZIndex>10</ZIndex>
-                                            <Style>
-                                              <VerticalAlign>Middle</VerticalAlign>
-                                              <PaddingLeft>5pt</PaddingLeft>
-                                              <PaddingRight>5pt</PaddingRight>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
                                           <Textbox Name="textbox29">
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=LAST(Fields!Total_Caption3.Value) &amp; " " &amp;LAST(Fields!CurrencyCode3.Value)</Value>
+                                                    <Value>=FIRST(Fields!Total_Caption2.Value) &amp; " " &amp;FIRST(Fields!CurrencyCode3.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -3257,7 +3057,7 @@ Cstr(Fields!AccountNo.Value ))
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -3287,7 +3087,7 @@ Cstr(Fields!AccountNo.Value ))
                                                 <Style>Solid</Style>
                                                 <Width>1pt</Width>
                                               </RightBorder>
-                                              <VerticalAlign>Middle</VerticalAlign>
+                                              <VerticalAlign>Top</VerticalAlign>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -3361,14 +3161,11 @@ Cstr(Fields!AccountNo.Value ))
                                   <TablixMember />
                                   <TablixMember />
                                   <TablixMember />
-                                  <TablixMember />
                                 </TablixMembers>
                               </TablixColumnHierarchy>
                               <TablixRowHierarchy>
                                 <TablixMembers>
-                                  <TablixMember>
-                                    <KeepWithGroup>After</KeepWithGroup>
-                                  </TablixMember>
+                                  <TablixMember />
                                   <TablixMember>
                                     <Group Name="Table1_CurrencyGroup">
                                       <GroupExpressions>
@@ -3380,7 +3177,6 @@ Cstr(Fields!AccountNo.Value ))
                                         <Visibility>
                                           <Hidden>true</Hidden>
                                         </Visibility>
-                                        <KeepWithGroup>After</KeepWithGroup>
                                       </TablixMember>
                                       <TablixMember>
                                         <Group Name="Table1_Details_Group">
@@ -3395,35 +3191,33 @@ Cstr(Fields!AccountNo.Value ))
                                         </TablixMembers>
                                         <DataElementName>Detail_Collection</DataElementName>
                                         <DataElementOutput>Output</DataElementOutput>
-                                        <KeepTogether>true</KeepTogether>
                                       </TablixMember>
                                       <TablixMember>
                                         <Visibility>
                                           <Hidden>=IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
                                         </Visibility>
-                                        <KeepWithGroup>Before</KeepWithGroup>
                                       </TablixMember>
                                       <TablixMember>
                                         <Visibility>
                                           <Hidden>=IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
                                         </Visibility>
-                                        <KeepWithGroup>Before</KeepWithGroup>
                                       </TablixMember>
                                       <TablixMember>
                                         <Visibility>
                                           <Hidden>=IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
                                         </Visibility>
-                                        <KeepWithGroup>Before</KeepWithGroup>
-                                        <KeepTogether>true</KeepTogether>
                                       </TablixMember>
                                     </TablixMembers>
                                   </TablixMember>
                                 </TablixMembers>
                               </TablixRowHierarchy>
+                              <RepeatColumnHeaders>true</RepeatColumnHeaders>
+                              <RepeatRowHeaders>true</RepeatRowHeaders>
+                              <DataSetName>DataSet_Result</DataSetName>
                               <Top>0.22004in</Top>
                               <Left>0.01484in</Left>
-                              <Height>3.0427cm</Height>
-                              <Width>17.23609cm</Width>
+                              <Height>3.38664cm</Height>
+                              <Width>17.60779cm</Width>
                               <ZIndex>2</ZIndex>
                               <Style />
                             </Tablix>
@@ -3461,21 +3255,22 @@ Cstr(Fields!AccountNo.Value ))
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
+            <DataSetName>DataSet_Result</DataSetName>
             <PageBreak>
               <BreakLocation>End</BreakLocation>
             </PageBreak>
-            <Height>7.32669cm</Height>
+            <Height>8.22628cm</Height>
             <Width>17.93863cm</Width>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>2.88452in</Height>
+        <Height>3.23869in</Height>
         <Style />
       </Body>
       <Width>17.93863cm</Width>
       <Page>
         <PageHeader>
-          <Height>3.605in</Height>
+          <Height>3.44875in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -3525,7 +3320,7 @@ Cstr(Fields!AccountNo.Value ))
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>4.40629cm</Top>
+              <Top>3.45379cm</Top>
               <Left>10.52724cm</Left>
               <Height>116pt</Height>
               <Width>7.11822cm</Width>
@@ -3589,7 +3384,6 @@ Cstr(Fields!AccountNo.Value ))
               <MIMEType>image/bmp</MIMEType>
               <Sizing>FitProportional</Sizing>
               <Top>0.26875in</Top>
-              <Left>0in</Left>
               <Height>15.75331mm</Height>
               <Width>40.2767mm</Width>
               <ZIndex>3</ZIndex>
@@ -3616,7 +3410,7 @@ Cstr(Fields!AccountNo.Value ))
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox320</rd:DefaultName>
-              <Top>3.46889in</Top>
+              <Top>3.35639in</Top>
               <Left>0.00003in</Left>
               <Height>5pt</Height>
               <Width>6.947in</Width>
@@ -3673,8 +3467,10 @@ Cstr(Fields!AccountNo.Value ))
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value EvaluationMode="Constant">Account No.</Value>
-                          <Style />
+                          <Value>=First(Fields!AccountNoLbl.Value, "DataSet_Result")</Value>
+                          <Style>
+                            <FontWeight>Bold</FontWeight>
+                          </Style>
                         </TextRun>
                       </TextRuns>
                       <Style />
@@ -3701,8 +3497,10 @@ Cstr(Fields!AccountNo.Value ))
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value EvaluationMode="Constant">Statement Date</Value>
-                          <Style />
+                          <Value>=First(Fields!StatementDateLbl.Value, "DataSet_Result")</Value>
+                          <Style>
+                            <FontWeight>Bold</FontWeight>
+                          </Style>
                         </TextRun>
                       </TextRuns>
                       <Style />
@@ -3730,8 +3528,10 @@ Cstr(Fields!AccountNo.Value ))
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value EvaluationMode="Constant">Payment Terms</Value>
-                          <Style />
+                          <Value>=First(Fields!PaymentTermsLbl.Value, "DataSet_Result")</Value>
+                          <Style>
+                            <FontWeight>Bold</FontWeight>
+                          </Style>
                         </TextRun>
                       </TextRuns>
                       <Style />
@@ -3935,7 +3735,6 @@ Cstr(Fields!AccountNo.Value ))
             </Rectangle>
             <Rectangle Name="Rectangle1">
               <KeepTogether>true</KeepTogether>
-              <Left>0in</Left>
               <Height>0.01042in</Height>
               <Width>7.06245in</Width>
               <ZIndex>7</ZIndex>

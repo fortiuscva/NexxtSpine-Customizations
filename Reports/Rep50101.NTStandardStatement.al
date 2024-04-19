@@ -22,6 +22,36 @@ report 50101 "NTS NT Standard Statement"
             column(AccountNo; Customer."No.")
             {
             }
+            column(Total_Caption2; Total_CaptionLbl)
+            {
+            }
+            column(DueDateCaption; DueDate_CustLedgEntry2CaptionLbl)
+            {
+            }
+            column(SurgeryDateLbl; SurgeryDateLbl)
+            {
+            }
+            column(DocumentLbl; DocumentLbl)
+            {
+            }
+            column(PurchaseOrderNoLbl; PurchaseOrderNoLbl)
+            {
+            }
+            column(OriginalAmtLbl; OriginalAmtLbl)
+            {
+            }
+            column(CurrentBalanceLbl; CurrentBalanceLbl)
+            {
+            }
+            column(AccountNoLbl; AccountNoLbl)
+            {
+            }
+            column(PaymentTermsLbl; PaymentTermsLbl)
+            {
+            }
+            column(StatementDateLbl; StatementDateLbl)
+            {
+            }
             dataitem("Integer"; "Integer")
             {
                 DataItemTableView = sorting(Number) where(Number = const(1));
@@ -213,9 +243,7 @@ report 50101 "NTS NT Standard Statement"
                 {
                     DataItemTableView = sorting(Number) where(Number = filter(1 ..));
                     PrintOnlyIfDetail = true;
-                    column(Total_Caption2; Total_CaptionLbl)
-                    {
-                    }
+
                     dataitem(CustLedgEntryHdr; "Integer")
                     {
                         DataItemTableView = sorting(Number) where(Number = const(1));
@@ -1109,7 +1137,16 @@ report 50101 "NTS NT Standard Statement"
         CompanyInfoHomepageCaptionLbl: Label 'Home Page';
         CompanyInfoEmailCaptionLbl: Label 'Email';
         DocDateCaptionLbl: Label 'Document Date';
-        Total_CaptionLbl: Label 'Total';
+        Total_CaptionLbl: Label 'Amount Due';
+
+        SurgeryDateLbl: label 'Surgery Date';
+        DocumentLbl: Label 'Invoice/Credit Number';
+        PurchaseOrderNoLbl: Label 'Purchase Order Number';
+        OriginalAmtLbl: Label 'Original Amoount';
+        CurrentBalanceLbl: Label 'Current Balance';
+        AccountNoLbl: Label 'Account No.';
+        PaymentTermsLbl: Label 'Payment Term';
+        StatementDateLbl: Label 'Statement Date';
         BlankStartDateErr: Label 'Start Date must have a value.';
         BlankEndDateErr: Label 'End Date must have a value.';
         StartDateLaterTheEndDateErr: Label 'Start date must be earlier than End date.';
@@ -1382,7 +1419,7 @@ report 50101 "NTS NT Standard Statement"
             i := i + 1;
         end;
 
-        HeaderText[i] := StrSubstNo('%1 %2', EndDate - PeriodStartDate[i - 1] + 1, '+' + Text002);
+        HeaderText[i] := StrSubstNo('%1 %2', EndDate - PeriodStartDate[i - 1] + 1, ' + ' + Text002);
     end;
 
     local procedure CalcDates()
