@@ -19,7 +19,7 @@ report 50101 "NTS NT Standard Statement"
             column(PaymentTermCode; Customer."Payment Terms Code")
             {
             }
-            column(AccountNo; Customer."Our Account No.")
+            column(AccountNo; Customer."No.")
             {
             }
             dataitem("Integer"; "Integer")
@@ -105,6 +105,9 @@ report 50101 "NTS NT Standard Statement"
                 {
                 }
                 column(EndDate; Format(EndDate))
+                {
+                }
+                column(HeaderText6; HeaderText[6])
                 {
                 }
                 column(HeaderText5; HeaderText[5])
@@ -500,8 +503,7 @@ report 50101 "NTS NT Standard Statement"
 
                             trigger OnPreDataItem()
                             begin
-                                if not IncludeAgingBand then
-                                    SetRange("Due Date", 0D, EndDate - 1);
+
                                 SetRange("Currency Code", TempCurrency2.Code);
 
                                 if (not PrintEntriesDue) and (not IncludeAgingBand) then
@@ -667,6 +669,11 @@ report 50101 "NTS NT Standard Statement"
                             AutoFormatExpression = TempAgingBandBuf."Currency Code";
                             AutoFormatType = 1;
                         }
+                        column(AgingBandBufCol6Amt; TempAgingBandBuf."NTS Column 6 Amt.")
+                        {
+                            AutoFormatExpression = TempAgingBandBuf."Currency Code";
+                            AutoFormatType = 1;
+                        }
                         column(AgingBandCurrencyCode; AgingBandCurrencyCode)
                         {
                         }
@@ -706,19 +713,6 @@ report 50101 "NTS NT Standard Statement"
                         if not IncludeAgingBand then
                             CurrReport.Break();
                     end;
-                }
-            }
-            dataitem(LetterText; "Integer")
-            {
-                DataItemTableView = sorting(Number) where(Number = const(1));
-                column(GreetingText; GreetingLbl)
-                {
-                }
-                column(BodyText; BodyLbl)
-                {
-                }
-                column(ClosingText; ClosingLbl)
-                {
                 }
             }
 
@@ -765,9 +759,10 @@ report 50101 "NTS NT Standard Statement"
             begin
                 VerifyDates();
                 AgingBandEndingDate := EndDate;
+
                 CalcAgingBandDates();
-                CalcDates();
-                CreateHeadings();
+                //CalcDates();
+
                 CompanyInfo.Get();
                 FormatAddr.Company(CompanyAddr, CompanyInfo);
                 CompanyInfo.CalcFields(Picture);
@@ -1027,6 +1022,7 @@ report 50101 "NTS NT Standard Statement"
     trigger OnPreReport()
     begin
         StartDateTime := CurrentDateTime();
+        IncludeAgingBand := true;
         CalcDates();
         CreateHeadings();
         InitRequestPageDataInternal();
@@ -1060,7 +1056,7 @@ report 50101 "NTS NT Standard Statement"
         CurrencyCode3: Code[10];
         DateChoice: Option "Due Date","Posting Date";
         StatementStyle: Option "Balance","Open Item";
-        AgingDate: array[5] of Date;
+        AgingDate: array[6] of Date;
         AgingBandEndingDate: Date;
         AgingBandCurrencyCode: Code[20];
         LogInteractionEnable: Boolean;
@@ -1146,9 +1142,9 @@ report 50101 "NTS NT Standard Statement"
         PrintEntriesDue: Boolean;
         PrintUnappliedEntries: Boolean;
         PrintReversedEntries: Boolean;
-        PeriodStartDate: array[5] of Date;
-        PeriodEndDate: array[5] of Date;
-        HeaderText: array[5] of Text[30];
+        PeriodStartDate: array[6] of Date;
+        PeriodEndDate: array[6] of Date;
+        HeaderText: array[6] of Text[30];
         Text032Txt: Label '-%1', Comment = 'Negating the period length: %1 is the period length';
         Text010: Label 'The Date Formula %1 cannot be used. Try to restate it. E.g. 1M+CM instead of CM+1M.';
         EnterDateFormulaErr: Label 'Enter a date formula in the Period Length field.';
@@ -1175,17 +1171,17 @@ report 50101 "NTS NT Standard Statement"
 
     local procedure CalcAgingBandDates()
     begin
-        if not IncludeAgingBand then
-            exit;
         if AgingBandEndingDate = 0D then
             Error(AgingBandEndErr);
         if Format(PeriodLength) = '' then
             Error(AgingBandPeriodErr);
         Evaluate(PeriodLength2, StrSubstNo(PeriodSeparatorLbl, PeriodLength));
-        AgingDate[5] := AgingBandEndingDate;
+
+        AgingDate[6] := AgingBandEndingDate;
+        AgingDate[5] := CalcDate(PeriodLength2, AgingDate[6]);
         AgingDate[4] := CalcDate(PeriodLength2, AgingDate[5]);
         AgingDate[3] := CalcDate(PeriodLength2, AgingDate[4]);
-        AgingDate[2] := CalcDate(PeriodLength2, AgingDate[3]);
+        AgingDate[2] := CalcDate(PeriodLength2, AgingDate[3] - 30);
         AgingDate[1] := CalcDate(PeriodLength2, AgingDate[2]);
         if AgingDate[2] <= AgingDate[1] then
             Error(PeriodLengthErr);
@@ -1207,7 +1203,7 @@ report 50101 "NTS NT Standard Statement"
             TempAgingBandBuf.Insert();
         I := 1;
         GoOn := true;
-        while (I <= 5) and GoOn do begin
+        while (I <= 6) and GoOn do begin
             if Date <= AgingDate[I] then
                 if I = 1 then begin
                     TempAgingBandBuf."Column 1 Amt." := TempAgingBandBuf."Column 1 Amt." + Amount;
@@ -1233,6 +1229,12 @@ report 50101 "NTS NT Standard Statement"
                     TempAgingBandBuf."Column 5 Amt." := TempAgingBandBuf."Column 5 Amt." + Amount;
                     GoOn := false;
                 end;
+            if Date <= AgingDate[I] then
+                if I = 6 then begin
+                    TempAgingBandBuf."NTS Column 6 Amt." := TempAgingBandBuf."NTS Column 6 Amt." + Amount;
+                    GoOn := false;
+                end;
+
             I := I + 1;
         end;
         TempAgingBandBuf.Modify();
@@ -1380,7 +1382,7 @@ report 50101 "NTS NT Standard Statement"
             i := i + 1;
         end;
 
-        HeaderText[i] := StrSubstNo('%1 %2 %3', AfterTok, EndDate - PeriodStartDate[i - 1] + 1, Text002);
+        HeaderText[i] := StrSubstNo('%1 %2', EndDate - PeriodStartDate[i - 1] + 1, '+' + Text002);
     end;
 
     local procedure CalcDates()
@@ -1395,8 +1397,13 @@ report 50101 "NTS NT Standard Statement"
         PeriodStartDate[1] := CalcDate(PeriodLength2, EndDate + 1);
 
         for i := 2 to ArrayLen(PeriodEndDate) do begin
-            PeriodEndDate[i] := PeriodStartDate[i - 1] - 1;
-            PeriodStartDate[i] := CalcDate(PeriodLength2, PeriodEndDate[i] + 1);
+            if i = 5 then begin
+                PeriodEndDate[i] := PeriodStartDate[i - 1] - 1;
+                PeriodStartDate[i] := CalcDate(PeriodLength2, PeriodEndDate[i] - 30);
+            end else begin
+                PeriodEndDate[i] := PeriodStartDate[i - 1] - 1;
+                PeriodStartDate[i] := CalcDate(PeriodLength2, PeriodEndDate[i] + 1);
+            end;
         end;
         PeriodStartDate[i] := 0D;
 
