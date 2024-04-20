@@ -1,4 +1,4 @@
-codeunit 50100 "NTS Event Management"
+codeunit 50149 "NTS Event Management"
 {
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforeSalesInvHeaderInsert', '', false, false)]
 
@@ -6,8 +6,8 @@ codeunit 50100 "NTS Event Management"
     begin
         if SalesInvHeader.IsTemporary then
             exit;
-        if SalesHeader."Promised Delivery Date" = 0D then
+        if SalesHeader."Requested Delivery Date" = 0D then
             exit;
-        SalesInvHeader."NTS Promised Delivery Date" := SalesHeader."Promised Delivery Date";
+        SalesInvHeader."NTS Requested Delivery Date" := SalesHeader."Requested Delivery Date";
     end;
 }

@@ -2,9 +2,9 @@ tableextension 50148 "NTS Sales Invoice Header Ext" extends "Sales Invoice Heade
 {
     fields
     {
-        field(50100; "NTS Promised Delivery Date"; Date)
+        field(50100; "NTS Requested Delivery Date"; Date)
         {
-            Caption = 'Promised Delivery Date';
+            Caption = 'Requested Delivery Date';
             DataClassification = ToBeClassified;
         }
     }
