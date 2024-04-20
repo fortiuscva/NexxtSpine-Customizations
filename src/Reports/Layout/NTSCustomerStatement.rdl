@@ -34,13 +34,13 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>3.35549cm</Width>
+                                    <Width>3.82685cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>3.37097cm</Width>
+                                    <Width>3.84233cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>4.16469cm</Width>
+                                    <Width>4.63605cm</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
@@ -56,7 +56,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText1.Value + "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
+                                                    <Value>=Fields!HeaderText1.Value + "( " + Last(Fields!CurrencySymbol.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontWeight>Bold</FontWeight>
@@ -111,7 +111,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText2.Value+ "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
+                                                    <Value>=Fields!HeaderText2.Value+ "( " + Last(Fields!CurrencySymbol.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontWeight>Bold</FontWeight>
@@ -166,7 +166,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText3.Value + "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
+                                                    <Value>=Fields!HeaderText3.Value + "( " + Last(Fields!CurrencySymbol.Value)+ " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontWeight>Bold</FontWeight>
@@ -560,7 +560,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText4.Value+ "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
+                                                    <Value>=Fields!HeaderText4.Value+ "( " + Last(Fields!CurrencySymbol.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontWeight>Bold</FontWeight>
@@ -615,7 +615,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText5.Value+ "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
+                                                    <Value>=Fields!HeaderText5.Value+ "(" + Last(Fields!CurrencySymbol.Value) + ")"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontWeight>Bold</FontWeight>
@@ -659,6 +659,7 @@
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
                                           </Textbox>
+                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                       <TablixCell>
@@ -670,7 +671,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!HeaderText6.Value+ "( " + FIRST(Fields!CurrencyCode3.Value) + " )"</Value>
+                                                    <Value>=Fields!HeaderText6.Value+ "( " + Last(Fields!CurrencySymbol.Value) + " )"</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontWeight>Bold</FontWeight>
@@ -907,7 +908,7 @@
                               <KeepTogether>true</KeepTogether>
                               <Top>5.29645cm</Top>
                               <Height>2.92983cm</Height>
-                              <Width>10.89115cm</Width>
+                              <Width>12.30523cm</Width>
                               <Style>
                                 <Border>
                                   <Style>Dotted</Style>
@@ -2576,7 +2577,7 @@ Cstr(Fields!AccountNo.Value ))
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=FIRST(Fields!Total_Caption2.Value) &amp; " " &amp;FIRST(Fields!CurrencyCode3.Value)</Value>
+                                                    <Value>=FIRST(Fields!Total_Caption2.Value) &amp; " " &amp;First(Fields!CurrencySymbol3.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -2795,7 +2796,7 @@ Cstr(Fields!AccountNo.Value ))
         <Height>3.23869in</Height>
         <Style />
       </Body>
-      <Width>17.93863cm</Width>
+      <Width>17.94053cm</Width>
       <Page>
         <PageHeader>
           <Height>3.44875in</Height>
@@ -2822,7 +2823,7 @@ Cstr(Fields!AccountNo.Value ))
                 </Paragraph>
               </Paragraphs>
               <Top>0.18521cm</Top>
-              <Left>3.73923in</Left>
+              <Left>4.05173in</Left>
               <Height>29pt</Height>
               <Width>7.48132cm</Width>
               <Style>
@@ -2835,7 +2836,9 @@ Cstr(Fields!AccountNo.Value ))
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>="Please remit your payment to:"+System.Environment.NewLine +System.Environment.NewLine  +Code.GetData(11,1) + System.Environment.NewLine + Code.GetData(12,1) + System.Environment.NewLine + Code.GetData(13,1) + System.Environment.NewLine +Code.GetData(14,1) + System.Environment.NewLine +Code.GetData(15,1) +System.Environment.NewLine + Code.GetData(16,1) + System.Environment.NewLine + Code.GetData(42,1) +System.Environment.NewLine + Code.GetData(23,1)</Value>
+                      <Value>="Please remit your payment to:"+System.Environment.NewLine +System.Environment.NewLine  +"Nexxt Spine LLC"
+ + System.Environment.NewLine + "14425 Bergen Blvd, Ste B"
+ + System.Environment.NewLine + "Noblesville, IN 46060"</Value>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>11pt</FontSize>
@@ -3231,7 +3234,7 @@ Cstr(Fields!AccountNo.Value ))
               </ReportItems>
               <KeepTogether>true</KeepTogether>
               <Top>0.49875in</Top>
-              <Left>3.64458in</Left>
+              <Left>3.83208in</Left>
               <Height>0.50656in</Height>
               <Width>3.16862in</Width>
               <ZIndex>6</ZIndex>
@@ -3263,7 +3266,7 @@ Cstr(Fields!AccountNo.Value ))
             </Rectangle>
             <Rectangle Name="Rectangle1">
               <KeepTogether>true</KeepTogether>
-              <Height>0.01042in</Height>
+              <Height>3.3425in</Height>
               <Width>7.06245in</Width>
               <ZIndex>7</ZIndex>
               <Style>
@@ -3625,6 +3628,9 @@ End Function
         <Field Name="CurrencyCode3">
           <DataField>CurrencyCode3</DataField>
         </Field>
+        <Field Name="CurrencySymbol3">
+          <DataField>CurrencySymbol3</DataField>
+        </Field>
         <Field Name="CustBalance_CustLedgEntryHdr">
           <DataField>CustBalance_CustLedgEntryHdr</DataField>
         </Field>
@@ -3852,6 +3858,9 @@ End Function
         </Field>
         <Field Name="AgingDateHeader4">
           <DataField>AgingDateHeader4</DataField>
+        </Field>
+        <Field Name="CurrencySymbol">
+          <DataField>CurrencySymbol</DataField>
         </Field>
       </Fields>
       <Query>
