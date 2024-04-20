@@ -1,7 +1,7 @@
 report 50103 "NTS Purchase Order"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = './NexxtPurchaseOrder.rdl';
+    RDLCLayout = './src/Reports/Layout/NexxtPurchaseOrder.rdl';
     Caption = 'Nexxt Purchase Order';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = All;

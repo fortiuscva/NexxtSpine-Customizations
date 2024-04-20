@@ -2,7 +2,7 @@ report 50104 "NTS Sales - Invoice"
 {
     Caption = 'Nexxt Sales - Invoice';
     DefaultLayout = RDLC;
-    RDLCLayout = './Nexxt Sales - Invoice.rdl';
+    RDLCLayout = './src/Reports/Layout/Nexxt Sales - Invoice.rdl';
     PreviewMode = PrintLayout;
 
     dataset
