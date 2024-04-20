@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -19,7 +19,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>17.9212cm</Width>
+                  <Width>17.9847cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -34,42 +34,10 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>17.33424cm</Width>
+                                    <Width>17.83695cm</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
-                                  <TablixRow>
-                                    <Height>0.423cm</Height>
-                                    <TablixCells>
-                                      <TablixCell>
-                                        <CellContents>
-                                          <Textbox Name="Textbox11">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value>Comments:</Value>
-                                                    <Style>
-                                                      <FontFamily />
-                                                      <FontSize>8pt</FontSize>
-                                                      <FontWeight>Bold</FontWeight>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style />
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>Textbox11</rd:DefaultName>
-                                            <Style>
-                                              <Border />
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                    </TablixCells>
-                                  </TablixRow>
                                   <TablixRow>
                                     <Height>0.423cm</Height>
                                     <TablixCells>
@@ -97,6 +65,10 @@
                                               <Border>
                                                 <Style>Solid</Style>
                                               </Border>
+                                              <PaddingLeft>2pt</PaddingLeft>
+                                              <PaddingRight>2pt</PaddingRight>
+                                              <PaddingTop>2pt</PaddingTop>
+                                              <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
                                         </CellContents>
@@ -113,9 +85,6 @@
                               <TablixRowHierarchy>
                                 <TablixMembers>
                                   <TablixMember>
-                                    <KeepWithGroup>After</KeepWithGroup>
-                                  </TablixMember>
-                                  <TablixMember>
                                     <Group Name="Details1">
                                       <GroupExpressions>
                                         <GroupExpression>=Fields!DocLine_SalesCommentLine.Value</GroupExpression>
@@ -127,10 +96,10 @@
                                   </TablixMember>
                                 </TablixMembers>
                               </TablixRowHierarchy>
-                              <Top>3.89847cm</Top>
-                              <Left>0.58696cm</Left>
-                              <Height>0.846cm</Height>
-                              <Width>17.33424cm</Width>
+                              <Top>3.96197cm</Top>
+                              <Left>0.08425cm</Left>
+                              <Height>0.423cm</Height>
+                              <Width>17.83695cm</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -144,7 +113,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>="Picked by:"</Value>
+                                      <Value>="Picked by:  __________________________________"</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>8pt</FontSize>
@@ -152,16 +121,14 @@
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style>
-                                    <TextAlign>Right</TextAlign>
-                                  </Style>
+                                  <Style />
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox2</rd:DefaultName>
                               <Top>4.97632cm</Top>
                               <Left>0.19284cm</Left>
                               <Height>0.6cm</Height>
-                              <Width>2.39702cm</Width>
+                              <Width>6.57744cm</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <Border>
@@ -180,7 +147,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>="Date:"</Value>
+                                      <Value>="Date:  __________________________________"</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>8pt</FontSize>
@@ -188,16 +155,14 @@
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style>
-                                    <TextAlign>Right</TextAlign>
-                                  </Style>
+                                  <Style />
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox2</rd:DefaultName>
                               <Top>5.64688cm</Top>
                               <Left>0.19284cm</Left>
                               <Height>0.6cm</Height>
-                              <Width>2.39702cm</Width>
+                              <Width>6.57744cm</Width>
                               <ZIndex>2</ZIndex>
                               <Style>
                                 <Border>
@@ -216,7 +181,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>="Packed by:"</Value>
+                                      <Value>="Packed by:  __________________________________"</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>8pt</FontSize>
@@ -224,16 +189,14 @@
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style>
-                                    <TextAlign>Right</TextAlign>
-                                  </Style>
+                                  <Style />
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox2</rd:DefaultName>
-                              <Top>4.92086cm</Top>
-                              <Left>11.03219cm</Left>
+                              <Top>4.97632cm</Top>
+                              <Left>11.56094cm</Left>
                               <Height>0.6cm</Height>
-                              <Width>2.36161cm</Width>
+                              <Width>6.42376cm</Width>
                               <ZIndex>3</ZIndex>
                               <Style>
                                 <Border>
@@ -252,7 +215,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>="Date:"</Value>
+                                      <Value>="Date:  __________________________________"</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>8pt</FontSize>
@@ -260,16 +223,14 @@
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style>
-                                    <TextAlign>Right</TextAlign>
-                                  </Style>
+                                  <Style />
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox2</rd:DefaultName>
-                              <Top>5.59142cm</Top>
-                              <Left>11.03219cm</Left>
+                              <Top>5.64688cm</Top>
+                              <Left>11.56094cm</Left>
                               <Height>0.6cm</Height>
-                              <Width>2.36161cm</Width>
+                              <Width>6.42376cm</Width>
                               <ZIndex>4</ZIndex>
                               <Style>
                                 <Border>
@@ -619,7 +580,7 @@ Item</Value>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Qty Ordered</Value>
+                                                    <Value>=Fields!OrderedCaption.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -628,7 +589,7 @@ Item</Value>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -691,7 +652,7 @@ Item</Value>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Qty Shipped</Value>
+                                                    <Value>=Fields!ShippedCaption.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -990,7 +951,7 @@ Item</Value>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1058,7 +1019,7 @@ Item</Value>
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Center</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1264,6 +1225,7 @@ Item</Value>
                                             </Style>
                                           </Textbox>
                                           <ColSpan>2</ColSpan>
+                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                       <TablixCell />
@@ -1872,141 +1834,13 @@ Item</Value>
                               </Filters>
                               <Top>0.0845in</Top>
                               <Height>1.3281in</Height>
-                              <Width>7.00158in</Width>
+                              <Width>7.00159in</Width>
                               <ZIndex>5</ZIndex>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8pt</FontSize>
                               </Style>
                             </Tablix>
-                            <Textbox Name="Textbox1">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>="_____________________"</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox1</rd:DefaultName>
-                              <Top>4.97632cm</Top>
-                              <Left>2.61937cm</Left>
-                              <Height>0.6cm</Height>
-                              <Width>4.88737cm</Width>
-                              <ZIndex>6</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox7">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>="_____________________"</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox1</rd:DefaultName>
-                              <Top>5.61865cm</Top>
-                              <Left>2.61937cm</Left>
-                              <Height>0.62823cm</Height>
-                              <Width>4.88737cm</Width>
-                              <ZIndex>7</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox8">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>="_____________________"</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox1</rd:DefaultName>
-                              <Top>4.92086cm</Top>
-                              <Left>13.3938cm</Left>
-                              <Height>0.6cm</Height>
-                              <Width>4.5274cm</Width>
-                              <ZIndex>8</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox10">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>="_____________________"</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox1</rd:DefaultName>
-                              <Top>5.56319cm</Top>
-                              <Left>13.3938cm</Left>
-                              <Height>0.62823cm</Height>
-                              <Width>4.5274cm</Width>
-                              <ZIndex>9</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Style>
@@ -2042,7 +1876,7 @@ Item</Value>
             <Top>0.12506cm</Top>
             <Left>0.10266cm</Left>
             <Height>6.48501cm</Height>
-            <Width>17.9212cm</Width>
+            <Width>17.9847cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2053,7 +1887,7 @@ Item</Value>
         <Height>6.61007cm</Height>
         <Style />
       </Body>
-      <Width>18.02386cm</Width>
+      <Width>18.08736cm</Width>
       <Page>
         <PageHeader>
           <Height>9.47614cm</Height>
@@ -2404,7 +2238,7 @@ Item</Value>
                   </Paragraphs>
                   <Top>0.00001in</Top>
                   <Height>11.60912pt</Height>
-                  <Width>2.67904in</Width>
+                  <Width>2.60404in</Width>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -2578,7 +2412,7 @@ Item</Value>
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>="Whs: " + Fields!SSH_LocationCode.Value</Value>
+                          <Value>="Whs: " + Code.GetData(79,1)</Value>
                           <Style>
                             <FontFamily>Segoe UI</FontFamily>
                             <FontSize>8pt</FontSize>
@@ -2929,8 +2763,8 @@ Item</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.21682cm</Top>
-              <Left>16.02863cm</Left>
+              <Top>0.24857cm</Top>
+              <Left>15.99688cm</Left>
               <Height>0.6cm</Height>
               <Width>1.83689cm</Width>
               <Style>
