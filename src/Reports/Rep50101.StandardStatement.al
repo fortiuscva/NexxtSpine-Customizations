@@ -1156,10 +1156,10 @@ report 50101 "NTS Standard Statement"
         SurgeryDateLbl: label 'Surgery Date';
         DocumentLbl: Label 'Invoice/Credit Number';
         PurchaseOrderNoLbl: Label 'Purchase Order Number';
-        OriginalAmtLbl: Label 'Original Amoount';
+        OriginalAmtLbl: Label 'Original Amount';
         CurrentBalanceLbl: Label 'Current Balance';
-        AccountNoLbl: Label 'Account No.';
-        PaymentTermsLbl: Label 'Payment Term';
+        AccountNoLbl: Label 'Account Number';
+        PaymentTermsLbl: Label 'Payment Terms';
         StatementDateLbl: Label 'Statement Date';
         BlankStartDateErr: Label 'Start Date must have a value.';
         BlankEndDateErr: Label 'End Date must have a value.';
@@ -1202,7 +1202,7 @@ report 50101 "NTS Standard Statement"
         Text000: Label 'Not Due';
         AfterTok: Label 'After';
         BeforeTok: Label 'Before';
-        Text002: Label 'days';
+        Text002: Label 'Days';
 
     local procedure GetDate(PostingDate: Date; DueDate: Date): Date
     begin
@@ -1450,7 +1450,7 @@ report 50101 "NTS Standard Statement"
         for i := 2 to ArrayLen(PeriodEndDate) do begin
             if i = 5 then begin
                 PeriodEndDate[i] := PeriodStartDate[i - 1] - 1;
-                PeriodStartDate[i] := CalcDate(PeriodLength2, PeriodEndDate[i] - 30);
+                PeriodStartDate[i] := CalcDate(PeriodLength2, PeriodEndDate[i] - 29);
             end else begin
                 PeriodEndDate[i] := PeriodStartDate[i - 1] - 1;
                 PeriodStartDate[i] := CalcDate(PeriodLength2, PeriodEndDate[i] + 1);
