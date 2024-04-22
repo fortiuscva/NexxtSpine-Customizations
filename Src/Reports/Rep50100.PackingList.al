@@ -6,7 +6,6 @@ report 50100 "NTS Packing List"
     ApplicationArea = all;
     UsageCategory = ReportsAndAnalysis;
 
-
     dataset
     {
         dataitem("Sales Shipment Header"; "Sales Shipment Header")
