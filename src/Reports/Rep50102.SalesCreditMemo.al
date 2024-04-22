@@ -80,6 +80,8 @@ report 50102 "NTS Sales Credit Memo"
                     column(CompanyAddress6; CompanyAddress[6])
                     {
                     }
+                    column(PhoneNoCompanyInfo; PhoneNoText)
+                    { }
                     column(CopyTxt; CopyTxt)
                     {
                     }
@@ -591,9 +593,10 @@ report 50102 "NTS Sales Credit Memo"
         SalesSetup.Get();
         FormatDocument.SetLogoPosition(SalesSetup."Logo Position on Documents", CompanyInfo1, CompanyInfo2, CompanyInfo3);
 
-        if PrintCompany then
-            FormatAddress.Company(CompanyAddress, CompanyInfo)
-        else
+        if PrintCompany then begin
+            FormatAddress.Company(CompanyAddress, CompanyInfo);
+            PhoneNoText := 'Phone No:' + CompanyInfo."Phone No.";
+        end else
             Clear(CompanyAddress);
     end;
 
@@ -618,6 +621,7 @@ report 50102 "NTS Sales Credit Memo"
         CompanyAddress: array[8] of Text[100];
         BillToAddress: array[8] of Text[100];
         ShipToAddress: array[8] of Text[100];
+        PhoneNoText: Text;
         CopyTxt: Text;
         PrintCompany: Boolean;
         PrintFooter: Boolean;
