@@ -253,7 +253,6 @@
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
                                           </Textbox>
-                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                       <TablixCell>
@@ -799,7 +798,7 @@ Cstr(Fields!No_SalesCrMemoHeader.Value), 1)</Hidden>
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Center</TextAlign>
+                    <TextAlign>Right</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
@@ -1208,61 +1207,12 @@ Cstr(Fields!No_SalesCrMemoHeader.Value), 1)</Hidden>
               <ZIndex>5</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Style>Solid</Style>
                 </Border>
               </Style>
             </Rectangle>
             <Rectangle Name="Rectangle6">
               <ReportItems>
-                <Textbox Name="BillToAddress62">
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=Code.GetData(6,1)</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style />
-                    </Paragraph>
-                  </Paragraphs>
-                  <Top>0.82543in</Top>
-                  <Left>0.0251in</Left>
-                  <Height>11pt</Height>
-                  <Width>2.29543in</Width>
-                  <Style>
-                    <PaddingLeft>5pt</PaddingLeft>
-                  </Style>
-                </Textbox>
-                <Textbox Name="BillToAddress52">
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=Code.GetData(5,1)</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style />
-                    </Paragraph>
-                  </Paragraphs>
-                  <Top>0.65889in</Top>
-                  <Left>0.0251in</Left>
-                  <Height>11pt</Height>
-                  <Width>2.29543in</Width>
-                  <ZIndex>1</ZIndex>
-                  <Style>
-                    <PaddingLeft>5pt</PaddingLeft>
-                  </Style>
-                </Textbox>
                 <Textbox Name="BillToAddress42">
                   <KeepTogether>true</KeepTogether>
                   <Paragraphs>
@@ -1283,7 +1233,6 @@ Cstr(Fields!No_SalesCrMemoHeader.Value), 1)</Hidden>
                   <Left>0.0251in</Left>
                   <Height>11pt</Height>
                   <Width>2.29543in</Width>
-                  <ZIndex>2</ZIndex>
                   <Style>
                     <PaddingLeft>5pt</PaddingLeft>
                   </Style>
@@ -1308,7 +1257,7 @@ Cstr(Fields!No_SalesCrMemoHeader.Value), 1)</Hidden>
                   <Left>0.0251in</Left>
                   <Height>11pt</Height>
                   <Width>2.29543in</Width>
-                  <ZIndex>3</ZIndex>
+                  <ZIndex>1</ZIndex>
                   <Style>
                     <PaddingLeft>5pt</PaddingLeft>
                   </Style>
@@ -1333,7 +1282,7 @@ Cstr(Fields!No_SalesCrMemoHeader.Value), 1)</Hidden>
                   <Left>0.0251in</Left>
                   <Height>11pt</Height>
                   <Width>2.29543in</Width>
-                  <ZIndex>4</ZIndex>
+                  <ZIndex>2</ZIndex>
                   <Style>
                     <PaddingLeft>5pt</PaddingLeft>
                   </Style>
@@ -1358,7 +1307,32 @@ Cstr(Fields!No_SalesCrMemoHeader.Value), 1)</Hidden>
                   <Left>0.0251in</Left>
                   <Height>11pt</Height>
                   <Width>2.29543in</Width>
-                  <ZIndex>5</ZIndex>
+                  <ZIndex>3</ZIndex>
+                  <Style>
+                    <PaddingLeft>5pt</PaddingLeft>
+                  </Style>
+                </Textbox>
+                <Textbox Name="BillToAddress64">
+                  <KeepTogether>true</KeepTogether>
+                  <Paragraphs>
+                    <Paragraph>
+                      <TextRuns>
+                        <TextRun>
+                          <Value>=First(Fields!PhoneNoCompanyInfo.Value, "DataSet_Result")</Value>
+                          <Style>
+                            <FontFamily>Segoe UI</FontFamily>
+                            <FontSize>8pt</FontSize>
+                          </Style>
+                        </TextRun>
+                      </TextRuns>
+                      <Style />
+                    </Paragraph>
+                  </Paragraphs>
+                  <Top>0.64514in</Top>
+                  <Left>0.02511in</Left>
+                  <Height>11pt</Height>
+                  <Width>2.29543in</Width>
+                  <ZIndex>4</ZIndex>
                   <Style>
                     <PaddingLeft>5pt</PaddingLeft>
                   </Style>
@@ -1367,7 +1341,7 @@ Cstr(Fields!No_SalesCrMemoHeader.Value), 1)</Hidden>
               <KeepTogether>true</KeepTogether>
               <Top>2.18593cm</Top>
               <Left>0.10585cm</Left>
-              <Height>2.48466cm</Height>
+              <Height>2.02671cm</Height>
               <Width>5.89417cm</Width>
               <ZIndex>6</ZIndex>
               <Style>
@@ -1550,6 +1524,9 @@ Shared PictureData3 as Object
         </Field>
         <Field Name="CompanyAddress6">
           <DataField>CompanyAddress6</DataField>
+        </Field>
+        <Field Name="PhoneNoCompanyInfo">
+          <DataField>PhoneNoCompanyInfo</DataField>
         </Field>
         <Field Name="CopyTxt">
           <DataField>CopyTxt</DataField>
