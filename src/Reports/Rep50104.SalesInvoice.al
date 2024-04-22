@@ -16,6 +16,8 @@ report 50104 "NTS Sales - Invoice"
             column(No_SalesInvHeader; "No.")
             {
             }
+            column(NTS_Requested_Delivery_Date; "NTS Requested Delivery Date")
+            { }
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
             {
                 DataItemLink = "Document No." = field("No.");
@@ -178,7 +180,7 @@ report 50104 "NTS Sales - Invoice"
                     column(DueDate_SalesInvHeader; "Sales Invoice Header"."Due Date")
                     {
                     }
-                    column(SalesHeader_RequestedDelDate; SalesHeader."Requested Delivery Date")
+                    column(SalesHeader_RequestedDelDate; "Sales Invoice Header"."NTS Requested Delivery Date")
                     { }
                     column(PaymentTermsDescription; PaymentTerms.Description)
                     {
@@ -700,8 +702,6 @@ report 50104 "NTS Sales - Invoice"
                         Clear(BreakdownAmt);
                     end;
                 end;
-                if SalesHeader.Get(SalesHeader."Document Type"::Order, "Sales Invoice Header"."Order No.") then;
-
             end;
         }
     }
@@ -915,7 +915,6 @@ report 50104 "NTS Sales - Invoice"
         AmountSubjecttoSalesTaxCaption: Text;
         AmountExemptfromSalesTaxCaption: Text;
         DisplayAdditionalFeeNote: Boolean;
-        SalesHeader: Record "Sales Header";
         ResourceRec: Record Resource;
         FreightAmt: Decimal;
 

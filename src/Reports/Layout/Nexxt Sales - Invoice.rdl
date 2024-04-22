@@ -1776,9 +1776,9 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                 </Paragraph>
               </Paragraphs>
               <Top>0.39933in</Top>
-              <Left>3.67111in</Left>
+              <Left>3.44611in</Left>
               <Height>14.6pt</Height>
-              <Width>1.74596in</Width>
+              <Width>1.97096in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -1806,9 +1806,9 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Left>3.67111in</Left>
+              <Left>3.44611in</Left>
               <Height>20pt</Height>
-              <Width>3.36405in</Width>
+              <Width>3.58905in</Width>
               <ZIndex>2</ZIndex>
               <Style />
             </Textbox>
@@ -1834,7 +1834,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
               <Top>1.79195in</Top>
               <Left>0.00001in</Left>
               <Height>11pt</Height>
-              <Width>3.55814in</Width>
+              <Width>3.16046in</Width>
               <ZIndex>3</ZIndex>
               <Style />
             </Textbox>
@@ -1860,7 +1860,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
               <Top>1.62541in</Top>
               <Left>0.00001in</Left>
               <Height>11pt</Height>
-              <Width>3.55814in</Width>
+              <Width>3.16046in</Width>
               <ZIndex>4</ZIndex>
               <Style />
             </Textbox>
@@ -1914,9 +1914,9 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                 </Paragraph>
               </Paragraphs>
               <Top>0.60489in</Top>
-              <Left>3.67111in</Left>
+              <Left>3.44611in</Left>
               <Height>19.13474pt</Height>
-              <Width>1.74596in</Width>
+              <Width>1.97096in</Width>
               <ZIndex>6</ZIndex>
               <Style>
                 <Border>
@@ -1946,7 +1946,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
               <Top>1.45888in</Top>
               <Left>0.00001in</Left>
               <Height>11pt</Height>
-              <Width>3.55814in</Width>
+              <Width>3.16046in</Width>
               <ZIndex>7</ZIndex>
               <Style />
             </Textbox>
@@ -1972,7 +1972,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
               <Top>1.29234in</Top>
               <Left>0.00001in</Left>
               <Height>11pt</Height>
-              <Width>3.55814in</Width>
+              <Width>3.16046in</Width>
               <ZIndex>8</ZIndex>
               <Style />
             </Textbox>
@@ -1998,7 +1998,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
               <Top>1.12581in</Top>
               <Left>0.00001in</Left>
               <Height>11pt</Height>
-              <Width>3.55814in</Width>
+              <Width>3.16046in</Width>
               <ZIndex>9</ZIndex>
               <Style />
             </Textbox>
@@ -2024,7 +2024,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
               <Top>0.95927in</Top>
               <Left>0.00001in</Left>
               <Height>11pt</Height>
-              <Width>3.55814in</Width>
+              <Width>3.16046in</Width>
               <ZIndex>10</ZIndex>
               <Style />
             </Textbox>
@@ -2050,7 +2050,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
               <Top>0.80524in</Top>
               <Left>0.00001in</Left>
               <Height>11pt</Height>
-              <Width>3.55814in</Width>
+              <Width>3.16046in</Width>
               <ZIndex>11</ZIndex>
               <Style />
             </Textbox>
@@ -2061,7 +2061,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
               <Sizing>FitProportional</Sizing>
               <Left>0.00001in</Left>
               <Height>18.3044mm</Height>
-              <Width>90.37666mm</Width>
+              <Width>80.27568mm</Width>
               <ZIndex>12</ZIndex>
               <DataElementOutput>NoOutput</DataElementOutput>
               <Style>
@@ -2088,9 +2088,9 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                 </Paragraph>
               </Paragraphs>
               <Top>1.1244in</Top>
-              <Left>3.67111in</Left>
+              <Left>3.44611in</Left>
               <Height>13.7pt</Height>
-              <Width>1.14834in</Width>
+              <Width>1.13167in</Width>
               <ZIndex>13</ZIndex>
               <Style>
                 <Border>
@@ -2105,7 +2105,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value EvaluationMode="Constant">Surgery Date</Value>
+                      <Value EvaluationMode="Constant">Surgery/ Requested Date</Value>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -2119,9 +2119,9 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                 </Paragraph>
               </Paragraphs>
               <Top>1.1244in</Top>
-              <Left>4.81945in</Left>
+              <Left>4.57778in</Left>
               <Height>13.7pt</Height>
-              <Width>1.17322in</Width>
+              <Width>1.41489in</Width>
               <ZIndex>14</ZIndex>
               <Style>
                 <Border>
@@ -2149,9 +2149,9 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                 </Paragraph>
               </Paragraphs>
               <Top>1.31607in</Top>
-              <Left>3.67111in</Left>
+              <Left>3.44611in</Left>
               <Height>21.2pt</Height>
-              <Width>1.14834in</Width>
+              <Width>1.13167in</Width>
               <ZIndex>15</ZIndex>
               <Style>
                 <Border>
@@ -2170,6 +2170,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
+                        <Format>d</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2179,9 +2180,9 @@ Cstr(Fields!TaxIdentTypeCaption.Value)
                 </Paragraph>
               </Paragraphs>
               <Top>1.31607in</Top>
-              <Left>4.81945in</Left>
+              <Left>4.57778in</Left>
               <Height>21.2pt</Height>
-              <Width>1.17322in</Width>
+              <Width>1.41489in</Width>
               <ZIndex>16</ZIndex>
               <Style>
                 <Border>
@@ -2677,6 +2678,9 @@ End Function</Code>
       <Fields>
         <Field Name="No_SalesInvHeader">
           <DataField>No_SalesInvHeader</DataField>
+        </Field>
+        <Field Name="NTS_Requested_Delivery_Date">
+          <DataField>NTS_Requested_Delivery_Date</DataField>
         </Field>
         <Field Name="DisplayAdditionalFeeNote">
           <DataField>DisplayAdditionalFeeNote</DataField>
