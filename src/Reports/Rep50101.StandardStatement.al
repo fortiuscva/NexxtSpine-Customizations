@@ -707,6 +707,11 @@ report 50101 "NTS Standard Statement"
                             AutoFormatExpression = TempAgingBandBuf."Currency Code";
                             AutoFormatType = 1;
                         }
+                        column(AgingBandBufCol7Amt; TempAgingBandBuf."NTS Column 7 Amt.")
+                        {
+                            AutoFormatExpression = TempAgingBandBuf."Currency Code";
+                            AutoFormatType = 1;
+                        }
                         column(AgingBandCurrencyCode; AgingBandCurrencyCode)
                         {
                         }
@@ -1288,6 +1293,7 @@ report 50101 "NTS Standard Statement"
 
             I := I + 1;
         end;
+        TempAgingBandBuf."NTS Column 7 Amt." := TempAgingBandBuf."Column 1 Amt." + TempAgingBandBuf."Column 2 Amt." + TempAgingBandBuf."Column 3 Amt." + TempAgingBandBuf."Column 4 Amt." + TempAgingBandBuf."Column 5 Amt." + TempAgingBandBuf."NTS Column 6 Amt.";
         TempAgingBandBuf.Modify();
     end;
 
