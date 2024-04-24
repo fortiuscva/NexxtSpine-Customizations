@@ -465,6 +465,12 @@
         <Field Name="AgingBandBufCol6AmtFormat">
           <DataField>AgingBandBufCol6AmtFormat</DataField>
         </Field>
+        <Field Name="AgingBandBufCol7Amt">
+          <DataField>AgingBandBufCol7Amt</DataField>
+        </Field>
+        <Field Name="AgingBandBufCol7AmtFormat">
+          <DataField>AgingBandBufCol7AmtFormat</DataField>
+        </Field>
         <Field Name="AgingBandCurrencyCode">
           <DataField>AgingBandCurrencyCode</DataField>
         </Field>
@@ -497,7 +503,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>17.93863cm</Width>
+                  <Width>17.92499cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -512,13 +518,13 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>3.82685cm</Width>
+                                    <Width>3.503cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>3.84233cm</Width>
+                                    <Width>3.51848cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>4.63605cm</Width>
+                                    <Width>4.3122cm</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
@@ -1385,29 +1391,29 @@
                               <KeepTogether>true</KeepTogether>
                               <Top>8.78895cm</Top>
                               <Height>2.92983cm</Height>
-                              <Width>12.30523cm</Width>
+                              <Width>11.33368cm</Width>
                               <Style>
                                 <Border>
-                                  <Style>Dotted</Style>
+                                  <Style>Solid</Style>
                                 </Border>
                                 <TopBorder>
                                   <Color>Black</Color>
-                                  <Style>Dotted</Style>
+                                  <Style>Solid</Style>
                                   <Width>1pt</Width>
                                 </TopBorder>
                                 <BottomBorder>
                                   <Color>Black</Color>
-                                  <Style>Dotted</Style>
+                                  <Style>Solid</Style>
                                   <Width>1pt</Width>
                                 </BottomBorder>
                                 <LeftBorder>
                                   <Color>Black</Color>
-                                  <Style>Dotted</Style>
+                                  <Style>Solid</Style>
                                   <Width>1pt</Width>
                                 </LeftBorder>
                                 <RightBorder>
                                   <Color>Black</Color>
-                                  <Style>Dotted</Style>
+                                  <Style>Solid</Style>
                                   <Width>1pt</Width>
                                 </RightBorder>
                               </Style>
@@ -3210,7 +3216,7 @@ Cstr(Fields!AccountNo.Value ))
                                       </TablixMember>
                                       <TablixMember>
                                         <Visibility>
-                                          <Hidden>=IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
+                                          <Hidden>true</Hidden>
                                         </Visibility>
                                       </TablixMember>
                                     </TablixMembers>
@@ -3226,6 +3232,158 @@ Cstr(Fields!AccountNo.Value ))
                               <Width>17.60779cm</Width>
                               <ZIndex>2</ZIndex>
                               <Style />
+                            </Tablix>
+                            <Tablix Name="Tablix1">
+                              <TablixBody>
+                                <TablixColumns>
+                                  <TablixColumn>
+                                    <Width>2.0125in</Width>
+                                  </TablixColumn>
+                                </TablixColumns>
+                                <TablixRows>
+                                  <TablixRow>
+                                    <Height>0.25in</Height>
+                                    <TablixCells>
+                                      <TablixCell>
+                                        <CellContents>
+                                          <Textbox Name="Textbox15">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>=First(Fields!Total_Caption2.Value) &amp; "  (" &amp; First(Fields!CurrencySymbol3.Value) + ")"</Value>
+                                                    <Style>
+                                                      <FontFamily>Segoe UI</FontFamily>
+                                                      <FontSize>9pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>Textbox1</rd:DefaultName>
+                                            <Style>
+                                              <Border>
+                                                <Style>Solid</Style>
+                                              </Border>
+                                              <TopBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>1pt</Width>
+                                              </TopBorder>
+                                              <BottomBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>1pt</Width>
+                                              </BottomBorder>
+                                              <LeftBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>1pt</Width>
+                                              </LeftBorder>
+                                              <RightBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>1pt</Width>
+                                              </RightBorder>
+                                              <PaddingLeft>2pt</PaddingLeft>
+                                              <PaddingRight>2pt</PaddingRight>
+                                              <PaddingTop>2pt</PaddingTop>
+                                              <PaddingBottom>2pt</PaddingBottom>
+                                            </Style>
+                                          </Textbox>
+                                        </CellContents>
+                                      </TablixCell>
+                                    </TablixCells>
+                                  </TablixRow>
+                                  <TablixRow>
+                                    <Height>0.25in</Height>
+                                    <TablixCells>
+                                      <TablixCell>
+                                        <CellContents>
+                                          <Textbox Name="textbox187">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>=Last(Fields!AgingBandBufCol7Amt.Value)</Value>
+                                                    <Style>
+                                                      <FontFamily>Segoe UI</FontFamily>
+                                                      <FontSize>8pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
+                                                      <Format>=Fields!AgingBandBufCol1AmtFormat.Value</Format>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>textbox163</rd:DefaultName>
+                                            <Style>
+                                              <Border>
+                                                <Style>Solid</Style>
+                                                <Width>0.5pt</Width>
+                                              </Border>
+                                              <TopBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>0.5pt</Width>
+                                              </TopBorder>
+                                              <BottomBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>0.5pt</Width>
+                                              </BottomBorder>
+                                              <LeftBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>0.5pt</Width>
+                                              </LeftBorder>
+                                              <RightBorder>
+                                                <Color>Black</Color>
+                                                <Style>Solid</Style>
+                                                <Width>0.5pt</Width>
+                                              </RightBorder>
+                                              <PaddingLeft>5pt</PaddingLeft>
+                                            </Style>
+                                          </Textbox>
+                                          <rd:Selected>true</rd:Selected>
+                                        </CellContents>
+                                      </TablixCell>
+                                    </TablixCells>
+                                  </TablixRow>
+                                </TablixRows>
+                              </TablixBody>
+                              <TablixColumnHierarchy>
+                                <TablixMembers>
+                                  <TablixMember />
+                                </TablixMembers>
+                              </TablixColumnHierarchy>
+                              <TablixRowHierarchy>
+                                <TablixMembers>
+                                  <TablixMember />
+                                  <TablixMember />
+                                </TablixMembers>
+                              </TablixRowHierarchy>
+                              <Top>3.46875in</Top>
+                              <Left>4.65708in</Left>
+                              <Height>0.5in</Height>
+                              <Width>2.0125in</Width>
+                              <ZIndex>3</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
                             </Tablix>
                           </ReportItems>
                           <Style>
@@ -3266,14 +3424,14 @@ Cstr(Fields!AccountNo.Value ))
               <BreakLocation>End</BreakLocation>
             </PageBreak>
             <Height>11.71878cm</Height>
-            <Width>17.93863cm</Width>
+            <Width>17.92499cm</Width>
             <Style />
           </Tablix>
         </ReportItems>
         <Height>4.61369in</Height>
         <Style />
       </Body>
-      <Width>17.94053cm</Width>
+      <Width>17.93862cm</Width>
       <Page>
         <PageHeader>
           <Height>3.44875in</Height>
@@ -3443,7 +3601,7 @@ Cstr(Fields!AccountNo.Value ))
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Code.GetData(11,1) + System.Environment.NewLine + Code.GetData(12,1) + System.Environment.NewLine + Code.GetData(13,1) + System.Environment.NewLine +Code.GetData(14,1) + Code.GetData(15,1)  + Code.GetData(16,1) + System.Environment.NewLine +  Code.GetData(23,1)</Value>
+                      <Value>=Code.GetData(11,1) + System.Environment.NewLine + Code.GetData(12,1) + System.Environment.NewLine + Code.GetData(13,1) + System.Environment.NewLine +Code.GetData(14,1) + Code.GetData(15,1)  + Code.GetData(16,1) + System.Environment.NewLine +  "PH "+Code.GetData(23,1)</Value>
                       <Style>
                         <FontFamily>Bahnschrift SemiLight</FontFamily>
                         <FontWeight>Normal</FontWeight>
@@ -3755,7 +3913,7 @@ Cstr(Fields!AccountNo.Value ))
             </Rectangle>
             <Rectangle Name="Rectangle1">
               <KeepTogether>true</KeepTogether>
-              <Height>3.30083in</Height>
+              <Height>3.28695in</Height>
               <Width>7.06245in</Width>
               <ZIndex>7</ZIndex>
               <Style>
@@ -3772,40 +3930,13 @@ Cstr(Fields!AccountNo.Value ))
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Textbox Name="PageNumberTextBox">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Code.GetGroupPageNumber(ReportItems!NewPage.Value, Globals!PageNumber)</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>0.44095cm</Top>
-              <Left>17.35329cm</Left>
-              <Height>11pt</Height>
-              <Width>0.42466cm</Width>
-              <Style>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>1pt</PaddingLeft>
-              </Style>
-            </Textbox>
             <Textbox Name="CurrReportPageNoCaption">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Fields!CurrReportPageNoCaption.Value</Value>
+                      <Value>="Page " &amp; Globals!PageNumber &amp; "of " &amp; Globals!TotalPages</Value>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -3817,11 +3948,10 @@ Cstr(Fields!AccountNo.Value ))
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.44095cm</Top>
-              <Left>11.59258cm</Left>
+              <Top>0.44093cm</Top>
+              <Left>11.91008cm</Left>
               <Height>11pt</Height>
               <Width>5.76071cm</Width>
-              <ZIndex>1</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
