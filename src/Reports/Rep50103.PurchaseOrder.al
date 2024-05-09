@@ -16,6 +16,8 @@ report 50103 "NTS Purchase Order"
             column(No_PurchaseHeader; "No.")
             {
             }
+            column(NTS_Reason_Code; "NTS Reason Code")
+            { }
             column(CompanyInformation_Picture; CompanyInformation.Picture)
             { }
             dataitem(CopyLoop; "Integer")
@@ -132,7 +134,8 @@ report 50103 "NTS Purchase Order"
                     column(CompanyInformationPhoneNo; CompanyInformation."Phone No.")
                     {
                     }
-
+                    column(ReasonCode_Description; ReasonCode.Description)
+                    { }
                     column(CopyNo; CopyNo)
                     {
                     }
@@ -480,6 +483,8 @@ report 50103 "NTS Purchase Order"
                     UseDate := "Posting Date"
                 else
                     UseDate := WorkDate();
+
+                if ReasonCode.Get("Purchase Header"."NTS Reason Code") then;
             end;
 
             trigger OnPreDataItem()
@@ -655,5 +660,6 @@ report 50103 "NTS Purchase Order"
         VendorOrderNoLbl: Label 'Vendor Order No.';
         VendorInvoiceNoLbl: Label 'Vendor Invoice No.';
         VendorItemNo: Code[50];
+        ReasonCode: Record "NTS Purchase Reason Code";
 }
 

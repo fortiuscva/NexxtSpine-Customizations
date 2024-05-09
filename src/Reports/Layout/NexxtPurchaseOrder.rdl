@@ -2725,7 +2725,7 @@ No UDI for SP-0288 or SP-0289</Value>
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value EvaluationMode="Constant">All Instrument items need to follow the following: All lot numbers laser marked must follow Nexxt Spine OCP 7.5-06; Assign next sequential lot number based upon supplier specific prefix code. Contact Purchasing Agent to obtain your prefix code if not already assigned. Acceptable quantity is zero below and 10% over. Acceptable delivery is zero days late and 10 calendar days early. All shipments must include certifications of material and workmanship. Vendor must obtain approval by Nexxt Spine quality personnel prior to making any changes in the service or production process once approved via acceptable FAS.</Value>
+                          <Value>=Fields!ReasonCode_Description.Value</Value>
                           <Style>
                             <FontFamily>Segoe UI</FontFamily>
                             <FontSize>8pt</FontSize>
@@ -2836,7 +2836,6 @@ No UDI for SP-0288 or SP-0289</Value>
                 </Textbox>
               </ReportItems>
               <KeepTogether>true</KeepTogether>
-              <Top>0in</Top>
               <Height>2.57214in</Height>
               <Width>7.28106in</Width>
               <Visibility>
@@ -2978,6 +2977,9 @@ IoNIwatKlBkxECgFKguiDDxs2pZC3IOKAIdIwYhRrgQ01IMH8063P2rA2C0wKqkyUlUvg6iyZc+RFW7f
         <Field Name="No_PurchaseHeader">
           <DataField>No_PurchaseHeader</DataField>
         </Field>
+        <Field Name="NTS_Reason_Code">
+          <DataField>NTS_Reason_Code</DataField>
+        </Field>
         <Field Name="CompanyInformation_Picture">
           <DataField>CompanyInformation_Picture</DataField>
         </Field>
@@ -3088,6 +3090,9 @@ IoNIwatKlBkxECgFKguiDDxs2pZC3IOKAIdIwYhRrgQ01IMH8063P2rA2C0wKqkyUlUvg6iyZc+RFW7f
         </Field>
         <Field Name="CompanyInformationPhoneNo">
           <DataField>CompanyInformationPhoneNo</DataField>
+        </Field>
+        <Field Name="ReasonCode_Description">
+          <DataField>ReasonCode_Description</DataField>
         </Field>
         <Field Name="CopyNo">
           <DataField>CopyNo</DataField>
