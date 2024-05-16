@@ -1,7 +1,7 @@
 /// <summary>
 /// PageExtension NTS Inventory Setup (ID 50101) extends Record Inventory Setup.
 /// </summary>
-pageextension 50102 "NTS Inventory Setup" extends "Inventory Setup"
+pageextension 52101 "NTS Inventory Setup" extends "Inventory Setup"
 {
     layout
     {

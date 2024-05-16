@@ -1,4 +1,4 @@
-codeunit 50149 "NTS Event Management"
+codeunit 52101 "NTS Event Management"
 {
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforeSalesInvHeaderInsert', '', false, false)]
 

@@ -1,4 +1,4 @@
-report 50102 "NTS Sales Credit Memo"
+report 52102 "NTS Sales Credit Memo"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './src/Reports/Layout/NTSSalesCreditMemo.rdl';

@@ -1,4 +1,4 @@
-report 50101 "NTS Standard Statement"
+report 52101 "NTS Standard Statement"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './src/Reports/Layout/NTSCustomerStatement.rdl';

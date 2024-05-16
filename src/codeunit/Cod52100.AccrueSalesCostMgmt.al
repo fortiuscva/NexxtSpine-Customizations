@@ -1,4 +1,4 @@
-codeunit 50101 "NTS Accrue Sales & Cost Mgmt."
+codeunit 52100 "NTS Accrue Sales & Cost Mgmt."
 {
     procedure AccrueSalesRevenueLines(SalesAcureCost: Record "NTS Accrue Sales Order Lines")
     var

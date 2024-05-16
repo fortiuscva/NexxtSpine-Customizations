@@ -1,4 +1,4 @@
-pageextension 50149 "NTS Posted Sales Invoice Ext" extends "Posted Sales Invoice"
+pageextension 52103 "NTS Posted Sales Invoice Ext" extends "Posted Sales Invoice"
 {
     layout
     {
