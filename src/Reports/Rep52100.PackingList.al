@@ -1,4 +1,4 @@
-report 50100 "NTS Packing List"
+report 52100 "NTS Packing List"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './src/Reports/Layout/PackingList.rdl';

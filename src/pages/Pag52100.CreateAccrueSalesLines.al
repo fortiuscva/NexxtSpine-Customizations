@@ -1,4 +1,4 @@
-page 50100 "NTS Create Accrue Sales Lines"
+page 52100 "NTS Create Accrue Sales Lines"
 {
     Caption = 'New Accrue Sales Lines';
     PageType = StandardDialog;

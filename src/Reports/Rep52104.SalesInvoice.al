@@ -1,4 +1,4 @@
-report 50104 "NTS Sales - Invoice"
+report 52104 "NTS Sales - Invoice"
 {
     Caption = 'Nexxt Sales - Invoice';
     DefaultLayout = RDLC;

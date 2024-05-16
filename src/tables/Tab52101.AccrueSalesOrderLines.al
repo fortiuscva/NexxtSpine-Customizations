@@ -1,4 +1,4 @@
-table 50100 "NTS Accrue Sales Order Lines"
+table 52101 "NTS Accrue Sales Order Lines"
 {
     Caption = 'Accrue Sales Order Lines';
     DataClassification = ToBeClassified;

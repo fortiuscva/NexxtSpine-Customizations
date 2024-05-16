@@ -1,4 +1,4 @@
-page 52100 "NTS Purchase Reason Codes"
+page 52101 "NTS Purchase Reason Codes"
 {
     ApplicationArea = All;
     Caption = 'Purchase Reason Codes';

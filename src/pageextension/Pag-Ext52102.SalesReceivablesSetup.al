@@ -1,7 +1,7 @@
 /// <summary>
-/// PageExtension NTS NTS NTS NTS NTS NTS Sales & Receivables Setup (ID 50101) extends Record Sales & Receivables Setup.
+/// PageExtension NTS NTS NTS NTS NTS NTS NTS NTS Sales & Receivables Setup (ID 50101) extends Record Sales & Receivables Setup.
 /// </summary>
-pageextension 50101 "Sales & Receivables Setup" extends "Sales & Receivables Setup"
+pageextension 52102 "Sales & Receivables Setup" extends "Sales & Receivables Setup"
 {
     layout
     {

@@ -1,4 +1,4 @@
-report 50103 "NTS Purchase Order"
+report 52103 "NTS Purchase Order"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './src/Reports/Layout/NexxtPurchaseOrder.rdl';
