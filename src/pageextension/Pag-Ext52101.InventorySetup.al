@@ -23,4 +23,20 @@ pageextension 52101 "NTS Inventory Setup" extends "Inventory Setup"
             }
         }
     }
+    actions
+    {
+        addfirst(Processing)
+        {
+            action("NTS RunStandrdDialogue")
+            {
+                ApplicationArea = All;
+                Caption = 'New Accure Dialogue';
+                RunPageMode = Create;
+                trigger OnAction()
+                begin
+                    Page.Run(Page::"NTS Create Accrue Sales Lines");
+                end;
+            }
+        }
+    }
 }

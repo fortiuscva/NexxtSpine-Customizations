@@ -33,7 +33,7 @@ table 52101 "NTS Accrue Sales Order Lines"
         {
             Caption = 'Status';
         }
-        field(8; "Error Text"; text[250])
+        field(8; "Error Text"; text[1024])
         {
             Caption = 'Error Text';
         }

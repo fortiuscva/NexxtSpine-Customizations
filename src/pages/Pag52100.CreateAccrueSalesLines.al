@@ -12,15 +12,14 @@ page 52100 "NTS Create Accrue Sales Lines"
         {
             group(ProcessID)
             {
-                Caption = 'Process-ID';
+                Caption = 'Date';
                 field("Date"; Rec.Date)
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Date field.';
-                    Editable = false;
                     trigger OnValidate()
                     begin
-
+                        Rec.Date := CalcDate('<CM>', WorkDate());
                     end;
                 }
             }
@@ -30,6 +29,7 @@ page 52100 "NTS Create Accrue Sales Lines"
     begin
         rec.Init();
         Rec.Date := CalcDate('<CM>', WorkDate());
+        Rec.Insert();
     end;
 
 
@@ -42,6 +42,10 @@ page 52100 "NTS Create Accrue Sales Lines"
                 begin
                     mCUSalesMgtLoc.AccrueSalesRevenueLines(Rec);
                     mCUSalesMgtLoc.AccrueSalesCOGSLines(Rec);
+                    If mCUSalesMgtLoc.PostGeneralJournalAR(Rec) then
+                        Message('Sales Revnue has been posted successfully');
+                    if mCUSalesMgtLoc.PostGeneralJournalAC(Rec) then
+                        Message('Sales Cost has been posted successfully');
                 end;
             else
                 clear(rec);
