@@ -11,4 +11,13 @@ codeunit 52101 "NTS Event Management"
         SalesInvHeader."NTS Requested Delivery Date" := SalesHeader."Requested Delivery Date";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, codeunit::"Gen. Jnl.-Post Line", 'OnPostGLAccOnAfterInitGLEntry', '', false, false)]
+    local procedure OnPostGLAccOnAfterInitGLEntry(var GenJournalLine: Record "Gen. Journal Line"; var GLEntry: Record "G/L Entry");
+    begin
+        if GenJournalLine."Your Reference" = 'ACUUREDSALES' then begin
+            GLEntry."NTS Accured Posting Month" := FORMAT(GenJournalLine."Document Date", 0, '<Month Text>');
+            GLEntry."NTS Accured Posting Year" := Date2DMY(GenJournalLine."Posting Date", 3);
+        end;
+
+    end;
 }
