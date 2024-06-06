@@ -18,6 +18,7 @@ codeunit 52101 "NTS Event Management"
             GLEntry."NTS Accured Posting Month" := FORMAT(GenJournalLine."Document Date", 0, '<Month Text>');
             GLEntry."NTS Accured Posting Year" := Date2DMY(GenJournalLine."Posting Date", 3);
         end;
+        GLEntry."NTS Revenue Reversal" := GenJournalLine."NTS Revenue Reversal";
 
     end;
 }
