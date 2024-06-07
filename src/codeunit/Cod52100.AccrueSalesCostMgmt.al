@@ -109,6 +109,7 @@ codeunit 52100 "NTS Accrue Sales & Cost Mgmt."
         GeneralJournalLine.Validate("Bal. Account No.", SalesSetup."NTS Accrued Sales GL");
         GeneralJournalLine.Description := 'Accrued Sales' + salesLine."Document No." + '-' + format(salesLine."Line No.") + '-' + Month;
         GeneralJournalLine."Your Reference" := 'ACUUREDSALES';
+        GeneralJournalLine."NTS Revenue Reversal" := true;
         GeneralJournalLine.Insert(true);
     end;
 
@@ -168,6 +169,7 @@ codeunit 52100 "NTS Accrue Sales & Cost Mgmt."
         GeneralJournalLine.Validate("Bal. Account Type", GeneralJournalLine."Bal. Account Type"::"G/L Account");
         GeneralJournalLine.Validate("Bal. Account No.", InventrySetup."NTS Accrued Inventory GL");
         GeneralJournalLine."Your Reference" := 'ACUUREDSALES';
+        GeneralJournalLine."NTS Revenue Reversal" := true;
         GeneralJournalLine.Description := 'Accrued Cost' + salesLine."Document No." + '-' + format(salesLine."Line No.") + '-' + Month;
         GeneralJournalLine.Insert(true);
     end;
@@ -241,6 +243,7 @@ codeunit 52100 "NTS Accrue Sales & Cost Mgmt."
         InputDate := CalcDate('<CM>', WorkDate());
         GLEntry.SetRange(GLEntry."NTS Accured Posting Year", Date2DMY(InputDate, 3));
         GLEntry.SetRange(GLEntry."NTS Accured Posting Month", FORMAT(InputDate, 0, '<Month Text>'));
+        GLEntry.SetRange("NTS Revenue Reversal", false);
         if not GLEntry.IsEmpty then
             Error('Posting has alredy been done, please check G/L Entries');
 

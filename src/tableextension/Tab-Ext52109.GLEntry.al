@@ -12,5 +12,10 @@ tableextension 52109 "NTS G/L Entry" extends "G/L Entry"
             Caption = 'Accured Posting Year';
             DataClassification = ToBeClassified;
         }
+        field(52102; "NTS Revenue Reversal"; Boolean)
+        {
+            Caption = 'Revenue Reversal';
+            DataClassification = ToBeClassified;
+        }
     }
 }
