@@ -16,6 +16,7 @@ report 52105 "NTS Accrue Sales Cost Mgmt"
                     Error(BlankInputErr);
                 GLEntry.SetRange(GLEntry."NTS Accured Posting Year", Date2DMY(InputDate, 3));
                 GLEntry.SetRange(GLEntry."NTS Accured Posting Month", FORMAT(InputDate, 0, '<Month Text>'));
+                GLEntry.SetRange("NTS Revenue Reversal", false);
                 if not GLEntry.IsEmpty then
                     Error('Posting has alredy been done, please check G/L Entries');
                 AccureSalesCost.AccrueSalesCOGSLines(InputDate);
