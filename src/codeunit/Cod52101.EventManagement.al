@@ -21,4 +21,29 @@ codeunit 52101 "NTS Event Management"
         GLEntry."NTS Revenue Reversal" := GenJournalLine."NTS Revenue Reversal";
 
     end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Prod. Order Routing Line", 'OnAfterCopyFromRoutingLine', '', true, true)]
+    local procedure OnAfterCopyFromRoutingLine(var ProdOrderRoutingLine: Record "Prod. Order Routing Line"; RoutingLine: Record "Routing Line")
+    var
+        IRCode: Record "NTS IR Code";
+    begin
+        case true of
+            RoutingLine."NTS IR Sheet 1" <> '':
+                begin
+                    ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 1");
+                end;
+            RoutingLine."NTS IR Sheet 2" <> '':
+                begin
+                    ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 2");
+                end;
+            RoutingLine."NTS IR Sheet 3" <> '':
+                begin
+                    ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 3");
+                end;
+        end;
+
+        ProdOrderRoutingLine."NTS IR Sheet 1" := RoutingLine."NTS IR Sheet 1";
+        ProdOrderRoutingLine."NTS IR Sheet 2" := RoutingLine."NTS IR Sheet 2";
+        ProdOrderRoutingLine."NTS IR Sheet 3" := RoutingLine."NTS IR Sheet 3";
+    end;
 }
