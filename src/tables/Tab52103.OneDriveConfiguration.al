@@ -33,6 +33,10 @@ table 52103 "NTS OneDrive Configuration"
         {
             Caption = 'Destination Folder Name';
         }
+        field(8; "File Open Path URL"; Text[1024])
+        {
+            Caption = 'File Open Path URL';
+        }
     }
     keys
     {

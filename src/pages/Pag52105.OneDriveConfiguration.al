@@ -40,6 +40,11 @@ page 52105 "NTS OneDrive Configuration"
                 {
                     ToolTip = 'Specifies the value of the Destination Folder Name field.', Comment = '%';
                 }
+                field("File Open Path URL"; Rec."File Open Path URL")
+                {
+                    ToolTip = 'Specifies the value of the File Open Path URL field.', Comment = '%';
+                }
+
             }
         }
     }
