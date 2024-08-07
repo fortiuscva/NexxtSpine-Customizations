@@ -6,7 +6,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         {
             Caption = 'IR Sheet 1';
             DataClassification = ToBeClassified;
-            TableRelation = "NTS Reference IR Code";
+            TableRelation = "NTS Reference IR Code".Code where("Source No." = field("Prod. Order No."));
 
             trigger OnValidate()
             begin
@@ -17,7 +17,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         {
             Caption = 'IR Sheet 2';
             DataClassification = ToBeClassified;
-            TableRelation = "NTS Reference IR Code";
+            TableRelation = "NTS Reference IR Code".Code where("Source No." = field("Prod. Order No."));
 
             trigger OnValidate()
             begin
@@ -28,7 +28,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         {
             Caption = 'IR Sheet 3';
             DataClassification = ToBeClassified;
-            TableRelation = "NTS Reference IR Code";
+            TableRelation = "NTS Reference IR Code".Code where("Source No." = field("Prod. Order No."));
 
             trigger OnValidate()
             begin
@@ -44,7 +44,8 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
     begin
         ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
         ReferenceIRCode.SetRange("Source Subtype", Rec.Status);
-        ReferenceIRCode.SetRange("Source No.", Rec."Routing No.");
+        //ReferenceIRCode.SetRange("Source No.", Rec."Routing No.");
+        ReferenceIRCode.SetRange("Source No.", Rec."Prod. Order No.");
         ReferenceIRCode.SetRange("Source Line No.", Rec."Routing Reference No.");
         ReferenceIRCode.SetRange("Source Subline No.", 0);
         ReferenceIRCode.SetRange(Code, IRSheetPar);
@@ -53,7 +54,8 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
                 ReferenceIRCode.Init();
                 ReferenceIRCode."Source Type" := Database::"Prod. Order Routing Line";
                 ReferenceIRCode."Source Subtype" := Rec.Status;
-                ReferenceIRCode."Source No." := Rec."Routing No.";
+                //ReferenceIRCode."Source No." := Rec."Routing No.";
+                ReferenceIRCode."Source No." := Rec."Prod. Order No.";
                 ReferenceIRCode."Source Line No." := Rec."Routing Reference No.";
                 ReferenceIRCode."Source Subline No." := 0;
                 ReferenceIRCode.Code := IRCode.Code;

@@ -27,20 +27,14 @@ codeunit 52101 "NTS Event Management"
     var
         IRCode: Record "NTS IR Code";
     begin
-        case true of
-            RoutingLine."NTS IR Sheet 1" <> '':
-                begin
-                    ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 1");
-                end;
-            RoutingLine."NTS IR Sheet 2" <> '':
-                begin
-                    ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 2");
-                end;
-            RoutingLine."NTS IR Sheet 3" <> '':
-                begin
-                    ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 3");
-                end;
-        end;
+
+        if RoutingLine."NTS IR Sheet 1" <> '' then
+            ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 1");
+        if RoutingLine."NTS IR Sheet 2" <> '' then
+            ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 2");
+
+        if RoutingLine."NTS IR Sheet 3" <> '' then
+            ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 3");
 
         ProdOrderRoutingLine."NTS IR Sheet 1" := RoutingLine."NTS IR Sheet 1";
         ProdOrderRoutingLine."NTS IR Sheet 2" := RoutingLine."NTS IR Sheet 2";
