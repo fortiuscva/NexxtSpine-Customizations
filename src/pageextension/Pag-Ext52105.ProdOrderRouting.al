@@ -26,7 +26,7 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
             {
                 Caption = 'Reference IR Code Factbox';
                 ApplicationArea = All;
-                SubPageLink = "Source Type" = const(5409), "Source Subtype" = field(Status), "Source No." = field("Routing No."), "Source Line No." = field("Routing Reference No.");
+                SubPageLink = "Source Type" = const(5409), "Source Subtype" = field(Status), "Source No." = field("Prod. Order No."), "Source Line No." = field("Routing Reference No.");
             }
         }
     }
