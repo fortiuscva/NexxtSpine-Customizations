@@ -20,5 +20,14 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
                 ToolTip = 'Specifies the value of the NTS IR Sheet 3 field.';
             }
         }
+        addlast(factboxes)
+        {
+            part(IRCodesFactbox; "NTS Reference IR Code Factbox")
+            {
+                Caption = 'Reference IR Code Factbox';
+                ApplicationArea = All;
+                SubPageLink = "Source Type" = const(5409), "Source Subtype" = field(Status), "Source No." = field("Routing No."), "Source Line No." = field("Routing Reference No.");
+            }
+        }
     }
 }

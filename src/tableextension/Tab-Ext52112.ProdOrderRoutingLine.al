@@ -40,6 +40,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
     var
         IRCode: Record "NTS IR Code";
         ReferenceIRCode: Record "NTS Reference IR Code";
+        OneDriveIntegrationCULcl: Codeunit "NTS OneDrive Integration";
     begin
         ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
         ReferenceIRCode.SetRange("Source Subtype", Rec.Status);
@@ -57,8 +58,10 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
                 ReferenceIRCode."Source Subline No." := 0;
                 ReferenceIRCode.Code := IRCode.Code;
                 ReferenceIRCode."IR Number" := IRCode."IR Number";
-                ReferenceIRCode."IR Sheet Name" := IRCode."IR Sheet Name";
-                ReferenceIRCode.Link := IRCode.Link;
+                //ReferenceIRCode."IR Sheet Name" := IRCode."IR Sheet Name";
+                //ReferenceIRCode.Link := IRCode.Link;
+                ReferenceIRCode."IR Sheet Name" := Rec."Prod. Order No." + IRCode."IR Number" + IRCode."IR Sheet Name";
+                OneDriveIntegrationCULcl.ConnectOneDriveFile(Rec."Prod. Order No." + IRCode."IR Number" + IRCode."IR Sheet Name", IRCode."IR Number", ReferenceIRCode.Link);
                 ReferenceIRCode.Insert();
             end;
         end;
