@@ -47,10 +47,14 @@ table 52102 "NTS Reference IR Code"
         {
             Caption = 'Link';
         }
+        field(15; "Operation No."; Code[20])
+        {
+            Caption = '"Operation No."';
+        }
     }
     keys
     {
-        key(PK; "Source Type", "Source Subtype", "Source No.", "Source Line No.", "Source Subline No.", Code)
+        key(PK; "Source Type", "Source Subtype", "Source No.", "Source Line No.", "Source Subline No.", Code, "Operation No.")
         {
             Clustered = true;
         }
