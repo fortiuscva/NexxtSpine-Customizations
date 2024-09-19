@@ -82,7 +82,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
                 //ReferenceIRCode."IR Sheet Name" := IRCode."IR Sheet Name";
                 //ReferenceIRCode.Link := IRCode.Link;
                 ReferenceIRCode."IR Sheet Name" := Rec."Prod. Order No." + IRCode."IR Number" + IRCode."IR Sheet Name";
-                OneDriveIntegrationCULcl.ConnectOneDriveFile(Rec."Prod. Order No." + IRCode."IR Number" + IRCode."IR Sheet Name", IRCode."IR Number", ReferenceIRCode.Link);
+                OneDriveIntegrationCULcl.ConnectOneDriveFile(Rec."Prod. Order No." + '-' + format(Rec."Routing Reference No.") + '-' + IRCode."IR Number", IRCode."IR Number", ReferenceIRCode.Link);
                 ReferenceIRCode.Insert();
 
                 TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode, Rec, IRCode);
