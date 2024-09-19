@@ -60,24 +60,38 @@ codeunit 52102 "NTS OneDrive Integration"
             DHeadersVarLcl := DClientVarLcl.DefaultRequestHeaders();
             DHeadersVarLcl.Add('Authorization', StrSubstNo('Bearer %1', APITokenVarLcl));
 
-            RequestVarLcl.SetRequestUri(StrSubstNo('https://graph.microsoft.com/v1.0/drives/%1/items/root:/%2/%3:/content', '5c760bc6-498c-4d74-a063-4c2b562d6df4', OneDriveConfig."Source Folder Name", pFileName + '.xlsx'));
+            RequestVarLcl.SetRequestUri(StrSubstNo('https://graph.microsoft.com/v1.0/drives/%1/items/root:/%2/%3:/content', '5c760bc6-498c-4d74-a063-4c2b562d6df4', OneDriveConfig."Destination Folder Name", pNewFileName + '.xlsm'));
             RequestVarLcl.Method := 'GET';
-            if DClientVarLcl.Send(RequestVarLcl, DResponseVarLcl) then
-                if DResponseVarLcl.IsSuccessStatusCode() then
-                    if DResponseVarLcl.Content.ReadAs(InstreamVarLcl) then begin
+            if DClientVarLcl.Send(RequestVarLcl, DResponseVarLcl) and (DResponseVarLcl.IsSuccessStatusCode) then begin
+                pLink := OneDriveConfig."File Open Path URL" + '/' + pNewFileName + '.xlsm' + '&file=' + pNewFileName + '.xlsm';
+            end else begin
+                Clear(DHeadersVarLcl);
+                Clear(RequestVarLcl);
+                Clear(DClientVarLcl);
+                Clear(DResponseVarLcl);
 
-                        DHeaders2VarLcl := DClient2VarLcl.DefaultRequestHeaders();
-                        DHeaders2VarLcl.Add('Authorization', StrSubstNo('Bearer %1', APITokenVarLcl));
-                        //Request2VarLcl.SetRequestUri(StrSubstNo('https://graph.microsoft.com/v1.0/drives/%1/items/root:/%2/%3:/content', '5c760bc6-498c-4d74-a063-4c2b562d6df4', OneDriveConfig."Destination Folder Name", pNewFileName + ' ' + pFileName));
-                        Request2VarLcl.SetRequestUri(StrSubstNo('https://graph.microsoft.com/v1.0/drives/%1/items/root:/%2/%3:/content', '5c760bc6-498c-4d74-a063-4c2b562d6df4', OneDriveConfig."Destination Folder Name", pNewFileName + '.xlsx'));
-                        Request2VarLcl.Method := 'PUT';
-                        Content2VarLcl.WriteFrom(InstreamVarLcl);
-                        Request2VarLcl.Content := Content2VarLcl;
-                        if DClient2VarLcl.Send(Request2VarLcl, DResponse2VarLcl) then begin
-                            //pLink := 'https://nexxtspinellc-my.sharepoint.com/personal/bcadmin_nexxtspine_com/_layouts/15/Doc.aspx?sourcedoc=%2Fpersonal%2Fbcadmin%5Fnexxtspine%5Fcom%2FDocuments%2FBCOneDrive%2FProductionOrderFolder/' + pNewFileName + '.xlsx' + '&file=' + pNewFileName + '.xlsx'; // working
-                            pLink := OneDriveConfig."File Open Path URL" + '/' + pNewFileName + '.xlsx' + '&file=' + pNewFileName + '.xlsx';
+                DHeadersVarLcl := DClientVarLcl.DefaultRequestHeaders();
+                DHeadersVarLcl.Add('Authorization', StrSubstNo('Bearer %1', APITokenVarLcl));
+
+                RequestVarLcl.SetRequestUri(StrSubstNo('https://graph.microsoft.com/v1.0/drives/%1/items/root:/%2/%3:/content', '5c760bc6-498c-4d74-a063-4c2b562d6df4', OneDriveConfig."Source Folder Name", pFileName + '.xlsm'));
+                RequestVarLcl.Method := 'GET';
+                if DClientVarLcl.Send(RequestVarLcl, DResponseVarLcl) then
+                    if DResponseVarLcl.IsSuccessStatusCode() then
+                        if DResponseVarLcl.Content.ReadAs(InstreamVarLcl) then begin
+
+                            DHeaders2VarLcl := DClient2VarLcl.DefaultRequestHeaders();
+                            DHeaders2VarLcl.Add('Authorization', StrSubstNo('Bearer %1', APITokenVarLcl));
+                            //Request2VarLcl.SetRequestUri(StrSubstNo('https://graph.microsoft.com/v1.0/drives/%1/items/root:/%2/%3:/content', '5c760bc6-498c-4d74-a063-4c2b562d6df4', OneDriveConfig."Destination Folder Name", pNewFileName + ' ' + pFileName));
+                            Request2VarLcl.SetRequestUri(StrSubstNo('https://graph.microsoft.com/v1.0/drives/%1/items/root:/%2/%3:/content', '5c760bc6-498c-4d74-a063-4c2b562d6df4', OneDriveConfig."Destination Folder Name", pNewFileName + '.xlsm'));
+                            Request2VarLcl.Method := 'PUT';
+                            Content2VarLcl.WriteFrom(InstreamVarLcl);
+                            Request2VarLcl.Content := Content2VarLcl;
+                            if DClient2VarLcl.Send(Request2VarLcl, DResponse2VarLcl) then begin
+                                //pLink := 'https://nexxtspinellc-my.sharepoint.com/personal/bcadmin_nexxtspine_com/_layouts/15/Doc.aspx?sourcedoc=%2Fpersonal%2Fbcadmin%5Fnexxtspine%5Fcom%2FDocuments%2FBCOneDrive%2FProductionOrderFolder/' + pNewFileName + '.xlsx' + '&file=' + pNewFileName + '.xlsx'; // working
+                                pLink := OneDriveConfig."File Open Path URL" + '/' + pNewFileName + '.xlsm' + '&file=' + pNewFileName + '.xlsm';
+                            end;
                         end;
-                    end;
+            end;
         end;
     end;
 }
