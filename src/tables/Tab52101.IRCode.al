@@ -23,6 +23,10 @@ table 52101 "NTS IR Code"
         {
             Caption = 'Link';
         }
+        field(5; "File Name"; Text[2048])
+        {
+            Caption = 'File Name';
+        }
     }
 
     keys
