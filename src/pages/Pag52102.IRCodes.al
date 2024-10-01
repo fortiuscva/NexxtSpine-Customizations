@@ -32,6 +32,11 @@ page 52102 "NTS IR Codes"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the IR Sheet Name field.';
                 }
+                field("File Name"; Rec."File Name")
+                {
+                    ApplicationArea = all;
+                    ToolTip = 'Specifies the value of the File Name field.';
+                }
                 field(Link; Rec.Link)
                 {
                     ToolTip = 'Specifies the value of the Link field.';
