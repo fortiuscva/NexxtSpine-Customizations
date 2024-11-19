@@ -29,13 +29,24 @@ page 52106 "NTS Reference IR Code Factbox"
     {
         area(Processing)
         {
-            action(OpenFile)
+            action(OpenWebURL)
             {
+                Caption = 'Open Web URL';
                 ApplicationArea = all;
                 Image = Open;
                 trigger OnAction()
                 begin
                     Hyperlink(rec.Link);
+                end;
+            }
+            action(OpenMobileURL)
+            {
+                Caption = 'Open Mobile URL';
+                ApplicationArea = all;
+                Image = Open;
+                trigger OnAction()
+                begin
+                    Hyperlink(rec."Mobile Link");
                 end;
             }
         }
