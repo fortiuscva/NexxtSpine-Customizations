@@ -1,4 +1,4 @@
-tableextension 52113 "NTS Customer" extends Customer
+tableextension 52114 "NTS Customer" extends Customer
 {
     fields
     {
