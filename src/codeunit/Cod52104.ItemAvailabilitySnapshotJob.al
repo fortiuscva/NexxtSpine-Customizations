@@ -15,7 +15,7 @@ codeunit 52104 "Item Availability Snapshot Job"
         TotalSupply: Decimal;
         TotalDemand: Decimal;
     begin
-        Snapshot.DeleteAll();
+        //Snapshot.DeleteAll();
 
         ItemLedg.SetCurrentKey("Item No.", "Location Code");
         if ItemLedg.FindSet() then
