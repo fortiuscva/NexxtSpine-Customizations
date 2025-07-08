@@ -521,7 +521,7 @@ report 52100 "NTS Packing List"
                         CompanyInformation."Phone No." := RespCenter."Phone No.";
                         CompanyInformation."Fax No." := RespCenter."Fax No.";
                     end;
-                CurrReport.Language := Language.GetLanguageIdOrDefault("Language Code");
+                CurrReport.Language := LanguageGbl.GetLanguageIdOrDefault("Language Code");
 
                 if "Salesperson Code" = '' then
                     Clear(SalesPurchPerson)
@@ -721,7 +721,7 @@ report 52100 "NTS Packing List"
         Cust: Record Customer;
         PostedAsmHeader: Record "Posted Assembly Header";
         PostedAsmLine: Record "Posted Assembly Line";
-        Language: Codeunit Language;
+        LanguageGbl: Codeunit Language;
         SalesShipmentPrinted: Codeunit "Sales Shpt.-Printed";
         FormatAddress: Codeunit "Format Address";
         FormatDocument: Codeunit "Format Document";
