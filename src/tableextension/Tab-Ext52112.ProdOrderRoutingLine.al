@@ -57,6 +57,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         IRCode: Record "NTS IR Code";
         ReferenceIRCode: Record "NTS Reference IR Code";
         OneDriveIntegrationCULcl: Codeunit "NTS OneDrive Integration";
+        NewFileName: Text;
     begin
         ReferenceIRCode.Reset();
         ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
@@ -83,14 +84,19 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
                 //ReferenceIRCode.Link := IRCode.Link;
                 ReferenceIRCode."IR Sheet Name" := Rec."Prod. Order No." + IRCode."IR Number" + IRCode."IR Sheet Name";
                 OneDriveIntegrationCULcl.ConnectOneDriveFile(Rec."Prod. Order No." + '-' + format(Rec."Routing Reference No.") + '-' + IRCode."IR Number", IRCode."File Name", ReferenceIRCode.Link);
+                //ReferenceIRCode."Mobile Link" := 'ms-excel:ofe|u|' + ReferenceIRCode.Link;
+                NewFileName := Rec."Prod. Order No." + '-' + format(Rec."Routing Reference No.") + '-' + IRCode."IR Number";
+                //ReferenceIRCode."Mobile Link" := 'https://convert.nexxtspine.com:3000' + '/' + NewFileName + '.xlsm' + '&file=' + NewFileName + '.xlsm';
+                ReferenceIRCode."Mobile Link" := ReplaceFirst(ReferenceIRCode.Link, 'https://nexxtspinellc-my.sharepoint.com', 'https://convert.nexxtspine.com:3000');
                 ReferenceIRCode.Insert();
 
-                TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode, Rec, IRCode);
+                TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode.Link, Rec, IRCode, '');
+                TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode."Mobile Link", Rec, IRCode, 'Mobile URL_');
             end;
         end;
     end;
 
-    local procedure TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCodePar: Record "NTS Reference IR Code"; ProdOrderRoutingLinePar: Record "Prod. Order Routing Line"; IRCodePar: Record "NTS IR Code")
+    local procedure TransferReferenceIRCodeLinkToProdOrderLinks(LinkPar: Text[2048]; ProdOrderRoutingLinePar: Record "Prod. Order Routing Line"; IRCodePar: Record "NTS IR Code"; MobileURLDesc: text[100])
     var
         NewRecLink: Record "Record Link";
         EntryNo: Integer;
@@ -106,8 +112,8 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             NewRecLink.INIT;
             NewRecLink."Link ID" := EntryNo;
             NewRecLink."Record ID" := ProductionOrder.RECORDID;
-            NewRecLink.URL1 := ReferenceIRCodePar.Link;
-            NewRecLink.Description := Format(ProdOrderRoutingLinePar.RecordId) + IRCodePar."IR Number";
+            NewRecLink.URL1 := LinkPar;
+            NewRecLink.Description := MobileURLDesc + Format(ProdOrderRoutingLinePar.RecordId) + IRCodePar."IR Number";
             NewRecLink.Type := NewRecLink.Type::Link;
             NewRecLink."User ID" := UserId;
             NewRecLink.Created := CreateDateTime(Today, Time);
@@ -115,4 +121,21 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             NewRecLink.INSERT;
         end;
     end;
+
+    procedure ReplaceFirst(SourceText: Text; OldValue: Text; NewValue: Text): Text
+    var
+        Pos: Integer;
+        BeforeText: Text;
+        AfterText: Text;
+    begin
+        Pos := StrPos(SourceText, OldValue);
+        if Pos > 0 then begin
+            BeforeText := CopyStr(SourceText, 1, Pos - 1);
+            AfterText := CopyStr(SourceText, Pos + StrLen(OldValue), StrLen(SourceText) - (Pos + StrLen(OldValue)) + 1);
+            exit(BeforeText + NewValue + AfterText);
+        end else
+            exit(SourceText);
+    end;
+
+
 }
