@@ -51,6 +51,10 @@ table 52102 "NTS Reference IR Code"
         {
             Caption = '"Operation No."';
         }
+        field(16; "Mobile Link"; text[2048])
+        {
+            Caption = 'Mobile Link';
+        }
     }
     keys
     {

@@ -28,6 +28,10 @@ page 52104 "NTS Reference IR Codes"
                 {
                     ToolTip = 'Specifies the value of the Link field.', Comment = '%';
                 }
+                field("Mobile Link"; Rec."Mobile Link")
+                {
+                    ToolTip = 'Specifies the value of the Mobile Link field.', Comment = '%';
+                }
             }
         }
     }
