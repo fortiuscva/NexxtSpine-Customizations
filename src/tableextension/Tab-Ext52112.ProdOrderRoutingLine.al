@@ -86,7 +86,8 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
                 OneDriveIntegrationCULcl.ConnectOneDriveFile(Rec."Prod. Order No." + '-' + format(Rec."Routing Reference No.") + '-' + IRCode."IR Number", IRCode."File Name", ReferenceIRCode.Link);
                 //ReferenceIRCode."Mobile Link" := 'ms-excel:ofe|u|' + ReferenceIRCode.Link;
                 NewFileName := Rec."Prod. Order No." + '-' + format(Rec."Routing Reference No.") + '-' + IRCode."IR Number";
-                ReferenceIRCode."Mobile Link" := 'https://convert.nexxtspine.com:3000' + '/' + NewFileName + '.xlsm' + '&file=' + NewFileName + '.xlsm';
+                //ReferenceIRCode."Mobile Link" := 'https://convert.nexxtspine.com:3000' + '/' + NewFileName + '.xlsm' + '&file=' + NewFileName + '.xlsm';
+                ReferenceIRCode."Mobile Link" := ReplaceFirst(ReferenceIRCode.Link, 'https://nexxtspinellc-my.sharepoint.com', 'https://convert.nexxtspine.com:3000');
                 ReferenceIRCode.Insert();
 
                 TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode.Link, Rec, IRCode, '');
@@ -119,5 +120,20 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             NewRecLink.Company := CompanyName;
             NewRecLink.INSERT;
         end;
+    end;
+
+    procedure ReplaceFirst(SourceText: Text; OldValue: Text; NewValue: Text): Text
+    var
+        Pos: Integer;
+        BeforeText: Text;
+        AfterText: Text;
+    begin
+        Pos := StrPos(SourceText, OldValue);
+        if Pos > 0 then begin
+            BeforeText := CopyStr(SourceText, 1, Pos - 1);
+            AfterText := CopyStr(SourceText, Pos + StrLen(OldValue), StrLen(SourceText) - (Pos + StrLen(OldValue)) + 1);
+            exit(BeforeText + NewValue + AfterText);
+        end else
+            exit(SourceText);
     end;
 }
