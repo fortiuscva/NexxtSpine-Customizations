@@ -90,7 +90,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
                 ReferenceIRCode."Mobile Link" := ReplaceFirst(ReferenceIRCode.Link, 'https://nexxtspinellc-my.sharepoint.com', 'https://convert.nexxtspine.com:3000');
                 ReferenceIRCode.Insert();
 
-                TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode.Link, Rec, IRCode, '');
+                //TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode.Link, Rec, IRCode, '');
                 TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode."Mobile Link", Rec, IRCode, 'Mobile URL_');
             end;
         end;
@@ -103,6 +103,11 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         ProductionOrder: Record "Production Order";
     begin
         if ProductionOrder.Get(Rec.Status, Rec."Prod. Order No.") then begin
+            NewRecLink.Reset();
+            NewRecLink.SetRange("Record ID", ProductionOrder.RecordId);
+            if NewRecLink.FindSet() then
+                NewRecLink.DeleteAll();
+
             NewRecLink.Reset();
             if NewRecLink.FindLast() then
                 EntryNo := NewRecLink."Link ID" + 1
