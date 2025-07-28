@@ -55,8 +55,18 @@ pageextension 52104 "NTS Item Card" extends "Item Card"
             {
                 ApplicationArea = All;
             }
+            field("NTS Global Dimension 1 Code"; Rec."Global Dimension 1 Code")
+            {
 
+                Caption = 'Global Dimension 1 Code';
+                ApplicationArea = all;
+            }
+            field("NTS Global Dimension 2 Code"; Rec."Global Dimension 2 Code")
+            {
 
+                Caption = 'Global Dimension 2 Code';
+                ApplicationArea = all;
+            }
         }
     }
 
