@@ -2,9 +2,9 @@ tableextension 52119 "NTS Location" extends Location
 {
     fields
     {
-        field(52100; "NTS Finished Goods Location"; Boolean)
+        field(52100; "NTS Is Finished Goods Location"; Boolean)
         {
-            Caption = 'Finished Goods Location';
+            Caption = 'Is Finished Goods Location';
             DataClassification = ToBeClassified;
 
 
@@ -12,9 +12,9 @@ tableextension 52119 "NTS Location" extends Location
             var
                 LocationRec: Record Location;
             begin
-                if "NTS Finished Goods Location" then begin
+                if "NTS Is Finished Goods Location" then begin
                     LocationRec.Reset();
-                    LocationRec.SetRange("NTS Finished Goods Location", true);
+                    LocationRec.SetRange("NTS Is Finished Goods Location", true);
                     if LocationRec.FindFirst() then
                         Error('Only one location can be marked as Finished Goods.');
                 end;
