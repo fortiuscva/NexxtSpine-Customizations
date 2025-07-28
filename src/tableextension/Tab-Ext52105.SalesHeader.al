@@ -55,5 +55,9 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             FieldClass = FlowField;
             CalcFormula = lookup(Customer.Contact where("No." = field("NTS Distributor")));
         }
+        field(52104; "NTS Sales Type"; Enum "NTS Sales Type")
+        {
+            Caption = 'Sales Type';
+        }
     }
 }
