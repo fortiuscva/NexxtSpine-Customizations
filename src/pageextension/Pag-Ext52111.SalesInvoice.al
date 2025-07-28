@@ -19,6 +19,11 @@ pageextension 52111 "NTS Sales Invoice" extends "Sales Invoice"
                 ApplicationArea = all;
                 Caption = 'Reps';
             }
+            field("NTS Sales Type"; Rec."NTS Sales Type")
+            {
+                ApplicationArea = all;
+                Caption = 'Sales Type';
+            }
         }
     }
 }
