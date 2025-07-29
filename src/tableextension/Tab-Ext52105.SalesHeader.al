@@ -51,9 +51,28 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
         field(52103; "NTS Reps"; Text[100])
         {
             Caption = 'Reps';
-            Editable = false;
-            FieldClass = FlowField;
-            CalcFormula = lookup(Customer.Contact where("No." = field("NTS Distributor")));
+            trigger OnLookup()
+            var
+                ContactBusinessRel: Record "Contact Business Relation";
+                ContactRec: Record Contact;
+                ContactListPage: Page "Contact List";
+                Contact2: Record Contact;
+            begin
+
+                ContactBusinessRel.SetRange("Link to Table", ContactBusinessRel."Link to Table"::Customer);
+                ContactBusinessRel.SetRange("No.", Rec."NTS Distributor");
+
+                if ContactBusinessRel.FindSet() then begin
+                    ContactRec.Reset();
+                    ContactRec.SetRange("No.", ContactBusinessRel."Contact No.");
+
+                    ContactListPage.SetTableView(ContactRec);
+                    if PAGE.RUNMODAL(PAGE::"Contact List", ContactRec) = ACTION::LookupOK then begin
+                        Rec."NTS Reps" := ContactRec."No.";
+                    end;
+                end;
+            end;
+
         }
     }
 }
