@@ -56,7 +56,6 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
                 ContactBusinessRel: Record "Contact Business Relation";
                 ContactRec: Record Contact;
                 ContactListPage: Page "Contact List";
-                Contact2: Record Contact;
             begin
 
                 ContactBusinessRel.SetRange("Link to Table", ContactBusinessRel."Link to Table"::Customer);
@@ -64,11 +63,11 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
 
                 if ContactBusinessRel.FindSet() then begin
                     ContactRec.Reset();
-                    ContactRec.SetRange("No.", ContactBusinessRel."Contact No.");
+                    ContactRec.SetRange("Company No.", ContactBusinessRel."Contact No.");
 
                     ContactListPage.SetTableView(ContactRec);
                     if PAGE.RUNMODAL(PAGE::"Contact List", ContactRec) = ACTION::LookupOK then begin
-                        Rec."NTS Reps" := ContactRec."No.";
+                        Rec."NTS Reps" := ContactRec."Name";
                     end;
                 end;
             end;
