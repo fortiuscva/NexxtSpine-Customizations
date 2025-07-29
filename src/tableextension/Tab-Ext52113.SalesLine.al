@@ -8,6 +8,8 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
             var
                 ItemRec: Record Item;
             begin
+                if not (Rec.Type = Type::Item) then
+                    exit;
                 if ItemRec.Get(Rec."No.") then begin
                     case ItemRec.PartStatus of
                         ItemRec.PartStatus::Released:
