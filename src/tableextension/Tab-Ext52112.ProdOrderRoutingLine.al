@@ -103,10 +103,10 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         ProductionOrder: Record "Production Order";
     begin
         if ProductionOrder.Get(Rec.Status, Rec."Prod. Order No.") then begin
-            NewRecLink.Reset();
-            NewRecLink.SetRange("Record ID", ProductionOrder.RecordId);
-            if NewRecLink.FindSet() then
-                NewRecLink.DeleteAll();
+            // NewRecLink.Reset();
+            // NewRecLink.SetRange("Record ID", ProductionOrder.RecordId);
+            // if NewRecLink.FindSet() then
+            //     NewRecLink.DeleteAll();
 
             NewRecLink.Reset();
             if NewRecLink.FindLast() then
