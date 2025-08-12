@@ -10,7 +10,12 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
             column(LotNumber; GetLotNo("Prod. Order No.", "Line No."))
             {
             }
-            //column(NTSQRCodeImageBlob; QRCodeBlob) { }
+            column(NTSQRCodeText; GenerateQRCode(GetGTIN("Item No.") + '|' + GetLotNo("Prod. Order No.", "Line No.")))
+            {
+            }
+            column(NTSLaserEtchQRCodeLbl; LaserEtchQRCodeLbl)
+            {
+            }
         }
     }
 
@@ -34,28 +39,19 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         exit('');
     end;
 
-
-    local procedure GenerateQRCodeImage(GTIN: Code[20]; LotNo: Code[50])
-    var
-        EncodedText: Text;
+    local procedure GenerateQRCode(Value: Text): Text
     begin
-        QRCodeText := 'GTIN:' + GTIN + '; Lot#:' + LotNo;
-
         BarcodeFontProvider2D := Enum::"Barcode Font Provider 2D"::IDAutomation2D;
         BarcodeSymbology2D := Enum::"Barcode Symbology 2D"::"QR-Code";
-        EncodedText := BarcodeFontProvider2D.EncodeFont(QRCodeText, BarcodeSymbology2D);
-
-        QRCodeBlob.CreateOutStream(OutStream);
-        OutStream.WriteText(EncodedText);
+        exit(BarcodeFontProvider2D.EncodeFont(Value, BarcodeSymbology2D));
     end;
 
 
     var
 
         QRCodeText: Text;
-        QRCodeBlob: Codeunit "Temp Blob";
-        OutStream: OutStream;
         BarcodeFontProvider2D: Interface "Barcode Font Provider 2D";
         BarcodeSymbology2D: Enum "Barcode Symbology 2D";
+        LaserEtchQRCodeLbl: Label 'Laser Etch QR Code.';
 
 }
