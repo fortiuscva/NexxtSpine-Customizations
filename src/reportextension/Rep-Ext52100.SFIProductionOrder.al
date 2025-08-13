@@ -1,16 +1,12 @@
 reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
 {
+    RDLCLayout = './src/reportextension/Layouts/SFI Production Order-azure.rdlc';
+
     dataset
     {
         add("Prod. Order Line")
         {
-            column(NTSGTIN; GetGTIN("Prod. Order Line"."Item No."))
-            {
-            }
-            column(LotNumber; GetLotNo("Prod. Order No.", "Line No."))
-            {
-            }
-            column(NTSQRCodeText; GenerateQRCode(GetGTIN("Item No.") + '|' + GetLotNo("Prod. Order No.", "Line No.")))
+            column(NTSQRCodeText; 'GTIN(UDI): ' + GenerateQRCode(GetGTIN("Item No.") + 'Lot#: ' + GetLotNo("Prod. Order No.", "Line No.")))
             {
             }
             column(NTSLaserEtchQRCodeLbl; LaserEtchQRCodeLbl)
@@ -30,13 +26,17 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
 
     local procedure GetLotNo(ProdOrderNo: Code[20]; LineNo: Integer): Code[50]
     var
-        TrackingSpec: Record "Tracking Specification";
+        ReservationEntryRec: Record "Reservation Entry";
     begin
-        TrackingSpec.SetRange("Source Type", DATABASE::"Prod. Order Line");
-        TrackingSpec.SetRange("Source ID", ProdOrderNo);
-        if TrackingSpec.FindFirst() then
-            exit(TrackingSpec."Lot No.");
-        exit('');
+        ReservationEntryRec.Reset();
+        ReservationEntryRec.SetRange("Source Type", DATABASE::"Prod. Order Line");
+        ReservationEntryRec.SetRange("Source ID", ProdOrderNo);
+        ReservationEntryRec.SetRange("Source Prod. Order Line", LineNo);
+        if ReservationEntryRec.FindSet() then
+            repeat
+                LotNo := ReservationEntryRec."Lot No.";
+            until ReservationEntryRec.Next = 0;
+        exit(LotNo);
     end;
 
     local procedure GenerateQRCode(Value: Text): Text
@@ -53,5 +53,6 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         BarcodeFontProvider2D: Interface "Barcode Font Provider 2D";
         BarcodeSymbology2D: Enum "Barcode Symbology 2D";
         LaserEtchQRCodeLbl: Label 'Laser Etch QR Code.';
+        LotNo: Code[50];
 
 }
