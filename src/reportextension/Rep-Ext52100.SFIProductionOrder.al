@@ -1,12 +1,13 @@
 reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
 {
+
     RDLCLayout = './src/reportextension/Layouts/SFI Production Order-azure.rdlc';
 
     dataset
     {
         add("Prod. Order Line")
         {
-            column(NTSQRCodeText; 'GTIN(UDI): ' + GenerateQRCode(GetGTIN("Item No.") + 'Lot#: ' + GetLotNo("Prod. Order No.", "Line No.")))
+            column(NTSQRCodeText; GenerateQRCode(GetGTIN("Item No.") + ',' + GetLotNo("Prod. Order No.", "Line No.")))
             {
             }
             column(NTSLaserEtchQRCodeLbl; LaserEtchQRCodeLbl)
@@ -20,8 +21,8 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         ItemRec: Record Item;
     begin
         if ItemRec.Get(ItemNo) then
-            exit(ItemRec.GTIN);
-        exit('');
+            GTIN := 'GTIN(UDI): ' + ItemRec.GTIN;
+        exit(GTIN);
     end;
 
     local procedure GetLotNo(ProdOrderNo: Code[20]; LineNo: Integer): Code[50]
@@ -34,7 +35,7 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         ReservationEntryRec.SetRange("Source Prod. Order Line", LineNo);
         if ReservationEntryRec.FindSet() then
             repeat
-                LotNo := ReservationEntryRec."Lot No.";
+                LotNo := 'Lot#: ' + ReservationEntryRec."Lot No.";
             until ReservationEntryRec.Next = 0;
         exit(LotNo);
     end;
@@ -48,7 +49,7 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
 
 
     var
-
+        GTIN: code[25];
         QRCodeText: Text;
         BarcodeFontProvider2D: Interface "Barcode Font Provider 2D";
         BarcodeSymbology2D: Enum "Barcode Symbology 2D";

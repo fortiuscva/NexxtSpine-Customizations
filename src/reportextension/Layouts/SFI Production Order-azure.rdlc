@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-08-13T19:04:50.8821720Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-08-14T12:37:24.7460325Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -683,6 +683,7 @@
                                     <TextRun>
                                       <Value>=Fields!Prod_Order_Line_Item_No.Value</Value>
                                       <Style>
+                                        <FontSize>8pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
@@ -712,7 +713,9 @@
                                   <TextRuns>
                                     <TextRun>
                                       <Value>=Fields!Prod_Order_Shelf_No.Value</Value>
-                                      <Style />
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
                                     </TextRun>
                                   </TextRuns>
                                   <Style />
@@ -722,7 +725,7 @@
                               <Top>0.5in</Top>
                               <Left>1in</Left>
                               <Height>0.25in</Height>
-                              <Width>3.5in</Width>
+                              <Width>4.0875in</Width>
                               <ZIndex>12</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -739,6 +742,7 @@
                                     <TextRun>
                                       <Value>=Fields!Prod_Order_Description.Value &amp; Fields!Prod_Order_Description2.Value</Value>
                                       <Style>
+                                        <FontSize>8pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
@@ -750,7 +754,7 @@
                               <Top>0.25in</Top>
                               <Left>1in</Left>
                               <Height>0.25in</Height>
-                              <Width>3.5in</Width>
+                              <Width>4.0875in</Width>
                               <ZIndex>13</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -766,7 +770,9 @@
                                   <TextRuns>
                                     <TextRun>
                                       <Value>=Fields!Prod_Order_Line_Line_No.Value</Value>
-                                      <Style />
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
@@ -778,7 +784,7 @@
                               <Top>0.75in</Top>
                               <Left>1in</Left>
                               <Height>0.25in</Height>
-                              <Width>3.5in</Width>
+                              <Width>4.0875in</Width>
                               <ZIndex>14</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -823,7 +829,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.5in</Height>
+                  <Height>1.19458in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -849,28 +855,26 @@
                                       <Value>=First(Fields!NTSQRCodeText.Value)</Value>
                                       <Style>
                                         <FontFamily>IDAutomation2D</FontFamily>
-                                        <FontSize>12pt</FontSize>
-                                        <FontWeight>Bold</FontWeight>
+                                        <FontSize>8pt</FontSize>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style />
+                                  <Style>
+                                    <TextAlign>Center</TextAlign>
+                                  </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>NTSQRCodeText</rd:DefaultName>
-                              <Top>0.16541in</Top>
-                              <Left>1.055in</Left>
-                              <Height>0.3in</Height>
-                              <Width>0.5875in</Width>
+                              <Top>0.19458in</Top>
+                              <Left>0.5675in</Left>
+                              <Height>1in</Height>
+                              <Width>1in</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
                                 </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
+                                <VerticalAlign>Middle</VerticalAlign>
                               </Style>
                             </Textbox>
                             <Textbox Name="NTSLaserEtchQRCodeLbl">
@@ -882,26 +886,25 @@
                                     <TextRun>
                                       <Value>=First(Fields!NTSLaserEtchQRCodeLbl.Value)</Value>
                                       <Style>
-                                        <FontSize>12pt</FontSize>
+                                        <FontSize>11pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style>
-                                    <TextAlign>Left</TextAlign>
-                                  </Style>
+                                  <Style />
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>NTSLaserEtchQRCodeLbl</rd:DefaultName>
-                              <Top>0.21958in</Top>
-                              <Left>1.97167in</Left>
+                              <Top>0.32755in</Top>
+                              <Left>2.77167in</Left>
                               <Height>0.1875in</Height>
-                              <Width>1.125in</Width>
+                              <Width>2in</Width>
                               <ZIndex>2</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
                                 </Border>
+                                <VerticalAlign>Bottom</VerticalAlign>
                                 <PaddingLeft>2pt</PaddingLeft>
                                 <PaddingRight>2pt</PaddingRight>
                                 <PaddingTop>2pt</PaddingTop>
@@ -2337,12 +2340,12 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Height>6.34335in</Height>
+            <Height>7.03793in</Height>
             <Width>18.0975cm</Width>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>16.11211cm</Height>
+        <Height>17.87634cm</Height>
         <Style />
       </Body>
       <Width>18.40748cm</Width>
