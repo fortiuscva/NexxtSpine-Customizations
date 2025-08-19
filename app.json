@@ -10,7 +10,14 @@
   "help": "",
   "url": "",
   "logo": "",
-  "dependencies": [],
+  "dependencies": [
+    {
+      "id": "0a9a2776-4d2a-42a1-aca7-91b65a59e4ac",
+      "name": "NexxtSpine_StatusMod",
+      "version": "1.0.0.3",
+      "publisher": "Impact Networking"
+    }
+  ],
   "screenshots": [],
   "platform": "1.0.0.0",
   "application": "23.0.0.0",
