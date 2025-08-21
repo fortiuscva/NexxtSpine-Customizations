@@ -26,6 +26,7 @@ table 52111 "NTS DoR Header"
         field(5; "Serial Number"; Code[20])
         {
             Caption = 'Serial Number';
+            TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("Set Name"));
         }
         field(6; Status; Enum "NTS Status")
         {
@@ -106,4 +107,10 @@ table 52111 "NTS DoR Header"
             Clustered = true;
         }
     }
+    trigger OnInsert()
+    var
+        NoSeries: Codeunit "No. Series";
+    begin
+        "DoR Number" := NoSeries.GetNextNo('DOR', WorkDate(), true);
+    end;
 }
