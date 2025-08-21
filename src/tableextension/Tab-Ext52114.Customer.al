@@ -5,7 +5,6 @@ tableextension 52114 "NTS Customer" extends Customer
         field(52100; "NTS Is Distributor"; Boolean)
         {
             Caption = 'Is Distributor';
-            DataClassification = AccountData;
         }
     }
 }
