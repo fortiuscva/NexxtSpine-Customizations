@@ -588,8 +588,8 @@ report 52104 "NTS Sales - Invoice"
                         CompanyInformation."Phone No." := RespCenter."Phone No.";
                         CompanyInformation."Fax No." := RespCenter."Fax No.";
                     end; */
-                CurrReport.Language := Language.GetLanguageIdOrDefault("Language Code");
-                CurrReport.FormatRegion := Language.GetFormatRegionOrDefault("Format Region");
+                CurrReport.Language := LanguageGbl.GetLanguageIdOrDefault("Language Code");
+                CurrReport.FormatRegion := LanguageGbl.GetFormatRegionOrDefault("Format Region");
 
                 if "Salesperson Code" = '' then
                     Clear(SalesPurchPerson)
@@ -841,7 +841,7 @@ report 52104 "NTS Sales - Invoice"
         TempPostedAsmLine: Record "Posted Assembly Line" temporary;
         TempLineFeeNoteOnReportHist: Record "Line Fee Note on Report Hist." temporary;
         GLSetup: Record "General Ledger Setup";
-        Language: Codeunit Language;
+        LanguageGbl: Codeunit Language;
         CompanyAddress: array[10] of Text[100];
         BillToAddress: array[8] of Text[100];
         ShipToAddress: array[8] of Text[100];
@@ -1025,7 +1025,7 @@ report 52104 "NTS Sales - Invoice"
                 TempLineFeeNoteOnReportHist.Insert();
             until LineFeeNoteOnReportHist.Next() = 0;
         end else begin
-            LineFeeNoteOnReportHist.SetRange("Language Code", Language.GetUserLanguageCode());
+            LineFeeNoteOnReportHist.SetRange("Language Code", LanguageGbl.GetUserLanguageCode());
             if LineFeeNoteOnReportHist.FindSet() then
                 repeat
                     TempLineFeeNoteOnReportHist.Init();

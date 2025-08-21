@@ -16,6 +16,12 @@
       "name": "NexxtSpine_StatusMod",
       "version": "1.0.0.3",
       "publisher": "Impact Networking"
+    },
+    {
+      "id": "e2a22fd6-cbb6-481a-9db0-d9c929773cf8",
+      "name": "NexxtSpineCustomFields",
+      "version": "1.0.0.0",
+      "publisher": "Impact Networking" 
     }
   ],
   "screenshots": [],
