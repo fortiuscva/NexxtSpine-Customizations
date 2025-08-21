@@ -7,27 +7,71 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;
-            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Sell-to Customer No."));
+            trigger OnLookup()
+            var
+                HSDMapping: Record "Hosp. Surg. Distrib. Mapping";
+                SurgeonRec: Record "NTS Surgeon";
+                TempSurgeon: Record "NTS Surgeon" temporary;
+            begin
+
+                HSDMapping.SetRange(Hospital, Rec."Sell-to Customer No.");
+                if HSDMapping.FindSet() then
+                    repeat
+                        if SurgeonRec.Get(HSDMapping.Surgeon) then begin
+                            TempSurgeon := SurgeonRec;
+                            TempSurgeon.Insert();
+                        end;
+                    until HSDMapping.Next() = 0;
+
+                if Page.RunModal(Page::"NTS Surgeon List", TempSurgeon) = Action::LookupOK then begin
+                    Validate(Rec."NTS Surgeon", TempSurgeon."Surgeon Name");
+                end;
+
+            end;
+
+
             trigger OnValidate()
             var
                 HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
             begin
-                if Rec."Sell-to Customer No." <> '' then
-                    if HSDMappingRec.Get(Rec."Sell-to Customer No.", Rec."NTS Surgeon") then
-                        Rec."NTS Distributor" := HSDMappingRec.Distributor;
+                HSDMappingRec.Reset();
+                HSDMappingRec.SetRange(Hospital, Rec."Sell-to Customer No.");
+                HSDMappingRec.SetRange(Surgeon, Rec."NTS Surgeon");
+
+                if HSDMappingRec.FindFirst() then
+                    Rec."NTS Distributor" := HSDMappingRec.Distributor;
             end;
         }
         field(52102; "NTS Distributor"; Code[50])
         {
             Caption = 'Distributor';
+            Editable = false;
             DataClassification = ToBeClassified;
         }
         field(52103; "NTS Reps"; Text[100])
         {
             Caption = 'Reps';
-            Editable = false;
-            FieldClass = FlowField;
-            CalcFormula = lookup(Customer.Contact where("No." = field("NTS Distributor")));
+            trigger OnLookup()
+            var
+                ContactBusinessRel: Record "Contact Business Relation";
+                ContactRec: Record Contact;
+                ContactListPage: Page "Contact List";
+            begin
+
+                ContactBusinessRel.SetRange("Link to Table", ContactBusinessRel."Link to Table"::Customer);
+                ContactBusinessRel.SetRange("No.", Rec."NTS Distributor");
+
+                if ContactBusinessRel.FindSet() then begin
+                    ContactRec.Reset();
+                    ContactRec.SetRange("Company No.", ContactBusinessRel."Contact No.");
+
+                    ContactListPage.SetTableView(ContactRec);
+                    if PAGE.RUNMODAL(PAGE::"Contact List", ContactRec) = ACTION::LookupOK then begin
+                        Rec."NTS Reps" := ContactRec."Name";
+                    end;
+                end;
+            end;
+
         }
     }
 }

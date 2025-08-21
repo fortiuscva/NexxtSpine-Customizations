@@ -14,36 +14,23 @@ table 52110 "Hosp. Surg. Distrib. Mapping"
         {
             Caption = 'Surgeon';
             TableRelation = "NTS Surgeon";
-            trigger OnValidate()
-            var
-                HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
-            begin
-                if Surgeon = '' then
-                    exit;
-
-                HSDMappingRec.SetRange(Surgeon, Surgeon);
-                HSDMappingRec.SetFilter(Hospital, '<>%1', Hospital);
-                if not HSDMappingRec.IsEmpty then
-                    Error('This surgeon is already assigned to another hospital.');
-            end;
-
         }
         field(3; Distributor; Code[20])
         {
             Caption = 'Distributor';
             TableRelation = Customer where("NTS Is Distributor" = const(true));
-            trigger OnValidate()
 
+            trigger OnValidate()
             var
                 HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
             begin
                 if Distributor = '' then
                     exit;
 
-                HSDMappingRec.SetRange(Distributor, Distributor);
-                HSDMappingRec.SetFilter(Surgeon, '<>%1', Surgeon);
+                HSDMappingRec.SetRange(Surgeon, Surgeon);
+                HSDMappingRec.SetFilter(Distributor, '<>%1', Distributor);
                 if not HSDMappingRec.IsEmpty then
-                    Error('This Surgeon is already assigned to another Distributor.');
+                    Error('This surgeon is already assigned to a different distributor.');
             end;
 
         }
