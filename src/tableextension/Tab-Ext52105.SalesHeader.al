@@ -73,5 +73,9 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             end;
 
         }
+        field(52104; "NTS Sales Type"; Enum "NTS Sales Type")
+        {
+            Caption = 'Sales Type';
+        }
     }
 }
