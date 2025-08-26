@@ -28,8 +28,7 @@ report 52107 "NTS Create TO from SO"
                 TransferHeaderRec.Validate("Shipment Date", SalesHeader."Shipment Date");
                 TransferHeaderRec.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
                 TransferHeaderRec.Validate("Shipping Time", SalesHeader."Shipping Time");
-                TransferHeaderRec.Validate("NTS Tracking No.", '');
-                // TransferHeaderRec.Validate("Set Name",SalesHeader."Set Name");
+                TransferHeaderRec.Validate("NTS Set Name", SalesHeader."NTS Set Name");
                 TransferHeaderRec.Modify();
 
                 SalesLineRec.SetRange("Document No.", SalesHeader."No.");

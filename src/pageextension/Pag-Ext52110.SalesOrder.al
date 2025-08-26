@@ -19,6 +19,27 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                 ApplicationArea = all;
                 Caption = 'Reps';
             }
+            field("NTS DoR Number"; Rec."NTS DoR Number")
+            {
+                ApplicationArea = all;
+                Caption = 'DoR Number';
+            }
+        }
+    }
+    actions
+    {
+        addlast(Processing)
+        {
+            action("NTS CreateTransferOrder")
+            {
+                Caption = 'Create Transfer';
+                Image = Report;
+                ApplicationArea = All;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+                RunObject = report "NTS Create TO from SO";
+            }
         }
     }
 }

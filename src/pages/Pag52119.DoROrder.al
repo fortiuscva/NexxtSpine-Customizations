@@ -58,4 +58,27 @@ page 52119 "NTS DoR Order"
 
         }
     }
+    actions
+    {
+        area(processing)
+        {
+            group(Post)
+            {
+                Caption = 'Post';
+                action(PostDoR)
+                {
+                    Caption = 'Post';
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
+                    trigger OnAction()
+                    var
+                        NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+                    begin
+                        NexxSpineFunctions.PostDoR(Rec);
+                    end;
+                }
+            }
+        }
+    }
 }
