@@ -52,4 +52,20 @@ codeunit 52101 "NTS Event Management"
             NewRecLink.DeleteAll();
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeCalcLevels, '', false, false)]
+    local procedure "Calculate Low-Level Code_OnBeforeCalcLevels"(Type: Option; No: Code[20]; Level: Integer; LevelDepth: Integer; var Result: Integer; var IsHandled: Boolean)
+    var
+        ItemRec: Record Item;
+    begin
+
+        if ItemRec.Get(No) then begin
+            if ItemRec."NTS Purchase to Production" and (LevelDepth > 50) then begin
+                // Bypass the error and return a safe level
+                Result := Level;
+                IsHandled := true;
+            end;
+        end;
+
+    end;
+
 }
