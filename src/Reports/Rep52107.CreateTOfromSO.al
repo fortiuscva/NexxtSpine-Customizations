@@ -11,16 +11,17 @@ report 52107 "NTS Create TO from SO"
             DataItemTableView = where("Document Type" = const(Order));
             trigger OnAfterGetRecord()
             begin
+                LocationRec.Reset;
                 LocationRec.SetRange("NTS Is Finished Goods Location", true);
-                if LocationRec.FindFirst() then;
+                LocationRec.FindFirst();
 
-                TransferHeaderRec.Reset();
                 TransferHeaderRec.Init();
+                TransferHeaderRec."No." := '';
+                TransferHeaderRec.Insert(True);
+
                 TransferHeaderRec.Validate("Transfer-from Code", LocationRec.Code);
                 TransferHeaderRec.Validate("Transfer-to Code", SalesHeader."Location Code");
                 TransferHeaderRec.Validate("Direct Transfer", true);
-                TransferHeaderRec.Insert(True);
-
                 TransferHeaderRec.Validate("Posting Date", WorkDate());
                 TransferHeaderRec.Validate("Shortcut Dimension 1 Code", SalesHeader."Shortcut Dimension 1 Code");
                 TransferHeaderRec.Validate("Shortcut Dimension 2 Code", SalesHeader."Shortcut Dimension 2 Code");
@@ -29,21 +30,28 @@ report 52107 "NTS Create TO from SO"
                 TransferHeaderRec.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
                 TransferHeaderRec.Validate("Shipping Time", SalesHeader."Shipping Time");
                 TransferHeaderRec.Validate("NTS Set Name", SalesHeader."NTS Set Name");
-                TransferHeaderRec.Modify();
+                TransferHeaderRec.Modify(true);
 
+                NextLineNo := 10000;
+                SalesLineRec.Reset();
+                SalesLineRec.SetRange("Document Type", SalesHeader."Document Type");
                 SalesLineRec.SetRange("Document No.", SalesHeader."No.");
                 SalesLineRec.SetRange(Type, SalesLineRec.Type::Item);
+                SalesLineRec.SetFilter("No.", '<>%1', '');
                 if SalesLineRec.FindSet() then
                     repeat
                         TransferLineRec.Init();
-                        TransferLineRec.Validate("Document No.", TransferHeaderRec."No.");
-                        TransferLineRec.Validate("Line No.", SalesLineRec."Line No.");
-                        TransferLineRec.Insert();
+                        TransferLineRec."Document No." := TransferHeaderRec."No.";
+                        TransferLineRec."Line No." := NextLineNo;
+                        TransferLineRec.Insert(true);
 
                         TransferLineRec.Validate("Item No.", SalesLineRec."No.");
                         TransferLineRec.Validate(Quantity, SalesLineRec.Quantity);
-                        TransferLineRec.Validate("Unit of Measure", SalesLineRec."Unit of Measure");
-                        TransferLineRec.Modify();
+                        TransferLineRec.Validate("Unit of Measure Code", SalesLineRec."Unit of Measure Code");
+                        TransferLineRec.Validate("NTS Sales Order No.", SalesLineRec."Document No.");
+                        TransferLineRec.Validate("NTS Sales Order Line No.", SalesLineRec."Line No.");
+                        TransferLineRec.Modify(true);
+                        NextLineNo += 10000;
                     until SalesLineRec.Next() = 0;
             end;
         }
@@ -53,4 +61,5 @@ report 52107 "NTS Create TO from SO"
         TransferLineRec: Record "Transfer Line";
         SalesLineRec: Record "Sales Line";
         LocationRec: Record Location;
+        NextLineNo: Integer;
 }

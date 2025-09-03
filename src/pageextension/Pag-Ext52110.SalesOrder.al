@@ -33,7 +33,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
             action("NTS CreateTransferOrder")
             {
                 Caption = 'Create Transfer';
-                Image = Report;
+                Image = Create;
                 ApplicationArea = All;
                 Promoted = true;
                 PromotedIsBig = true;
