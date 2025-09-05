@@ -60,8 +60,9 @@ codeunit 52103 "NTS NexxtSpine Functions"
     begin
         SalesHeader.Init();
         SalesHeader."Document Type" := SalesHeader."Document Type"::Order;
+        SalesHeader."No." := '';
         SalesHeader.Insert(true);
-        SalesHeader."Sell-to Customer No." := DoRHeader."Customer";
+        SalesHeader.Validate("Sell-to Customer No.", DoRHeader."Customer");
         SalesHeader.validate("NTS DoR Number", DoRHeader."DoR Number");
         SalesHeader.Validate(Status, SalesHeader.Status::Open);
         SalesHeader.Validate("NTS Surgeon", DoRHeader.Surgeon);
@@ -134,5 +135,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
             until DoRLine.Next() = 0;
     end;
 
+    var
+        NewLineNo: Integer;
 
 }
