@@ -41,6 +41,17 @@ codeunit 52101 "NTS Event Management"
         ProdOrderRoutingLine."NTS IR Sheet 3" := RoutingLine."NTS IR Sheet 3";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Prod. Order", OnBeforeTransferRouting, '', false, false)]
+    local procedure "Calculate Prod. Order_OnBeforeTransferRouting"(var ProdOrder: Record "Production Order"; var ProdOrderLine: Record "Prod. Order Line"; var IsHandled: Boolean)
+    var
+        NewRecLink: Record "Record Link";
+    begin
+        NewRecLink.Reset();
+        NewRecLink.SetRange("Record ID", ProdOrder.RecordId);
+        if NewRecLink.FindSet() then
+            NewRecLink.DeleteAll();
+    end;
+    
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterPostSalesDoc, '', false, false)]
     local procedure "Sales-Post_OnAfterPostSalesDoc"(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
     begin
