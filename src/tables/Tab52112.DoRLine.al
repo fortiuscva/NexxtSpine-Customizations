@@ -1,14 +1,14 @@
-table 52112 "NTS DoR Line"
+table 52112 "NTS DOR Line"
 {
-    Caption = 'DoR Line';
+    Caption = 'DOR Line';
     DataClassification = ToBeClassified;
 
     fields
     {
-        field(1; "DoR Number"; Code[20])
+        field(1; "Document No."; Code[20])
         {
-            Caption = 'DoR Number';
-            TableRelation = "NTS DoR Header"."DoR Number";
+            Caption = 'Document No.';
+            TableRelation = "NTS DOR Header"."No.";
         }
         field(2; "Line No."; Integer)
         {
@@ -27,8 +27,8 @@ table 52112 "NTS DoR Line"
                 TempItem: Record Item temporary;
             begin
 
-                if not DORHeader.Get("DoR Number") then
-                    Error('DOR Header not found for Document No. %1.', "DoR Number");
+                if not DORHeader.Get("Document No.") then
+                    Error('DOR Header not found for Document No. %1.', "Document No.");
 
                 BOMComponent.SetRange("Parent Item No.", DORHeader."Set Name");
                 if BOMComponent.FindSet() then
@@ -41,8 +41,6 @@ table 52112 "NTS DoR Line"
                 if PAGE.RunModal(0, TempItem) = ACTION::LookupOK then
                     "Item No." := TempItem."No.";
             end;
-
-
         }
         field(4; Quantity; Integer)
         {
@@ -56,7 +54,7 @@ table 52112 "NTS DoR Line"
     }
     keys
     {
-        key(PK; "DoR Number", "Item No.")
+        key(PK; "Document No.", "Item No.")
         {
             Clustered = true;
         }

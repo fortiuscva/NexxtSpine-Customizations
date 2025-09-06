@@ -38,7 +38,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
             unitPrice := TempSalesLine."Unit Price";
             discountPct := TempSalesLine."Line Discount %";
         end;
-    end;
+    end;"NTS DOR Header"
 
     procedure PostDoR(var DoRHeader: Record "NTS DoR Header")
     var
@@ -52,7 +52,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         DisassembleSet(DoRHeader);
         DoRHeader.Status := DoRHeader.Status::Posted;
         DoRHeader.Modify();
-    end;
+    end;"NTS DOR Header"
 
     procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header")
     var
@@ -86,7 +86,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Validate("No.", DoRLine."Item No.");
                 SalesLine.Validate(Quantity, DoRLine.Quantity);
                 SalesLine.Validate("NTS Lot Number", DoRLine."Lot Number");
-                SalesLine.Modify(True);
+                SalesLine.Modify(True);"NTS DOR Header"
                 NextLineNo += 10000;
             until DoRLine.Next() = 0;
 

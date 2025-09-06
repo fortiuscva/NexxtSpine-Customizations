@@ -1,5 +1,5 @@
 /// <summary>
-/// PageExtension NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS Sales & Receivables Setup (ID 50101) extends Record Sales & Receivables Setup.
+/// PageExtension NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS Sales & Receivables Setup (ID 50101) extends Record Sales & Receivables Setup.
 /// </summary>
 pageextension 52102 "Sales & Receivables Setup" extends "Sales & Receivables Setup"
 {
@@ -10,6 +10,11 @@ pageextension 52102 "Sales & Receivables Setup" extends "Sales & Receivables Set
             group("NTS NTSNexxt")
             {
                 Caption = 'Nexxt Spine';
+                field("NTS DOR Nos."; Rec."NTS DOR Nos.")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the DOR Nos. field.', Comment = '%';
+                }
                 field("NTS Accrued AR GL"; Rec."NTS Accrued AR GL")
                 {
                     ApplicationArea = all;

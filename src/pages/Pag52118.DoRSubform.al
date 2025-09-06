@@ -3,7 +3,7 @@ page 52118 "NTS DoR Subform"
     ApplicationArea = All;
     Caption = 'DoR Subform';
     PageType = ListPart;
-    SourceTable = "NTS DoR Line";
+    SourceTable = "NTS DOR Line";
     AutoSplitKey = true;
     DelayedInsert = true;
 

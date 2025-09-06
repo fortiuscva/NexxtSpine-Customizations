@@ -3,7 +3,7 @@ page 52117 "NTS DoR List"
     ApplicationArea = All;
     Caption = 'NTS DoR List';
     PageType = List;
-    SourceTable = "NTS DoR Line";
+    SourceTable = "NTS DOR Line";
     UsageCategory = Lists;
 
     layout
