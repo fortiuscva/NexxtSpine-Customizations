@@ -38,7 +38,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
             unitPrice := TempSalesLine."Unit Price";
             discountPct := TempSalesLine."Line Discount %";
         end;
-    end;"NTS DOR Header"
+    end;
 
     procedure PostDoR(var DoRHeader: Record "NTS DoR Header")
     var
@@ -52,7 +52,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         DisassembleSet(DoRHeader);
         DoRHeader.Status := DoRHeader.Status::Posted;
         DoRHeader.Modify();
-    end;"NTS DOR Header"
+    end;
 
     procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header")
     var
@@ -65,7 +65,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader."No." := '';
         SalesHeader.Insert(true);
         SalesHeader.Validate("Sell-to Customer No.", DoRHeader."Customer");
-        SalesHeader.validate("NTS DoR Number", DoRHeader."DoR Number");
+        SalesHeader.validate("NTS DoR Number", DoRHeader."No.");
         SalesHeader.Validate(Status, SalesHeader.Status::Open);
         SalesHeader.Validate("NTS Surgeon", DoRHeader.Surgeon);
         SalesHeader.Validate("NTS Distributor", DoRHeader.Distributor);
@@ -74,7 +74,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
         NextLineNo := 10000;
         DoRLine.Reset();
-        DoRLine.SetRange("DoR Number", DoRHeader."DoR Number");
+        DoRLine.SetRange("Document No.", DoRHeader."No.");
         if DoRLine.FindSet() then
             repeat
                 SalesLine.Init();
@@ -86,7 +86,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Validate("No.", DoRLine."Item No.");
                 SalesLine.Validate(Quantity, DoRLine.Quantity);
                 SalesLine.Validate("NTS Lot Number", DoRLine."Lot Number");
-                SalesLine.Modify(True);"NTS DOR Header"
+                SalesLine.Modify(True);
                 NextLineNo += 10000;
             until DoRLine.Next() = 0;
 
@@ -104,7 +104,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if Customer.Get(DoRHeader."Distributor") then
             LocationCode := Customer."Location Code";
 
-        if DoRLine.Get(DoRHeader."DoR Number", DoRHeader."Set Name") then
+        if DoRLine.Get(DoRHeader."No.", DoRHeader."Set Name") then
             SetLotNo := DoRLine."Lot Number";
 
         // Negative adjustment for the Set
@@ -124,7 +124,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         NextLineNo += 10000;
 
         DoRLine.Reset();
-        DoRLine.SetRange("DoR Number", DoRHeader."DoR Number");
+        DoRLine.SetRange("Document No.", DoRHeader."No.");
         if DoRLine.FindSet() then
             repeat
                 // Explode BOM and create positive entries for components

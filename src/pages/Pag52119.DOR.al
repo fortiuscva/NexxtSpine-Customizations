@@ -1,7 +1,7 @@
-page 52119 "NTS DoR Order"
+page 52119 "NTS DOR"
 {
     ApplicationArea = All;
-    Caption = 'DoR Order';
+    Caption = 'DOR';
     PageType = Document;
     SourceTable = "NTS DOR Header";
 
@@ -59,10 +59,10 @@ page 52119 "NTS DoR Order"
                     ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
                 }
             }
-            part(DoRLinesPart; "NTS DoR Subform")
+            part(DoRLinesPart; "NTS DOR Subform")
             {
                 ApplicationArea = All;
-                SubPageLink = "DoR Number" = field("No.");
+                SubPageLink = "Document No." = field("No.");
             }
 
         }
