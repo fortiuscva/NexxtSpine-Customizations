@@ -10,6 +10,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
         LineWithPrice: Interface "Line With Price";
         PriceCalculation: interface "Price Calculation";
         SVariant: Variant;
+        NextLineNo: Integer;
+        NewLineNo: Integer;
 
     procedure GetUnitPriceAndDiscount(distributorNo: Code[20]; itemNo: Code[20]; var unitPrice: Decimal; var discountPct: Decimal)
     begin
@@ -70,19 +72,22 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader.Validate("NTS Reps", DoRHeader.Reps);
         SalesHeader.Modify(true);
 
+        NextLineNo := 10000;
+        DoRLine.Reset();
         DoRLine.SetRange("DoR Number", DoRHeader."DoR Number");
         if DoRLine.FindSet() then
             repeat
                 SalesLine.Init();
                 SalesLine."Document Type" := SalesLine."Document Type"::Order;
                 SalesLine."Document No." := SalesHeader."No.";
-                SalesLine."Line No." := DoRLine."Line No.";
+                SalesLine."Line No." := NextLineNo;
                 SalesLine.Insert(True);
                 SalesLine."Type" := SalesLine."Type"::Item;
                 SalesLine.Validate("No.", DoRLine."Item No.");
                 SalesLine.Validate(Quantity, DoRLine.Quantity);
                 SalesLine.Validate("NTS Lot Number", DoRLine."Lot Number");
                 SalesLine.Modify(True);
+                NextLineNo += 10000;
             until DoRLine.Next() = 0;
 
     end;
@@ -94,48 +99,126 @@ codeunit 52103 "NTS NexxtSpine Functions"
         BOMComponent: Record "BOM Component";
         Customer: Record Customer;
         LocationCode: Code[10];
+        SetLotNo: Code[50];
     begin
-        Customer.Get(DoRHeader."Distributor");
-        LocationCode := Customer."Location Code";
+        if Customer.Get(DoRHeader."Distributor") then
+            LocationCode := Customer."Location Code";
 
+        if DoRLine.Get(DoRHeader."DoR Number", DoRHeader."Set Name") then
+            SetLotNo := DoRLine."Lot Number";
+
+        // Negative adjustment for the Set
+        NextLineNo := 10000;
+        ItemJournalLine.Init();
+        ItemJournalLine."Journal Template Name" := 'ITEM';
+        ItemJournalLine."Journal Batch Name" := 'DEFAULT';
+        ItemJournalLine."Line No." := NextLineNo;
+        ItemJournalLine.Insert(true);
+        ItemJournalLine.Validate("Entry Type", ItemJournalLine."Entry Type"::"Negative Adjmt.");
+        ItemJournalLine.Validate("Item No.", DoRHeader."Set Name");
+        ItemJournalLine.Validate(Quantity, DoRLine.Quantity);
+        ItemJournalLine.Validate("Location Code", LocationCode);
+        ItemJournalLine.Validate("Serial No.", DoRHeader."Serial Number");
+        ItemJournalLine.Validate("Lot No.", SetLotNo);
+        ItemJournalLine.Modify(true);
+        NextLineNo += 10000;
+
+        DoRLine.Reset();
         DoRLine.SetRange("DoR Number", DoRHeader."DoR Number");
         if DoRLine.FindSet() then
             repeat
-                // Negative adjustment for the Set
+                // Explode BOM and create positive entries for components
+                NewLineNo := 10000;
                 ItemJournalLine.Init();
                 ItemJournalLine."Journal Template Name" := 'ITEM';
                 ItemJournalLine."Journal Batch Name" := 'DEFAULT';
-                ItemJournalLine."Line No." := DoRLine."Line No.";
+                ItemJournalLine."Line No." := NewLineNo;
                 ItemJournalLine.Insert(true);
-                ItemJournalLine."Entry Type" := ItemJournalLine."Entry Type"::"Negative Adjmt.";
-                ItemJournalLine."Item No." := DoRHeader."Set Name";
-                ItemJournalLine.Quantity := DoRLine.Quantity;
-                ItemJournalLine."Location Code" := LocationCode;
-                ItemJournalLine."Serial No." := DoRHeader."Serial Number";
-                ItemJournalLine."Lot No." := DoRLine."Lot Number";
+                ItemJournalLine.Validate("Entry Type", ItemJournalLine."Entry Type"::"Positive Adjmt.");
+                ItemJournalLine.Validate("Item No.", DoRLine."Item No.");
+                ItemJournalLine.Validate(Quantity, DoRLine.Quantity);
+                ItemJournalLine.Validate("Location Code", LocationCode);
+                ItemJournalLine.Validate("Serial No.", DoRHeader."Serial Number");
+                ItemJournalLine.Validate("Lot No.", DoRLine."Lot Number");
                 ItemJournalLine.Modify(true);
-
-                // Explode BOM and create positive entries for components
-                BOMComponent.SetRange("Parent Item No.", DoRHeader."Set Name");
-                if BOMComponent.FindSet() then
-                    repeat
-                        ItemJournalLine.Init();
-                        ItemJournalLine."Journal Template Name" := 'ITEM';
-                        ItemJournalLine."Journal Batch Name" := 'DEFAULT';
-                        ItemJournalLine."Line No." := DoRLine."Line No.";
-                        ItemJournalLine.Insert(true);
-                        ItemJournalLine."Entry Type" := ItemJournalLine."Entry Type"::"Positive Adjmt.";
-                        ItemJournalLine."Item No." := BOMComponent."No.";
-                        ItemJournalLine.Quantity := BOMComponent."Quantity per";
-                        ItemJournalLine."Location Code" := LocationCode;
-                        ItemJournalLine."Serial No." := DoRHeader."Serial Number";
-                        ItemJournalLine."Lot No." := DoRLine."Lot Number";
-                        ItemJournalLine.Modify(true);
-                    until BOMComponent.Next() = 0;
+                NewLineNo += 10000;
             until DoRLine.Next() = 0;
     end;
 
+    procedure CreatePositiveAdjustment(SalesHeader: Record "Sales Header")
     var
-        NewLineNo: Integer;
+        SalesLine: Record "Sales Line";
+        ItemJournalLine: Record "Item Journal Line";
+        LocationRec: Record Location;
+        FinishedGoodsLocation: Code[10];
+        ItemJournalTemplate: Record "Item Journal Template";
+        ItemJournalBatch: Record "Item Journal Batch";
+        ItemJournalPost: Codeunit "Item Jnl.-Post";
+    begin
+        // Get Finished Goods Location
+        LocationRec.Reset;
+        LocationRec.SetRange("NTS Is Finished Goods Location", true);
+        LocationRec.FindFirst();
 
+        // Create journal lines
+        NextLineNo := 10000;
+        SalesLine.Reset();
+        SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
+        SalesLine.SetRange("Document No.", SalesHeader."No.");
+        if SalesLine.FindSet() then
+            repeat
+                ItemJournalLine.Init();
+                ItemJournalLine."Journal Template Name" := 'ITEM';
+                ItemJournalLine."Journal Batch Name" := 'DEFAULT';
+                ItemJournalLine."Line No." := NextLineNo;
+                ItemJournalLine.INSERT(TRUE);
+                ItemJournalLine.VALIDATE("Entry Type", ItemJournalLine."Entry Type"::"Positive Adjmt.");
+                ItemJournalLine.VALIDATE("Item No.", SalesLine."No.");
+                ItemJournalLine.VALIDATE(Quantity, SalesLine.Quantity);
+                ItemJournalLine.VALIDATE("Location Code", LocationRec.Code);
+                ItemJournalLine.VALIDATE("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                ItemJournalLine.Modify(TRUE);
+            until SalesLine.Next() = 0;
+
+        // Post the journal
+        ItemJournalPost.Run(ItemJournalLine);
+    end;
+
+    procedure CreateAssemblyOrder(TransferHeader: Record "Transfer Header")
+    var
+        AssemblyHeader: Record "Assembly Header";
+        AssemblyLine: Record "Assembly Line";
+        TransLine: Record "Transfer Line";
+    begin
+        AssemblyHeader.Init();
+        AssemblyHeader."Document Type" := AssemblyHeader."Document Type"::Order;
+        AssemblyHeader."No." := '';
+        AssemblyHeader.Insert(true);
+        AssemblyHeader.Validate("Item No.", TransferHeader."NTS Set Name");
+        AssemblyHeader.Validate("Posting Date", TransferHeader."Posting Date");
+        AssemblyHeader.Validate("Due Date", TransferHeader."Posting Date");
+        AssemblyHeader.Validate("Starting Date", TransferHeader."Posting Date");
+        AssemblyHeader.Validate("Ending Date", TransferHeader."Posting Date");
+        AssemblyHeader.Validate("Location Code", TransferHeader."Transfer-to Code");
+        AssemblyHeader.Validate("Shortcut Dimension 1 Code", TransferHeader."Shortcut Dimension 1 Code");
+        AssemblyHeader.Validate("Shortcut Dimension 2 Code", TransferHeader."Shortcut Dimension 2 Code");
+        AssemblyHeader.Modify(true);
+
+        NextLineNo := 10000;
+        TransLine.Reset();
+        TransLine.SetRange("Document No.", TransferHeader."No.");
+        if TransLine.FindSet() then
+            repeat
+                AssemblyLine.Init();
+                AssemblyLine.Type := AssemblyLine.Type::Item;
+                AssemblyLine."Document No." := AssemblyHeader."No.";
+                AssemblyLine."Line No." := NextLineNo;
+                AssemblyLine.Insert(True);
+                AssemblyLine.Validate("No.", TransLine."Item No.");
+                AssemblyLine.Validate(Quantity, TransLine.Quantity);
+                AssemblyLine.Validate("Unit of Measure Code", TransLine."Unit of Measure");
+                AssemblyLine.Modify(true);
+                NextLineNo += 10000;
+            until TransLine.Next() = 0;
+    end;
 }
