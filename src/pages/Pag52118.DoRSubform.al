@@ -1,7 +1,7 @@
-page 52118 "NTS DoR Subform"
+page 52118 "NTS DOR Subform"
 {
     ApplicationArea = All;
-    Caption = 'DoR Subform';
+    Caption = 'DOR Subform';
     PageType = ListPart;
     SourceTable = "NTS DOR Line";
     AutoSplitKey = true;
@@ -13,7 +13,7 @@ page 52118 "NTS DoR Subform"
         {
             repeater(General)
             {
-                field("DoR Number"; Rec."DoR Number")
+                field("DoR Number"; Rec."Document No.")
                 {
                     ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
                 }
