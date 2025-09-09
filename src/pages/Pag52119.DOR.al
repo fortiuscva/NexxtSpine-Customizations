@@ -4,6 +4,7 @@ page 52119 "NTS DOR"
     Caption = 'DOR';
     PageType = Document;
     SourceTable = "NTS DOR Header";
+    UsageCategory = Administration;
 
     layout
     {
@@ -30,7 +31,7 @@ page 52119 "NTS DOR"
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }
 
-                field("Serial Number"; Rec."Serial Number")
+                field("Serial Number"; Rec."Serial No.")
                 {
                     ToolTip = 'Specifies the value of the Serial Number field.', Comment = '%';
                 }

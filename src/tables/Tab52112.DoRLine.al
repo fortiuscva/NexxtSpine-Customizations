@@ -46,15 +46,15 @@ table 52112 "NTS DOR Line"
         {
             Caption = 'Quantity';
         }
-        field(5; "Lot Number"; Code[50])
+        field(5; "Lot No."; Code[50])
         {
-            Caption = 'Lot Number';
+            Caption = 'Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Item No."));
         }
     }
     keys
     {
-        key(PK; "Document No.", "Item No.")
+        key(PK; "Document No.", "Line No.")
         {
             Clustered = true;
         }
