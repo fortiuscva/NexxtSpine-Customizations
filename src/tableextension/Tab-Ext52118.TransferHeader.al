@@ -12,6 +12,12 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Caption = 'Tracking URL';
             DataClassification = ToBeClassified;
         }
+        field(52102; "NTS Set Name"; code[20])
+        {
+            Caption = 'Set Name';
+            DataClassification = ToBeClassified;
+            TableRelation = "Sales Header"."NTS Set Name";
+        }
         modify("Shipping Agent Code")
         {
             trigger OnAfterValidate()
