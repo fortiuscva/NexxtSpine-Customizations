@@ -6,6 +6,7 @@ page 52118 "NTS DOR Subform"
     SourceTable = "NTS DOR Line";
     AutoSplitKey = true;
     DelayedInsert = true;
+    UsageCategory = Lists;
 
     layout
     {
@@ -13,7 +14,7 @@ page 52118 "NTS DOR Subform"
         {
             repeater(General)
             {
-                field("DoR Number"; Rec."Document No.")
+                field("Document No."; Rec."Document No.")
                 {
                     ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
                 }
@@ -21,7 +22,7 @@ page 52118 "NTS DOR Subform"
                 {
                     ToolTip = 'Specifies the value of the Item field.', Comment = '%';
                 }
-                field("Lot Number"; Rec."Lot Number")
+                field("Lot Number"; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot Number field.', Comment = '%';
                 }

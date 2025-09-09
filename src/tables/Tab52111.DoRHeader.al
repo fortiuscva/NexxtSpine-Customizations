@@ -33,9 +33,9 @@ table 52111 "NTS DOR Header"
             Caption = 'Set Name';
             TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
         }
-        field(5; "Serial Number"; Code[20])
+        field(5; "Serial No."; Code[20])
         {
-            Caption = 'Serial Number';
+            Caption = 'Serial No.';
             TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("Set Name"));
         }
         field(6; Status; Enum "NTS Status")

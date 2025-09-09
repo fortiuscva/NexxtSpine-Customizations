@@ -34,7 +34,7 @@ page 52117 "NTS DOR List"
                 {
                     ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
                 }
-                field("Serial Number"; Rec."Serial Number")
+                field("Serial Number"; Rec."Serial No.")
                 {
                     ToolTip = 'Specifies the value of the Serial Number field.', Comment = '%';
                 }

@@ -85,7 +85,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine."Type" := SalesLine."Type"::Item;
                 SalesLine.Validate("No.", DoRLine."Item No.");
                 SalesLine.Validate(Quantity, DoRLine.Quantity);
-                SalesLine.Validate("NTS Lot Number", DoRLine."Lot Number");
+                SalesLine.Validate("NTS Lot Number", DoRLine."Lot No.");
                 SalesLine.Modify(True);
                 NextLineNo += 10000;
             until DoRLine.Next() = 0;
@@ -105,7 +105,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
             LocationCode := Customer."Location Code";
 
         if DoRLine.Get(DoRHeader."No.", DoRHeader."Set Name") then
-            SetLotNo := DoRLine."Lot Number";
+            SetLotNo := DoRLine."Lot No.";
 
         // Negative adjustment for the Set
         NextLineNo := 10000;
@@ -118,7 +118,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         ItemJournalLine.Validate("Item No.", DoRHeader."Set Name");
         ItemJournalLine.Validate(Quantity, DoRLine.Quantity);
         ItemJournalLine.Validate("Location Code", LocationCode);
-        ItemJournalLine.Validate("Serial No.", DoRHeader."Serial Number");
+        ItemJournalLine.Validate("Serial No.", DoRHeader."Serial No.");
         ItemJournalLine.Validate("Lot No.", SetLotNo);
         ItemJournalLine.Modify(true);
         NextLineNo += 10000;
@@ -138,8 +138,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 ItemJournalLine.Validate("Item No.", DoRLine."Item No.");
                 ItemJournalLine.Validate(Quantity, DoRLine.Quantity);
                 ItemJournalLine.Validate("Location Code", LocationCode);
-                ItemJournalLine.Validate("Serial No.", DoRHeader."Serial Number");
-                ItemJournalLine.Validate("Lot No.", DoRLine."Lot Number");
+                ItemJournalLine.Validate("Serial No.", DoRHeader."Serial No.");
+                ItemJournalLine.Validate("Lot No.", DoRLine."Lot No.");
                 ItemJournalLine.Modify(true);
                 NewLineNo += 10000;
             until DoRLine.Next() = 0;
