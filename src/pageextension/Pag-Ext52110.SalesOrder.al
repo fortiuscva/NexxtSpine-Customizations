@@ -38,7 +38,14 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                 Promoted = true;
                 PromotedIsBig = true;
                 PromotedCategory = Process;
-                RunObject = report "NTS Create TO from SO";
+                trigger OnAction()
+                var
+                    NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+                begin
+                    if not Confirm('Do you want to Create Transfer Order?') then
+                        exit;
+                    NTSFunctions.CreateTransferOrder(Rec);
+                end;
             }
         }
     }

@@ -12,6 +12,16 @@ tableextension 52116 "NTS Transfer Line" extends "Transfer Line"
             Caption = 'Sales Order Line No.';
             DataClassification = CustomerContent;
         }
+        field(52102; "NTS DOR No."; Code[20])
+        {
+            Caption = 'DOR No.';
+            DataClassification = CustomerContent;
+        }
+        field(52103; "NTS DOR Line No."; Integer)
+        {
+            Caption = 'DOR Line No.';
+            DataClassification = CustomerContent;
+        }
 
 
         modify("Item No.")
