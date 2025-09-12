@@ -51,7 +51,7 @@ codeunit 52101 "NTS Event Management"
         if NewRecLink.FindSet() then
             NewRecLink.DeleteAll();
     end;
-    
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterPostSalesDoc, '', false, false)]
     local procedure "Sales-Post_OnAfterPostSalesDoc"(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
     begin
@@ -68,8 +68,21 @@ codeunit 52101 "NTS Event Management"
         NexxtSpineFunctions.CreateAssemblyOrder(TransferHeader);
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeCalcLevels, '', false, false)]
+    local procedure "Calculate Low-Level Code_OnBeforeCalcLevels"(Type: Option; No: Code[20]; Level: Integer; LevelDepth: Integer; var Result: Integer; var IsHandled: Boolean)
     var
-        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+        ItemRec: Record Item;
+    begin
+
+        if ItemRec.Get(No) then begin
+            if ItemRec."NTS Purchase to Production" and (LevelDepth >= 50) then begin
+                // Bypass the error and return a safe level
+                Result := Level;
+                IsHandled := true;
+            end;
+        end;
+
+    end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeCalcLevels, '', false, false)]
     local procedure "Calculate Low-Level Code_OnBeforeCalcLevels"(Type: Option; No: Code[20]; Level: Integer; LevelDepth: Integer; var Result: Integer; var IsHandled: Boolean)
@@ -87,4 +100,6 @@ codeunit 52101 "NTS Event Management"
 
     end;
 
+ var
+        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
 }

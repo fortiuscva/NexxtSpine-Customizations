@@ -1,5 +1,5 @@
 /// <summary>
-/// PageExtension NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS Sales & Receivables Setup (ID 50101) extends Record Sales & Receivables Setup.
+/// PageExtension NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS NTS Sales & Receivables Setup (ID 50101) extends Record Sales & Receivables Setup.
 /// </summary>
 pageextension 52102 "Sales & Receivables Setup" extends "Sales & Receivables Setup"
 {
@@ -34,6 +34,16 @@ pageextension 52102 "Sales & Receivables Setup" extends "Sales & Receivables Set
                 {
                     ApplicationArea = all;
                     ToolTip = 'Accured Sales Batch Name';
+                }
+                field("NTS DOR Journal Template Name"; Rec."NTS DOR Journal Template Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the DOR Journal Template Name field.', Comment = '%';
+                }
+                field("NTS DOR Journal Batch Name"; Rec."NTS DOR Journal Batch Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the DOR Journal Batch Name field.', Comment = '%';
                 }
             }
         }

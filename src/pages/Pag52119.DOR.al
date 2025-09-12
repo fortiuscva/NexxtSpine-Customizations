@@ -30,15 +30,24 @@ page 52119 "NTS DOR"
                 {
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }
+                field("Set Name"; Rec."Set Name")
+                {
+                    ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
+                }
 
                 field("Serial Number"; Rec."Serial No.")
                 {
                     ToolTip = 'Specifies the value of the Serial Number field.', Comment = '%';
                 }
-                field("Set Name"; Rec."Set Name")
+                field("Lot No."; Rec."Lot No.")
                 {
-                    ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
                 }
+                field(Quantity; Rec.Quantity)
+                {
+                    ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
+                }
+
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
@@ -85,7 +94,12 @@ page 52119 "NTS DOR"
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
                     begin
-                        NexxSpineFunctions.PostDoR(Rec);
+                        if not Confirm('Do you want to post the DOR %1', false, Rec."No.") then
+                            exit;
+                        if Rec.Status = Rec.Status::Released then
+                            NexxSpineFunctions.PostDoR(Rec)
+                        else
+                            Error('Status must be Released');
                     end;
                 }
             }
