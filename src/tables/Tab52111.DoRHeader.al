@@ -109,9 +109,18 @@ table 52111 "NTS DOR Header"
                 end;
             end;
         }
+        field(10; "Lot No."; Code[50])
+        {
+            Caption = 'Lot No.';
+            TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Set Name"));
+        }
         field(20; "Posting Date"; Date)
         {
             Caption = 'Posting Date';
+        }
+        field(21; Quantity; Decimal)
+        {
+            Caption = 'Quantity';
         }
 
         field(107; "No. Series"; Code[20])

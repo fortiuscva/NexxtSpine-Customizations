@@ -11,7 +11,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         PriceCalculation: interface "Price Calculation";
         SVariant: Variant;
         NextLineNo: Integer;
-        NewLineNo: Integer;
+
 
     procedure GetUnitPriceAndDiscount(distributorNo: Code[20]; itemNo: Code[20]; var unitPrice: Decimal; var discountPct: Decimal)
     begin
@@ -48,7 +48,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferHeader: Record "Transfer Header";
         TransferLine: Record "Transfer Line";
     begin
-        CreateSalesOrder(DoRHeader);
+        if DoRHeader.Customer <> '' then
+            CreateSalesOrder(DoRHeader);
         DisassembleSet(DoRHeader);
         DoRHeader.Status := DoRHeader.Status::Posted;
         DoRHeader.Modify();
@@ -89,7 +90,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Modify(True);
                 NextLineNo += 10000;
             until DoRLine.Next() = 0;
-
+        Message('Sales Order created, Sales Order No.:%1', SalesHeader."No.");
     end;
 
     procedure DisassembleSet(DoRHeader: Record "NTS DoR Header")
@@ -100,26 +101,35 @@ codeunit 52103 "NTS NexxtSpine Functions"
         Customer: Record Customer;
         LocationCode: Code[10];
         SetLotNo: Code[50];
+        ItemJournalPost: Codeunit "Item Jnl.-Post";
     begin
         if Customer.Get(DoRHeader."Distributor") then
             LocationCode := Customer."Location Code";
 
-        if DoRLine.Get(DoRHeader."No.", DoRHeader."Set Name") then
+        DoRLine.SetRange("Document No.", DoRHeader."No.");
+        if Dorline.FindFirst() then
             SetLotNo := DoRLine."Lot No.";
+        SalesReceivablesSetup.Get();
 
         // Negative adjustment for the Set
-        NextLineNo := 10000;
+        ItemJournalLine.Reset();
+        ItemJournalLine.SetRange("Journal Template Name", SalesReceivablesSetup."NTS DOR Journal Template Name");
+        ItemJournalLine.SetRange("Journal Batch Name", SalesReceivablesSetup."NTS DOR Journal Batch Name");
+        if ItemJournalLine.FindLast() then
+            NextLineNo := ItemJournalLine."Line No." + 10000;
         ItemJournalLine.Init();
-        ItemJournalLine."Journal Template Name" := 'ITEM';
-        ItemJournalLine."Journal Batch Name" := 'DEFAULT';
+        ItemJournalLine."Journal Template Name" := SalesReceivablesSetup."NTS DOR Journal Template Name";
+        ItemJournalLine."Journal Batch Name" := SalesReceivablesSetup."NTS DOR Journal Batch Name";
         ItemJournalLine."Line No." := NextLineNo;
         ItemJournalLine.Insert(true);
         ItemJournalLine.Validate("Entry Type", ItemJournalLine."Entry Type"::"Negative Adjmt.");
         ItemJournalLine.Validate("Item No.", DoRHeader."Set Name");
-        ItemJournalLine.Validate(Quantity, DoRLine.Quantity);
+        ItemJournalLine.Validate("Document No.", DoRHeader."No.");
+        ItemJournalLine.Validate(Quantity, DoRHeader.Quantity);
+        ItemJournalLine.Validate("Posting Date", DoRHeader."Posting Date");
         ItemJournalLine.Validate("Location Code", LocationCode);
         ItemJournalLine.Validate("Serial No.", DoRHeader."Serial No.");
-        ItemJournalLine.Validate("Lot No.", SetLotNo);
+        ItemJournalLine.Validate("Lot No.", DoRHeader."Lot No.");
         ItemJournalLine.Modify(true);
         NextLineNo += 10000;
 
@@ -128,21 +138,27 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if DoRLine.FindSet() then
             repeat
                 // Explode BOM and create positive entries for components
-                NewLineNo := 10000;
                 ItemJournalLine.Init();
-                ItemJournalLine."Journal Template Name" := 'ITEM';
-                ItemJournalLine."Journal Batch Name" := 'DEFAULT';
-                ItemJournalLine."Line No." := NewLineNo;
+                ItemJournalLine."Journal Template Name" := SalesReceivablesSetup."NTS DOR Journal Template Name";
+                ItemJournalLine."Journal Batch Name" := SalesReceivablesSetup."NTS DOR Journal Batch Name";
+                ItemJournalLine."Line No." := NextLineNo;
                 ItemJournalLine.Insert(true);
                 ItemJournalLine.Validate("Entry Type", ItemJournalLine."Entry Type"::"Positive Adjmt.");
                 ItemJournalLine.Validate("Item No.", DoRLine."Item No.");
+                ItemJournalLine.Validate("Document No.", DoRLine."Document No.");
                 ItemJournalLine.Validate(Quantity, DoRLine.Quantity);
+                ItemJournalLine.Validate("Posting Date", DoRHeader."Posting Date");
                 ItemJournalLine.Validate("Location Code", LocationCode);
                 ItemJournalLine.Validate("Serial No.", DoRHeader."Serial No.");
                 ItemJournalLine.Validate("Lot No.", DoRLine."Lot No.");
                 ItemJournalLine.Modify(true);
-                NewLineNo += 10000;
+                NextLineNo += 10000;
             until DoRLine.Next() = 0;
+
+        ItemJournalLine.Reset();
+        ItemJournalLine.SetRange("Journal Template Name", SalesReceivablesSetup."NTS DOR Journal Template Name");
+        ItemJournalLine.SetRange("Journal Batch Name", SalesReceivablesSetup."NTS DOR Journal Batch Name");
+        ItemJournalPost.Run(ItemJournalLine);
     end;
 
     procedure CreatePositiveAdjustment(SalesHeader: Record "Sales Header")
@@ -159,7 +175,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         LocationRec.Reset;
         LocationRec.SetRange("NTS Is Finished Goods Location", true);
         LocationRec.FindFirst();
-
+        SalesReceivablesSetup.Get();
         // Create journal lines
         NextLineNo := 10000;
         SalesLine.Reset();
@@ -168,19 +184,25 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if SalesLine.FindSet() then
             repeat
                 ItemJournalLine.Init();
-                ItemJournalLine."Journal Template Name" := 'ITEM';
-                ItemJournalLine."Journal Batch Name" := 'DEFAULT';
+                ItemJournalLine."Journal Template Name" := SalesReceivablesSetup."NTS DOR Journal Template Name";
+                ItemJournalLine."Journal Batch Name" := SalesReceivablesSetup."NTS DOR Journal Batch Name";
                 ItemJournalLine."Line No." := NextLineNo;
                 ItemJournalLine.INSERT(TRUE);
                 ItemJournalLine.VALIDATE("Entry Type", ItemJournalLine."Entry Type"::"Positive Adjmt.");
                 ItemJournalLine.VALIDATE("Item No.", SalesLine."No.");
+                ItemJournalLine.VALIDATE("Document No.", SalesLine."Document No.");
                 ItemJournalLine.VALIDATE(Quantity, SalesLine.Quantity);
                 ItemJournalLine.VALIDATE("Location Code", LocationRec.Code);
                 ItemJournalLine.VALIDATE("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                ItemJournalLine.VALIDATE("Posting Date", SalesLine."Posting Date");
                 ItemJournalLine.Modify(TRUE);
             until SalesLine.Next() = 0;
 
         // Post the journal
+
+        ItemJournalLine.Reset();
+        ItemJournalLine.SetRange("Journal Template Name", SalesReceivablesSetup."NTS DOR Journal Template Name");
+        ItemJournalLine.SetRange("Journal Batch Name", SalesReceivablesSetup."NTS DOR Journal Batch Name");
         ItemJournalPost.Run(ItemJournalLine);
     end;
 
@@ -221,4 +243,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 NextLineNo += 10000;
             until TransLine.Next() = 0;
     end;
+
+    var
+        SalesReceivablesSetup: Record "Sales & Receivables Setup";
 }
