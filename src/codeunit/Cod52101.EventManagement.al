@@ -61,6 +61,7 @@ codeunit 52101 "NTS Event Management"
 
     end;
 
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Transfer", OnAfterTransferOrderPostTransfer, '', false, false)]
     local procedure "TransferOrder-Post Transfer_OnAfterTransferOrderPostTransfer"(var TransferHeader: Record "Transfer Header"; var SuppressCommit: Boolean; var DirectTransHeader: Record "Direct Trans. Header"; InvtPickPutAway: Boolean)
     begin
@@ -83,7 +84,22 @@ codeunit 52101 "NTS Event Management"
 
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeCalcLevels, '', false, false)]
+    local procedure "Calculate Low-Level Code_OnBeforeCalcLevels"(Type: Option; No: Code[20]; Level: Integer; LevelDepth: Integer; var Result: Integer; var IsHandled: Boolean)
     var
-        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+        ItemRec: Record Item;
+    begin
 
+        if ItemRec.Get(No) then begin
+            if ItemRec."NTS Purchase to Production" and (LevelDepth > 50) then begin
+                // Bypass the error and return a safe level
+                Result := Level;
+                IsHandled := true;
+            end;
+        end;
+
+    end;
+
+ var
+        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
 }
