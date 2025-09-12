@@ -47,12 +47,15 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesLine: Record "Sales Line";
         TransferHeader: Record "Transfer Header";
         TransferLine: Record "Transfer Line";
+        CustNoBlankError: Label 'Customer No. is blank on this %1';
     begin
-        if DoRHeader.Customer <> '' then
+        if DoRHeader.Customer <> '' then begin
             CreateSalesOrder(DoRHeader);
-        DisassembleSet(DoRHeader);
-        DoRHeader.Status := DoRHeader.Status::Posted;
-        DoRHeader.Modify();
+            DisassembleSet(DoRHeader);
+            DoRHeader.Status := DoRHeader.Status::Posted;
+            DoRHeader.Modify();
+        end else
+            Error(StrSubstNo(CustNoBlankError, DoRHeader."No."));
     end;
 
     procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header")

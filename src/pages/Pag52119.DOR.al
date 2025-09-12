@@ -94,8 +94,8 @@ page 52119 "NTS DOR"
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
                         SalesHeader: Record "Sales Header";
-                        SOExistError: Label 'Sales Order %1 already exist for this DOR %2';
-                        ReleasedStatusError: Label 'Status must be Released to Post this DOR %1';
+                        SOExistError: Label 'Sales Order %1 already exist for this %2';
+                        ReleasedStatusError: Label 'Status must be Released to Post this %1';
                     begin
                         if Rec.Status = Rec.Status::Posted then begin
                             SalesHeader.Reset();
