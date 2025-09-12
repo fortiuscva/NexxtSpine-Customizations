@@ -93,13 +93,22 @@ page 52119 "NTS DOR"
                     trigger OnAction()
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+                        SalesHeader: Record "Sales Header";
+                        SOExistError: Label 'Sales Order %1 already exist for this DOR %2';
+                        ReleasedStatusError: Label 'Status must be Released to Post this DOR %1';
                     begin
+                        if Rec.Status = Rec.Status::Posted then begin
+                            SalesHeader.Reset();
+                            SalesHeader.SetRange("NTS DoR Number", Rec."No.");
+                            if SalesHeader.FindFirst() then
+                                Error(StrSubstNo(SOExistError, SalesHeader."No.", Rec."No."));
+                        end;
                         if not Confirm('Do you want to post the DOR %1', false, Rec."No.") then
                             exit;
                         if Rec.Status = Rec.Status::Released then
                             NexxSpineFunctions.PostDoR(Rec)
                         else
-                            Error('Status must be Released');
+                            Error(StrSubstNo(ReleasedStatusError, Rec."No."));
                     end;
                 }
             }
