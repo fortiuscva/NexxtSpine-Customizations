@@ -7,6 +7,16 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
             Caption = 'Lot Number';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("No."));
         }
+        field(52114; "NTS DOR No."; Code[20])
+        {
+            Caption = 'DOR No.';
+            DataClassification = CustomerContent;
+        }
+        field(52115; "NTS DOR Line No."; Integer)
+        {
+            Caption = 'DOR Line No.';
+            DataClassification = CustomerContent;
+        }
         modify("No.")
         {
             trigger OnAfterValidate()

@@ -90,6 +90,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Validate("No.", DoRLine."Item No.");
                 SalesLine.Validate(Quantity, DoRLine.Quantity);
                 SalesLine.Validate("NTS Lot Number", DoRLine."Lot No.");
+                SalesLine.Validate("NTS DOR No.", DoRLine."Document No.");
+                SalesLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
                 SalesLine.Modify(True);
                 NextLineNo += 10000;
             until DoRLine.Next() = 0;
@@ -227,6 +229,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader.Validate("Location Code", TransferHeader."Transfer-to Code");
         AssemblyHeader.Validate("Shortcut Dimension 1 Code", TransferHeader."Shortcut Dimension 1 Code");
         AssemblyHeader.Validate("Shortcut Dimension 2 Code", TransferHeader."Shortcut Dimension 2 Code");
+        AssemblyHeader.Validate("NTS DOR No.", TransferHeader."NTS DOR No.");
         AssemblyHeader.Modify(true);
 
         NextLineNo := 10000;
@@ -242,9 +245,81 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 AssemblyLine.Validate("No.", TransLine."Item No.");
                 AssemblyLine.Validate(Quantity, TransLine.Quantity);
                 AssemblyLine.Validate("Unit of Measure Code", TransLine."Unit of Measure");
+                AssemblyLine.Validate("NTS DOR No.", TransLine."NTS DOR No.");
+                AssemblyLine.Validate("NTS DOR Line No.", TransLine."NTS DOR Line No.");
                 AssemblyLine.Modify(true);
                 NextLineNo += 10000;
             until TransLine.Next() = 0;
+    end;
+
+    procedure CreateTransferOrder(var SalesHeader: Record "Sales Header")
+    var
+        TransferHeader: Record "Transfer Header";
+        TransferLine: Record "Transfer Line";
+        SalesLine: Record "Sales Line";
+        Location: Record Location;
+        NextLineNo: Integer;
+        NTSDORLine: Record "NTS DOR Line";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+
+    begin
+        Location.Reset;
+        Location.SetRange("NTS Is Finished Goods Location", true);
+        Location.FindFirst();
+
+        TransferHeader.Init();
+        TransferHeader."No." := '';
+        TransferHeader.Insert(True);
+
+        TransferHeader.Validate("Transfer-from Code", Location.Code);
+        TransferHeader.Validate("Transfer-to Code", SalesHeader."Location Code");
+        TransferHeader.Validate("Direct Transfer", true);
+        TransferHeader.Validate("Posting Date", WorkDate());
+        TransferHeader.Validate("Shortcut Dimension 1 Code", SalesHeader."Shortcut Dimension 1 Code");
+        TransferHeader.Validate("Shortcut Dimension 2 Code", SalesHeader."Shortcut Dimension 2 Code");
+        TransferHeader.Validate("Assigned User ID", SalesHeader."Salesperson Code");
+        TransferHeader.Validate("Shipment Date", SalesHeader."Shipment Date");
+        TransferHeader.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
+        TransferHeader.Validate("Shipping Time", SalesHeader."Shipping Time");
+        TransferHeader.Validate("NTS Set Name", SalesHeader."NTS Set Name");
+        TransferHeader.Validate("NTS DOR No.", SalesHeader."NTS DoR Number");
+        TransferHeader.Modify(true);
+
+        NextLineNo := 10000;
+        SalesLine.Reset();
+        SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+        SalesLine.SetRange("Document No.", SalesHeader."No.");
+        SalesLine.SetRange(Type, SalesLine.Type::Item);
+        SalesLine.SetFilter("No.", '<>%1', '');
+        if SalesLine.FindSet() then
+            repeat
+                TransferLine.Init();
+                TransferLine."Document No." := TransferHeader."No.";
+                TransferLine."Line No." := NextLineNo;
+                TransferLine.Insert(true);
+
+                TransferLine.Validate("Item No.", SalesLine."No.");
+                TransferLine.Validate(Quantity, SalesLine.Quantity);
+                TransferLine.Validate("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                TransferLine.Validate("NTS Sales Order No.", SalesLine."Document No.");
+                TransferLine.Validate("NTS Sales Order Line No.", SalesLine."Line No.");
+                TransferLine.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
+                TransferLine.Validate("NTS DOR Line No.", SalesLine."NTS DOR Line No.");
+                TransferLine.Modify(true);
+                if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
+                    if not NTSDORLine.Consumable then begin
+                        ForReservEntry."Lot No." := NTSDORLine."Lot No.";
+                        CreateReservEntry.CreateReservEntryFor(Database::"Transfer Line", 0, TransferHeader."No.", '', 0, TransferLine."Line No.", TransferLine."Qty. per Unit of Measure", TransferLine.Quantity, TransferLine."Quantity (Base)", ForReservEntry);
+                        CreateReservEntry.SetDates(0D, TransferLine."Receipt Date");
+                        CreateReservEntry.SetNewExpirationDate(TransferLine."Receipt Date");
+                        // CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                        // CreateReservEntry.SetApplyToEntryNo(InspHeadRecPar."Item Ledger Entry No.");
+                        CreateReservEntry.CreateEntry(TransferLine."Item No.", TransferLine."Variant Code", TransferHeader."Transfer-from Code", TransferLine.Description, 0D, TransferHeader."Posting Date", 0, ForReservEntry."Reservation Status"::Surplus);
+                    end;
+                    NextLineNo += 10000;
+                end;
+            until SalesLine.Next() = 0;
     end;
 
     var
