@@ -72,4 +72,28 @@ page 52121 "NTS Posted DOR"
 
         }
     }
+    actions
+    {
+        area(Processing)
+        {
+            action("NTS Sales Order")
+            {
+                Caption = 'Sales Order';
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                trigger OnAction()
+                var
+                    SalesHeader: Record "Sales Header";
+                begin
+                    SalesHeader.Reset();
+                    SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
+                    SalesHeader.SetRange("NTS DoR Number", Rec."No.");
+                    if SalesHeader.FindFirst() then
+                        Page.RunModal(Page::"Sales Order", SalesHeader);
+                end;
+            }
+        }
+    }
 }
