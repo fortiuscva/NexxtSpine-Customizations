@@ -3,6 +3,7 @@ page 52117 "NTS DOR List"
     ApplicationArea = All;
     Caption = 'DOR List';
     PageType = List;
+    Editable = false;
     SourceTable = "NTS DOR Header";
     CardPageId = "NTS DOR";
     UsageCategory = Lists;
