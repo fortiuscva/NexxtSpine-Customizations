@@ -167,8 +167,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
         ItemJournalLine.Validate(Quantity, DoRHeader.Quantity);
         ItemJournalLine.Validate("Posting Date", DoRHeader."Posting Date");
         ItemJournalLine.Validate("Location Code", LocationCode);
-        ItemJournalLine.Validate("Serial No.", DoRHeader."Serial No.");
-        ItemJournalLine.Validate("Lot No.", DoRHeader."Lot No.");
+        // ItemJournalLine.Validate("Serial No.", DoRHeader."Serial No.");
+        // ItemJournalLine.Validate("Lot No.", DoRHeader."Lot No.");
         // ItemJournalLine.Modify(true);
         NextLineNo += 10000;
 
@@ -208,8 +208,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 ItemJournalLine.Validate(Quantity, DoRLine.Quantity);
                 ItemJournalLine.Validate("Posting Date", DoRHeader."Posting Date");
                 ItemJournalLine.Validate("Location Code", LocationCode);
-                ItemJournalLine.Validate("Serial No.", DoRHeader."Serial No.");
-                ItemJournalLine.Validate("Lot No.", DoRLine."Lot No.");
+                // ItemJournalLine.Validate("Serial No.", DoRHeader."Serial No.");
+                // ItemJournalLine.Validate("Lot No.", DoRLine."Lot No.");
                 // ItemJournalLine.Modify(true);
                 NextLineNo += 10000;
 
@@ -242,6 +242,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
         ItemJournalTemplate: Record "Item Journal Template";
         ItemJournalBatch: Record "Item Journal Batch";
         ItemJournalPost: Codeunit "Item Jnl.-Post";
+        ItemJnlPostLine: Codeunit "Item Jnl.-Post Line";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+        DORLine: Record "NTS DOR Line";
+        ItemTrackingVal: integer;
     begin
         // Get Finished Goods Location
         LocationRec.Reset;
@@ -259,7 +265,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 ItemJournalLine."Journal Template Name" := SalesReceivablesSetup."NTS DOR Journal Template Name";
                 ItemJournalLine."Journal Batch Name" := SalesReceivablesSetup."NTS DOR Journal Batch Name";
                 ItemJournalLine."Line No." := NextLineNo;
-                ItemJournalLine.INSERT(TRUE);
+                // ItemJournalLine.INSERT(TRUE);
                 ItemJournalLine.VALIDATE("Entry Type", ItemJournalLine."Entry Type"::"Positive Adjmt.");
                 ItemJournalLine.VALIDATE("Item No.", SalesLine."No.");
                 ItemJournalLine.VALIDATE("Document No.", SalesLine."Document No.");
@@ -267,15 +273,26 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 ItemJournalLine.VALIDATE("Location Code", LocationRec.Code);
                 ItemJournalLine.VALIDATE("Unit of Measure Code", SalesLine."Unit of Measure Code");
                 ItemJournalLine.VALIDATE("Posting Date", SalesLine."Posting Date");
-                ItemJournalLine.Modify(TRUE);
+                // ItemJournalLine.Modify(TRUE);
+
+                DORLine.get(SalesLine."NTS DOR No.", SalesLine."NTS DOR Line No.");
+                ForReservEntry."Lot No." := DoRLine."Lot No.";
+                TrackingSpec."New Lot No." := DoRLine."Lot No.";
+
+                CreateReservEntry.CreateReservEntryFor(
+                Database::"Item Journal Line", 1,
+                ItemJournalLine."Document No.", '',
+                0, ItemJournalLine."Line No.",
+                ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
+                ForReservEntry);
+                CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                CreateReservEntry.CreateEntry(
+                ItemJournalLine."No.", ItemJournalLine."Variant Code",
+                ItemJournalLine."Location Code", ItemJournalLine.Description,
+                0D, ItemJournalLine."Posting Date",
+                0, ForReservEntry."Reservation Status"::Prospect);
+                ItemJnlPostLine.RunWithCheck(ItemJournalLine);
             until SalesLine.Next() = 0;
-
-        // Post the journal
-
-        ItemJournalLine.Reset();
-        ItemJournalLine.SetRange("Journal Template Name", SalesReceivablesSetup."NTS DOR Journal Template Name");
-        ItemJournalLine.SetRange("Journal Batch Name", SalesReceivablesSetup."NTS DOR Journal Batch Name");
-        ItemJournalPost.Run(ItemJournalLine);
     end;
 
     procedure CreateAssemblyOrder(TransferHeader: Record "Transfer Header")

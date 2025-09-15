@@ -6,6 +6,7 @@ page 52120 "NTS Posted DOR List"
     Editable = false;
     SourceTable = "NTS DOR Header";
     UsageCategory = Lists;
+    CardPageId = "NTS Posted DOR";
     SourceTableView = where(Posted = filter(true));
 
     layout

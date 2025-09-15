@@ -64,6 +64,12 @@ page 52121 "NTS Posted DOR"
                     ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                 }
             }
+            part(PostedDoRLinesPart; "NTS Posted DOR Subform")
+            {
+                ApplicationArea = All;
+                SubPageLink = "Document No." = field("No.");
+            }
+
         }
     }
 }

@@ -38,7 +38,7 @@ table 52111 "NTS DOR Header"
             Caption = 'Serial No.';
             TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("Set Name"));
         }
-        field(6; Status; Enum "NTS Status")
+        field(6; Status; Enum "NTS DOR Status")
         {
             Caption = 'Status';
             Editable = false;
