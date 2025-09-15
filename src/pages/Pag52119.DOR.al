@@ -77,7 +77,7 @@ page 52119 "NTS DOR"
                     Visible = false;
                 }
             }
-            part(DoRLinesPart; "NTS DOR Subform")
+            part(DORLines; "NTS DOR Subform")
             {
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");

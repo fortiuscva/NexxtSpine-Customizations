@@ -18,9 +18,6 @@ codeunit 52106 "NTS DOR Release Management"
 
     local procedure CheckForManualRelease(var DorHeader: Record "NTS DOR Header")
     begin
-        if DorHeader."Posted" then
-            Error('You cannot release a posted DOR document. Document %1 skipped.', DorHeader."No.");
-
         if DorHeader.Status = DorHeader.Status::Released then
             Error('DOR document %1 is already Released.', DorHeader."No.");
     end;
@@ -45,9 +42,6 @@ codeunit 52106 "NTS DOR Release Management"
 
     local procedure CheckReopenStatus(var DorHeader: Record "NTS DOR Header")
     begin
-        if DorHeader."Posted" then
-            Error('You cannot reopen a posted DOR document. Document %1 skipped.', DorHeader."No.");
-
         if DorHeader.Status = DorHeader.Status::Open then
             Error('DOR document %1 is already Open.', DorHeader."No.");
     end;
