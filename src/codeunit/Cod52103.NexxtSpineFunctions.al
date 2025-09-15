@@ -172,6 +172,25 @@ codeunit 52103 "NTS NexxtSpine Functions"
         ItemJournalLine.Modify(true);
         NextLineNo += 10000;
 
+        ForReservEntry."Lot No." := DoRHeader."Lot No.";
+        ForReservEntry."Serial No." := DoRHeader."Serial No.";
+        TrackingSpec."New Lot No." := DoRHeader."Lot No.";
+        TrackingSpec."New Serial No." := DoRHeader."Serial No.";
+
+        CreateReservEntry.CreateReservEntryFor(
+        Database::"Item Journal Line", 2,
+        ItemJournalLine."Document No.", ItemJournalLine."Journal Batch Name",
+        0, ItemJournalLine."Line No.",
+        ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
+        ForReservEntry);
+        CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+        CreateReservEntry.CreateEntry(
+        ItemJournalLine."Item No.", ItemJournalLine."Variant Code",
+        ItemJournalLine."Location Code", ItemJournalLine.Description,
+        0D, ItemJournalLine."Posting Date",
+        0, ForReservEntry."Reservation Status"::Prospect);
+
+
         DoRLine.Reset();
         DoRLine.SetRange("Document No.", DoRHeader."No.");
         if DoRLine.FindSet() then
@@ -192,10 +211,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 ItemJournalLine.Validate("Lot No.", DoRLine."Lot No.");
                 ItemJournalLine.Modify(true);
                 NextLineNo += 10000;
+
+
                 ForReservEntry."Lot No." := DoRLine."Lot No.";
-                //ForReservEntry."Serial No." := DoRLine."Serial No.";
                 TrackingSpec."New Lot No." := DoRLine."Lot No.";
-                //TrackingSpec."New Serial No." := InspHeadRecPar."Serial No.";
 
                 CreateReservEntry.CreateReservEntryFor(
                 Database::"Item Journal Line", 1,
@@ -203,16 +222,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 0, ItemJournalLine."Line No.",
                 ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
                 ForReservEntry);
-                //CreateReservEntry."Warranty Date" := OldReservEntry."Warranty Date";
-                //CreateReservEntry.SetDates(0D, ILERecLcl."Expiration Date");
-                //CreateReservEntry.SetNewExpirationDate(ILERecLcl."Expiration Date");
                 CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
-                //CreateReservEntry.SetApplyToEntryNo(InspHeadRecPar."Item Ledger Entry No.");
                 CreateReservEntry.CreateEntry(
                 ItemJournalLine."No.", ItemJournalLine."Variant Code",
                 ItemJournalLine."Location Code", ItemJournalLine.Description,
-                0D, 0D,
-                0, ForReservEntry."Reservation Status"::Surplus);
+                0D, ItemJournalLine."Posting Date",
+                0, ForReservEntry."Reservation Status"::Prospect);
             until DoRLine.Next() = 0;
 
         ItemJournalLine.Reset();
