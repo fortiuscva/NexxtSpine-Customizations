@@ -51,6 +51,7 @@ page 52119 "NTS DOR"
 
                 field(Status; Rec.Status)
                 {
+                    Editable = false;
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
                 }
                 field(Surgeon; Rec.Surgeon)
@@ -68,6 +69,11 @@ page 52119 "NTS DOR"
                 field("Surgery Date"; Rec."Surgery Date")
                 {
                     ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
+                }
+                field(Posted; Rec.Posted)
+                {
+                    ToolTip = 'Specifies the value of the Posted field.', Comment = '%';
+                    Editable = false;
                 }
             }
             part(DoRLinesPart; "NTS DOR Subform")
@@ -98,18 +104,48 @@ page 52119 "NTS DOR"
                         SOExistError: Label 'Sales Order %1 already exist for this %2';
                         ReleasedStatusError: Label 'Status must be Released to Post this %1';
                     begin
-                        if Rec.Status = Rec.Status::Posted then begin
-                            SalesHeader.Reset();
-                            SalesHeader.SetRange("NTS DoR Number", Rec."No.");
-                            if SalesHeader.FindFirst() then
-                                Error(StrSubstNo(SOExistError, SalesHeader."No.", Rec."No."));
-                        end;
                         if not Confirm('Do you want to post the DOR %1', false, Rec."No.") then
                             exit;
                         if Rec.Status = Rec.Status::Released then
                             NexxSpineFunctions.PostDoR(Rec)
                         else
                             Error(StrSubstNo(ReleasedStatusError, Rec."No."));
+                    end;
+                }
+            }
+            group(DORReleaseGroup)
+            {
+                Caption = 'Release';
+                Image = ReleaseDoc;
+                action(Release)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Re&lease';
+                    Enabled = Rec.Status <> Rec.Status::Released;
+                    Image = ReleaseDoc;
+                    ShortCutKey = 'Ctrl+F9';
+                    ToolTip = 'Release the document to the next stage of processing. You must reopen the document before you can make changes to it.';
+
+                    trigger OnAction()
+                    begin
+                        Rec.PerformManualRelease();
+
+                    end;
+                }
+                action(Reopen)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Re&open';
+                    Enabled = Rec.Status <> Rec.Status::Open;
+                    Image = ReOpen;
+                    ToolTip = 'Reopen the document to change it after it has been approved. Approved documents have the Released status and must be opened before they can be changed.';
+
+                    trigger OnAction()
+                    var
+                        DORReleaseMgmnt: Codeunit "NTS DOR Release Management";
+                    begin
+                        DORReleaseMgmnt.PerformManualReopen(Rec);
+
                     end;
                 }
             }

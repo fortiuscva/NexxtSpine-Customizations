@@ -41,6 +41,7 @@ table 52111 "NTS DOR Header"
         field(6; Status; Enum "NTS Status")
         {
             Caption = 'Status';
+            Editable = false;
         }
         field(7; Surgeon; Text[100])
         {
@@ -113,6 +114,10 @@ table 52111 "NTS DOR Header"
         {
             Caption = 'Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Set Name"));
+        }
+        field(11; Posted; Boolean)
+        {
+            Caption = 'Posted';
         }
         field(20; "Posting Date"; Date)
         {
@@ -265,6 +270,64 @@ table 52111 "NTS DOR Header"
         end;
     end;
 
+    procedure PerformManualReopen(var DorHeader: Record "NTS DOR Header")
+    var
+        BatchProcessingMgt: Codeunit "Batch Processing Mgt.";
+        NoOfSelected: Integer;
+        NoOfSkipped: Integer;
+    begin
+        NoOfSelected := DorHeader.Count;
+
+        // Exclude already Open docs
+        DorHeader.SetFilter(Status, '<>%1', DorHeader.Status::Open);
+
+        NoOfSkipped := NoOfSelected - DorHeader.Count;
+
+        BatchProcessingMgt.BatchProcess(
+            DorHeader,
+            Codeunit::"NTS DOR Manual Reopen",
+            Enum::"Error Handling Options"::"Show Error",
+            NoOfSelected,
+            NoOfSkipped);
+    end;
+
+    procedure PerformManualRelease()
+    var
+        DORRelaeseMgmnt: Codeunit "NTS DOR Release Management";
+        IsHandled: Boolean;
+    begin
+        if Rec.Status <> Rec.Status::Released then begin
+            DORRelaeseMgmnt.PerformManualRelease(Rec);
+            Commit();
+        end;
+    end;
+
+    procedure PerformManualRelease(var DorHeader: Record "NTS DOR Header")
+    var
+        BatchProcessingMgt: Codeunit "Batch Processing Mgt.";
+        NoOfSelected: Integer;
+        NoOfSkipped: Integer;
+        PrevFilterGroup: Integer;
+    begin
+        NoOfSelected := DorHeader.Count;
+
+        PrevFilterGroup := DorHeader.FilterGroup();
+        DorHeader.FilterGroup(10); // apply filter in a safe group
+        DorHeader.SetFilter(Status, '<>%1', DorHeader.Status::Released);
+
+        NoOfSkipped := NoOfSelected - DorHeader.Count;
+
+        BatchProcessingMgt.BatchProcess(
+            DorHeader,
+            Codeunit::"NTS DOR Manual Release",
+            Enum::"Error Handling Options"::"Show Error",
+            NoOfSelected,
+            NoOfSkipped);
+
+        // clear filters
+        DorHeader.SetRange(Status);
+        DorHeader.FilterGroup(PrevFilterGroup);
+    end;
 
     Var
 

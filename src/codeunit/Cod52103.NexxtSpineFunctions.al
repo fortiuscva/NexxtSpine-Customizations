@@ -52,7 +52,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if DoRHeader.Customer <> '' then begin
             CreateSalesOrder(DoRHeader);
             DisassembleSet(DoRHeader);
-            DoRHeader.Status := DoRHeader.Status::Posted;
+            DoRHeader.Posted := true;
             DoRHeader.Modify();
         end else
             Error(StrSubstNo(CustNoBlankError, DoRHeader."No."));
@@ -343,7 +343,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 TransferLine.Validate("NTS DOR Line No.", SalesLine."NTS DOR Line No.");
                 TransferLine.Modify(true);
                 if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
-                    if not NTSDORLine.Consumable then begin
+                    if not NTSDORLine.Consumed then begin
                         // ForReservEntry."Lot No." := NTSDORLine."Lot No.";
                         // CreateReservEntry.CreateReservEntryFor(Database::"Transfer Line", 0, TransferHeader."No.", '', 0, TransferLine."Line No.", TransferLine."Qty. per Unit of Measure", TransferLine.Quantity, TransferLine."Quantity (Base)", ForReservEntry);
                         // CreateReservEntry.SetDates(0D, TransferLine."Receipt Date");
@@ -362,14 +362,13 @@ codeunit 52103 "NTS NexxtSpine Functions"
                           TransferLine."Document No.", '', TransferLine."Derived From Line No.", TransferLine."Line No.", TransferLine."Qty. per Unit of Measure",
                           TransferLine.Quantity, TransferLine."Quantity (Base)" * TransferLine."Qty. per Unit of Measure", ForReservEntry);
                         CreateReservEntry.CreateEntry(
-                          TransferLine."Item No.", TransferLine."Variant Code", TransferLine."Transfer-from Code", '', TransferLine."Receipt Date", 0D, 0, ReservStatus::Surplus);
+                          TransferLine."Item No.", TransferLine."Variant Code", TransferLine."Transfer-from Code", '', TransferLine."Receipt Date", TransferLine."Shipment Date", 0, ReservStatus::Surplus);
 
-                        CurrentSourceRowID := ItemTrackingMgt.ComposeRowID(5741, 0, TransferLine."Document No.", '', 0, TransferLine."Line No.");
+                        CurrentSourceRowID := ItemTrackingMgt.ComposeRowID(Database::"Transfer Line", 0, TransferLine."Document No.", '', 0, TransferLine."Line No.");
 
-                        SecondSourceRowID := ItemTrackingMgt.ComposeRowID(5741, 1, TransferLine."Document No.", '', 0, TransferLine."Line No.");
+                        SecondSourceRowID := ItemTrackingMgt.ComposeRowID(Database::"Transfer Line", 1, TransferLine."Document No.", '', 0, TransferLine."Line No.");
 
                         ItemTrackingMgt.SynchronizeItemTracking(CurrentSourceRowID, SecondSourceRowID, '');
-
                     end;
                     NextLineNo += 10000;
                 end;
