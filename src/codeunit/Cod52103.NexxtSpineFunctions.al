@@ -63,6 +63,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
         DoRLine: Record "NTS DoR Line";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+        ItemTrackingVal: integer;
     begin
         SalesHeader.Init();
         SalesHeader."Document Type" := SalesHeader."Document Type"::Order;
@@ -94,6 +98,32 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
                 SalesLine.Modify(True);
                 NextLineNo += 10000;
+
+                ItemTrackingVal := FindItemTrackingCode(SalesLine."No.");
+                if (ItemTrackingVal <> 0) then begin
+
+                    ForReservEntry."Lot No." := DoRLine."Lot No.";
+                    //ForReservEntry."Serial No." := DoRLine."Serial No.";
+                    TrackingSpec."New Lot No." := DoRLine."Lot No.";
+                    //TrackingSpec."New Serial No." := InspHeadRecPar."Serial No.";
+
+                    CreateReservEntry.CreateReservEntryFor(
+                    Database::"Sales Line", 1,
+                    SalesLine."Document No.", '',
+                    0, SalesLine."Line No.",
+                    SalesLine."Qty. per Unit of Measure", SalesLine.Quantity, SalesLine."Quantity (Base)",
+                    ForReservEntry);
+                    //CreateReservEntry."Warranty Date" := OldReservEntry."Warranty Date";
+                    //CreateReservEntry.SetDates(0D, ILERecLcl."Expiration Date");
+                    //CreateReservEntry.SetNewExpirationDate(ILERecLcl."Expiration Date");
+                    CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                    //CreateReservEntry.SetApplyToEntryNo(InspHeadRecPar."Item Ledger Entry No.");
+                    CreateReservEntry.CreateEntry(
+                    SalesLine."No.", SalesLine."Variant Code",
+                    SalesLine."Location Code", SalesLine.Description,
+                    0D, SalesLine."Shipment Date",
+                    0, ForReservEntry."Reservation Status"::Surplus);
+                end;
             until DoRLine.Next() = 0;
         Message('Sales Order created, Sales Order No.:%1', SalesHeader."No.");
     end;
@@ -321,6 +351,28 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 end;
             until SalesLine.Next() = 0;
     end;
+
+    procedure FindItemTrackingCode(ItemNoPar: Code[20]) TrackingType: Integer
+    var
+        ItemTrackingCodeRecLcl: Record "Item Tracking Code";
+        ItemRecLcl: Record Item;
+    begin
+        ItemRecLcl.GET(ItemNoPar);
+        IF ItemRecLcl."Item Tracking Code" = '' THEN
+            EXIT(0); //No Tracking
+
+        ItemTrackingCodeRecLcl.GET(ItemRecLcl."Item Tracking Code");
+        IF ItemTrackingCodeRecLcl."SN Specific Tracking" THEN
+            IF ItemTrackingCodeRecLcl."Lot Specific Tracking" THEN
+                EXIT(3) //Lot Serial Combo
+            ELSE
+                EXIT(2) //Serial Specific
+        ELSE
+            IF ItemTrackingCodeRecLcl."Lot Specific Tracking" THEN
+                EXIT(1); //Lot Specific
+        EXIT(0);
+    end;
+
 
     var
         SalesReceivablesSetup: Record "Sales & Receivables Setup";

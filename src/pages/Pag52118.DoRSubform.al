@@ -6,8 +6,7 @@ page 52118 "NTS DOR Subform"
     SourceTable = "NTS DOR Line";
     AutoSplitKey = true;
     DelayedInsert = true;
-    UsageCategory = Lists;
-
+    UsageCategory = None;
     layout
     {
         area(Content)

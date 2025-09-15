@@ -4,7 +4,8 @@ page 52119 "NTS DOR"
     Caption = 'DOR';
     PageType = Document;
     SourceTable = "NTS DOR Header";
-    UsageCategory = Administration;
+    UsageCategory = None;
+
 
     layout
     {
