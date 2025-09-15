@@ -2,7 +2,7 @@ pageextension 52115 "NTS Sales Order Subform" extends "Sales Order Subform"
 {
     layout
     {
-        addlast(Control1)
+        addfirst(Control1)
         {
             field("NTS DOR No."; Rec."NTS DOR No.")
             {

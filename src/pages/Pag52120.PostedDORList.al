@@ -1,7 +1,7 @@
 page 52120 "NTS Posted DOR List"
 {
     ApplicationArea = All;
-    Caption = 'NTS Posted DOR List';
+    Caption = 'Posted DORs';
     PageType = List;
     Editable = false;
     SourceTable = "NTS DOR Header";

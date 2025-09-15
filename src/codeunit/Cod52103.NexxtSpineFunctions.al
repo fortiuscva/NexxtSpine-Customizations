@@ -49,13 +49,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferLine: Record "Transfer Line";
         CustNoBlankError: Label 'Customer No. is blank on this %1';
     begin
-        if DoRHeader.Customer <> '' then begin
-            CreateSalesOrder(DoRHeader);
-            DisassembleSet(DoRHeader);
-            DoRHeader.Posted := true;
-            DoRHeader.Modify();
-        end else
-            Error(StrSubstNo(CustNoBlankError, DoRHeader."No."));
+        DoRHeader.TestField(Customer);
+        CreateSalesOrder(DoRHeader);
+        DoRHeader.Posted := true;
+        DoRHeader.Modify();
     end;
 
     procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header")
@@ -125,6 +122,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     0, ForReservEntry."Reservation Status"::Surplus);
                 end;
             until DoRLine.Next() = 0;
+        DisassembleSet(DoRHeader);
         Message('Sales Order created, Sales Order No.:%1', SalesHeader."No.");
     end;
 
@@ -339,6 +337,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 AssemblyLine.Modify(true);
                 NextLineNo += 10000;
             until TransLine.Next() = 0;
+        Message('Assembly Order created, Assembly Order No.:%1', AssemblyHeader."No.");
     end;
 
     procedure CreateTransferOrder(var SalesHeader: Record "Sales Header")
@@ -428,6 +427,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     end;
                 end;
             until SalesLine.Next() = 0;
+        Message('Transfer Order created, Transfer Order No.:%1', TransferHeader."No.");
     end;
 
     procedure FindItemTrackingCode(ItemNoPar: Code[20]) TrackingType: Integer

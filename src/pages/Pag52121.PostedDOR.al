@@ -1,7 +1,7 @@
 page 52121 "NTS Posted DOR"
 {
     ApplicationArea = All;
-    Caption = 'NTS Posted DOR';
+    Caption = 'Posted DOR';
     PageType = Document;
     Editable = false;
     SourceTable = "NTS DOR Header";

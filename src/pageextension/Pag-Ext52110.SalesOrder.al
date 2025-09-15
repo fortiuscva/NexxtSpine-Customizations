@@ -28,23 +28,45 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
     }
     actions
     {
-        addlast("F&unctions")
+        addfirst(processing)
         {
-            action("NTS CreateTransferOrder")
+            group("NTS NEXXTSPINE")
             {
-                Caption = 'Create Transfer';
-                Image = Create;
+                Caption = 'NEXXTSPINE';
+                action("NTS CreateTransferOrder")
+                {
+                    Caption = 'Create Transfer Order';
+                    Image = Create;
+                    ApplicationArea = All;
+                    Promoted = true;
+                    PromotedIsBig = true;
+                    PromotedCategory = Process;
+                    trigger OnAction()
+                    var
+                        NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+                    begin
+                        if not Confirm('Do you want to Create Transfer Order?') then
+                            exit;
+                        NTSFunctions.CreateTransferOrder(Rec);
+                    end;
+                }
+            }
+        }
+
+        addlast(navigation)
+        {
+            action("NTS Transfer Order")
+            {
+                Caption = 'Open Transfer Order';
+                Image = Open;
                 ApplicationArea = All;
-                Promoted = true;
-                PromotedIsBig = true;
-                PromotedCategory = Process;
                 trigger OnAction()
                 var
-                    NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+                    TransferHeader: Record "Transfer Header";
                 begin
-                    if not Confirm('Do you want to Create Transfer Order?') then
-                        exit;
-                    NTSFunctions.CreateTransferOrder(Rec);
+                    TransferHeader.SetRange("NTS DOR No.", Rec."NTS DoR Number");
+                    if TransferHeader.FindFirst() then
+                        Page.RunModal(Page::"Transfer Order", TransferHeader);
                 end;
             }
         }

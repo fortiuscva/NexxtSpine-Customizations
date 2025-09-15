@@ -1,6 +1,7 @@
 table 52111 "NTS DOR Header"
 {
     Caption = 'DOR Header';
+    DataCaptionFields = "No.";
     DataClassification = ToBeClassified;
 
     fields
