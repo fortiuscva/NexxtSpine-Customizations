@@ -292,6 +292,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         NTSDORLine: Record "NTS DOR Line";
         CreateReservEntry: Codeunit "Create Reserv. Entry";
         ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
 
     begin
         Location.Reset;
@@ -339,13 +340,29 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 TransferLine.Modify(true);
                 if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
                     if not NTSDORLine.Consumable then begin
+                        // ForReservEntry."Lot No." := NTSDORLine."Lot No.";
+                        // CreateReservEntry.CreateReservEntryFor(Database::"Transfer Line", 0, TransferHeader."No.", '', 0, TransferLine."Line No.", TransferLine."Qty. per Unit of Measure", TransferLine.Quantity, TransferLine."Quantity (Base)", ForReservEntry);
+                        // CreateReservEntry.SetDates(0D, TransferLine."Receipt Date");
+                        // CreateReservEntry.SetNewExpirationDate(TransferLine."Receipt Date");
+                        // // CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                        // // CreateReservEntry.SetApplyToEntryNo(InspHeadRecPar."Item Ledger Entry No.");
+                        // CreateReservEntry.CreateEntry(TransferLine."Item No.", TransferLine."Variant Code", TransferHeader."Transfer-from Code", TransferLine.Description, 0D, TransferHeader."Posting Date", 0, ForReservEntry."Reservation Status"::Surplus);
+
                         ForReservEntry."Lot No." := NTSDORLine."Lot No.";
-                        CreateReservEntry.CreateReservEntryFor(Database::"Transfer Line", 0, TransferHeader."No.", '', 0, TransferLine."Line No.", TransferLine."Qty. per Unit of Measure", TransferLine.Quantity, TransferLine."Quantity (Base)", ForReservEntry);
-                        CreateReservEntry.SetDates(0D, TransferLine."Receipt Date");
-                        CreateReservEntry.SetNewExpirationDate(TransferLine."Receipt Date");
-                        // CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
-                        // CreateReservEntry.SetApplyToEntryNo(InspHeadRecPar."Item Ledger Entry No.");
-                        CreateReservEntry.CreateEntry(TransferLine."Item No.", TransferLine."Variant Code", TransferHeader."Transfer-from Code", TransferLine.Description, 0D, TransferHeader."Posting Date", 0, ForReservEntry."Reservation Status"::Surplus);
+                        TrackingSpec."New Lot No." := NTSDORLine."Lot No.";
+
+                        CreateReservEntry.CreateReservEntryFor(
+                        Database::"Transfer Line", 1,
+                        TransferLine."Document No.", '',
+                        0, TransferLine."Line No.",
+                        TransferLine."Qty. per Unit of Measure", TransferLine.Quantity, TransferLine."Quantity (Base)",
+                        ForReservEntry);
+                        CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                        CreateReservEntry.CreateEntry(
+                        TransferLine."Item No.", TransferLine."Variant Code",
+                        TransferHeader."Transfer-from Code", TransferLine.Description,
+                        0D, TransferHeader."Posting Date",
+                        0, ForReservEntry."Reservation Status"::Surplus);
                     end;
                     NextLineNo += 10000;
                 end;
