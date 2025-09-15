@@ -74,6 +74,7 @@ page 52119 "NTS DOR"
                 {
                     ToolTip = 'Specifies the value of the Posted field.', Comment = '%';
                     Editable = false;
+                    Visible = false;
                 }
             }
             part(DoRLinesPart; "NTS DOR Subform")
@@ -104,12 +105,13 @@ page 52119 "NTS DOR"
                         SOExistError: Label 'Sales Order %1 already exist for this %2';
                         ReleasedStatusError: Label 'Status must be Released to Post this %1';
                     begin
+                        if Rec.Status <> Rec.Status::Released then
+                            Error(StrSubstNo(ReleasedStatusError, Rec."No."));
+
                         if not Confirm('Do you want to post the DOR %1', false, Rec."No.") then
                             exit;
-                        if Rec.Status = Rec.Status::Released then
-                            NexxSpineFunctions.PostDoR(Rec)
-                        else
-                            Error(StrSubstNo(ReleasedStatusError, Rec."No."));
+
+                        NexxSpineFunctions.PostDoR(Rec)
                     end;
                 }
             }
