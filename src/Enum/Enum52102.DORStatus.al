@@ -1,4 +1,4 @@
-enum 52102 "NTS Status"
+enum 52102 "NTS DOR Status"
 {
     Extensible = true;
 
