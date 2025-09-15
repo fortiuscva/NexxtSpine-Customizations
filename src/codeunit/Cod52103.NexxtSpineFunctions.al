@@ -146,8 +146,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
             LocationCode := Customer."Location Code";
 
         DoRLine.SetRange("Document No.", DoRHeader."No.");
-        if Dorline.FindFirst() then
-            SetLotNo := DoRLine."Lot No.";
         SalesReceivablesSetup.Get();
 
         // Negative adjustment for the Set
@@ -172,25 +170,27 @@ codeunit 52103 "NTS NexxtSpine Functions"
         // ItemJournalLine.Modify(true);
         NextLineNo += 10000;
 
-        ForReservEntry."Lot No." := DoRHeader."Lot No.";
-        ForReservEntry."Serial No." := DoRHeader."Serial No.";
-        TrackingSpec."New Lot No." := DoRHeader."Lot No.";
-        TrackingSpec."New Serial No." := DoRHeader."Serial No.";
+        ItemTrackingVal := FindItemTrackingCode(ItemJournalLine."Item No.");
+        if (ItemTrackingVal <> 0) then begin
+            ForReservEntry."Lot No." := DoRHeader."Lot No.";
+            ForReservEntry."Serial No." := DoRHeader."Serial No.";
+            TrackingSpec."New Lot No." := DoRHeader."Lot No.";
+            TrackingSpec."New Serial No." := DoRHeader."Serial No.";
 
-        CreateReservEntry.CreateReservEntryFor(
-        Database::"Item Journal Line", 2,
-        ItemJournalLine."Document No.", ItemJournalLine."Journal Batch Name",
-        0, ItemJournalLine."Line No.",
-        ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
-        ForReservEntry);
-        CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
-        CreateReservEntry.CreateEntry(
-        ItemJournalLine."Item No.", ItemJournalLine."Variant Code",
-        ItemJournalLine."Location Code", ItemJournalLine.Description,
-        0D, ItemJournalLine."Posting Date",
-        0, ForReservEntry."Reservation Status"::Prospect);
-        ItemJnlPostLine.RunWithCheck(ItemJournalLine);
-
+            CreateReservEntry.CreateReservEntryFor(
+            Database::"Item Journal Line", 2,
+            ItemJournalLine."Document No.", ItemJournalLine."Journal Batch Name",
+            0, ItemJournalLine."Line No.",
+            ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
+            ForReservEntry);
+            CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+            CreateReservEntry.CreateEntry(
+            ItemJournalLine."Item No.", ItemJournalLine."Variant Code",
+            ItemJournalLine."Location Code", ItemJournalLine.Description,
+            0D, ItemJournalLine."Posting Date",
+            0, ForReservEntry."Reservation Status"::Prospect);
+            ItemJnlPostLine.RunWithCheck(ItemJournalLine);
+        end;
         DoRLine.Reset();
         DoRLine.SetRange("Document No.", DoRHeader."No.");
         if DoRLine.FindSet() then
@@ -213,23 +213,25 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 // ItemJournalLine.Modify(true);
                 NextLineNo += 10000;
 
+                ItemTrackingVal := FindItemTrackingCode(ItemJournalLine."Item No.");
+                if (ItemTrackingVal <> 0) then begin
+                    ForReservEntry."Lot No." := DoRLine."Lot No.";
+                    TrackingSpec."New Lot No." := DoRLine."Lot No.";
 
-                ForReservEntry."Lot No." := DoRLine."Lot No.";
-                TrackingSpec."New Lot No." := DoRLine."Lot No.";
-
-                CreateReservEntry.CreateReservEntryFor(
-                Database::"Item Journal Line", 1,
-                ItemJournalLine."Document No.", '',
-                0, ItemJournalLine."Line No.",
-                ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
-                ForReservEntry);
-                CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
-                CreateReservEntry.CreateEntry(
-                ItemJournalLine."No.", ItemJournalLine."Variant Code",
-                ItemJournalLine."Location Code", ItemJournalLine.Description,
-                0D, ItemJournalLine."Posting Date",
-                0, ForReservEntry."Reservation Status"::Prospect);
-                ItemJnlPostLine.RunWithCheck(ItemJournalLine);
+                    CreateReservEntry.CreateReservEntryFor(
+                    Database::"Item Journal Line", 1,
+                    ItemJournalLine."Document No.", '',
+                    0, ItemJournalLine."Line No.",
+                    ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
+                    ForReservEntry);
+                    CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                    CreateReservEntry.CreateEntry(
+                    ItemJournalLine."No.", ItemJournalLine."Variant Code",
+                    ItemJournalLine."Location Code", ItemJournalLine.Description,
+                    0D, ItemJournalLine."Posting Date",
+                    0, ForReservEntry."Reservation Status"::Prospect);
+                    ItemJnlPostLine.RunWithCheck(ItemJournalLine);
+                end;
             until DoRLine.Next() = 0;
     end;
 
@@ -276,22 +278,25 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 // ItemJournalLine.Modify(TRUE);
 
                 DORLine.get(SalesLine."NTS DOR No.", SalesLine."NTS DOR Line No.");
-                ForReservEntry."Lot No." := DoRLine."Lot No.";
-                TrackingSpec."New Lot No." := DoRLine."Lot No.";
+                ItemTrackingVal := FindItemTrackingCode(ItemJournalLine."Item No.");
+                if (ItemTrackingVal <> 0) then begin
+                    ForReservEntry."Lot No." := DoRLine."Lot No.";
+                    TrackingSpec."New Lot No." := DoRLine."Lot No.";
 
-                CreateReservEntry.CreateReservEntryFor(
-                Database::"Item Journal Line", 1,
-                ItemJournalLine."Document No.", '',
-                0, ItemJournalLine."Line No.",
-                ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
-                ForReservEntry);
-                CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
-                CreateReservEntry.CreateEntry(
-                ItemJournalLine."No.", ItemJournalLine."Variant Code",
-                ItemJournalLine."Location Code", ItemJournalLine.Description,
-                0D, ItemJournalLine."Posting Date",
-                0, ForReservEntry."Reservation Status"::Prospect);
-                ItemJnlPostLine.RunWithCheck(ItemJournalLine);
+                    CreateReservEntry.CreateReservEntryFor(
+                    Database::"Item Journal Line", 1,
+                    ItemJournalLine."Document No.", '',
+                    0, ItemJournalLine."Line No.",
+                    ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
+                    ForReservEntry);
+                    CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                    CreateReservEntry.CreateEntry(
+                    ItemJournalLine."No.", ItemJournalLine."Variant Code",
+                    ItemJournalLine."Location Code", ItemJournalLine.Description,
+                    0D, ItemJournalLine."Posting Date",
+                    0, ForReservEntry."Reservation Status"::Prospect);
+                    ItemJnlPostLine.RunWithCheck(ItemJournalLine);
+                end;
             until SalesLine.Next() = 0;
     end;
 
