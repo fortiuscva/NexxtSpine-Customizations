@@ -28,7 +28,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
     }
     actions
     {
-        addlast(Processing)
+        addlast("F&unctions")
         {
             action("NTS CreateTransferOrder")
             {

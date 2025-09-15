@@ -29,7 +29,7 @@ page 52118 "NTS DOR Subform"
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
                 }
-                field(Consumable; Rec.Consumable)
+                field(Consumed; Rec.Consumed)
                 {
                     ToolTip = 'Specifies the value of the Consumable field.', Comment = '%';
                 }

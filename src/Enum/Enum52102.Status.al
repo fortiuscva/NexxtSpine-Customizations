@@ -10,8 +10,4 @@ enum 52102 "NTS Status"
     {
         Caption = 'Released';
     }
-    value(2; Posted)
-    {
-        Caption = 'Posted';
-    }
 }
