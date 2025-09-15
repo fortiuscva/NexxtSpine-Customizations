@@ -137,6 +137,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
         LocationCode: Code[10];
         SetLotNo: Code[50];
         ItemJournalPost: Codeunit "Item Jnl.-Post";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+        ItemTrackingVal: integer;
     begin
         if Customer.Get(DoRHeader."Distributor") then
             LocationCode := Customer."Location Code";
@@ -188,6 +192,27 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 ItemJournalLine.Validate("Lot No.", DoRLine."Lot No.");
                 ItemJournalLine.Modify(true);
                 NextLineNo += 10000;
+                ForReservEntry."Lot No." := DoRLine."Lot No.";
+                //ForReservEntry."Serial No." := DoRLine."Serial No.";
+                TrackingSpec."New Lot No." := DoRLine."Lot No.";
+                //TrackingSpec."New Serial No." := InspHeadRecPar."Serial No.";
+
+                CreateReservEntry.CreateReservEntryFor(
+                Database::"Item Journal Line", 1,
+                ItemJournalLine."Document No.", '',
+                0, ItemJournalLine."Line No.",
+                ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
+                ForReservEntry);
+                //CreateReservEntry."Warranty Date" := OldReservEntry."Warranty Date";
+                //CreateReservEntry.SetDates(0D, ILERecLcl."Expiration Date");
+                //CreateReservEntry.SetNewExpirationDate(ILERecLcl."Expiration Date");
+                CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                //CreateReservEntry.SetApplyToEntryNo(InspHeadRecPar."Item Ledger Entry No.");
+                CreateReservEntry.CreateEntry(
+                ItemJournalLine."No.", ItemJournalLine."Variant Code",
+                ItemJournalLine."Location Code", ItemJournalLine.Description,
+                0D, 0D,
+                0, ForReservEntry."Reservation Status"::Surplus);
             until DoRLine.Next() = 0;
 
         ItemJournalLine.Reset();

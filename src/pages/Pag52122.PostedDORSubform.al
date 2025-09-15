@@ -1,12 +1,14 @@
-page 52118 "NTS DOR Subform"
+page 52122 "NTS Posted DOR Subform"
 {
     ApplicationArea = All;
-    Caption = 'DOR Subform';
+    Caption = 'NTS Posted DOR Subform';
     PageType = ListPart;
+    Editable = false;
     SourceTable = "NTS DOR Line";
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
+
     layout
     {
         area(Content)
@@ -15,13 +17,13 @@ page 52118 "NTS DOR Subform"
             {
                 field("Line No."; Rec."Line No.")
                 {
-                    ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Line No. field.', Comment = '%';
                 }
                 field("Item No."; Rec."Item No.")
                 {
                     ToolTip = 'Specifies the value of the Item field.', Comment = '%';
                 }
-                field("Lot Number"; Rec."Lot No.")
+                field("Lot No."; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot Number field.', Comment = '%';
                 }
