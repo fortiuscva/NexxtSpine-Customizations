@@ -17,6 +17,7 @@ page 52122 "NTS Posted DOR Subform"
             {
                 field("Line No."; Rec."Line No.")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the Line No. field.', Comment = '%';
                 }
                 field("Item No."; Rec."Item No.")
