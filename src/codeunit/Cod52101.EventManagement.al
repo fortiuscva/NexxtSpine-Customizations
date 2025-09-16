@@ -59,14 +59,13 @@ codeunit 52101 "NTS Event Management"
             NexxtSpineFunctions.CreatePositiveAdjustment(SalesHeader);
     end;
 
-
-
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", OnAfterTransferOrderPostReceipt, '', false, false)]
-    local procedure "TransferOrder-Post Receipt_OnAfterTransferOrderPostReceipt"(var TransferHeader: Record "Transfer Header"; CommitIsSuppressed: Boolean; var TransferReceiptHeader: Record "Transfer Receipt Header")
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", OnRunOnBeforeCommit, '', false, false)]
+    local procedure "TransferOrder-Post Receipt_OnRunOnBeforeCommit"(var TransHeader: Record "Transfer Header"; var TransRcptHeader: Record "Transfer Receipt Header"; PostedWhseRcptHeader: Record "Posted Whse. Receipt Header"; var SuppressCommit: Boolean)
     begin
-        if (TransferHeader."NTS DOR No." <> '') then
-            NexxtSpineFunctions.CreateAssemblyOrder(TransferHeader);
+        if (TransHeader."NTS DOR No." <> '') then
+            NexxtSpineFunctions.CreateAssemblyOrder(TransHeader);
     end;
+
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeCalcLevels, '', false, false)]
     local procedure "Calculate Low-Level Code_OnBeforeCalcLevels"(Type: Option; No: Code[20]; Level: Integer; LevelDepth: Integer; var Result: Integer; var IsHandled: Boolean)

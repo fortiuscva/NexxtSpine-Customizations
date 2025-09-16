@@ -24,25 +24,45 @@ table 52111 "NTS DOR Header"
         {
             Caption = 'Customer';
             TableRelation = Customer."No." WHERE("NTS Is Distributor" = CONST(false));
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(3; "Surgery Date"; Date)
         {
             Caption = 'Surgery Date';
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(4; "Set Name"; Code[20])
         {
             Caption = 'Set Name';
             TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(5; "Serial No."; Code[20])
         {
             Caption = 'Serial No.';
             TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("Set Name"));
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(6; Status; Enum "NTS DOR Status")
         {
             Caption = 'Status';
             Editable = false;
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(7; Surgeon; Text[100])
         {
@@ -74,6 +94,7 @@ table 52111 "NTS DOR Header"
             var
                 HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
             begin
+                TestStatusOpen();
                 HSDMappingRec.Reset();
                 HSDMappingRec.SetRange(Hospital, Rec.Customer);
                 HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
@@ -86,6 +107,10 @@ table 52111 "NTS DOR Header"
         {
             Caption = 'Distributor';
             Editable = false;
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(9; Reps; Text[100])
         {
@@ -110,23 +135,41 @@ table 52111 "NTS DOR Header"
                     end;
                 end;
             end;
+
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(10; "Lot No."; Code[50])
         {
             Caption = 'Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Set Name"));
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(11; Posted; Boolean)
         {
             Caption = 'Posted';
+            Editable = false;
         }
         field(20; "Posting Date"; Date)
         {
             Caption = 'Posting Date';
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
         field(21; Quantity; Decimal)
         {
             Caption = 'Quantity';
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
 
         field(107; "No. Series"; Code[20])
@@ -134,6 +177,10 @@ table 52111 "NTS DOR Header"
             Caption = 'No. Series';
             Editable = false;
             TableRelation = "No. Series";
+            trigger OnValidate()
+            begin
+                TestStatusOpen();
+            end;
         }
 
     }
@@ -328,6 +375,11 @@ table 52111 "NTS DOR Header"
         // clear filters
         DorHeader.SetRange(Status);
         DorHeader.FilterGroup(PrevFilterGroup);
+    end;
+
+    procedure TestStatusOpen()
+    begin
+        TestField(Status, Status::Open);
     end;
 
     Var
