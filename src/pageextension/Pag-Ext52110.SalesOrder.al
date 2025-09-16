@@ -22,6 +22,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
             field("NTS DoR Number"; Rec."NTS DoR Number")
             {
                 ApplicationArea = all;
+                Editable = false;
                 Caption = 'DoR Number';
             }
         }
@@ -44,7 +45,12 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                     trigger OnAction()
                     var
                         NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+                        TransferHeader: Record "Transfer Header";
+                        TOCreatedError: Label 'Transfer Order was already Created for this Sales Order %1';
                     begin
+                        if Rec."NTS Is TO Created" then
+                            Error(StrSubstNo(TOCreatedError, Rec."No."));
+                        Rec.TestField(Status, Rec.Status::Released);
                         if not Confirm('Do you want to Create Transfer Order?') then
                             exit;
                         NTSFunctions.CreateTransferOrder(Rec);

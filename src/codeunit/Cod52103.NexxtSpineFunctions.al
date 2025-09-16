@@ -303,6 +303,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader: Record "Assembly Header";
         AssemblyLine: Record "Assembly Line";
         TransLine: Record "Transfer Line";
+        NextLineNo: Integer;
+        ItemTrackingVal: Integer;
+        NTSDORLine: Record "NTS DOR Line";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
     begin
         AssemblyHeader.Init();
         AssemblyHeader."Document Type" := AssemblyHeader."Document Type"::Order;
@@ -336,6 +342,27 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 AssemblyLine.Validate("NTS DOR Line No.", TransLine."NTS DOR Line No.");
                 AssemblyLine.Modify(true);
                 NextLineNo += 10000;
+
+                ItemTrackingVal := FindItemTrackingCode(AssemblyLine."No.");
+                if (ItemTrackingVal <> 0) then begin
+                    NTSDORLine.Get(AssemblyLine."NTS DOR No.", AssemblyLine."NTS DOR Line No.");
+                    ForReservEntry."Lot No." := NTSDORLine."Lot No.";
+                    TrackingSpec."New Lot No." := NTSDORLine."Lot No.";
+
+                    CreateReservEntry.CreateReservEntryFor(
+                    Database::"Assembly Line", 1,
+                    AssemblyLine."Document No.", '',
+                    0, AssemblyLine."Line No.",
+                    AssemblyLine."Qty. per Unit of Measure", AssemblyLine.Quantity, AssemblyLine."Quantity (Base)",
+                    ForReservEntry);
+                    CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                    CreateReservEntry.CreateEntry(
+                    AssemblyLine."No.", AssemblyLine."Variant Code",
+                    AssemblyLine."Location Code", AssemblyLine.Description,
+                    0D, AssemblyLine."Due Date",
+                    0, ForReservEntry."Reservation Status"::Surplus);
+                end;
+            //ItemJnlPostLine.RunWithCheck(ItemJournalLine);
             until TransLine.Next() = 0;
         Message('Assembly Order created, Assembly Order No.:%1', AssemblyHeader."No.");
     end;
@@ -428,6 +455,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 end;
             until SalesLine.Next() = 0;
         Message('Transfer Order created, Transfer Order No.:%1', TransferHeader."No.");
+        SalesHeader.Validate("NTS Is TO Created", true);
+        SalesHeader.Modify();
     end;
 
     procedure FindItemTrackingCode(ItemNoPar: Code[20]) TrackingType: Integer

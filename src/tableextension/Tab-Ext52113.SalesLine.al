@@ -10,11 +10,13 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
         field(52114; "NTS DOR No."; Code[20])
         {
             Caption = 'DOR No.';
+            Editable = false;
             DataClassification = CustomerContent;
         }
         field(52115; "NTS DOR Line No."; Integer)
         {
             Caption = 'DOR Line No.';
+            Editable = false;
             DataClassification = CustomerContent;
         }
         modify("No.")
