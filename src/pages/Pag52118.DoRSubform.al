@@ -15,6 +15,7 @@ page 52118 "NTS DOR Subform"
             {
                 field("Line No."; Rec."Line No.")
                 {
+                    Visible = false;
                     ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
                 }
                 field("Item No."; Rec."Item No.")

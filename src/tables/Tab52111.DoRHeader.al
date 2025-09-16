@@ -59,10 +59,6 @@ table 52111 "NTS DOR Header"
         {
             Caption = 'Status';
             Editable = false;
-            trigger OnValidate()
-            begin
-                TestStatusOpen();
-            end;
         }
         field(7; Surgeon; Text[100])
         {
@@ -131,7 +127,7 @@ table 52111 "NTS DOR Header"
 
                     ContactListPage.SetTableView(ContactRec);
                     if PAGE.RUNMODAL(PAGE::"Contact List", ContactRec) = ACTION::LookupOK then begin
-                        Rec.Reps := ContactRec."Name";
+                        Validate(Rec.Reps, ContactRec."Name");
                     end;
                 end;
             end;
