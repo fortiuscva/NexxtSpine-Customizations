@@ -26,5 +26,22 @@ tableextension 52101 "NTS Sales & Receivables Setup" extends "Sales & Receivable
             DataClassification = ToBeClassified;
             TableRelation = "Gen. Journal Batch".Name where("Journal Template Name" = field("NTS Acc. Sale Gen. Templ. Name"));
         }
+        field(52104; "NTS DOR Nos."; Code[20])
+        {
+            Caption = 'DOR Nos.';
+            DataClassification = CustomerContent;
+            TableRelation = "No. Series";
+        }
+        field(52105; "NTS DOR Journal Template Name"; Code[10])
+        {
+            Caption = 'DOR Journal Template Name';
+            TableRelation = "Item Journal Template";
+        }
+        field(52106; "NTS DOR Journal Batch Name"; Code[10])
+        {
+            Caption = 'DOR Journal Batch Name';
+            TableRelation = "Item Journal Batch".Name where("Journal Template Name" = field("NTS DOR Journal Template Name"));
+        }
+
     }
 }

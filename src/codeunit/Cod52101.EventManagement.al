@@ -52,4 +52,22 @@ codeunit 52101 "NTS Event Management"
             NewRecLink.DeleteAll();
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterPostSalesLines, '', false, false)]
+    local procedure "Sales-Post_OnAfterPostSalesLines"(var SalesHeader: Record "Sales Header"; var SalesShipmentHeader: Record "Sales Shipment Header"; var SalesInvoiceHeader: Record "Sales Invoice Header"; var SalesCrMemoHeader: Record "Sales Cr.Memo Header"; var ReturnReceiptHeader: Record "Return Receipt Header"; WhseShip: Boolean; WhseReceive: Boolean; var SalesLinesProcessed: Boolean; CommitIsSuppressed: Boolean; EverythingInvoiced: Boolean; var TempSalesLineGlobal: Record "Sales Line" temporary)
+    begin
+        if (SalesShipmentHeader."No." <> '') then
+            NexxtSpineFunctions.CreatePositiveAdjustment(SalesHeader);
+    end;
+
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", OnBeforeTransferOrderPostReceipt, '', false, false)]
+    local procedure "TransferOrder-Post Receipt_OnBeforeTransferOrderPostReceipt"(var Sender: Codeunit "TransferOrder-Post Receipt"; var TransferHeader: Record "Transfer Header"; var CommitIsSuppressed: Boolean; var ItemJnlPostLine: Codeunit "Item Jnl.-Post Line")
+    begin
+        if (TransferHeader."NTS DOR No." <> '') then
+            NexxtSpineFunctions.CreateAssemblyOrder(TransferHeader);
+    end;
+
+    var
+        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+
 }
