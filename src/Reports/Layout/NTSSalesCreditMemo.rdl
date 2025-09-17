@@ -1,5 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
+  <am:AuthoringMetadata>
+    <am:CreatedBy>
+      <am:Name>MSRB</am:Name>
+      <am:Version>15.0.20283.0</am:Version>
+    </am:CreatedBy>
+    <am:UpdatedBy>
+      <am:Name>MSRB</am:Name>
+      <am:Version>15.0.20283.0</am:Version>
+    </am:UpdatedBy>
+    <am:LastModifiedTimestamp>2025-09-17T17:49:49.6341705Z</am:LastModifiedTimestamp>
+  </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
     <DataSource Name="DataSource">
@@ -330,7 +341,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Code.BlankZero(Fields!UnitPriceToPrint.Value)</Value>
+                                                    <Value>=Fields!CurrencySymbol.Value &amp; Code.BlankZero(Fields!UnitPriceToPrint.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -363,7 +374,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Code.BlankZero(Fields!AmountExclInvDisc.Value)</Value>
+                                                    <Value>=Fields!CurrencySymbol.Value &amp; Code.BlankZero(Fields!AmountExclInvDisc.Value)</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
                                                     </Style>
@@ -479,6 +490,7 @@
                                                     <Value>=Code.BlankZero(Sum(Fields!AmountExclInvDisc.Value))</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
+                                                      <Format>'$'#,0.00;('$'#,0.00)</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -1497,6 +1509,9 @@ Shared PictureData3 as Object
       <Fields>
         <Field Name="No_SalesCrMemoHeader">
           <DataField>No_SalesCrMemoHeader</DataField>
+        </Field>
+        <Field Name="CurrencySymbol">
+          <DataField>CurrencySymbol</DataField>
         </Field>
         <Field Name="CompanyInfo3Picture">
           <DataField>CompanyInfo3Picture</DataField>
