@@ -29,7 +29,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
     }
     actions
     {
-        addfirst(processing)
+        addlast(processing)
         {
             group("NTS NEXXTSPINE")
             {
@@ -37,7 +37,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                 action("NTS CreateTransferOrder")
                 {
                     Caption = 'Create Transfer Order';
-                    Image = Create;
+                    Image = NewTransferOrder;
                     ApplicationArea = All;
                     Promoted = true;
                     PromotedIsBig = true;
@@ -56,24 +56,20 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                         NTSFunctions.CreateTransferOrder(Rec);
                     end;
                 }
-            }
-        }
-
-        addlast(navigation)
-        {
-            action("NTS Transfer Order")
-            {
-                Caption = 'Open Transfer Order';
-                Image = Open;
-                ApplicationArea = All;
-                trigger OnAction()
-                var
-                    TransferHeader: Record "Transfer Header";
-                begin
-                    TransferHeader.SetRange("NTS DOR No.", Rec."NTS DoR Number");
-                    if TransferHeader.FindFirst() then
-                        Page.RunModal(Page::"Transfer Order", TransferHeader);
-                end;
+                action("NTS Transfer Order")
+                {
+                    Caption = 'Open Transfer Order';
+                    Image = TransferOrder;
+                    ApplicationArea = All;
+                    trigger OnAction()
+                    var
+                        TransferHeader: Record "Transfer Header";
+                    begin
+                        TransferHeader.SetRange("NTS DOR No.", Rec."NTS DoR Number");
+                        if TransferHeader.FindFirst() then
+                            Page.RunModal(Page::"Transfer Order", TransferHeader);
+                    end;
+                }
             }
         }
     }
