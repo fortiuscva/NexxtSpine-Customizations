@@ -75,6 +75,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader.Validate("NTS Surgeon", DoRHeader.Surgeon);
         SalesHeader.Validate("NTS Distributor", DoRHeader.Distributor);
         SalesHeader.Validate("NTS Reps", DoRHeader.Reps);
+        SalesHeader.Validate("NTS Set Name", DoRHeader."Set Name");
         SalesHeader.Modify(true);
 
         NextLineNo := 10000;
@@ -143,7 +144,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if Customer.Get(DoRHeader."Distributor") then
             LocationCode := Customer."Location Code";
 
-        DoRLine.SetRange("Document No.", DoRHeader."No.");
         SalesReceivablesSetup.Get();
 
         // Negative adjustment for the Set
@@ -170,14 +170,18 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
         ItemTrackingVal := FindItemTrackingCode(ItemJournalLine."Item No.");
         if (ItemTrackingVal <> 0) then begin
-            ForReservEntry."Lot No." := DoRHeader."Lot No.";
-            ForReservEntry."Serial No." := DoRHeader."Serial No.";
-            TrackingSpec."New Lot No." := DoRHeader."Lot No.";
-            TrackingSpec."New Serial No." := DoRHeader."Serial No.";
-
+            if ItemTrackingVal = 2 then begin
+                ForReservEntry."Serial No." := DoRHeader."Serial No.";
+                TrackingSpec."New Serial No." := DoRHeader."Serial No.";
+            end else begin
+                ForReservEntry."Lot No." := DoRHeader."Lot No.";
+                ForReservEntry."Serial No." := DoRHeader."Serial No.";
+                TrackingSpec."New Lot No." := DoRHeader."Lot No.";
+                TrackingSpec."New Serial No." := DoRHeader."Serial No.";
+            end;
             CreateReservEntry.CreateReservEntryFor(
-            Database::"Item Journal Line", 2,
-            ItemJournalLine."Document No.", ItemJournalLine."Journal Batch Name",
+            Database::"Item Journal Line", 3,
+            'ITEM', ItemJournalLine."Journal Batch Name",
             0, ItemJournalLine."Line No.",
             ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
             ForReservEntry);
@@ -213,18 +217,24 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
                 ItemTrackingVal := FindItemTrackingCode(ItemJournalLine."Item No.");
                 if (ItemTrackingVal <> 0) then begin
-                    ForReservEntry."Lot No." := DoRLine."Lot No.";
-                    TrackingSpec."New Lot No." := DoRLine."Lot No.";
+                    if ItemTrackingVal = 1 then begin
+                        ForReservEntry."Lot No." := DoRLine."Lot No.";
+                        TrackingSpec."New Lot No." := DoRLine."Lot No.";
+                    end else begin
+                        ForReservEntry."Lot No." := DoRLine."Lot No.";
+                        TrackingSpec."New Lot No." := DoRLine."Lot No.";
+                    end;
+
 
                     CreateReservEntry.CreateReservEntryFor(
-                    Database::"Item Journal Line", 1,
-                    ItemJournalLine."Document No.", '',
+                    Database::"Item Journal Line", 2,
+                    'ITEM', ItemJournalLine."Journal Batch Name",
                     0, ItemJournalLine."Line No.",
                     ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
                     ForReservEntry);
                     CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
                     CreateReservEntry.CreateEntry(
-                    ItemJournalLine."No.", ItemJournalLine."Variant Code",
+                    ItemJournalLine."Item No.", ItemJournalLine."Variant Code",
                     ItemJournalLine."Location Code", ItemJournalLine.Description,
                     0D, ItemJournalLine."Posting Date",
                     0, ForReservEntry."Reservation Status"::Prospect);
@@ -328,16 +338,19 @@ codeunit 52103 "NTS NexxtSpine Functions"
         NextLineNo := 10000;
         TransLine.Reset();
         TransLine.SetRange("Document No.", TransferHeader."No.");
+        TransLine.Setrange("Derived From Line No.", 0);
+
         if TransLine.FindSet() then
             repeat
                 AssemblyLine.Init();
-                AssemblyLine.Type := AssemblyLine.Type::Item;
+                AssemblyLine."Document Type" := AssemblyLine."Document Type"::Order;
                 AssemblyLine."Document No." := AssemblyHeader."No.";
                 AssemblyLine."Line No." := NextLineNo;
                 AssemblyLine.Insert(True);
+                AssemblyLine.Validate(Type, AssemblyLine.Type::Item);
                 AssemblyLine.Validate("No.", TransLine."Item No.");
                 AssemblyLine.Validate(Quantity, TransLine.Quantity);
-                AssemblyLine.Validate("Unit of Measure Code", TransLine."Unit of Measure");
+                AssemblyLine.Validate("Unit of Measure Code", TransLine."Unit of Measure Code");
                 AssemblyLine.Validate("NTS DOR No.", TransLine."NTS DOR No.");
                 AssemblyLine.Validate("NTS DOR Line No.", TransLine."NTS DOR Line No.");
                 AssemblyLine.Modify(true);
