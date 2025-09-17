@@ -94,6 +94,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Validate("NTS Lot Number", DoRLine."Lot No.");
                 SalesLine.Validate("NTS DOR No.", DoRLine."Document No.");
                 SalesLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
+                SalesLine.Validate("Posting Date", DoRHeader."Posting Date");
                 SalesLine.Modify(True);
                 NextLineNo += 10000;
 
@@ -282,7 +283,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 ItemJournalLine.VALIDATE(Quantity, SalesLine.Quantity);
                 ItemJournalLine.VALIDATE("Location Code", LocationRec.Code);
                 ItemJournalLine.VALIDATE("Unit of Measure Code", SalesLine."Unit of Measure Code");
-                ItemJournalLine.VALIDATE("Posting Date", SalesLine."Posting Date");
+                ItemJournalLine.VALIDATE("Posting Date", SalesHeader."Posting Date");
                 // ItemJournalLine.Modify(TRUE);
 
                 DORLine.get(SalesLine."NTS DOR No.", SalesLine."NTS DOR Line No.");
@@ -292,14 +293,14 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     TrackingSpec."New Lot No." := DoRLine."Lot No.";
 
                     CreateReservEntry.CreateReservEntryFor(
-                    Database::"Item Journal Line", 1,
-                    ItemJournalLine."Document No.", '',
+                    Database::"Item Journal Line", 2,
+                    'ITEM', ItemJournalLine."Journal Batch Name",
                     0, ItemJournalLine."Line No.",
                     ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
                     ForReservEntry);
                     CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
                     CreateReservEntry.CreateEntry(
-                    ItemJournalLine."No.", ItemJournalLine."Variant Code",
+                    ItemJournalLine."Item No.", ItemJournalLine."Variant Code",
                     ItemJournalLine."Location Code", ItemJournalLine.Description,
                     0D, ItemJournalLine."Posting Date",
                     0, ForReservEntry."Reservation Status"::Prospect);
