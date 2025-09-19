@@ -108,7 +108,7 @@ page 52119 "NTS DOR"
                         if Rec.Status <> Rec.Status::Released then
                             Error(StrSubstNo(ReleasedStatusError, Rec."No."));
 
-                        if not Confirm('Do you want to post the DOR %1', false, Rec."No.") then
+                        if not Confirm('Do you want to post the %1', false, Rec."No.") then
                             exit;
 
                         NexxSpineFunctions.PostDoR(Rec)

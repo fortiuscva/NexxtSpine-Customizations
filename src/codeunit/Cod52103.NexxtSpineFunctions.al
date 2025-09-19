@@ -94,7 +94,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Validate("NTS Lot Number", DoRLine."Lot No.");
                 SalesLine.Validate("NTS DOR No.", DoRLine."Document No.");
                 SalesLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
-                SalesLine.Validate("Posting Date", DoRHeader."Posting Date");
                 SalesLine.Modify(True);
                 NextLineNo += 10000;
 
@@ -320,6 +319,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         CreateReservEntry: Codeunit "Create Reserv. Entry";
         ForReservEntry: Record "Reservation Entry";
         TrackingSpec: Record "Tracking Specification";
+        DORHeader: Record "NTS DOR Header";
     begin
         AssemblyHeader.Init();
         AssemblyHeader."Document Type" := AssemblyHeader."Document Type"::Order;
@@ -334,6 +334,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader.Validate("Shortcut Dimension 1 Code", TransferHeader."Shortcut Dimension 1 Code");
         AssemblyHeader.Validate("Shortcut Dimension 2 Code", TransferHeader."Shortcut Dimension 2 Code");
         AssemblyHeader.Validate("NTS DOR No.", TransferHeader."NTS DOR No.");
+
         AssemblyHeader.Modify(true);
 
         NextLineNo := 10000;
