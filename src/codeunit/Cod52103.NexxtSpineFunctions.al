@@ -334,7 +334,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader.Validate("Shortcut Dimension 1 Code", TransferHeader."Shortcut Dimension 1 Code");
         AssemblyHeader.Validate("Shortcut Dimension 2 Code", TransferHeader."Shortcut Dimension 2 Code");
         AssemblyHeader.Validate("NTS DOR No.", TransferHeader."NTS DOR No.");
-
+        DORHeader.Get(AssemblyHeader."NTS DOR No.");
+        AssemblyHeader.Validate(Quantity, DORHeader.Quantity);
         AssemblyHeader.Modify(true);
 
         NextLineNo := 10000;
