@@ -51,6 +51,11 @@ table 52112 "NTS DOR Line"
             Caption = 'Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Item No."));
         }
+        field(6; Consumed; Boolean)
+        {
+            Caption = 'Consumed';
+            DataClassification = CustomerContent;
+        }
     }
     keys
     {

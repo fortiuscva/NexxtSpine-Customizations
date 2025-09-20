@@ -1,4 +1,4 @@
-enum 52102 "NTS Status"
+enum 52102 "NTS DOR Status"
 {
     Extensible = true;
 
@@ -9,9 +9,5 @@ enum 52102 "NTS Status"
     value(1; Released)
     {
         Caption = 'Released';
-    }
-    value(2; Posted)
-    {
-        Caption = 'Posted';
     }
 }

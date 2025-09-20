@@ -22,23 +22,54 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
             field("NTS DoR Number"; Rec."NTS DoR Number")
             {
                 ApplicationArea = all;
+                Editable = false;
                 Caption = 'DoR Number';
             }
         }
     }
     actions
     {
-        addlast(Processing)
+        addlast(processing)
         {
-            action("NTS CreateTransferOrder")
+            group("NTS NEXXTSPINE")
             {
-                Caption = 'Create Transfer';
-                Image = Create;
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedIsBig = true;
-                PromotedCategory = Process;
-                RunObject = report "NTS Create TO from SO";
+                Caption = 'NEXXTSPINE';
+                action("NTS CreateTransferOrder")
+                {
+                    Caption = 'Create Transfer Order';
+                    Image = NewTransferOrder;
+                    ApplicationArea = All;
+                    Promoted = true;
+                    PromotedIsBig = true;
+                    PromotedCategory = Process;
+                    trigger OnAction()
+                    var
+                        NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+                        TransferHeader: Record "Transfer Header";
+                        TOCreatedError: Label 'Transfer Order was already Created for this Sales Order %1';
+                    begin
+                        if Rec."NTS Is TO Created" then
+                            Error(StrSubstNo(TOCreatedError, Rec."No."));
+                        Rec.TestField(Status, Rec.Status::Released);
+                        if not Confirm('Do you want to Create Transfer Order?') then
+                            exit;
+                        NTSFunctions.CreateTransferOrder(Rec);
+                    end;
+                }
+                action("NTS Transfer Order")
+                {
+                    Caption = 'Open Transfer Order';
+                    Image = TransferOrder;
+                    ApplicationArea = All;
+                    trigger OnAction()
+                    var
+                        TransferHeader: Record "Transfer Header";
+                    begin
+                        TransferHeader.SetRange("NTS DOR No.", Rec."NTS DoR Number");
+                        if TransferHeader.FindFirst() then
+                            Page.RunModal(Page::"Transfer Order", TransferHeader);
+                    end;
+                }
             }
         }
     }

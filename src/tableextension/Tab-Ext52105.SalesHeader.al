@@ -80,12 +80,19 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
         field(52105; "NTS DoR Number"; code[20])
         {
             Caption = 'DoR Number';
+            Editable = false;
             TableRelation = "NTS DOR Header"."No.";
         }
         field(52106; "NTS Set Name"; Code[20])
         {
             Caption = 'Set Name';
             TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
+        }
+        field(52107; "NTS Is TO Created"; Boolean)
+        {
+            Caption = 'Is TO Created';
+            Editable = false;
+            DataClassification = CustomerContent;
         }
     }
 }

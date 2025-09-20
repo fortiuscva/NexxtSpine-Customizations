@@ -52,22 +52,20 @@ codeunit 52101 "NTS Event Management"
             NewRecLink.DeleteAll();
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterPostSalesDoc, '', false, false)]
-    local procedure "Sales-Post_OnAfterPostSalesDoc"(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterPostSalesLines, '', false, false)]
+    local procedure "Sales-Post_OnAfterPostSalesLines"(var SalesHeader: Record "Sales Header"; var SalesShipmentHeader: Record "Sales Shipment Header"; var SalesInvoiceHeader: Record "Sales Invoice Header"; var SalesCrMemoHeader: Record "Sales Cr.Memo Header"; var ReturnReceiptHeader: Record "Return Receipt Header"; WhseShip: Boolean; WhseReceive: Boolean; var SalesLinesProcessed: Boolean; CommitIsSuppressed: Boolean; EverythingInvoiced: Boolean; var TempSalesLineGlobal: Record "Sales Line" temporary)
     begin
-
-        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then
+        if (SalesShipmentHeader."No." <> '') then
             NexxtSpineFunctions.CreatePositiveAdjustment(SalesHeader);
-
     end;
 
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Transfer", OnAfterTransferOrderPostTransfer, '', false, false)]
-    local procedure "TransferOrder-Post Transfer_OnAfterTransferOrderPostTransfer"(var TransferHeader: Record "Transfer Header"; var SuppressCommit: Boolean; var DirectTransHeader: Record "Direct Trans. Header"; InvtPickPutAway: Boolean)
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", OnBeforeTransferOrderPostReceipt, '', false, false)]
+    local procedure "TransferOrder-Post Receipt_OnBeforeTransferOrderPostReceipt"(var Sender: Codeunit "TransferOrder-Post Receipt"; var TransferHeader: Record "Transfer Header"; var CommitIsSuppressed: Boolean; var ItemJnlPostLine: Codeunit "Item Jnl.-Post Line")
     begin
-        NexxtSpineFunctions.CreateAssemblyOrder(TransferHeader);
+        if (TransferHeader."NTS DOR No." <> '') then
+            NexxtSpineFunctions.CreateAssemblyOrder(TransferHeader);
     end;
-
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeCalcLevels, '', false, false)]
     local procedure "Calculate Low-Level Code_OnBeforeCalcLevels"(Type: Option; No: Code[20]; Level: Integer; LevelDepth: Integer; var Result: Integer; var IsHandled: Boolean)
     var
@@ -83,7 +81,6 @@ codeunit 52101 "NTS Event Management"
         end;
 
     end;
-
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeSetRecursiveLevelsOnBOM, '', false, false)]
     local procedure "Calculate Low-Level Code_OnBeforeSetRecursiveLevelsOnBOM"(var ProductionBOMHeader: Record "Production BOM Header"; LowLevelCode: Integer; IgnoreMissingItemsOrBOMs: Boolean; var IsHandled: Boolean)
     var
@@ -93,7 +90,6 @@ codeunit 52101 "NTS Event Management"
             if ItemRec."NTS Purchase to Production" then
                 IsHandled := true;
     end;
-
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
 }

@@ -1,11 +1,13 @@
 page 52117 "NTS DOR List"
 {
     ApplicationArea = All;
-    Caption = 'DOR List';
+    Caption = 'DORs';
     PageType = List;
+    Editable = false;
     SourceTable = "NTS DOR Header";
     CardPageId = "NTS DOR";
     UsageCategory = Lists;
+    SourceTableView = where(Posted = filter(false));
 
 
     layout
@@ -61,5 +63,52 @@ page 52117 "NTS DOR List"
 
             }
         }
+    }
+    actions
+    {
+        area(processing)
+        {
+            group(DORReleaseGroup)
+            {
+                Caption = 'Release';
+                Image = ReleaseDoc;
+
+                action(ReleaseDOR)
+                {
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Re&lease';
+                    Image = ReleaseDoc;
+                    ShortCutKey = 'Ctrl+F9';
+                    ToolTip = 'Release the DOR document to the next stage of processing. You must reopen the document before you can make changes to it.';
+
+                    trigger OnAction()
+                    var
+                        DorHeader: Record "NTS DOR Header";
+                    begin
+                        CurrPage.SetSelectionFilter(DorHeader);
+                        Rec.PerformManualRelease(DorHeader);
+                        CurrPage.Update(false);
+                    end;
+                }
+
+                action(ReopenDOR)
+                {
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Re&open';
+                    Image = ReOpen;
+                    ToolTip = 'Reopen the DOR document to change it after it has been approved. Approved DOR documents have the Released status and must be opened before they can be changed.';
+
+                    trigger OnAction()
+                    var
+                        DorHeader: Record "NTS DOR Header";
+                    begin
+                        CurrPage.SetSelectionFilter(DorHeader);
+                        Rec.PerformManualReopen(DorHeader);
+                        CurrPage.Update(false);
+                    end;
+                }
+            }
+        }
+
     }
 }

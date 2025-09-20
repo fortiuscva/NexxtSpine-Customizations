@@ -30,6 +30,7 @@ report 52107 "NTS Create TO from SO"
                 TransferHeaderRec.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
                 TransferHeaderRec.Validate("Shipping Time", SalesHeader."Shipping Time");
                 TransferHeaderRec.Validate("NTS Set Name", SalesHeader."NTS Set Name");
+                TransferHeaderRec.Validate("NTS DOR No.", SalesHeader."NTS DoR Number");
                 TransferHeaderRec.Modify(true);
 
                 NextLineNo := 10000;
@@ -50,6 +51,8 @@ report 52107 "NTS Create TO from SO"
                         TransferLineRec.Validate("Unit of Measure Code", SalesLineRec."Unit of Measure Code");
                         TransferLineRec.Validate("NTS Sales Order No.", SalesLineRec."Document No.");
                         TransferLineRec.Validate("NTS Sales Order Line No.", SalesLineRec."Line No.");
+                        TransferLineRec.Validate("NTS DOR No.", SalesLineRec."NTS DOR No.");
+                        TransferLineRec.Validate("NTS DOR Line No.", SalesLineRec."NTS DOR Line No.");
                         TransferLineRec.Modify(true);
                         NextLineNo += 10000;
                     until SalesLineRec.Next() = 0;

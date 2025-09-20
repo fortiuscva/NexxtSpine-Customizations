@@ -4,7 +4,8 @@ page 52119 "NTS DOR"
     Caption = 'DOR';
     PageType = Document;
     SourceTable = "NTS DOR Header";
-    UsageCategory = Administration;
+    UsageCategory = None;
+
 
     layout
     {
@@ -30,17 +31,27 @@ page 52119 "NTS DOR"
                 {
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }
+                field("Set Name"; Rec."Set Name")
+                {
+                    ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
+                }
 
                 field("Serial Number"; Rec."Serial No.")
                 {
                     ToolTip = 'Specifies the value of the Serial Number field.', Comment = '%';
                 }
-                field("Set Name"; Rec."Set Name")
+                field("Lot No."; Rec."Lot No.")
                 {
-                    ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
                 }
+                field(Quantity; Rec.Quantity)
+                {
+                    ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
+                }
+
                 field(Status; Rec.Status)
                 {
+                    Editable = false;
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
                 }
                 field(Surgeon; Rec.Surgeon)
@@ -59,8 +70,14 @@ page 52119 "NTS DOR"
                 {
                     ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
                 }
+                field(Posted; Rec.Posted)
+                {
+                    ToolTip = 'Specifies the value of the Posted field.', Comment = '%';
+                    Editable = false;
+                    Visible = false;
+                }
             }
-            part(DoRLinesPart; "NTS DOR Subform")
+            part(DORLines; "NTS DOR Subform")
             {
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
@@ -84,8 +101,53 @@ page 52119 "NTS DOR"
                     trigger OnAction()
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+                        SalesHeader: Record "Sales Header";
+                        SOExistError: Label 'Sales Order %1 already exist for this %2';
+                        ReleasedStatusError: Label 'Status must be Released to Post this %1';
                     begin
-                        NexxSpineFunctions.PostDoR(Rec);
+                        if Rec.Status <> Rec.Status::Released then
+                            Error(StrSubstNo(ReleasedStatusError, Rec."No."));
+
+                        if not Confirm('Do you want to post the %1', false, Rec."No.") then
+                            exit;
+
+                        NexxSpineFunctions.PostDoR(Rec)
+                    end;
+                }
+            }
+            group(DORReleaseGroup)
+            {
+                Caption = 'Release';
+                Image = ReleaseDoc;
+                action(Release)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Re&lease';
+                    Enabled = Rec.Status <> Rec.Status::Released;
+                    Image = ReleaseDoc;
+                    ShortCutKey = 'Ctrl+F9';
+                    ToolTip = 'Release the document to the next stage of processing. You must reopen the document before you can make changes to it.';
+
+                    trigger OnAction()
+                    begin
+                        Rec.PerformManualRelease();
+
+                    end;
+                }
+                action(Reopen)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Re&open';
+                    Enabled = Rec.Status <> Rec.Status::Open;
+                    Image = ReOpen;
+                    ToolTip = 'Reopen the document to change it after it has been approved. Approved documents have the Released status and must be opened before they can be changed.';
+
+                    trigger OnAction()
+                    var
+                        DORReleaseMgmnt: Codeunit "NTS DOR Release Management";
+                    begin
+                        DORReleaseMgmnt.PerformManualReopen(Rec);
+
                     end;
                 }
             }
