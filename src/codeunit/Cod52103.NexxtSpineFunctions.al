@@ -338,6 +338,37 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader.Validate(Quantity, DORHeader.Quantity);
         AssemblyHeader.Modify(true);
 
+        ItemTrackingVal := FindItemTrackingCode(AssemblyHeader."Item No.");
+        if (ItemTrackingVal <> 0) then begin
+            if ItemTrackingVal = 2 then begin
+                ForReservEntry."Serial No." := DoRHeader."Serial No.";
+                TrackingSpec."New Serial No." := DoRHeader."Serial No.";
+            end else begin
+                ForReservEntry."Lot No." := DoRHeader."Lot No.";
+                ForReservEntry."Serial No." := DoRHeader."Serial No.";
+                TrackingSpec."New Lot No." := DoRHeader."Lot No.";
+                TrackingSpec."New Serial No." := DoRHeader."Serial No.";
+            end;
+            CreateReservEntry.CreateReservEntryFor(
+            Database::"Assembly Header", 1,
+            AssemblyHeader."No.", '',
+            0, 0,
+            AssemblyHeader."Qty. per Unit of Measure", AssemblyHeader.Quantity, AssemblyHeader."Quantity (Base)",
+            ForReservEntry);
+            CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+            CreateReservEntry.CreateEntry(
+            AssemblyHeader."Item No.", AssemblyHeader."Variant Code",
+            AssemblyHeader."Location Code", AssemblyHeader.Description,
+            0D, AssemblyHeader."Posting Date",
+            0, ForReservEntry."Reservation Status"::Surplus);
+        end;
+
+
+        AssemblyLine.Reset();
+        AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
+        if AssemblyLine.FindSet() then
+            AssemblyLine.DeleteAll(true);
+
         NextLineNo := 10000;
         TransLine.Reset();
         TransLine.SetRange("Document No.", TransferHeader."No.");
