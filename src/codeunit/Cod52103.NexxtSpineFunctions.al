@@ -76,6 +76,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader.Validate("NTS Distributor", DoRHeader.Distributor);
         SalesHeader.Validate("NTS Reps", DoRHeader.Reps);
         SalesHeader.Validate("NTS Set Name", DoRHeader."Set Name");
+        SalesHeader.Validate("Location Code", DoRHeader."Location Code");
         SalesHeader.Modify(true);
 
         NextLineNo := 10000;
@@ -94,6 +95,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Validate("NTS Lot Number", DoRLine."Lot No.");
                 SalesLine.Validate("NTS DOR No.", DoRLine."Document No.");
                 SalesLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
+                SalesLine.Validate("Location Code", DoRHeader."Location Code");
                 SalesLine.Modify(True);
                 NextLineNo += 10000;
 
