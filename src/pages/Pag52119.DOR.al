@@ -76,6 +76,11 @@ page 52119 "NTS DOR"
                     Editable = false;
                     Visible = false;
                 }
+                field("Location Code"; Rec."Location Code")
+                {
+                    Editable = false;
+                    ToolTip = 'Specifies the value of the Location Code field.', Comment = '%';
+                }
             }
             part(DORLines; "NTS DOR Subform")
             {

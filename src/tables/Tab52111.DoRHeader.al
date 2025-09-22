@@ -159,13 +159,20 @@ table 52111 "NTS DOR Header"
                 TestStatusOpen();
             end;
         }
-        field(21; Quantity; Decimal)
+        field(21; Quantity; Integer)
         {
             Caption = 'Quantity';
             trigger OnValidate()
             begin
                 TestStatusOpen();
             end;
+        }
+        field(22; "Location Code"; code[20])
+        {
+            Caption = 'Location Code';
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = lookup(Customer."Location Code" where("No." = field("Distributor")));
         }
 
         field(107; "No. Series"; Code[20])
