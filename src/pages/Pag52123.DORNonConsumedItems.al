@@ -1,28 +1,25 @@
-page 52118 "NTS DOR Subform"
+page 52123 "NTS DOR Non-Consumed Items"
 {
     ApplicationArea = All;
-    Caption = 'Lines';
+    Caption = 'Non-Consumed Items';
     PageType = ListPart;
     SourceTable = "NTS DOR Line";
+    SourceTableView = where(Consumed = const(false));
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
+
     layout
     {
         area(Content)
         {
             repeater(General)
             {
-                field("Line No."; Rec."Line No.")
-                {
-                    Visible = false;
-                    ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
-                }
                 field("Item No."; Rec."Item No.")
                 {
                     ToolTip = 'Specifies the value of the Item field.', Comment = '%';
                 }
-                field("Lot Number"; Rec."Lot No.")
+                field("Lot No."; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot Number field.', Comment = '%';
                 }
@@ -37,8 +34,4 @@ page 52118 "NTS DOR Subform"
             }
         }
     }
-    trigger OnNewRecord(BelowxRec: Boolean)
-    begin
-        Rec.Validate(Rec.Consumed, false);
-    end;
 }

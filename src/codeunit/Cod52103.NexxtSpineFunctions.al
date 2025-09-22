@@ -338,11 +338,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader.Validate(Quantity, DORHeader.Quantity);
         AssemblyHeader.Modify(true);
 
-        AssemblyLine.Reset();
-        AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
-        if AssemblyLine.FindSet() then
-            AssemblyLine.DeleteAll(true);
-
+        /*
+            AssemblyLine.Reset();
+            AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
+            if AssemblyLine.FindSet() then
+                AssemblyLine.DeleteAll(true);
+        */
         NextLineNo := 10000;
         TransLine.Reset();
         TransLine.SetRange("Document No.", TransferHeader."No.");
@@ -501,6 +502,95 @@ codeunit 52103 "NTS NexxtSpine Functions"
         EXIT(0);
     end;
 
+    procedure ValidateLOTSerial(ItemTrackingType: Integer; LotNo: Code[50]; SerialNo: Code[20])
+    begin
+        Case ItemTrackingType of
+            0:
+                begin
+                    if LotNo <> '' then
+                        Error('Lot No. must be Blank');
+                    if SerialNo <> '' then
+                        Error('Serial No. must be Blank');
+                end;
+            1:
+                begin
+                    if LotNo = '' then
+                        Error('Lot No. cannot be Blank');
+                end;
+            2:
+                begin
+                    if SerialNo = '' then
+                        Error('Serial No. cannot be Blank');
+                end;
+            3:
+                begin
+                    if LotNo = '' then
+                        Error('Lot No. cannot be Blank');
+                    if SerialNo = '' then
+                        Error('Serial No. cannot be Blank');
+                end;
+        end;
+    end;
+
+    procedure InsertNonConsumedItems(DORHeader: Record "NTS DOR Header")
+    var
+        ItemLedgEntry: Record "Item Ledger Entry";
+        ItemLedgEntry2: Record "Item Ledger Entry";
+        DORLine: Record "NTS DOR Line";
+        DORLine2: Record "NTS DOR Line";
+        NextLineNo: Integer;
+        ItemTrackingVal: Integer;
+    begin
+        DORHeader.TestField(DORHeader."Set Name");
+        ItemTrackingVal := FindItemTrackingCode(DORHeader."Set Name");
+        ValidateLOTSerial(ItemTrackingVal, DORHeader."Lot No.", DORHeader."Serial No.");
+        NextLineNo := 0;
+        DORLine.Reset();
+        DORLine.SetRange("Document No.", DORHeader."No.");
+        // DORLine.SetRange(Consumed, true);
+        if DORLine.FindLast() then
+            NextLineNo := DORLine."Line No." + 10000;
+
+        ItemLedgEntry.Reset();
+        ItemLedgEntry.SetRange("Item No.", DORHeader."Set Name");
+        ItemLedgEntry.SetRange("Entry Type", ItemLedgEntry."Entry Type"::"Assembly Output");
+        ItemLedgEntry.SetFilter("Remaining Quantity", '<>%1', 0);
+        ItemLedgEntry.SetRange("Lot No.", DORHeader."Lot No.");
+        ItemLedgEntry.SetRange("Serial No.", DORHeader."Serial No.");
+        if ItemLedgEntry.FindLast() then begin
+            ItemLedgEntry2.Reset();
+            ItemLedgEntry2.SetRange("Document No.", ItemLedgEntry."Document No.");
+            ItemLedgEntry2.SetRange("Entry Type", ItemLedgEntry2."Entry Type"::"Assembly Consumption");
+            if ItemLedgEntry2.FindSet() then begin
+                repeat
+                    DORLine.Reset();
+                    DORLine.SetRange("Document No.", DORHeader."No.");
+                    DORLine.SetRange(Consumed, true);
+                    DORLine.SetRange("Item No.", ItemLedgEntry2."Item No.");
+                    if not DORLine.FindFirst() then begin
+                        DORLine2.Init();
+                        DORLine2."Document No." := DORHeader."No.";
+                        DORLine2."Line No." := NextLineNo;
+                        DORLine2.Insert(true);
+                        DORLine2.Validate("Item No.", ItemLedgEntry2."Item No.");
+                        DORLine2.Validate("Lot No.", ItemLedgEntry2."Lot No.");
+                        DORLine2.Validate(Quantity, ItemLedgEntry2.Quantity);
+                        DORLine2.Validate(Consumed, false);
+                        DORLine2.Modify();
+                        NextLineNo += 10000;
+                    end;
+                until ItemLedgEntry2.Next() = 0;
+            end;
+        end;
+    end;
+
+    procedure GetAndValidateLOTSerialCombo(ItemNo: Code[20]; LotNo: Code[50]; SerialNo: Code[20])
+    var
+        ItemTrackingVal: Integer;
+    begin
+        ItemTrackingVal := FindItemTrackingCode(ItemNo);
+        ValidateLOTSerial(ItemTrackingVal, LotNo, SerialNo);
+    end;
 
     var
         SalesReceivablesSetup: Record "Sales & Receivables Setup";
