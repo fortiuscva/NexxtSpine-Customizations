@@ -345,27 +345,33 @@ codeunit 52103 "NTS NexxtSpine Functions"
             AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
             if AssemblyLine.FindSet() then
                 AssemblyLine.DeleteAll(true);
-        */
+        
         NextLineNo := 10000;
         TransLine.Reset();
         TransLine.SetRange("Document No.", TransferHeader."No.");
         TransLine.Setrange("Derived From Line No.", 0);
 
         if TransLine.FindSet() then
+        */
+        AssemblyLine.Reset();
+        AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
+        if AssemblyLine.FindSet() then
             repeat
-                AssemblyLine.Init();
-                AssemblyLine."Document Type" := AssemblyLine."Document Type"::Order;
-                AssemblyLine."Document No." := AssemblyHeader."No.";
-                AssemblyLine."Line No." := NextLineNo;
-                AssemblyLine.Insert(True);
-                AssemblyLine.Validate(Type, AssemblyLine.Type::Item);
-                AssemblyLine.Validate("No.", TransLine."Item No.");
-                AssemblyLine.Validate(Quantity, TransLine.Quantity);
-                AssemblyLine.Validate("Unit of Measure Code", TransLine."Unit of Measure Code");
-                AssemblyLine.Validate("NTS DOR No.", TransLine."NTS DOR No.");
-                AssemblyLine.Validate("NTS DOR Line No.", TransLine."NTS DOR Line No.");
-                AssemblyLine.Modify(true);
-                NextLineNo += 10000;
+                /*
+                    AssemblyLine.Init();
+                    AssemblyLine."Document Type" := AssemblyLine."Document Type"::Order;
+                    AssemblyLine."Document No." := AssemblyHeader."No.";
+                    AssemblyLine."Line No." := NextLineNo;
+                    AssemblyLine.Insert(True);
+                    AssemblyLine.Validate(Type, AssemblyLine.Type::Item);
+                    AssemblyLine.Validate("No.", TransLine."Item No.");
+                    AssemblyLine.Validate(Quantity, TransLine.Quantity);
+                    AssemblyLine.Validate("Unit of Measure Code", TransLine."Unit of Measure Code");
+                    AssemblyLine.Validate("NTS DOR No.", TransLine."NTS DOR No.");
+                    AssemblyLine.Validate("NTS DOR Line No.", TransLine."NTS DOR Line No.");
+                    AssemblyLine.Modify(true);
+                    NextLineNo += 10000;
+                */
 
                 ItemTrackingVal := FindItemTrackingCode(AssemblyLine."No.");
                 if (ItemTrackingVal <> 0) then begin
