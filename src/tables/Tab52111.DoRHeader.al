@@ -51,8 +51,12 @@ table 52111 "NTS DOR Header"
             Caption = 'Serial No.';
             TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("Set Name"));
             trigger OnValidate()
+            var
+                NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+
             begin
                 TestStatusOpen();
+                NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
             end;
         }
         field(6; Status; Enum "NTS DOR Status")
@@ -91,21 +95,31 @@ table 52111 "NTS DOR Header"
                 HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
             begin
                 TestStatusOpen();
-                HSDMappingRec.Reset();
-                HSDMappingRec.SetRange(Hospital, Rec.Customer);
-                HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
+                if (Rec.Surgeon <> '') then begin
+                    HSDMappingRec.Reset();
+                    HSDMappingRec.SetRange(Hospital, Rec.Customer);
+                    HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
 
-                if HSDMappingRec.FindFirst() then
-                    Rec.Distributor := HSDMappingRec.Distributor;
+                    if HSDMappingRec.FindFirst() then
+                        Rec.Validate(Distributor, HSDMappingRec.Distributor);
+                end else begin
+                    Clear(Distributor);
+                    Clear(Reps);
+                    Clear("Location Code");
+                end;
             end;
         }
-        field(8; Distributor; Code[50])
+        field(8; Distributor; Code[20])
         {
             Caption = 'Distributor';
             Editable = false;
             trigger OnValidate()
+            var
+                Customer: Record Customer;
             begin
                 TestStatusOpen();
+                Customer.Get(Distributor);
+                Rec.Validate("Location Code", Customer."Location Code");
             end;
         }
         field(9; Reps; Text[100])
@@ -142,8 +156,11 @@ table 52111 "NTS DOR Header"
             Caption = 'Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Set Name"));
             trigger OnValidate()
+            var
+                NTSFunctions: Codeunit "NTS NexxtSpine Functions";
             begin
                 TestStatusOpen();
+                NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
             end;
         }
         field(11; Posted; Boolean)
@@ -170,9 +187,6 @@ table 52111 "NTS DOR Header"
         field(22; "Location Code"; code[20])
         {
             Caption = 'Location Code';
-            Editable = false;
-            FieldClass = FlowField;
-            CalcFormula = lookup(Customer."Location Code" where("No." = field("Distributor")));
         }
 
         field(107; "No. Series"; Code[20])

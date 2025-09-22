@@ -87,7 +87,11 @@ page 52119 "NTS DOR"
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
             }
-
+            part(DORNonConsumedItems; "NTS DOR Non-Consumed Items")
+            {
+                ApplicationArea = All;
+                SubPageLink = "Document No." = field("No.");
+            }
         }
     }
     actions
@@ -130,13 +134,28 @@ page 52119 "NTS DOR"
                     Caption = 'Re&lease';
                     Enabled = Rec.Status <> Rec.Status::Released;
                     Image = ReleaseDoc;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
                     ShortCutKey = 'Ctrl+F9';
                     ToolTip = 'Release the document to the next stage of processing. You must reopen the document before you can make changes to it.';
 
                     trigger OnAction()
+                    var
+                        NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+                        DORLine: Record "NTS DOR Line";
                     begin
+                        NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
+                        NTSFunctions.InsertNonConsumedItems(Rec);
+                        DORLine.Reset();
+                        DORLine.SetRange("Document No.", Rec."No.");
+                        if DORLine.FindSet() then begin
+                            repeat
+                                NTSFunctions.GetAndValidateLOTSerialCombo(DORLine."Item No.", DORLine."Lot No.", '');
+                            until DORLine.Next() = 0;
+                        end;
                         Rec.PerformManualRelease();
-
+                        CurrPage.Update();
                     end;
                 }
                 action(Reopen)

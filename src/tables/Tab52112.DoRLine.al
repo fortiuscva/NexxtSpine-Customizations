@@ -17,7 +17,7 @@ table 52112 "NTS DOR Line"
         field(3; "Item No."; Code[20])
         {
             Caption = 'Item';
-            TableRelation = Item."No." where("Assembly BOM" = const(true));
+            TableRelation = Item."No." where("Assembly BOM" = const(false));
             trigger OnLookup()
             var
                 DORHeader: Record "NTS DOR Header";
@@ -27,14 +27,13 @@ table 52112 "NTS DOR Line"
                 TempItem: Record Item temporary;
             begin
 
-                if not DORHeader.Get("Document No.") then
-                    Error('DOR Header not found for Document No. %1.', "Document No.");
+                DORHeader.Get("Document No.");
 
                 BOMComponent.SetRange("Parent Item No.", DORHeader."Set Name");
                 if BOMComponent.FindSet() then
                     repeat
-                        if ItemRec.Get(BOMComponent."No.") then
-                            TempItem := ItemRec;
+                        ItemRec.Get(BOMComponent."No.");
+                        TempItem := ItemRec;
                         TempItem.Insert();
                     until BOMComponent.Next() = 0;
 
@@ -50,6 +49,12 @@ table 52112 "NTS DOR Line"
         {
             Caption = 'Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Item No."));
+            trigger OnValidate()
+            var
+                NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+            begin
+                NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Item No.", Rec."Lot No.", '');
+            end;
         }
         field(6; Consumed; Boolean)
         {
