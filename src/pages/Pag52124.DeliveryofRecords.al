@@ -1,7 +1,7 @@
 page 52124 "NTS Delivery of Records"
 {
     ApplicationArea = All;
-    Caption = 'DORs';
+    Caption = 'Delivery of Records';
     PageType = List;
     Editable = false;
     SourceTable = "NTS DOR Header";
@@ -46,6 +46,11 @@ page 52124 "NTS Delivery of Records"
                 {
                     ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
                 }
+                field("Set Description"; Rec."Set Description")
+                {
+                    ToolTip = 'Specifies the value of the Set Description field.', Comment = '%';
+                }
+
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';

@@ -32,55 +32,71 @@ page 52119 "NTS DOR"
                 {
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }
+                field("Customer Name"; Rec."Customer Name")
+                {
+                    ToolTip = 'Specifies the value of the Customer Name field.', Comment = '%';
+                }
+
                 field("Set Name"; Rec."Set Name")
                 {
                     ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
                 }
-
-                field("Serial Number"; Rec."Serial No.")
+                field("Set Description"; Rec."Set Description")
                 {
-                    ToolTip = 'Specifies the value of the Serial Number field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Set Description field.', Comment = '%';
                 }
-                field("Lot No."; Rec."Lot No.")
+                field("Posting Date"; Rec."Posting Date")
                 {
-                    ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                 }
-                field(Quantity; Rec.Quantity)
-                {
-                    ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
-                }
-
                 field(Status; Rec.Status)
                 {
                     Editable = false;
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
                 }
-                field(Surgeon; Rec.Surgeon)
+
+                group(ItemTracking)
                 {
-                    ToolTip = 'Specifies the value of the Surgeon field.', Comment = '%';
+                    Caption = 'Item Tracking';
+                    field("Lot No."; Rec."Lot No.")
+                    {
+                        ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
+                    }
+                    field("Serial Number"; Rec."Serial No.")
+                    {
+                        ToolTip = 'Specifies the value of the Serial Number field.', Comment = '%';
+                    }
+                    field(Quantity; Rec.Quantity)
+                    {
+                        ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
+                    }
                 }
-                field(Distributor; Rec.Distributor)
+
+                group(Surgery)
                 {
-                    ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
-                }
-                field(Reps; Rec.Reps)
-                {
-                    ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
-                }
-                field("Surgery Date"; Rec."Surgery Date")
-                {
-                    ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
-                }
-                field(Posted; Rec.Posted)
-                {
-                    ToolTip = 'Specifies the value of the Posted field.', Comment = '%';
-                    Editable = false;
-                    Visible = false;
-                }
-                field("Location Code"; Rec."Location Code")
-                {
-                    Editable = false;
-                    ToolTip = 'Specifies the value of the Location Code field.', Comment = '%';
+                    Caption = 'Surgery';
+                    field(Surgeon; Rec.Surgeon)
+                    {
+                        ToolTip = 'Specifies the value of the Surgeon field.', Comment = '%';
+                    }
+                    field("Surgery Date"; Rec."Surgery Date")
+                    {
+                        ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
+                    }
+                    field(Reps; Rec.Reps)
+                    {
+                        ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
+                    }
+                    field(Distributor; Rec.Distributor)
+                    {
+                        ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
+                    }
+                    field("Location Code"; Rec."Location Code")
+                    {
+                        Editable = false;
+                        ToolTip = 'Specifies the value of the Location Code field.', Comment = '%';
+                    }
+
                 }
             }
             part(DORLines; "NTS DOR Subform")

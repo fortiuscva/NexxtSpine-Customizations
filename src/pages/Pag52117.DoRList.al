@@ -48,6 +48,11 @@ page 52117 "NTS DOR List"
                 {
                     ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
                 }
+                field("Set Description"; Rec."Set Description")
+                {
+                    ToolTip = 'Specifies the value of the Set Description field.', Comment = '%';
+                }
+
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';

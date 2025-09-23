@@ -53,7 +53,7 @@ table 52111 "NTS DOR Header"
             trigger OnValidate()
             begin
                 TestStatusOpen();
-
+                ValidateSetName();
             end;
         }
         field(5; "Serial No."; Code[20])
@@ -77,45 +77,10 @@ table 52111 "NTS DOR Header"
         field(7; Surgeon; Code[20])
         {
             Caption = 'Surgeon';
-            trigger OnLookup()
-            var
-                HSDMapping: Record "Hosp. Surg. Distrib. Mapping";
-                SurgeonRec: Record "NTS Surgeon";
-                TempSurgeon: Record "NTS Surgeon" temporary;
-            begin
-                HSDMapping.SetRange(Hospital, Rec."Customer No.");
-                if HSDMapping.FindSet() then
-                    repeat
-                        if SurgeonRec.Get(HSDMapping.Surgeon) then begin
-                            TempSurgeon := SurgeonRec;
-                            TempSurgeon.Insert(true);
-                        end;
-                    until HSDMapping.Next() = 0;
-
-                if Page.RunModal(Page::"NTS Surgeon List", TempSurgeon) = Action::LookupOK then begin
-                    Validate(Rec.Surgeon, TempSurgeon.Code);
-                end;
-
-            end;
-
-
+            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Customer No."));
             trigger OnValidate()
-            var
-                HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
             begin
-                TestStatusOpen();
-                if (Rec.Surgeon <> '') then begin
-                    HSDMappingRec.Reset();
-                    HSDMappingRec.SetRange(Hospital, Rec."Customer No.");
-                    HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
-
-                    if HSDMappingRec.FindFirst() then
-                        Rec.Validate(Distributor, HSDMappingRec.Distributor);
-                end else begin
-                    Clear(Distributor);
-                    Clear(Reps);
-                    Clear("Location Code");
-                end;
+                ValidateSurgeon();
             end;
         }
         field(8; Distributor; Code[20])
@@ -128,7 +93,10 @@ table 52111 "NTS DOR Header"
             begin
                 TestStatusOpen();
                 Customer.Get(Distributor);
-                Rec.Validate("Location Code", Customer."Location Code");
+                if Customer."Location Code" <> '' then
+                    Rec.Validate("Location Code", Customer."Location Code")
+                else
+                    Rec.Validate("Location Code", '');
             end;
         }
         field(9; Reps; Text[100])
@@ -433,16 +401,37 @@ table 52111 "NTS DOR Header"
     end;
 
 
-    procedure ValidateSetItemNo()
+    procedure ValidateSetName()
     begin
         if (Rec."Set Name" <> xRec."Set Name") then begin
             if (Rec."Set Name" <> '') then begin
                 ItemRec.get("Set Name");
                 "Set Description" := ItemRec.Description;
-            end else
+                Validate("Lot No.", '');
+                Validate("Serial No.");
+            end else begin
                 "Set Description" := '';
+                Validate("Lot No.", '');
+                Validate("Serial No.");
+            end;
         end;
-
     end;
 
+    procedure ValidateSurgeon()
+    var
+        HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
+    begin
+        if (xRec.Surgeon <> Rec.Surgeon) then begin
+            if Surgeon <> '' then begin
+                HSDMappingRec.Reset();
+                HSDMappingRec.SetRange(Hospital, Rec."Customer No.");
+                HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
+                HSDMappingRec.FindFirst();
+                Rec.Validate(Distributor, HSDMappingRec.Distributor)
+            end else begin
+                Rec.Validate(Reps, '');
+                Rec.Validate(Distributor, '');
+            end;
+        end;
+    end;
 }
