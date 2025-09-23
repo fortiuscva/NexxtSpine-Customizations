@@ -12,7 +12,7 @@ page 52115 "NTS Surgeon List"
         {
             repeater(General)
             {
-                field("Surgeon Name"; Rec."Surgeon Name")
+                field("Surgeon Name"; Rec.Code)
                 {
                     ToolTip = 'Specifies the value of the Surgeon Name field.', Comment = '%';
                 }

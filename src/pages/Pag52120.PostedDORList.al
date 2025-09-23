@@ -19,7 +19,7 @@ page 52120 "NTS Posted DOR List"
                 {
                     ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
                 }
-                field(Customer; Rec.Customer)
+                field(Customer; Rec."Customer No.")
                 {
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }

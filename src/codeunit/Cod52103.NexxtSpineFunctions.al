@@ -49,7 +49,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferLine: Record "Transfer Line";
         CustNoBlankError: Label 'Customer No. is blank on this %1';
     begin
-        DoRHeader.TestField(Customer);
+        DoRHeader.TestField("Customer No.");
         CreateSalesOrder(DoRHeader);
         DoRHeader.Posted := true;
         DoRHeader.Modify();
@@ -69,7 +69,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader."Document Type" := SalesHeader."Document Type"::Order;
         SalesHeader."No." := '';
         SalesHeader.Insert(true);
-        SalesHeader.Validate("Sell-to Customer No.", DoRHeader."Customer");
+        SalesHeader.Validate("Sell-to Customer No.", DoRHeader."Customer No.");
         SalesHeader.validate("NTS DoR Number", DoRHeader."No.");
         SalesHeader.Validate(Status, SalesHeader.Status::Open);
         SalesHeader.Validate("NTS Surgeon", DoRHeader.Surgeon);

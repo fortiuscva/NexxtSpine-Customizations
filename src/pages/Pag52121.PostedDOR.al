@@ -19,7 +19,7 @@ page 52121 "NTS Posted DOR"
                 {
                     ToolTip = 'Specifies the number of the involved entry or record, according to the specified number series.';
                 }
-                field(Customer; Rec.Customer)
+                field(Customer; Rec."Customer No.")
                 {
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }
