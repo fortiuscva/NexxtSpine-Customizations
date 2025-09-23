@@ -2,7 +2,7 @@ table 52111 "NTS DOR Header"
 {
     Caption = 'DOR Header';
     DataCaptionFields = "No.";
-    DataClassification = ToBeClassified;
+    DataClassification = CustomerContent;
 
     fields
     {
@@ -20,13 +20,20 @@ table 52111 "NTS DOR Header"
                 end;
             end;
         }
-        field(2; Customer; Code[20])
+        field(2; "Customer No."; Code[20])
         {
             Caption = 'Customer';
             TableRelation = Customer."No." WHERE("NTS Is Distributor" = CONST(false));
             trigger OnValidate()
             begin
                 TestStatusOpen();
+                if (Rec."Customer No." <> xRec."Customer No.") then begin
+                    if (Rec."Customer No." <> '') then begin
+                        CustomerRec.get("Customer No.");
+                        "Customer Name" := CustomerRec.Name;
+                    end else
+                        "Customer Name" := '';
+                end;
             end;
         }
         field(3; "Surgery Date"; Date)
@@ -44,6 +51,7 @@ table 52111 "NTS DOR Header"
             trigger OnValidate()
             begin
                 TestStatusOpen();
+
             end;
         }
         field(5; "Serial No."; Code[20])
@@ -64,7 +72,7 @@ table 52111 "NTS DOR Header"
             Caption = 'Status';
             Editable = false;
         }
-        field(7; Surgeon; Text[100])
+        field(7; Surgeon; Code[20])
         {
             Caption = 'Surgeon';
             trigger OnLookup()
@@ -73,8 +81,7 @@ table 52111 "NTS DOR Header"
                 SurgeonRec: Record "NTS Surgeon";
                 TempSurgeon: Record "NTS Surgeon" temporary;
             begin
-
-                HSDMapping.SetRange(Hospital, Rec.Customer);
+                HSDMapping.SetRange(Hospital, Rec."Customer No.");
                 if HSDMapping.FindSet() then
                     repeat
                         if SurgeonRec.Get(HSDMapping.Surgeon) then begin
@@ -84,7 +91,7 @@ table 52111 "NTS DOR Header"
                     until HSDMapping.Next() = 0;
 
                 if Page.RunModal(Page::"NTS Surgeon List", TempSurgeon) = Action::LookupOK then begin
-                    Validate(Rec.Surgeon, TempSurgeon."Surgeon Name");
+                    Validate(Rec.Surgeon, TempSurgeon.Code);
                 end;
 
             end;
@@ -97,7 +104,7 @@ table 52111 "NTS DOR Header"
                 TestStatusOpen();
                 if (Rec.Surgeon <> '') then begin
                     HSDMappingRec.Reset();
-                    HSDMappingRec.SetRange(Hospital, Rec.Customer);
+                    HSDMappingRec.SetRange(Hospital, Rec."Customer No.");
                     HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
 
                     if HSDMappingRec.FindFirst() then
@@ -199,7 +206,21 @@ table 52111 "NTS DOR Header"
                 TestStatusOpen();
             end;
         }
+        field(79; "Customer Name"; Text[100])
+        {
+            Caption = 'Customer Name';
+            TableRelation = Customer.Name;
+            ValidateTableRelation = false;
+            Editable = false;
+        }
 
+        field(85; "Set Description"; Text[100])
+        {
+            Caption = 'Set Description';
+            TableRelation = Item.Description;
+            ValidateTableRelation = false;
+            Editable = false;
+        }
     }
     keys
     {
@@ -220,6 +241,16 @@ table 52111 "NTS DOR Header"
         // Remove view filters so that the cards does not show filtered view notification
         SetView('');
     end;
+
+    Var
+
+        SalesSetup: Record "Sales & Receivables Setup";
+        SelectNoSeriesAllowed: Boolean;
+        InsertMode: Boolean;
+        DORHeader: Record "NTS DOR Header";
+        CustomerRec: Record Customer;
+        ItemRec: Record Item;
+        Text051: Label 'The DOR %1 already exists.';
 
     procedure InitInsert()
     var
@@ -399,12 +430,17 @@ table 52111 "NTS DOR Header"
         TestField(Status, Status::Open);
     end;
 
-    Var
 
-        SalesSetup: Record "Sales & Receivables Setup";
-        SelectNoSeriesAllowed: Boolean;
-        InsertMode: Boolean;
-        DORHeader: Record "NTS DOR Header";
-        Text051: Label 'The DOR %1 already exists.';
+    procedure ValidateSetItemNo()
+    begin
+        if (Rec."Set Name" <> xRec."Set Name") then begin
+            if (Rec."Set Name" <> '') then begin
+                ItemRec.get("Set Name");
+                "Set Description" := ItemRec.Description;
+            end else
+                "Set Description" := '';
+        end;
+
+    end;
 
 }

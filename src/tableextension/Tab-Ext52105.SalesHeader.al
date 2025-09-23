@@ -3,7 +3,7 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
     fields
     {
         //field(52100; "NTS Requested Delivery Date"; Date) //already used on invoice header.
-        field(52101; "NTS Surgeon"; Text[100])
+        field(52101; "NTS Surgeon"; Code[20])
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;
@@ -13,7 +13,6 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
                 SurgeonRec: Record "NTS Surgeon";
                 TempSurgeon: Record "NTS Surgeon" temporary;
             begin
-
                 HSDMapping.SetRange(Hospital, Rec."Sell-to Customer No.");
                 if HSDMapping.FindSet() then
                     repeat
@@ -24,7 +23,7 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
                     until HSDMapping.Next() = 0;
 
                 if Page.RunModal(Page::"NTS Surgeon List", TempSurgeon) = Action::LookupOK then begin
-                    Validate(Rec."NTS Surgeon", TempSurgeon."Surgeon Name");
+                    Validate(Rec."NTS Surgeon", TempSurgeon.Code);
                 end;
 
             end;

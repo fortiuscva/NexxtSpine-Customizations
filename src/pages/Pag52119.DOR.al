@@ -5,6 +5,7 @@ page 52119 "NTS DOR"
     PageType = Document;
     SourceTable = "NTS DOR Header";
     UsageCategory = None;
+    DataCaptionFields = "No.";
 
 
     layout
@@ -27,7 +28,7 @@ page 52119 "NTS DOR"
                     end;
 
                 }
-                field(Customer; Rec.Customer)
+                field(Customer; Rec."Customer No.")
                 {
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }
