@@ -3,6 +3,8 @@ table 52111 "NTS DOR Header"
     Caption = 'DOR Header';
     DataCaptionFields = "No.";
     DataClassification = CustomerContent;
+    LookupPageId = "NTS Delivery of Records";
+    DrillDownPageId = "NTS Delivery of Records";
 
     fields
     {

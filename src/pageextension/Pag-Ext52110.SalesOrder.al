@@ -14,7 +14,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                 ApplicationArea = all;
                 Caption = 'Distributor';
             }
-            field("NTS Reps"; Rec."NTS Reps")
+            field("NTS Reps"; Rec."NTS Reps.")
             {
                 ApplicationArea = all;
                 Caption = 'Reps';
@@ -48,7 +48,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                         TransferHeader: Record "Transfer Header";
                         TOCreatedError: Label 'Transfer Order was already Created for this Sales Order %1';
                     begin
-                        if Rec."NTS Is TO Created" then
+                        if Rec."NTS Transfer Order Created" then
                             Error(StrSubstNo(TOCreatedError, Rec."No."));
                         Rec.TestField(Status, Rec.Status::Released);
                         if not Confirm('Do you want to Create Transfer Order?') then

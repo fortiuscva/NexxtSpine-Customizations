@@ -74,7 +74,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader.Validate(Status, SalesHeader.Status::Open);
         SalesHeader.Validate("NTS Surgeon", DoRHeader.Surgeon);
         SalesHeader.Validate("NTS Distributor", DoRHeader.Distributor);
-        SalesHeader.Validate("NTS Reps", DoRHeader.Reps);
+        SalesHeader.Validate("NTS Reps.", DoRHeader.Reps);
         SalesHeader.Validate("NTS Set Name", DoRHeader."Set Name");
         SalesHeader.Validate("Location Code", DoRHeader."Location Code");
         SalesHeader.Modify(true);
@@ -485,7 +485,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 end;
             until SalesLine.Next() = 0;
         Message('Transfer Order created, Transfer Order No.:%1', TransferHeader."No.");
-        SalesHeader.Validate("NTS Is TO Created", true);
+        SalesHeader.Validate("NTS Transfer Order Created", true);
         SalesHeader.Modify();
     end;
 

@@ -7,28 +7,7 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;
-            trigger OnLookup()
-            var
-                HSDMapping: Record "Hosp. Surg. Distrib. Mapping";
-                SurgeonRec: Record "NTS Surgeon";
-                TempSurgeon: Record "NTS Surgeon" temporary;
-            begin
-                HSDMapping.SetRange(Hospital, Rec."Sell-to Customer No.");
-                if HSDMapping.FindSet() then
-                    repeat
-                        if SurgeonRec.Get(HSDMapping.Surgeon) then begin
-                            TempSurgeon := SurgeonRec;
-                            TempSurgeon.Insert();
-                        end;
-                    until HSDMapping.Next() = 0;
-
-                if Page.RunModal(Page::"NTS Surgeon List", TempSurgeon) = Action::LookupOK then begin
-                    Validate(Rec."NTS Surgeon", TempSurgeon.Code);
-                end;
-
-            end;
-
-
+            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Sell-to Customer No."));
             trigger OnValidate()
             var
                 HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
@@ -36,41 +15,46 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
                 HSDMappingRec.Reset();
                 HSDMappingRec.SetRange(Hospital, Rec."Sell-to Customer No.");
                 HSDMappingRec.SetRange(Surgeon, Rec."NTS Surgeon");
-
                 if HSDMappingRec.FindFirst() then
-                    Rec."NTS Distributor" := HSDMappingRec.Distributor;
+                    Rec."NTS Distributor" := HSDMappingRec.Distributor
+                else
+                    Rec."NTS Distributor" := '';
             end;
         }
-        field(52102; "NTS Distributor"; Code[50])
+        field(52102; "NTS Distributor"; Code[20])
         {
             Caption = 'Distributor';
             Editable = false;
             DataClassification = ToBeClassified;
+            TableRelation = Customer."No." where("NTS Is Distributor" = const(true));
         }
-        field(52103; "NTS Reps"; Text[100])
+        field(52103; "NTS Reps."; Code[20])
         {
-            Caption = 'Reps';
+            Caption = 'Reps.';
+            TableRelation = Contact."No.";
             trigger OnLookup()
             var
                 ContactBusinessRel: Record "Contact Business Relation";
                 ContactRec: Record Contact;
                 ContactListPage: Page "Contact List";
             begin
-
                 ContactBusinessRel.SetRange("Link to Table", ContactBusinessRel."Link to Table"::Customer);
                 ContactBusinessRel.SetRange("No.", Rec."NTS Distributor");
-
                 if ContactBusinessRel.FindSet() then begin
                     ContactRec.Reset();
                     ContactRec.SetRange("Company No.", ContactBusinessRel."Contact No.");
-
                     ContactListPage.SetTableView(ContactRec);
                     if PAGE.RUNMODAL(PAGE::"Contact List", ContactRec) = ACTION::LookupOK then begin
-                        Rec."NTS Reps" := ContactRec."Name";
+                        Rec."NTS Reps." := ContactRec."No.";
                     end;
                 end;
+                ValidateReps();
             end;
 
+            trigger OnValidate()
+            begin
+                ValidateReps();
+            end;
         }
         field(52104; "NTS Sales Type"; Enum "NTS Sales Type")
         {
@@ -87,11 +71,33 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             Caption = 'Set Name';
             TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
         }
-        field(52107; "NTS Is TO Created"; Boolean)
+        field(52107; "NTS Transfer Order Created"; Boolean)
         {
-            Caption = 'Is TO Created';
+            Caption = 'Transfer Order Created';
             Editable = false;
             DataClassification = CustomerContent;
         }
+
+        field(52108; "NTS Reps. Name"; Text[100])
+        {
+            Caption = 'Reps. Name';
+            DataClassification = CustomerContent;
+            Editable = false;
+            TableRelation = Contact.Name where("No." = field("NTS Reps."));
+            ValidateTableRelation = false;
+        }
     }
+
+    Var
+        ContactRec: Record Contact;
+
+
+    procedure ValidateReps()
+    begin
+        if "NTS Reps." <> '' then begin
+            ContactRec.Get("NTS Reps.");
+            "NTS Reps. Name" := ContactRec.Name;
+        end else
+            "NTS Reps. Name" := '';
+    end;
 }
