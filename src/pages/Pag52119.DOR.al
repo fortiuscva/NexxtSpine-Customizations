@@ -115,15 +115,12 @@ page 52119 "NTS DOR"
     {
         area(processing)
         {
-            group(Post)
+            group("P&osting")
             {
-                Caption = 'Post';
-                action(PostDoR)
+                Caption = 'P&osting';
+                action(Post)
                 {
                     Caption = 'Post';
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    PromotedIsBig = true;
                     trigger OnAction()
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
@@ -151,9 +148,6 @@ page 52119 "NTS DOR"
                     Caption = 'Re&lease';
                     Enabled = Rec.Status <> Rec.Status::Released;
                     Image = ReleaseDoc;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    PromotedIsBig = true;
                     ShortCutKey = 'Ctrl+F9';
                     ToolTip = 'Release the document to the next stage of processing. You must reopen the document before you can make changes to it.';
 
@@ -190,6 +184,35 @@ page 52119 "NTS DOR"
                         DORReleaseMgmnt.PerformManualReopen(Rec);
 
                     end;
+                }
+            }
+        }
+        area(Promoted)
+        {
+            group(Category_Process)
+            {
+                Caption = 'Process', Comment = 'Generated from the PromotedActionCategories property index 1.';
+
+                group(Category_Category6)
+                {
+                    Caption = 'Posting', Comment = 'Generated from the PromotedActionCategories property index 5.';
+                    ShowAs = SplitButton;
+
+                    actionref(Post_Promoted; Post)
+                    {
+                    }
+                }
+                group(Category_Category5)
+                {
+                    Caption = 'Release', Comment = 'Generated from the PromotedActionCategories property index 4.';
+                    ShowAs = SplitButton;
+
+                    actionref(Release_Promoted; Release)
+                    {
+                    }
+                    actionref(Reopen_Promoted; Reopen)
+                    {
+                    }
                 }
             }
         }
