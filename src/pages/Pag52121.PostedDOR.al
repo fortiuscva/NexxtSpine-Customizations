@@ -93,7 +93,11 @@ page 52121 "NTS Posted DOR"
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
             }
-
+            part(DORNonConsumedItems; "NTS DOR Non-Consumed Items")
+            {
+                ApplicationArea = All;
+                SubPageLink = "Document No." = field("No.");
+            }
         }
     }
     actions

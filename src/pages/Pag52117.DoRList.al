@@ -72,47 +72,125 @@ page 52117 "NTS DOR List"
     {
         area(processing)
         {
-            group(DORReleaseGroup)
+            group("P&osting")
             {
-                Caption = 'Release';
-                Image = ReleaseDoc;
-
-                action(ReleaseDOR)
+                Caption = 'P&osting';
+                action(Post)
                 {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Re&lease';
-                    Image = ReleaseDoc;
-                    ShortCutKey = 'Ctrl+F9';
-                    ToolTip = 'Release the DOR document to the next stage of processing. You must reopen the document before you can make changes to it.';
-
+                    Caption = 'Post';
+                    Visible = IsPostedVisible;
                     trigger OnAction()
                     var
-                        DorHeader: Record "NTS DOR Header";
+                        NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+                        SalesHeader: Record "Sales Header";
+                        SOExistError: Label 'Sales Order %1 already exist for this %2';
+                        ReleasedStatusError: Label 'Status must be Released to Post this %1';
                     begin
-                        CurrPage.SetSelectionFilter(DorHeader);
-                        Rec.PerformManualRelease(DorHeader);
-                        CurrPage.Update(false);
+                        if Rec.Status <> Rec.Status::Released then
+                            Error(StrSubstNo(ReleasedStatusError, Rec."No."));
+
+                        if not Confirm('Do you want to post the %1', false, Rec."No.") then
+                            exit;
+
+                        NexxSpineFunctions.PostDoR(Rec)
                     end;
                 }
-
-                action(ReopenDOR)
+                group(DORReleaseGroup)
                 {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Re&open';
-                    Image = ReOpen;
-                    ToolTip = 'Reopen the DOR document to change it after it has been approved. Approved DOR documents have the Released status and must be opened before they can be changed.';
+                    Caption = 'Release';
+                    Image = ReleaseDoc;
 
-                    trigger OnAction()
-                    var
-                        DorHeader: Record "NTS DOR Header";
-                    begin
-                        CurrPage.SetSelectionFilter(DorHeader);
-                        Rec.PerformManualReopen(DorHeader);
-                        CurrPage.Update(false);
-                    end;
+                    action(Release)
+                    {
+                        ApplicationArea = Basic, Suite;
+                        Caption = 'Re&lease';
+                        Image = ReleaseDoc;
+                        Enabled = Rec.Status <> Rec.Status::Released;
+                        Visible = IsReleaseVisible;
+                        ShortCutKey = 'Ctrl+F9';
+                        ToolTip = 'Release the DOR document to the next stage of processing. You must reopen the document before you can make changes to it.';
+
+                        trigger OnAction()
+                        var
+                            DorHeader: Record "NTS DOR Header";
+                        begin
+                            CurrPage.SetSelectionFilter(DorHeader);
+                            Rec.PerformManualRelease(DorHeader);
+                            CurrPage.Update(false);
+                        end;
+                    }
+
+                    action(Reopen)
+                    {
+                        ApplicationArea = Basic, Suite;
+                        Caption = 'Re&open';
+                        Image = ReOpen;
+                        Enabled = Rec.Status <> Rec.Status::Open;
+                        Visible = IsReopenVisible;
+                        ToolTip = 'Reopen the DOR document to change it after it has been approved. Approved DOR documents have the Released status and must be opened before they can be changed.';
+
+                        trigger OnAction()
+                        var
+                            DorHeader: Record "NTS DOR Header";
+                        begin
+                            CurrPage.SetSelectionFilter(DorHeader);
+                            Rec.PerformManualReopen(DorHeader);
+                            CurrPage.Update(false);
+                        end;
+                    }
                 }
             }
         }
+        area(Promoted)
+        {
+            group(Category_Process)
+            {
+                Caption = 'Process', Comment = 'Generated from the PromotedActionCategories property index 1.';
 
+                group(Category_Category6)
+                {
+                    Caption = 'Posting', Comment = 'Generated from the PromotedActionCategories property index 5.';
+                    ShowAs = SplitButton;
+
+                    actionref(Post_Promoted; Post)
+                    {
+                    }
+                }
+                group(Category_Category5)
+                {
+                    Caption = 'Release', Comment = 'Generated from the PromotedActionCategories property index 4.';
+                    ShowAs = SplitButton;
+
+                    actionref(Release_Promoted; Release)
+                    {
+                    }
+                    actionref(Reopen_Promoted; Reopen)
+                    {
+                    }
+                }
+            }
+        }
     }
+    trigger OnAfterGetRecord()
+    begin
+        SetVisibleControls()
+    end;
+
+    procedure SetVisibleControls()
+    begin
+        if Rec.Posted then begin
+            IsReleaseVisible := false;
+            IsReopenVisible := false;
+            IsPostedVisible := false;
+        end else begin
+            IsReleaseVisible := true;
+            IsReopenVisible := true;
+            IsPostedVisible := true;
+        end;
+    end;
+
+    var
+        IsReleaseVisible: Boolean;
+        IsReopenVisible: Boolean;
+        IsPostedVisible: Boolean;
 }
