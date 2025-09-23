@@ -1,14 +1,12 @@
-page 52117 "NTS DOR List"
+page 52124 "NTS Delivery of Records"
 {
     ApplicationArea = All;
     Caption = 'DORs';
     PageType = List;
     Editable = false;
     SourceTable = "NTS DOR Header";
-    CardPageId = "NTS DOR";
+    CardPageId = "NTS Delivery of Record";
     UsageCategory = Lists;
-    SourceTableView = where(Posted = filter(false));
-
 
     layout
     {
@@ -72,12 +70,14 @@ page 52117 "NTS DOR List"
                 Caption = 'Release';
                 Image = ReleaseDoc;
 
+
                 action(ReleaseDOR)
                 {
                     ApplicationArea = Basic, Suite;
                     Caption = 'Re&lease';
                     Image = ReleaseDoc;
                     ShortCutKey = 'Ctrl+F9';
+                    Visible = IsReleaseVisible;
                     ToolTip = 'Release the DOR document to the next stage of processing. You must reopen the document before you can make changes to it.';
 
                     trigger OnAction()
@@ -95,6 +95,7 @@ page 52117 "NTS DOR List"
                     ApplicationArea = Basic, Suite;
                     Caption = 'Re&open';
                     Image = ReOpen;
+                    Visible = IsReopenVisible;
                     ToolTip = 'Reopen the DOR document to change it after it has been approved. Approved DOR documents have the Released status and must be opened before they can be changed.';
 
                     trigger OnAction()
@@ -108,6 +109,25 @@ page 52117 "NTS DOR List"
                 }
             }
         }
-
     }
+
+    trigger OnOpenPage()
+    begin
+
+    end;
+
+    var
+        IsReleaseVisible: Boolean;
+        IsReopenVisible: Boolean;
+
+    procedure SetVisibleControls()
+    begin
+        if Rec.Posted then begin
+            IsReleaseVisible := false;
+            IsReopenVisible := false;
+        end else begin
+            IsReleaseVisible := true;
+            IsReopenVisible := true;
+        end;
+    end;
 }

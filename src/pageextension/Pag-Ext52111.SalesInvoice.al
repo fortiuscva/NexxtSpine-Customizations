@@ -14,7 +14,7 @@ pageextension 52111 "NTS Sales Invoice" extends "Sales Invoice"
                 ApplicationArea = all;
                 Caption = 'Distributor';
             }
-            field("NTS Rep"; Rec."NTS Reps")
+            field("NTS Rep"; Rec."NTS Reps.")
             {
                 ApplicationArea = all;
                 Caption = 'Reps';
