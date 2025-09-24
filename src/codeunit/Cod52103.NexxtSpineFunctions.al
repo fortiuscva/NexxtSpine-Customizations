@@ -50,12 +50,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
         CustNoBlankError: Label 'Customer No. is blank on this %1';
     begin
         DoRHeader.TestField("Customer No.");
-        CreateSalesOrder(DoRHeader);
+        CreateSalesOrder(DoRHeader, true);
         DoRHeader.Posted := true;
         DoRHeader.Modify();
     end;
 
-    procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header")
+    procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header"; PostDisAssemblyPar: Boolean)
     var
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
@@ -82,6 +82,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         NextLineNo := 10000;
         DoRLine.Reset();
         DoRLine.SetRange("Document No.", DoRHeader."No.");
+        DoRLine.SetRange(Consumed, true);
         if DoRLine.FindSet() then
             repeat
                 SalesLine.Init();
@@ -125,8 +126,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     0, ForReservEntry."Reservation Status"::Surplus);
                 end;
             until DoRLine.Next() = 0;
-        DisassembleSet(DoRHeader);
-        Message('Sales Order created, Sales Order No.:%1', SalesHeader."No.");
+        if PostDisAssemblyPar then
+            DisassembleSet(DoRHeader);
+
+        Commit();
+        if Confirm(StrSubstNo(SalesOrderCreatedandOpenSalesOrderMsg, SalesHeader."No.")) then
+            Page.RunModal(Page::"Sales Order", SalesHeader);
     end;
 
     procedure DisassembleSet(DoRHeader: Record "NTS DoR Header")
@@ -603,4 +608,5 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
     var
         SalesReceivablesSetup: Record "Sales & Receivables Setup";
+        SalesOrderCreatedandOpenSalesOrderMsg: Label 'Sales Order %1 is successfully created. Do you want to open sales order?';
 }
