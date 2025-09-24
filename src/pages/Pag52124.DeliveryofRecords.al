@@ -1,7 +1,7 @@
 page 52124 "NTS Delivery of Records"
 {
     ApplicationArea = All;
-    Caption = 'DORs';
+    Caption = 'Delivery of Records';
     PageType = List;
     Editable = false;
     SourceTable = "NTS DOR Header";
@@ -34,7 +34,7 @@ page 52124 "NTS Delivery of Records"
                 {
                     ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                 }
-                field(Reps; Rec.Reps)
+                field(Reps; Rec."Reps.")
                 {
                     ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
                 }
@@ -46,6 +46,11 @@ page 52124 "NTS Delivery of Records"
                 {
                     ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
                 }
+                field("Set Description"; Rec."Set Description")
+                {
+                    ToolTip = 'Specifies the value of the Set Description field.', Comment = '%';
+                }
+
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
@@ -65,18 +70,43 @@ page 52124 "NTS Delivery of Records"
     {
         area(processing)
         {
+            group("P&osting")
+            {
+                Caption = 'P&osting';
+                action(Post)
+                {
+                    Caption = 'Post';
+                    Visible = true;
+                    trigger OnAction()
+                    var
+                        NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+                        SalesHeader: Record "Sales Header";
+                        SOExistError: Label 'Sales Order %1 already exist for this %2';
+                        ReleasedStatusError: Label 'Status must be Released to Post this %1';
+                    begin
+                        if Rec.Status <> Rec.Status::Released then
+                            Error(StrSubstNo(ReleasedStatusError, Rec."No."));
+
+                        if not Confirm('Do you want to post the %1', false, Rec."No.") then
+                            exit;
+
+                        NexxSpineFunctions.PostDoR(Rec)
+                    end;
+                }
+            }
             group(DORReleaseGroup)
             {
                 Caption = 'Release';
                 Image = ReleaseDoc;
 
 
-                action(ReleaseDOR)
+                action(Release)
                 {
                     ApplicationArea = Basic, Suite;
                     Caption = 'Re&lease';
                     Image = ReleaseDoc;
                     ShortCutKey = 'Ctrl+F9';
+                    Enabled = Rec.Status <> Rec.Status::Released;
                     Visible = IsReleaseVisible;
                     ToolTip = 'Release the DOR document to the next stage of processing. You must reopen the document before you can make changes to it.';
 
@@ -90,11 +120,12 @@ page 52124 "NTS Delivery of Records"
                     end;
                 }
 
-                action(ReopenDOR)
+                action(Reopen)
                 {
                     ApplicationArea = Basic, Suite;
                     Caption = 'Re&open';
                     Image = ReOpen;
+                    Enabled = Rec.Status <> Rec.Status::Open;
                     Visible = IsReopenVisible;
                     ToolTip = 'Reopen the DOR document to change it after it has been approved. Approved DOR documents have the Released status and must be opened before they can be changed.';
 
@@ -106,6 +137,35 @@ page 52124 "NTS Delivery of Records"
                         Rec.PerformManualReopen(DorHeader);
                         CurrPage.Update(false);
                     end;
+                }
+            }
+        }
+        area(Promoted)
+        {
+            group(Category_Process)
+            {
+                Caption = 'Process', Comment = 'Generated from the PromotedActionCategories property index 1.';
+
+                group(Category_Category6)
+                {
+                    Caption = 'Posting', Comment = 'Generated from the PromotedActionCategories property index 5.';
+                    ShowAs = SplitButton;
+
+                    actionref(Post_Promoted; Post)
+                    {
+                    }
+                }
+                group(Category_Category5)
+                {
+                    Caption = 'Release', Comment = 'Generated from the PromotedActionCategories property index 4.';
+                    ShowAs = SplitButton;
+
+                    actionref(Release_Promoted; Release)
+                    {
+                    }
+                    actionref(Reopen_Promoted; Reopen)
+                    {
+                    }
                 }
             }
         }

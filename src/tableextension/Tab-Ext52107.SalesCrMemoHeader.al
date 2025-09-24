@@ -14,7 +14,7 @@ tableextension 52107 "NTS Sales Cr.Memo Header" extends "Sales Cr.Memo Header"
             Caption = 'Distributor';
             Editable = false;
             DataClassification = CustomerContent;
-            TableRelation = Customer."No." where("NTS Is Distributor" = const(true));
+            TableRelation = Customer."No." where("NTS Distributor" = const(true));
         }
         field(52103; "NTS Reps."; Code[20])
         {

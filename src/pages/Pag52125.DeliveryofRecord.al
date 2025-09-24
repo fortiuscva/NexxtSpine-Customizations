@@ -1,11 +1,12 @@
 page 52125 "NTS Delivery of Record"
 {
     ApplicationArea = All;
-    Caption = 'DOR';
+    Caption = 'Delivery of Record';
     PageType = Document;
     SourceTable = "NTS DOR Header";
     UsageCategory = None;
-    DataCaptionFields = "No.";
+    DataCaptionFields = "No.", "Customer Name";
+    SourceTableView = where(Posted = const(false));
 
 
     layout
@@ -32,55 +33,74 @@ page 52125 "NTS Delivery of Record"
                 {
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }
+                field("Customer Name"; Rec."Customer Name")
+                {
+                    ToolTip = 'Specifies the value of the Customer Name field.', Comment = '%';
+                }
+
                 field("Set Name"; Rec."Set Name")
                 {
                     ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
                 }
-
-                field("Serial Number"; Rec."Serial No.")
+                field("Set Description"; Rec."Set Description")
                 {
-                    ToolTip = 'Specifies the value of the Serial Number field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Set Description field.', Comment = '%';
                 }
-                field("Lot No."; Rec."Lot No.")
+                field("Posting Date"; Rec."Posting Date")
                 {
-                    ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                 }
-                field(Quantity; Rec.Quantity)
-                {
-                    ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
-                }
-
                 field(Status; Rec.Status)
                 {
                     Editable = false;
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
                 }
-                field(Surgeon; Rec.Surgeon)
+
+                group(ItemTracking)
                 {
-                    ToolTip = 'Specifies the value of the Surgeon field.', Comment = '%';
+                    Caption = 'Item Tracking';
+                    field("Lot No."; Rec."Lot No.")
+                    {
+                        ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
+                    }
+                    field("Serial Number"; Rec."Serial No.")
+                    {
+                        ToolTip = 'Specifies the value of the Serial Number field.', Comment = '%';
+                    }
+                    field(Quantity; Rec.Quantity)
+                    {
+                        ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
+                    }
                 }
-                field(Distributor; Rec.Distributor)
+                group(Surgery)
                 {
-                    ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
-                }
-                field(Reps; Rec.Reps)
-                {
-                    ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
-                }
-                field("Surgery Date"; Rec."Surgery Date")
-                {
-                    ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
-                }
-                field(Posted; Rec.Posted)
-                {
-                    ToolTip = 'Specifies the value of the Posted field.', Comment = '%';
-                    Editable = false;
-                    Visible = false;
-                }
-                field("Location Code"; Rec."Location Code")
-                {
-                    Editable = false;
-                    ToolTip = 'Specifies the value of the Location Code field.', Comment = '%';
+                    Caption = 'Surgery';
+                    field(Surgeon; Rec.Surgeon)
+                    {
+                        ToolTip = 'Specifies the value of the Surgeon field.', Comment = '%';
+                    }
+                    field("Surgery Date"; Rec."Surgery Date")
+                    {
+                        ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
+                    }
+                    field(Reps; Rec."Reps.")
+                    {
+                        ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
+                    }
+                    field("Reps. Name"; Rec."Reps. Name")
+                    {
+                        ToolTip = 'Specifies the value of the Reps. Name field.', Comment = '%';
+                    }
+
+                    field(Distributor; Rec.Distributor)
+                    {
+                        ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
+                    }
+                    field("Location Code"; Rec."Location Code")
+                    {
+                        Editable = false;
+                        ToolTip = 'Specifies the value of the Location Code field.', Comment = '%';
+                    }
                 }
             }
             part(DORLines; "NTS Delivery of Record Subform")
@@ -99,16 +119,13 @@ page 52125 "NTS Delivery of Record"
     {
         area(processing)
         {
-            group(Post)
+            group("P&osting")
             {
-                Caption = 'Post';
-                action(PostDoR)
+                Caption = 'P&osting';
+                action(Post)
                 {
                     Caption = 'Post';
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    PromotedIsBig = true;
-                    Visible = true;
+                    Visible = IsPostedVisible;
                     trigger OnAction()
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
@@ -134,12 +151,9 @@ page 52125 "NTS Delivery of Record"
                 {
                     ApplicationArea = All;
                     Caption = 'Re&lease';
-                    Enabled = Rec.Status <> Rec.Status::Released;
                     Image = ReleaseDoc;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    PromotedIsBig = true;
                     ShortCutKey = 'Ctrl+F9';
+                    Enabled = Rec.Status <> Rec.Status::Released;
                     Visible = IsReleaseVisible;
                     ToolTip = 'Release the document to the next stage of processing. You must reopen the document before you can make changes to it.';
 
@@ -165,8 +179,8 @@ page 52125 "NTS Delivery of Record"
                 {
                     ApplicationArea = All;
                     Caption = 'Re&open';
-                    Enabled = Rec.Status <> Rec.Status::Open;
                     Image = ReOpen;
+                    Enabled = Rec.Status <> Rec.Status::Open;
                     Visible = IsReopenVisible;
                     ToolTip = 'Reopen the document to change it after it has been approved. Approved documents have the Released status and must be opened before they can be changed.';
 
@@ -177,6 +191,35 @@ page 52125 "NTS Delivery of Record"
                         DORReleaseMgmnt.PerformManualReopen(Rec);
 
                     end;
+                }
+            }
+        }
+        area(Promoted)
+        {
+            group(Category_Process)
+            {
+                Caption = 'Process', Comment = 'Generated from the PromotedActionCategories property index 1.';
+
+                group(Category_Category6)
+                {
+                    Caption = 'Posting', Comment = 'Generated from the PromotedActionCategories property index 5.';
+                    ShowAs = SplitButton;
+
+                    actionref(Post_Promoted; Post)
+                    {
+                    }
+                }
+                group(Category_Category5)
+                {
+                    Caption = 'Release', Comment = 'Generated from the PromotedActionCategories property index 4.';
+                    ShowAs = SplitButton;
+
+                    actionref(Release_Promoted; Release)
+                    {
+                    }
+                    actionref(Reopen_Promoted; Reopen)
+                    {
+                    }
                 }
             }
         }
