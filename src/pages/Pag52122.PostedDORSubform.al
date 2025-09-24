@@ -8,6 +8,7 @@ page 52122 "NTS Posted DOR Subform"
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
+    SourceTableView = where(Consumed = const(true));
 
     layout
     {
@@ -31,10 +32,6 @@ page 52122 "NTS Posted DOR Subform"
                 field(Quantity; Rec.Quantity)
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
-                }
-                field(Consumed; Rec.Consumed)
-                {
-                    ToolTip = 'Specifies the value of the Consumable field.', Comment = '%';
                 }
             }
         }

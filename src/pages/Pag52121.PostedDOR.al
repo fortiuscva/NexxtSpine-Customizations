@@ -110,24 +110,109 @@ page 52121 "NTS Posted DOR"
     {
         area(Processing)
         {
-            action("NTS Sales Order")
+            action("NTS Re-create Sales Order")
             {
-                Caption = 'Sales Order';
+                Caption = 'Re-create Sales Order';
                 ApplicationArea = all;
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedIsBig = true;
+                Image = Redo;
                 trigger OnAction()
                 var
-                    SalesHeader: Record "Sales Header";
+                    SalesOrderAlreadyCreatedVarLcl: Boolean;
                 begin
+                    clear(SalesOrderAlreadyCreatedVarLcl);
+                    Rec.TestField("Customer No.");
+
                     SalesHeader.Reset();
                     SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
                     SalesHeader.SetRange("NTS DoR Number", Rec."No.");
-                    if SalesHeader.FindFirst() then
-                        Page.RunModal(Page::"Sales Order", SalesHeader);
+                    SalesOrderAlreadyCreatedVarLcl := SalesHeader.FindFirst();
+
+                    if not SalesOrderAlreadyCreatedVarLcl then begin
+                        SalesShptHeader.Reset();
+                        SalesShptHeader.SetRange("NTS DoR Number", Rec."No.");
+                        SalesOrderAlreadyCreatedVarLcl := SalesShptHeader.FindFirst();
+                    end;
+                    if not SalesOrderAlreadyCreatedVarLcl then begin
+                        SalesInvHeader.Reset();
+                        SalesInvHeader.SetRange("NTS DoR Number", Rec."No.");
+                        SalesOrderAlreadyCreatedVarLcl := SalesInvHeader.FindFirst();
+                    end;
+                    if SalesOrderAlreadyCreatedVarLcl then begin
+                        if Confirm(StrSubstNo(SalesDocumentAlreadyExistsandProceedMsg, Rec."No."), false) then
+                            NexxSpineFunctions.CreateSalesOrder(Rec, false);
+                    end else
+                        if Confirm(StrSubstNo(RecreateOrderProceedMsg, Rec."No.")) then
+                            NexxSpineFunctions.CreateSalesOrder(Rec, false);
                 end;
+            }
+
+            group(Sales)
+            {
+                Caption = 'Sales';
+                action("NTS Sales Order")
+                {
+                    Caption = 'Order';
+                    ApplicationArea = all;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
+                    Image = Order;
+                    trigger OnAction()
+                    var
+                        SalesHeader: Record "Sales Header";
+                    begin
+                        SalesHeader.Reset();
+                        SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
+                        SalesHeader.SetRange("NTS DoR Number", Rec."No.");
+                        if SalesHeader.FindFirst() then
+                            Page.RunModal(Page::"Sales Order List", SalesHeader);
+                    end;
+                }
+                action("NTS Shipments")
+                {
+                    Caption = 'Shipments';
+                    ApplicationArea = all;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
+                    Image = Shipment;
+                    trigger OnAction()
+                    begin
+                        SalesShptHeader.Reset();
+                        SalesShptHeader.SetRange("NTS DoR Number", Rec."No.");
+                        if SalesShptHeader.FindFirst() then
+                            Page.RunModal(Page::"Posted Sales Shipments", SalesShptHeader);
+                    end;
+                }
+                action("NTS Invoices")
+                {
+                    Caption = 'Invoices';
+                    ApplicationArea = all;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedIsBig = true;
+                    Image = Invoice;
+                    trigger OnAction()
+                    begin
+                        SalesInvHeader.Reset();
+                        SalesInvHeader.SetRange("NTS DoR Number", Rec."No.");
+                        if SalesInvHeader.FindFirst() then
+                            Page.RunModal(Page::"Posted Sales Invoices", SalesInvHeader);
+                    end;
+                }
             }
         }
     }
+
+    var
+
+        SalesHeader: Record "Sales Header";
+        SalesShptHeader: Record "Sales Shipment Header";
+        SalesInvHeader: Record "Sales Invoice Header";
+        NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+        SalesDocumentAlreadyExistsandProceedMsg: Label 'Sales order or posted documents already exists for %1, Do you want to re-create sales order?';
+        RecreateOrderProceedMsg: Label 'Do you want to re-create sales order?';
 }
