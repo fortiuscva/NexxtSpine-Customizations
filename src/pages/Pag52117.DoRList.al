@@ -1,7 +1,7 @@
 page 52117 "NTS DOR List"
 {
     ApplicationArea = All;
-    Caption = 'DORs';
+    Caption = 'Delivery of Records';
     PageType = List;
     Editable = false;
     SourceTable = "NTS DOR Header";

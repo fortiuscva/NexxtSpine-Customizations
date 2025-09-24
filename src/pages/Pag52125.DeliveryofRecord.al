@@ -7,8 +7,6 @@ page 52125 "NTS Delivery of Record"
     UsageCategory = None;
     DataCaptionFields = "No.", "Customer Name";
     SourceTableView = where(Posted = const(false));
-
-
     layout
     {
         area(Content)
@@ -108,7 +106,7 @@ page 52125 "NTS Delivery of Record"
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
             }
-            part(DORNonConsumedItems; "NTS DOR Non-Consumed Items")
+            part(DORNonConsumedItems; "NTS DOR Non-Consumed Items SF")
             {
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");

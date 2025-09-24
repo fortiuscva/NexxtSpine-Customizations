@@ -27,9 +27,9 @@ tableextension 52106 "NTS Sales Shipment Header" extends "Sales Shipment Header"
             Caption = 'Sales Type';
             DataClassification = CustomerContent;
         }
-        field(52105; "NTS DoR Number"; code[20])
+        field(52105; "NTS DOR No."; code[20])
         {
-            Caption = 'DoR Number';
+            Caption = 'DOR No.';
             Editable = false;
             TableRelation = "NTS DOR Header"."No.";
 

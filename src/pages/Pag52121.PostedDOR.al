@@ -99,7 +99,7 @@ page 52121 "NTS Posted DOR"
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
             }
-            part(DORNonConsumedItems; "NTS DOR Non-Consumed Items")
+            part(DORNonConsumedItems; "NTS DOR Non-Consumed Items SF")
             {
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
@@ -127,17 +127,17 @@ page 52121 "NTS Posted DOR"
 
                     SalesHeader.Reset();
                     SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
-                    SalesHeader.SetRange("NTS DoR Number", Rec."No.");
+                    SalesHeader.SetRange("NTS DOR No.", Rec."No.");
                     SalesOrderAlreadyCreatedVarLcl := SalesHeader.FindFirst();
 
                     if not SalesOrderAlreadyCreatedVarLcl then begin
                         SalesShptHeader.Reset();
-                        SalesShptHeader.SetRange("NTS DoR Number", Rec."No.");
+                        SalesShptHeader.SetRange("NTS DOR No.", Rec."No.");
                         SalesOrderAlreadyCreatedVarLcl := SalesShptHeader.FindFirst();
                     end;
                     if not SalesOrderAlreadyCreatedVarLcl then begin
                         SalesInvHeader.Reset();
-                        SalesInvHeader.SetRange("NTS DoR Number", Rec."No.");
+                        SalesInvHeader.SetRange("NTS DOR No.", Rec."No.");
                         SalesOrderAlreadyCreatedVarLcl := SalesInvHeader.FindFirst();
                     end;
                     if SalesOrderAlreadyCreatedVarLcl then begin
@@ -166,7 +166,7 @@ page 52121 "NTS Posted DOR"
                     begin
                         SalesHeader.Reset();
                         SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
-                        SalesHeader.SetRange("NTS DoR Number", Rec."No.");
+                        SalesHeader.SetRange("NTS DOR No.", Rec."No.");
                         if SalesHeader.FindFirst() then
                             Page.RunModal(Page::"Sales Order List", SalesHeader);
                     end;
@@ -182,7 +182,7 @@ page 52121 "NTS Posted DOR"
                     trigger OnAction()
                     begin
                         SalesShptHeader.Reset();
-                        SalesShptHeader.SetRange("NTS DoR Number", Rec."No.");
+                        SalesShptHeader.SetRange("NTS DOR No.", Rec."No.");
                         if SalesShptHeader.FindFirst() then
                             Page.RunModal(Page::"Posted Sales Shipments", SalesShptHeader);
                     end;
@@ -198,7 +198,7 @@ page 52121 "NTS Posted DOR"
                     trigger OnAction()
                     begin
                         SalesInvHeader.Reset();
-                        SalesInvHeader.SetRange("NTS DoR Number", Rec."No.");
+                        SalesInvHeader.SetRange("NTS DOR No.", Rec."No.");
                         if SalesInvHeader.FindFirst() then
                             Page.RunModal(Page::"Posted Sales Invoices", SalesInvHeader);
                     end;
