@@ -74,7 +74,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader.Validate(Status, SalesHeader.Status::Open);
         SalesHeader.Validate("NTS Surgeon", DoRHeader.Surgeon);
         SalesHeader.Validate("NTS Distributor", DoRHeader.Distributor);
-        SalesHeader.Validate("NTS Reps.", DoRHeader.Reps);
+        SalesHeader.Validate("NTS Reps.", DoRHeader."Reps.");
         SalesHeader.Validate("NTS Set Name", DoRHeader."Set Name");
         SalesHeader.Validate("Location Code", DoRHeader."Location Code");
         SalesHeader.Modify(true);
@@ -582,7 +582,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         DORLine2.Insert(true);
                         DORLine2.Validate("Item No.", ItemLedgEntry2."Item No.");
                         DORLine2.Validate("Lot No.", ItemLedgEntry2."Lot No.");
-                        DORLine2.Validate(Quantity, ItemLedgEntry2.Quantity);
+                        //DORLine2.Validate(Quantity, ItemLedgEntry2.Quantity);
+                        DORLine2.Validate(Quantity, ItemLedgEntry2."Qty. per Unit of Measure" * DORHeader.Quantity);
                         DORLine2.Validate(Consumed, false);
                         DORLine2.Modify();
                         NextLineNo += 10000;

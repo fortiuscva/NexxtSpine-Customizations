@@ -54,7 +54,7 @@ table 52112 "NTS DOR Line"
         field(5; "Lot No."; Code[50])
         {
             Caption = 'Lot No.';
-            //TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Item No."));
+            TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Item No."));
             trigger OnValidate()
             var
                 NTSFunctions: Codeunit "NTS NexxtSpine Functions";
@@ -62,10 +62,10 @@ table 52112 "NTS DOR Line"
                 NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Item No.", Rec."Lot No.", '');
             end;
 
-            trigger OnLookup()
-            begin
-                ItemTrackingMgt.LookupTrackingNoInfo("Item No.", '', ItemTrackingType::"Lot No.", "Lot No.");
-            end;
+            // trigger OnLookup()
+            // begin
+            //     ItemTrackingMgt.LookupTrackingNoInfo("Item No.", '', ItemTrackingType::"Lot No.", "Lot No.");
+            // end;
         }
         field(6; Consumed; Boolean)
         {
@@ -75,10 +75,19 @@ table 52112 "NTS DOR Line"
         field(10; "Serial No."; Code[50])
         {
             Caption = 'Serial No.';
-            trigger OnLookup()
+            TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("Item No."));
+
+            trigger OnValidate()
+            var
+                NTSFunctions: Codeunit "NTS NexxtSpine Functions";
             begin
-                ItemTrackingMgt.LookupTrackingNoInfo("Item No.", '', ItemTrackingType::"Serial No.", "Serial No.");
+                NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Item No.", Rec."Lot No.", '');
             end;
+
+            // trigger OnLookup()
+            // begin
+            //     ItemTrackingMgt.LookupTrackingNoInfo("Item No.", '', ItemTrackingType::"Serial No.", "Serial No.");
+            // end;
         }
 
     }

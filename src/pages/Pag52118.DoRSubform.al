@@ -7,6 +7,7 @@ page 52118 "NTS DOR Subform"
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
+    SourceTableView = where(Consumed = const(true));
     layout
     {
         area(Content)
@@ -33,12 +34,13 @@ page 52118 "NTS DOR Subform"
                 field(Consumed; Rec.Consumed)
                 {
                     ToolTip = 'Specifies the value of the Consumable field.', Comment = '%';
+                    Visible = false;
                 }
             }
         }
     }
     trigger OnNewRecord(BelowxRec: Boolean)
     begin
-        Rec.Validate(Rec.Consumed, false);
+        Rec.Validate(Rec.Consumed, true);
     end;
 }

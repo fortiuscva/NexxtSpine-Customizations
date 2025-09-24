@@ -5,8 +5,9 @@ page 52119 "NTS DOR"
     PageType = Document;
     SourceTable = "NTS DOR Header";
     UsageCategory = None;
-    DataCaptionFields = "No.";
+    DataCaptionFields = "No.", "Customer Name";
     SourceTableView = where(Posted = filter(false));
+
     layout
     {
         area(Content)
@@ -82,9 +83,13 @@ page 52119 "NTS DOR"
                     {
                         ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
                     }
-                    field(Reps; Rec.Reps)
+                    field(Reps; Rec."Reps.")
                     {
                         ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
+                    }
+                    field("Reps. Name"; Rec."Reps. Name")
+                    {
+                        ToolTip = 'Specifies the value of the Reps. Name field.', Comment = '%';
                     }
                     field(Distributor; Rec.Distributor)
                     {
@@ -158,7 +163,12 @@ page 52119 "NTS DOR"
                         DORLine: Record "NTS DOR Line";
                     begin
                         NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
-                        NTSFunctions.InsertNonConsumedItems(Rec);
+                        DORLine.Reset();
+                        DORLine.SetRange("Document No.", Rec."No.");
+                        DORLine.SetRange(Consumed, false);
+                        if not DORLine.FindFirst() then
+                            NTSFunctions.InsertNonConsumedItems(Rec);
+
                         DORLine.Reset();
                         DORLine.SetRange("Document No.", Rec."No.");
                         if DORLine.FindSet() then begin

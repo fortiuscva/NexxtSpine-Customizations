@@ -34,7 +34,7 @@ page 52124 "NTS Delivery of Records"
                 {
                     ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                 }
-                field(Reps; Rec.Reps)
+                field(Reps; Rec."Reps.")
                 {
                     ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
                 }

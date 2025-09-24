@@ -26,7 +26,7 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             Caption = 'Distributor';
             Editable = false;
             DataClassification = ToBeClassified;
-            TableRelation = Customer."No." where("NTS Is Distributor" = const(true));
+            TableRelation = Customer."No." where("NTS Distributor" = const(true));
         }
         field(52103; "NTS Reps."; Code[20])
         {

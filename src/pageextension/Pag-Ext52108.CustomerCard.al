@@ -4,7 +4,7 @@ pageextension 52108 "NTS Customer Card" extends "Customer Card"
     {
         addlast(General)
         {
-            field("NTS Is Distributor"; Rec."NTS Is Distributor")
+            field("NTS Is Distributor"; Rec."NTS Distributor")
             {
                 ApplicationArea = All;
             }

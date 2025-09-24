@@ -25,7 +25,7 @@ table 52111 "NTS DOR Header"
         field(2; "Customer No."; Code[20])
         {
             Caption = 'Customer';
-            TableRelation = Customer."No." WHERE("NTS Is Distributor" = CONST(false));
+            TableRelation = Customer."No." WHERE("NTS Distributor" = CONST(false));
             trigger OnValidate()
             begin
                 TestStatusOpen();
@@ -33,8 +33,13 @@ table 52111 "NTS DOR Header"
                     if (Rec."Customer No." <> '') then begin
                         CustomerRec.get("Customer No.");
                         "Customer Name" := CustomerRec.Name;
-                    end else
+                        Validate(Surgeon, '');
+                        Validate("Reps.", '');
+                    end else begin
                         "Customer Name" := '';
+                        Validate(Surgeon, '');
+                        Validate("Reps.", '');
+                    end;
                 end;
             end;
         }
@@ -66,7 +71,8 @@ table 52111 "NTS DOR Header"
 
             begin
                 TestStatusOpen();
-                NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
+                if Rec."Serial No." <> '' then
+                    NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
             end;
         }
         field(6; Status; Enum "NTS DOR Status")
@@ -92,33 +98,36 @@ table 52111 "NTS DOR Header"
                 Customer: Record Customer;
             begin
                 TestStatusOpen();
-                Customer.Get(Distributor);
-                if Customer."Location Code" <> '' then
-                    Rec.Validate("Location Code", Customer."Location Code")
-                else
+                if Distributor <> '' then begin
+                    Customer.Get(Distributor);
+                    if Customer."Location Code" <> '' then
+                        Rec.Validate("Location Code", Customer."Location Code")
+                    else
+                        Rec.Validate("Location Code", '');
+                end else begin
                     Rec.Validate("Location Code", '');
+                end;
             end;
         }
-        field(9; Reps; Text[100])
+        field(9; "Reps."; Code[20])
         {
-            Caption = 'Reps';
+            Caption = 'Reps.';
+            TableRelation = Contact."No.";
             trigger OnLookup()
             var
                 ContactBusinessRel: Record "Contact Business Relation";
                 ContactRec: Record Contact;
                 ContactListPage: Page "Contact List";
             begin
-
                 ContactBusinessRel.SetRange("Link to Table", ContactBusinessRel."Link to Table"::Customer);
                 ContactBusinessRel.SetRange("No.", Rec.Distributor);
-
                 if ContactBusinessRel.FindSet() then begin
                     ContactRec.Reset();
                     ContactRec.SetRange("Company No.", ContactBusinessRel."Contact No.");
-
                     ContactListPage.SetTableView(ContactRec);
                     if PAGE.RUNMODAL(PAGE::"Contact List", ContactRec) = ACTION::LookupOK then begin
-                        Validate(Rec.Reps, ContactRec."Name");
+                        Validate(Rec."Reps.", ContactRec."No.");
+                        Validate(Rec."Reps. Name", ContactRec.Name);
                     end;
                 end;
             end;
@@ -126,6 +135,7 @@ table 52111 "NTS DOR Header"
             trigger OnValidate()
             begin
                 TestStatusOpen();
+                ValidateReps();
             end;
         }
         field(10; "Lot No."; Code[50])
@@ -137,7 +147,8 @@ table 52111 "NTS DOR Header"
                 NTSFunctions: Codeunit "NTS NexxtSpine Functions";
             begin
                 TestStatusOpen();
-                NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
+                if ("Lot No." <> '') then
+                    NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
             end;
         }
         field(11; Posted; Boolean)
@@ -191,12 +202,28 @@ table 52111 "NTS DOR Header"
             ValidateTableRelation = false;
             Editable = false;
         }
+        field(90; "Reps. Name"; Text[100])
+        {
+            Caption = 'Reps. Name';
+            Editable = false;
+            TableRelation = Contact.Name where("No." = field("Reps."));
+            ValidateTableRelation = false;
+        }
     }
     keys
     {
         key(PK; "No.")
         {
             Clustered = true;
+        }
+    }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "No.", "Customer Name", "Set Description", Surgeon, "Reps.", Distributor)
+        {
+        }
+        fieldgroup(Brick; "No.", "Customer Name", "Set Description", Surgeon, "Reps.", Distributor)
+        {
         }
     }
 
@@ -212,15 +239,25 @@ table 52111 "NTS DOR Header"
         SetView('');
     end;
 
+    trigger OnDelete()
+    begin
+        DORLineRec.Reset();
+        DORLineRec.SetRange("Document No.", "No.");
+        DORLineRec.DeleteAll(true);
+    end;
+
     Var
 
         SalesSetup: Record "Sales & Receivables Setup";
+        ContactBusinessRel: Record "Contact Business Relation";
+        ContactRec: Record Contact;
         SelectNoSeriesAllowed: Boolean;
         InsertMode: Boolean;
         DORHeader: Record "NTS DOR Header";
         CustomerRec: Record Customer;
         ItemRec: Record Item;
         Text051: Label 'The DOR %1 already exists.';
+        DORLineRec: Record "NTS DOR Line";
 
     procedure InitInsert()
     var
@@ -427,11 +464,30 @@ table 52111 "NTS DOR Header"
                 HSDMappingRec.SetRange(Hospital, Rec."Customer No.");
                 HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
                 HSDMappingRec.FindFirst();
-                Rec.Validate(Distributor, HSDMappingRec.Distributor)
+                Rec.Validate(Distributor, HSDMappingRec.Distributor);
+                Rec.Validate("Reps.", '');
             end else begin
-                Rec.Validate(Reps, '');
                 Rec.Validate(Distributor, '');
+                Rec.Validate("Reps.", '');
             end;
         end;
+    end;
+
+    procedure ValidateReps()
+    begin
+        if "Reps." <> '' then begin
+            TestField(Distributor);
+            ContactBusinessRel.SetRange("Link to Table", ContactBusinessRel."Link to Table"::Customer);
+            ContactBusinessRel.SetRange("No.", Rec.Distributor);
+            if ContactBusinessRel.FindSet() then begin
+                ContactRec.Reset();
+                ContactRec.SetRange("Company No.", ContactBusinessRel."Contact No.");
+                ContactRec.SetRange("No.", "Reps.");
+                ContactRec.FindFirst();
+                Validate(Rec."Reps. Name", ContactRec.Name);
+            end;
+        end else
+            Validate(Rec."Reps. Name", '');
+
     end;
 }

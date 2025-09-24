@@ -4,10 +4,10 @@ page 52123 "NTS DOR Non-Consumed Items"
     Caption = 'Non-Consumed Items';
     PageType = ListPart;
     SourceTable = "NTS DOR Line";
-    SourceTableView = where(Consumed = const(false));
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
+    SourceTableView = where(Consumed = const(false));
 
     layout
     {
@@ -30,6 +30,7 @@ page 52123 "NTS DOR Non-Consumed Items"
                 field(Consumed; Rec.Consumed)
                 {
                     ToolTip = 'Specifies the value of the Consumable field.', Comment = '%';
+                    Visible = false;
                 }
             }
         }

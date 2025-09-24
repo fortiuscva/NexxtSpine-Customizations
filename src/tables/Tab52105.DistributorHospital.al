@@ -8,7 +8,7 @@ table 52105 "NTS Distributor Hospital"
         field(1; "Hospital No."; Code[20])
         {
             Caption = 'Hospital No.';
-            TableRelation = Customer."No." where("NTS Is Distributor" = const(false));
+            TableRelation = Customer."No." where("NTS Distributor" = const(false));
         }
     }
     keys

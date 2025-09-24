@@ -18,7 +18,7 @@ tableextension 52103 "NTS Sales Invoice Header" extends "Sales Invoice Header"
             Caption = 'Distributor';
             Editable = false;
             DataClassification = CustomerContent;
-            TableRelation = Customer."No." where("NTS Is Distributor" = const(true));
+            TableRelation = Customer."No." where("NTS Distributor" = const(true));
         }
         field(52103; "NTS Reps."; Code[20])
         {

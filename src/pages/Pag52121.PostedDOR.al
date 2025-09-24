@@ -6,6 +6,8 @@ page 52121 "NTS Posted DOR"
     Editable = false;
     SourceTable = "NTS DOR Header";
     UsageCategory = None;
+    SourceTableView = where(Posted = const(true));
+    DataCaptionFields = "No.", "Customer Name";
 
     layout
     {
@@ -73,9 +75,13 @@ page 52121 "NTS Posted DOR"
                     {
                         ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
                     }
-                    field(Reps; Rec.Reps)
+                    field(Reps; Rec."Reps.")
                     {
                         ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
+                    }
+                    field("Reps. Name"; Rec."Reps. Name")
+                    {
+                        ToolTip = 'Specifies the value of the Reps. Name field.', Comment = '%';
                     }
                     field(Distributor; Rec.Distributor)
                     {

@@ -1,10 +1,11 @@
-page 52116 "NTS Hosp.Surg.Distrib. Mapping"
+page 52116 "NTS Hsp. Surg. Dist. Mappings"
 {
     ApplicationArea = All;
     Caption = 'Hospital-Surgeon-Distributor Mapping';
     PageType = List;
     SourceTable = "Hosp. Surg. Distrib. Mapping";
     UsageCategory = Lists;
+    DataCaptionFields = Hospital, Surgeon, Distributor;
 
     layout
     {
