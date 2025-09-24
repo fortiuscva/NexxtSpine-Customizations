@@ -60,9 +60,9 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
         {
             Caption = 'Sales Type';
         }
-        field(52105; "NTS DoR Number"; code[20])
+        field(52105; "NTS DOR No."; code[20])
         {
-            Caption = 'DoR Number';
+            Caption = 'DOR No.';
             Editable = false;
             TableRelation = "NTS DOR Header"."No.";
         }

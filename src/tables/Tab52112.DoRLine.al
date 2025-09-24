@@ -89,6 +89,20 @@ table 52112 "NTS DOR Line"
             //     ItemTrackingMgt.LookupTrackingNoInfo("Item No.", '', ItemTrackingType::"Serial No.", "Serial No.");
             // end;
         }
+        field(15; Description; Text[100])
+        {
+            Caption = 'Description';
+            DataClassification = CustomerContent;
+            Editable = false;
+            TableRelation = Item.Description;
+            ValidateTableRelation = false;
+        }
+        field(16; "Description 2"; Text[50])
+        {
+            Caption = 'Description 2';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
 
     }
     keys
@@ -105,6 +119,13 @@ table 52112 "NTS DOR Line"
 
     procedure ValidateItemNo()
     begin
-
+        if "Item No." <> '' then begin
+            ItemRec.get("Item No.");
+            Description := ItemRec.Description;
+            "Description 2" := ItemRec."Description 2";
+        end;
     end;
+
+    var
+        ItemRec: Record Item;
 }

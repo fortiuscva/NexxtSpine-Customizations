@@ -6,7 +6,7 @@ page 52124 "NTS Delivery of Records"
     Editable = false;
     SourceTable = "NTS DOR Header";
     CardPageId = "NTS Delivery of Record";
-    UsageCategory = Lists;
+    UsageCategory = None;
 
     layout
     {

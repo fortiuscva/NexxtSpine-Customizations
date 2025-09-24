@@ -31,9 +31,9 @@ tableextension 52103 "NTS Sales Invoice Header" extends "Sales Invoice Header"
             Caption = 'Sales Type';
             DataClassification = CustomerContent;
         }
-        field(52105; "NTS DoR Number"; code[20])
+        field(52105; "NTS DOR No."; code[20])
         {
-            Caption = 'DoR Number';
+            Caption = 'DOR No.';
             Editable = false;
             TableRelation = "NTS DOR Header"."No.";
 

@@ -25,6 +25,15 @@ page 52122 "NTS Posted DOR Subform"
                 {
                     ToolTip = 'Specifies the value of the Item field.', Comment = '%';
                 }
+                field(Description; Rec.Description)
+                {
+                    ToolTip = 'Specifies the value of the Description field.', Comment = '%';
+                }
+                field("Description 2"; Rec."Description 2")
+                {
+                    ToolTip = 'Specifies the value of the Description 2 field.', Comment = '%';
+                    Visible = false;
+                }
                 field("Lot No."; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot Number field.', Comment = '%';

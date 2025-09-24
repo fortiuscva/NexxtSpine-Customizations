@@ -1,7 +1,7 @@
 page 52119 "NTS DOR"
 {
     ApplicationArea = All;
-    Caption = 'DOR';
+    Caption = 'Delivery of Record';
     PageType = Document;
     SourceTable = "NTS DOR Header";
     UsageCategory = None;
@@ -108,7 +108,7 @@ page 52119 "NTS DOR"
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
             }
-            part(DORNonConsumedItems; "NTS DOR Non-Consumed Items")
+            part(DORNonConsumedItems; "NTS DOR Non-Consumed Items SF")
             {
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");

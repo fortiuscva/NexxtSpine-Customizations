@@ -70,7 +70,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader."No." := '';
         SalesHeader.Insert(true);
         SalesHeader.Validate("Sell-to Customer No.", DoRHeader."Customer No.");
-        SalesHeader.validate("NTS DoR Number", DoRHeader."No.");
+        SalesHeader.validate("NTS DOR No.", DoRHeader."No.");
         SalesHeader.Validate(Status, SalesHeader.Status::Open);
         SalesHeader.Validate("NTS Surgeon", DoRHeader.Surgeon);
         SalesHeader.Validate("NTS Distributor", DoRHeader.Distributor);
@@ -438,7 +438,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferHeader.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
         TransferHeader.Validate("Shipping Time", SalesHeader."Shipping Time");
         TransferHeader.Validate("NTS Set Name", SalesHeader."NTS Set Name");
-        TransferHeader.Validate("NTS DOR No.", SalesHeader."NTS DoR Number");
+        TransferHeader.Validate("NTS DOR No.", SalesHeader."NTS DOR No.");
         TransferHeader.Modify(true);
 
         NextLineNo := 10000;

@@ -1,4 +1,4 @@
-page 52123 "NTS DOR Non-Consumed Items"
+page 52123 "NTS DOR Non-Consumed Items SF"
 {
     ApplicationArea = All;
     Caption = 'Non-Consumed Items';
@@ -18,6 +18,17 @@ page 52123 "NTS DOR Non-Consumed Items"
                 field("Item No."; Rec."Item No.")
                 {
                     ToolTip = 'Specifies the value of the Item field.', Comment = '%';
+                }
+                field(Description; Rec.Description)
+                {
+                    ToolTip = 'Specifies the value of the Description field.', Comment = '%';
+                    Editable = false;
+                }
+                field("Description 2"; Rec."Description 2")
+                {
+                    ToolTip = 'Specifies the value of the Description 2 field.', Comment = '%';
+                    Editable = false;
+                    Visible = false;
                 }
                 field("Lot No."; Rec."Lot No.")
                 {
