@@ -49,13 +49,13 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferLine: Record "Transfer Line";
         CustNoBlankError: Label 'Customer No. is blank on this %1';
     begin
-        DoRHeader.TestField(Customer);
-        CreateSalesOrder(DoRHeader);
+        DoRHeader.TestField("Customer No.");
+        CreateSalesOrder(DoRHeader, true);
         DoRHeader.Posted := true;
         DoRHeader.Modify();
     end;
 
-    procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header")
+    procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header"; PostDisAssemblyPar: Boolean)
     var
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
@@ -69,18 +69,20 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader."Document Type" := SalesHeader."Document Type"::Order;
         SalesHeader."No." := '';
         SalesHeader.Insert(true);
-        SalesHeader.Validate("Sell-to Customer No.", DoRHeader."Customer");
-        SalesHeader.validate("NTS DoR Number", DoRHeader."No.");
+        SalesHeader.Validate("Sell-to Customer No.", DoRHeader."Customer No.");
+        SalesHeader.validate("NTS DOR No.", DoRHeader."No.");
         SalesHeader.Validate(Status, SalesHeader.Status::Open);
         SalesHeader.Validate("NTS Surgeon", DoRHeader.Surgeon);
         SalesHeader.Validate("NTS Distributor", DoRHeader.Distributor);
-        SalesHeader.Validate("NTS Reps", DoRHeader.Reps);
+        SalesHeader.Validate("NTS Reps.", DoRHeader."Reps.");
         SalesHeader.Validate("NTS Set Name", DoRHeader."Set Name");
+        SalesHeader.Validate("Location Code", DoRHeader."Location Code");
         SalesHeader.Modify(true);
 
         NextLineNo := 10000;
         DoRLine.Reset();
         DoRLine.SetRange("Document No.", DoRHeader."No.");
+        DoRLine.SetRange(Consumed, true);
         if DoRLine.FindSet() then
             repeat
                 SalesLine.Init();
@@ -94,7 +96,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 SalesLine.Validate("NTS Lot Number", DoRLine."Lot No.");
                 SalesLine.Validate("NTS DOR No.", DoRLine."Document No.");
                 SalesLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
-                SalesLine.Validate("Posting Date", DoRHeader."Posting Date");
+                SalesLine.Validate("Location Code", DoRHeader."Location Code");
                 SalesLine.Modify(True);
                 NextLineNo += 10000;
 
@@ -124,8 +126,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     0, ForReservEntry."Reservation Status"::Surplus);
                 end;
             until DoRLine.Next() = 0;
-        DisassembleSet(DoRHeader);
-        Message('Sales Order created, Sales Order No.:%1', SalesHeader."No.");
+        if PostDisAssemblyPar then
+            DisassembleSet(DoRHeader);
+
+        Commit();
+        if Confirm(StrSubstNo(SalesOrderCreatedandOpenSalesOrderMsg, SalesHeader."No.")) then
+            Page.RunModal(Page::"Sales Order", SalesHeader);
     end;
 
     procedure DisassembleSet(DoRHeader: Record "NTS DoR Header")
@@ -262,7 +268,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
     begin
         // Get Finished Goods Location
         LocationRec.Reset;
-        LocationRec.SetRange("NTS Finished Goods Location", true);
+        LocationRec.SetRange("NTS Is Finished Goods Location", true);
         LocationRec.FindFirst();
         SalesReceivablesSetup.Get();
         // Create journal lines
@@ -320,6 +326,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         CreateReservEntry: Codeunit "Create Reserv. Entry";
         ForReservEntry: Record "Reservation Entry";
         TrackingSpec: Record "Tracking Specification";
+        DORHeader: Record "NTS DOR Header";
     begin
         AssemblyHeader.Init();
         AssemblyHeader."Document Type" := AssemblyHeader."Document Type"::Order;
@@ -334,7 +341,15 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader.Validate("Shortcut Dimension 1 Code", TransferHeader."Shortcut Dimension 1 Code");
         AssemblyHeader.Validate("Shortcut Dimension 2 Code", TransferHeader."Shortcut Dimension 2 Code");
         AssemblyHeader.Validate("NTS DOR No.", TransferHeader."NTS DOR No.");
+        DORHeader.Get(AssemblyHeader."NTS DOR No.");
+        AssemblyHeader.Validate(Quantity, DORHeader.Quantity);
         AssemblyHeader.Modify(true);
+
+
+        AssemblyLine.Reset();
+        AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
+        if AssemblyLine.FindSet() then
+            AssemblyLine.DeleteAll(true);
 
         NextLineNo := 10000;
         TransLine.Reset();
@@ -351,11 +366,13 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 AssemblyLine.Validate(Type, AssemblyLine.Type::Item);
                 AssemblyLine.Validate("No.", TransLine."Item No.");
                 AssemblyLine.Validate(Quantity, TransLine.Quantity);
+                AssemblyLine.Validate("Quantity per", TransLine.Quantity);
                 AssemblyLine.Validate("Unit of Measure Code", TransLine."Unit of Measure Code");
                 AssemblyLine.Validate("NTS DOR No.", TransLine."NTS DOR No.");
                 AssemblyLine.Validate("NTS DOR Line No.", TransLine."NTS DOR Line No.");
                 AssemblyLine.Modify(true);
                 NextLineNo += 10000;
+
 
                 ItemTrackingVal := FindItemTrackingCode(AssemblyLine."No.");
                 if (ItemTrackingVal <> 0) then begin
@@ -399,7 +416,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         ItemTrackingVal: integer;
     begin
         Location.Reset;
-        Location.SetRange("NTS Finished Goods Location", true);
+        Location.SetRange("NTS Is Finished Goods Location", true);
         Location.FindFirst();
 
         TransferHeader.Init();
@@ -417,7 +434,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferHeader.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
         TransferHeader.Validate("Shipping Time", SalesHeader."Shipping Time");
         TransferHeader.Validate("NTS Set Name", SalesHeader."NTS Set Name");
-        TransferHeader.Validate("NTS DOR No.", SalesHeader."NTS DoR Number");
+        TransferHeader.Validate("NTS DOR No.", SalesHeader."NTS DOR No.");
         TransferHeader.Modify(true);
 
         NextLineNo := 10000;
@@ -469,7 +486,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 end;
             until SalesLine.Next() = 0;
         Message('Transfer Order created, Transfer Order No.:%1', TransferHeader."No.");
-        SalesHeader.Validate("NTS Is TO Created", true);
+        SalesHeader.Validate("NTS Transfer Order Created", true);
         SalesHeader.Modify();
     end;
 
@@ -494,7 +511,98 @@ codeunit 52103 "NTS NexxtSpine Functions"
         EXIT(0);
     end;
 
+    procedure ValidateLOTSerial(ItemTrackingType: Integer; LotNo: Code[50]; SerialNo: Code[20])
+    begin
+        Case ItemTrackingType of
+            0:
+                begin
+                    if LotNo <> '' then
+                        Error('Lot No. must be Blank');
+                    if SerialNo <> '' then
+                        Error('Serial No. must be Blank');
+                end;
+            1:
+                begin
+                    if LotNo = '' then
+                        Error('Lot No. cannot be Blank');
+                end;
+            2:
+                begin
+                    if SerialNo = '' then
+                        Error('Serial No. cannot be Blank');
+                end;
+            3:
+                begin
+                    if LotNo = '' then
+                        Error('Lot No. cannot be Blank');
+                    if SerialNo = '' then
+                        Error('Serial No. cannot be Blank');
+                end;
+        end;
+    end;
+
+    procedure InsertNonConsumedItems(DORHeader: Record "NTS DOR Header")
+    var
+        ItemLedgEntry: Record "Item Ledger Entry";
+        ItemLedgEntry2: Record "Item Ledger Entry";
+        DORLine: Record "NTS DOR Line";
+        DORLine2: Record "NTS DOR Line";
+        NextLineNo: Integer;
+        ItemTrackingVal: Integer;
+    begin
+        DORHeader.TestField(DORHeader."Set Name");
+        ItemTrackingVal := FindItemTrackingCode(DORHeader."Set Name");
+        ValidateLOTSerial(ItemTrackingVal, DORHeader."Lot No.", DORHeader."Serial No.");
+        NextLineNo := 0;
+        DORLine.Reset();
+        DORLine.SetRange("Document No.", DORHeader."No.");
+        // DORLine.SetRange(Consumed, true);
+        if DORLine.FindLast() then
+            NextLineNo := DORLine."Line No." + 10000;
+
+        ItemLedgEntry.Reset();
+        ItemLedgEntry.SetRange("Item No.", DORHeader."Set Name");
+        ItemLedgEntry.SetRange("Entry Type", ItemLedgEntry."Entry Type"::"Assembly Output");
+        ItemLedgEntry.SetFilter("Remaining Quantity", '<>%1', 0);
+        ItemLedgEntry.SetRange("Lot No.", DORHeader."Lot No.");
+        ItemLedgEntry.SetRange("Serial No.", DORHeader."Serial No.");
+        if ItemLedgEntry.FindLast() then begin
+            ItemLedgEntry2.Reset();
+            ItemLedgEntry2.SetRange("Document No.", ItemLedgEntry."Document No.");
+            ItemLedgEntry2.SetRange("Entry Type", ItemLedgEntry2."Entry Type"::"Assembly Consumption");
+            if ItemLedgEntry2.FindSet() then begin
+                repeat
+                    DORLine.Reset();
+                    DORLine.SetRange("Document No.", DORHeader."No.");
+                    DORLine.SetRange(Consumed, true);
+                    DORLine.SetRange("Item No.", ItemLedgEntry2."Item No.");
+                    if not DORLine.FindFirst() then begin
+                        DORLine2.Init();
+                        DORLine2."Document No." := DORHeader."No.";
+                        DORLine2."Line No." := NextLineNo;
+                        DORLine2.Insert(true);
+                        DORLine2.Validate("Item No.", ItemLedgEntry2."Item No.");
+                        DORLine2.Validate("Lot No.", ItemLedgEntry2."Lot No.");
+                        //DORLine2.Validate(Quantity, ItemLedgEntry2.Quantity);
+                        DORLine2.Validate(Quantity, ItemLedgEntry2."Qty. per Unit of Measure" * DORHeader.Quantity);
+                        DORLine2.Validate(Consumed, false);
+                        DORLine2.Modify();
+                        NextLineNo += 10000;
+                    end;
+                until ItemLedgEntry2.Next() = 0;
+            end;
+        end;
+    end;
+
+    procedure GetAndValidateLOTSerialCombo(ItemNo: Code[20]; LotNo: Code[50]; SerialNo: Code[20])
+    var
+        ItemTrackingVal: Integer;
+    begin
+        ItemTrackingVal := FindItemTrackingCode(ItemNo);
+        ValidateLOTSerial(ItemTrackingVal, LotNo, SerialNo);
+    end;
 
     var
         SalesReceivablesSetup: Record "Sales & Receivables Setup";
+        SalesOrderCreatedandOpenSalesOrderMsg: Label 'Sales Order %1 is successfully created. Do you want to open sales order?';
 }

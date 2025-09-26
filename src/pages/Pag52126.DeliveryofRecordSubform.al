@@ -1,15 +1,13 @@
-page 52122 "NTS Posted DOR Subform"
+page 52126 "NTS Delivery of Record Subform"
 {
     ApplicationArea = All;
-    Caption = 'NTS Posted DOR Subform';
+    Caption = 'Lines';
     PageType = ListPart;
-    Editable = false;
     SourceTable = "NTS DOR Line";
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
     SourceTableView = where(Consumed = const(true));
-
     layout
     {
         area(Content)
@@ -19,7 +17,7 @@ page 52122 "NTS Posted DOR Subform"
                 field("Line No."; Rec."Line No.")
                 {
                     Visible = false;
-                    ToolTip = 'Specifies the value of the Line No. field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
                 }
                 field("Item No."; Rec."Item No.")
                 {
@@ -34,7 +32,7 @@ page 52122 "NTS Posted DOR Subform"
                     ToolTip = 'Specifies the value of the Description 2 field.', Comment = '%';
                     Visible = false;
                 }
-                field("Lot No."; Rec."Lot No.")
+                field("Lot Number"; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot Number field.', Comment = '%';
                 }
@@ -42,7 +40,16 @@ page 52122 "NTS Posted DOR Subform"
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
                 }
+                field(Consumed; Rec.Consumed)
+                {
+                    ToolTip = 'Specifies the value of the Consumable field.', Comment = '%';
+                    Visible = false;
+                }
             }
         }
     }
+    trigger OnNewRecord(BelowxRec: Boolean)
+    begin
+        Rec.Validate(Rec.Consumed, true);
+    end;
 }

@@ -2,9 +2,9 @@ pageextension 52118 "NTS Sales Order List" extends "Sales Order List"
 {
     layout
     {
-        addlast(Control1)
+        addafter("Sell-to Customer Name")
         {
-            field("NTS DoR Number"; Rec."NTS DoR Number")
+            field("NTS DoR Number"; Rec."NTS DOR No.")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';

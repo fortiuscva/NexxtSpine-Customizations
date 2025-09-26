@@ -2,7 +2,9 @@ table 52111 "NTS DOR Header"
 {
     Caption = 'DOR Header';
     DataCaptionFields = "No.";
-    DataClassification = ToBeClassified;
+    DataClassification = CustomerContent;
+    LookupPageId = "NTS Delivery of Records";
+    DrillDownPageId = "NTS Delivery of Records";
 
     fields
     {
@@ -20,13 +22,25 @@ table 52111 "NTS DOR Header"
                 end;
             end;
         }
-        field(2; Customer; Code[20])
+        field(2; "Customer No."; Code[20])
         {
             Caption = 'Customer';
-            TableRelation = Customer."No." WHERE("NTS Is Distributor" = CONST(false));
+            TableRelation = Customer."No." WHERE("NTS Distributor" = CONST(false));
             trigger OnValidate()
             begin
                 TestStatusOpen();
+                if (Rec."Customer No." <> xRec."Customer No.") then begin
+                    if (Rec."Customer No." <> '') then begin
+                        CustomerRec.get("Customer No.");
+                        "Customer Name" := CustomerRec.Name;
+                        Validate(Surgeon, '');
+                        Validate("Reps.", '');
+                    end else begin
+                        "Customer Name" := '';
+                        Validate(Surgeon, '');
+                        Validate("Reps.", '');
+                    end;
+                end;
             end;
         }
         field(3; "Surgery Date"; Date)
@@ -44,6 +58,7 @@ table 52111 "NTS DOR Header"
             trigger OnValidate()
             begin
                 TestStatusOpen();
+                ValidateSetName();
             end;
         }
         field(5; "Serial No."; Code[20])
@@ -51,8 +66,13 @@ table 52111 "NTS DOR Header"
             Caption = 'Serial No.';
             TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("Set Name"));
             trigger OnValidate()
+            var
+                NTSFunctions: Codeunit "NTS NexxtSpine Functions";
+
             begin
                 TestStatusOpen();
+                if Rec."Serial No." <> '' then
+                    NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
             end;
         }
         field(6; Status; Enum "NTS DOR Status")
@@ -60,74 +80,54 @@ table 52111 "NTS DOR Header"
             Caption = 'Status';
             Editable = false;
         }
-        field(7; Surgeon; Text[100])
+        field(7; Surgeon; Code[20])
         {
             Caption = 'Surgeon';
-            trigger OnLookup()
-            var
-                HSDMapping: Record "Hosp. Surg. Distrib. Mapping";
-                SurgeonRec: Record "NTS Surgeon";
-                TempSurgeon: Record "NTS Surgeon" temporary;
-            begin
-
-                HSDMapping.SetRange(Hospital, Rec.Customer);
-                if HSDMapping.FindSet() then
-                    repeat
-                        if SurgeonRec.Get(HSDMapping.Surgeon) then begin
-                            TempSurgeon := SurgeonRec;
-                            TempSurgeon.Insert(true);
-                        end;
-                    until HSDMapping.Next() = 0;
-
-                if Page.RunModal(Page::"NTS Surgeon List", TempSurgeon) = Action::LookupOK then begin
-                    Validate(Rec.Surgeon, TempSurgeon."Surgeon Name");
-                end;
-
-            end;
-
-
+            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Customer No."));
             trigger OnValidate()
-            var
-                HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
             begin
-                TestStatusOpen();
-                HSDMappingRec.Reset();
-                HSDMappingRec.SetRange(Hospital, Rec.Customer);
-                HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
-
-                if HSDMappingRec.FindFirst() then
-                    Rec.Distributor := HSDMappingRec.Distributor;
+                ValidateSurgeon();
             end;
         }
-        field(8; Distributor; Code[50])
+        field(8; Distributor; Code[20])
         {
             Caption = 'Distributor';
             Editable = false;
             trigger OnValidate()
+            var
+                Customer: Record Customer;
             begin
                 TestStatusOpen();
+                if Distributor <> '' then begin
+                    Customer.Get(Distributor);
+                    if Customer."Location Code" <> '' then
+                        Rec.Validate("Location Code", Customer."Location Code")
+                    else
+                        Rec.Validate("Location Code", '');
+                end else begin
+                    Rec.Validate("Location Code", '');
+                end;
             end;
         }
-        field(9; Reps; Text[100])
+        field(9; "Reps."; Code[20])
         {
-            Caption = 'Reps';
+            Caption = 'Reps.';
+            TableRelation = Contact."No.";
             trigger OnLookup()
             var
                 ContactBusinessRel: Record "Contact Business Relation";
                 ContactRec: Record Contact;
                 ContactListPage: Page "Contact List";
             begin
-
                 ContactBusinessRel.SetRange("Link to Table", ContactBusinessRel."Link to Table"::Customer);
                 ContactBusinessRel.SetRange("No.", Rec.Distributor);
-
                 if ContactBusinessRel.FindSet() then begin
                     ContactRec.Reset();
                     ContactRec.SetRange("Company No.", ContactBusinessRel."Contact No.");
-
                     ContactListPage.SetTableView(ContactRec);
                     if PAGE.RUNMODAL(PAGE::"Contact List", ContactRec) = ACTION::LookupOK then begin
-                        Validate(Rec.Reps, ContactRec."Name");
+                        Validate(Rec."Reps.", ContactRec."No.");
+                        Validate(Rec."Reps. Name", ContactRec.Name);
                     end;
                 end;
             end;
@@ -135,6 +135,7 @@ table 52111 "NTS DOR Header"
             trigger OnValidate()
             begin
                 TestStatusOpen();
+                ValidateReps();
             end;
         }
         field(10; "Lot No."; Code[50])
@@ -142,8 +143,12 @@ table 52111 "NTS DOR Header"
             Caption = 'Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("Set Name"));
             trigger OnValidate()
+            var
+                NTSFunctions: Codeunit "NTS NexxtSpine Functions";
             begin
                 TestStatusOpen();
+                if ("Lot No." <> '') then
+                    NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
             end;
         }
         field(11; Posted; Boolean)
@@ -159,13 +164,17 @@ table 52111 "NTS DOR Header"
                 TestStatusOpen();
             end;
         }
-        field(21; Quantity; Decimal)
+        field(21; Quantity; Integer)
         {
             Caption = 'Quantity';
             trigger OnValidate()
             begin
                 TestStatusOpen();
             end;
+        }
+        field(22; "Location Code"; code[20])
+        {
+            Caption = 'Location Code';
         }
 
         field(107; "No. Series"; Code[20])
@@ -178,13 +187,43 @@ table 52111 "NTS DOR Header"
                 TestStatusOpen();
             end;
         }
+        field(79; "Customer Name"; Text[100])
+        {
+            Caption = 'Customer Name';
+            TableRelation = Customer.Name;
+            ValidateTableRelation = false;
+            Editable = false;
+        }
 
+        field(85; "Set Description"; Text[100])
+        {
+            Caption = 'Set Description';
+            TableRelation = Item.Description;
+            ValidateTableRelation = false;
+            Editable = false;
+        }
+        field(90; "Reps. Name"; Text[100])
+        {
+            Caption = 'Reps. Name';
+            Editable = false;
+            TableRelation = Contact.Name where("No." = field("Reps."));
+            ValidateTableRelation = false;
+        }
     }
     keys
     {
         key(PK; "No.")
         {
             Clustered = true;
+        }
+    }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "No.", "Customer Name", "Set Description", Surgeon, "Reps.", Distributor)
+        {
+        }
+        fieldgroup(Brick; "No.", "Customer Name", "Set Description", Surgeon, "Reps.", Distributor)
+        {
         }
     }
 
@@ -199,6 +238,26 @@ table 52111 "NTS DOR Header"
         // Remove view filters so that the cards does not show filtered view notification
         SetView('');
     end;
+
+    trigger OnDelete()
+    begin
+        DORLineRec.Reset();
+        DORLineRec.SetRange("Document No.", "No.");
+        DORLineRec.DeleteAll(true);
+    end;
+
+    Var
+
+        SalesSetup: Record "Sales & Receivables Setup";
+        ContactBusinessRel: Record "Contact Business Relation";
+        ContactRec: Record Contact;
+        SelectNoSeriesAllowed: Boolean;
+        InsertMode: Boolean;
+        DORHeader: Record "NTS DOR Header";
+        CustomerRec: Record Customer;
+        ItemRec: Record Item;
+        Text051: Label 'The DOR %1 already exists.';
+        DORLineRec: Record "NTS DOR Line";
 
     procedure InitInsert()
     var
@@ -378,12 +437,57 @@ table 52111 "NTS DOR Header"
         TestField(Status, Status::Open);
     end;
 
-    Var
 
-        SalesSetup: Record "Sales & Receivables Setup";
-        SelectNoSeriesAllowed: Boolean;
-        InsertMode: Boolean;
-        DORHeader: Record "NTS DOR Header";
-        Text051: Label 'The DOR %1 already exists.';
+    procedure ValidateSetName()
+    begin
+        if (Rec."Set Name" <> xRec."Set Name") then begin
+            if (Rec."Set Name" <> '') then begin
+                ItemRec.get("Set Name");
+                "Set Description" := ItemRec.Description;
+                Validate("Lot No.", '');
+                Validate("Serial No.");
+            end else begin
+                "Set Description" := '';
+                Validate("Lot No.", '');
+                Validate("Serial No.");
+            end;
+        end;
+    end;
 
+    procedure ValidateSurgeon()
+    var
+        HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
+    begin
+        if (xRec.Surgeon <> Rec.Surgeon) then begin
+            if Surgeon <> '' then begin
+                HSDMappingRec.Reset();
+                HSDMappingRec.SetRange(Hospital, Rec."Customer No.");
+                HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
+                HSDMappingRec.FindFirst();
+                Rec.Validate(Distributor, HSDMappingRec.Distributor);
+                Rec.Validate("Reps.", '');
+            end else begin
+                Rec.Validate(Distributor, '');
+                Rec.Validate("Reps.", '');
+            end;
+        end;
+    end;
+
+    procedure ValidateReps()
+    begin
+        if "Reps." <> '' then begin
+            TestField(Distributor);
+            ContactBusinessRel.SetRange("Link to Table", ContactBusinessRel."Link to Table"::Customer);
+            ContactBusinessRel.SetRange("No.", Rec.Distributor);
+            if ContactBusinessRel.FindSet() then begin
+                ContactRec.Reset();
+                ContactRec.SetRange("Company No.", ContactBusinessRel."Contact No.");
+                ContactRec.SetRange("No.", "Reps.");
+                ContactRec.FindFirst();
+                Validate(Rec."Reps. Name", ContactRec.Name);
+            end;
+        end else
+            Validate(Rec."Reps. Name", '');
+
+    end;
 }

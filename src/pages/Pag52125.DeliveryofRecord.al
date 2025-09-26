@@ -1,4 +1,4 @@
-page 52119 "NTS DOR"
+page 52125 "NTS Delivery of Record"
 {
     ApplicationArea = All;
     Caption = 'Delivery of Record';
@@ -6,8 +6,7 @@ page 52119 "NTS DOR"
     SourceTable = "NTS DOR Header";
     UsageCategory = None;
     DataCaptionFields = "No.", "Customer Name";
-    SourceTableView = where(Posted = filter(false));
-
+    SourceTableView = where(Posted = const(false));
     layout
     {
         area(Content)
@@ -71,7 +70,6 @@ page 52119 "NTS DOR"
                         ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
                     }
                 }
-
                 group(Surgery)
                 {
                     Caption = 'Surgery';
@@ -91,6 +89,7 @@ page 52119 "NTS DOR"
                     {
                         ToolTip = 'Specifies the value of the Reps. Name field.', Comment = '%';
                     }
+
                     field(Distributor; Rec.Distributor)
                     {
                         ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
@@ -100,10 +99,9 @@ page 52119 "NTS DOR"
                         Editable = false;
                         ToolTip = 'Specifies the value of the Location Code field.', Comment = '%';
                     }
-
                 }
             }
-            part(DORLines; "NTS DOR Subform")
+            part(DORLines; "NTS Delivery of Record Subform")
             {
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
@@ -151,10 +149,10 @@ page 52119 "NTS DOR"
                 {
                     ApplicationArea = All;
                     Caption = 'Re&lease';
-                    Enabled = Rec.Status <> Rec.Status::Released;
-                    Visible = IsReleaseVisible;
                     Image = ReleaseDoc;
                     ShortCutKey = 'Ctrl+F9';
+                    Enabled = Rec.Status <> Rec.Status::Released;
+                    Visible = IsReleaseVisible;
                     ToolTip = 'Release the document to the next stage of processing. You must reopen the document before you can make changes to it.';
 
                     trigger OnAction()
@@ -163,12 +161,7 @@ page 52119 "NTS DOR"
                         DORLine: Record "NTS DOR Line";
                     begin
                         NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
-                        DORLine.Reset();
-                        DORLine.SetRange("Document No.", Rec."No.");
-                        DORLine.SetRange(Consumed, false);
-                        if not DORLine.FindFirst() then
-                            NTSFunctions.InsertNonConsumedItems(Rec);
-
+                        NTSFunctions.InsertNonConsumedItems(Rec);
                         DORLine.Reset();
                         DORLine.SetRange("Document No.", Rec."No.");
                         if DORLine.FindSet() then begin
@@ -184,9 +177,9 @@ page 52119 "NTS DOR"
                 {
                     ApplicationArea = All;
                     Caption = 'Re&open';
+                    Image = ReOpen;
                     Enabled = Rec.Status <> Rec.Status::Open;
                     Visible = IsReopenVisible;
-                    Image = ReOpen;
                     ToolTip = 'Reopen the document to change it after it has been approved. Approved documents have the Released status and must be opened before they can be changed.';
 
                     trigger OnAction()
@@ -194,6 +187,7 @@ page 52119 "NTS DOR"
                         DORReleaseMgmnt: Codeunit "NTS DOR Release Management";
                     begin
                         DORReleaseMgmnt.PerformManualReopen(Rec);
+
                     end;
                 }
             }
@@ -232,7 +226,6 @@ page 52119 "NTS DOR"
     trigger OnOpenPage()
     begin
         SetDocNoVisible();
-        SetVisibleControls()
     end;
 
     trigger OnAfterGetCurrRecord()
@@ -261,6 +254,12 @@ page 52119 "NTS DOR"
     begin
     end;
 
+    var
+        DocNoVisible: Boolean;
+        IsReleaseVisible: Boolean;
+        IsReopenVisible: Boolean;
+        IsPostedVisible: Boolean;
+
     procedure SetVisibleControls()
     begin
         if Rec.Posted then begin
@@ -273,6 +272,7 @@ page 52119 "NTS DOR"
             IsPostedVisible := true;
         end;
     end;
+
 
     local procedure SetDocNoVisible()
     var
@@ -329,9 +329,4 @@ page 52119 "NTS DOR"
     end;
 
 
-    var
-        DocNoVisible: Boolean;
-        IsReleaseVisible: Boolean;
-        IsReopenVisible: Boolean;
-        IsPostedVisible: Boolean;
 }

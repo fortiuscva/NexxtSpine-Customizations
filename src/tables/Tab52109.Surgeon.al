@@ -1,18 +1,22 @@
 table 52109 "NTS Surgeon"
 {
     Caption = 'Surgeon';
-    DataClassification = ToBeClassified;
+    DataClassification = CustomerContent;
 
     fields
     {
-        field(1; "Surgeon Name"; Text[100])
+        field(1; "Code"; Code[10])
         {
-            Caption = 'Surgeon Name';
+            Caption = 'Code';
+        }
+        field(5; Name; Text[100])
+        {
+            Caption = 'Name';
         }
     }
     keys
     {
-        key(PK; "Surgeon Name")
+        key(PK; Code)
         {
             Clustered = true;
         }

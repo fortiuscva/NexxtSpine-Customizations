@@ -8,7 +8,7 @@ table 52106 "NTS Distributor Location Items"
         field(1; "Distributor No."; Code[20])
         {
             Caption = 'Distributor No.';
-            TableRelation = Customer."No." where("NTS Is Distributor" = const(true));
+            TableRelation = Customer."No." where("NTS Distributor" = const(true));
         }
         field(2; "Location Code"; Code[10])
         {

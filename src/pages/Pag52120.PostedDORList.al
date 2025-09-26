@@ -19,7 +19,7 @@ page 52120 "NTS Posted DOR List"
                 {
                     ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
                 }
-                field(Customer; Rec.Customer)
+                field(Customer; Rec."Customer No.")
                 {
                     ToolTip = 'Specifies the value of the Customer field.', Comment = '%';
                 }
@@ -31,7 +31,7 @@ page 52120 "NTS Posted DOR List"
                 {
                     ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                 }
-                field(Reps; Rec.Reps)
+                field(Reps; Rec."Reps.")
                 {
                     ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
                 }
@@ -43,6 +43,11 @@ page 52120 "NTS Posted DOR List"
                 {
                     ToolTip = 'Specifies the value of the Set Name field.', Comment = '%';
                 }
+                field("Set Description"; Rec."Set Description")
+                {
+                    ToolTip = 'Specifies the value of the Set Description field.', Comment = '%';
+                }
+
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
