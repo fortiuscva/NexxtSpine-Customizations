@@ -63,6 +63,11 @@ tableextension 52115 "NTS Item" extends Item
             DataClassification = ToBeClassified;
             TableRelation = "NTS Patent".Code;
         }
+        field(52110; "NTS Purchase To Production"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Purchase To Production';
+        }
 
     }
 }

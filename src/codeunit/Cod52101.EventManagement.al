@@ -66,8 +66,30 @@ codeunit 52101 "NTS Event Management"
         if (TransferHeader."NTS DOR No." <> '') then
             NexxtSpineFunctions.CreateAssemblyOrder(TransferHeader);
     end;
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeCalcLevels, '', false, false)]
+    local procedure "Calculate Low-Level Code_OnBeforeCalcLevels"(Type: Option; No: Code[20]; Level: Integer; LevelDepth: Integer; var Result: Integer; var IsHandled: Boolean)
+    var
+        ItemRec: Record Item;
+    begin
 
+        if ItemRec.Get(No) then begin
+            if ItemRec."NTS Purchase to Production" then begin
+                // Bypass the error and return a safe level
+                Result := Level;
+                IsHandled := true;
+            end;
+        end;
+
+    end;
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeSetRecursiveLevelsOnBOM, '', false, false)]
+    local procedure "Calculate Low-Level Code_OnBeforeSetRecursiveLevelsOnBOM"(var ProductionBOMHeader: Record "Production BOM Header"; LowLevelCode: Integer; IgnoreMissingItemsOrBOMs: Boolean; var IsHandled: Boolean)
+    var
+        ItemRec: Record Item;
+    begin
+        if ItemRec.Get(ProductionBOMHeader."No.") then
+            if ItemRec."NTS Purchase to Production" then
+                IsHandled := true;
+    end;
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
-
 }
