@@ -68,6 +68,14 @@ pageextension 52104 "NTS Item Card" extends "Item Card"
                 ApplicationArea = all;
             }
         }
+        addbefore("Manufacturing Policy")
+        {
+            field("NTS Purchase To Production"; Rec."NTS Purchase To Production")
+            {
+                Caption = 'Purchase To Production';
+                ApplicationArea = All;
+            }
+        }
     }
 
     trigger OnAfterGetRecord()
