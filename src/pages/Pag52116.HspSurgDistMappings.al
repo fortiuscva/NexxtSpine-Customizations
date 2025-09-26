@@ -1,10 +1,11 @@
-page 52116 "NTS Hosp.Surg.Distrib. Mapping"
+page 52116 "NTS Hsp. Surg. Dist. Mappings"
 {
     ApplicationArea = All;
     Caption = 'Hospital-Surgeon-Distributor Mapping';
     PageType = List;
     SourceTable = "Hosp. Surg. Distrib. Mapping";
     UsageCategory = Lists;
+    DataCaptionFields = Hospital, Surgeon, Distributor;
 
     layout
     {
@@ -12,10 +13,6 @@ page 52116 "NTS Hosp.Surg.Distrib. Mapping"
         {
             repeater(General)
             {
-                field(Distributor; Rec.Distributor)
-                {
-                    ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
-                }
                 field(Hospital; Rec.Hospital)
                 {
                     ToolTip = 'Specifies the value of the Hospital field.', Comment = '%';
@@ -23,6 +20,10 @@ page 52116 "NTS Hosp.Surg.Distrib. Mapping"
                 field(Surgeon; Rec.Surgeon)
                 {
                     ToolTip = 'Specifies the value of the Surgeon field.', Comment = '%';
+                }
+                field(Distributor; Rec.Distributor)
+                {
+                    ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
                 }
             }
         }

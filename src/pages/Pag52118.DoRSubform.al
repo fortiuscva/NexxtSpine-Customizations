@@ -7,6 +7,7 @@ page 52118 "NTS DOR Subform"
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
+    SourceTableView = where(Consumed = const(true));
     layout
     {
         area(Content)
@@ -22,6 +23,15 @@ page 52118 "NTS DOR Subform"
                 {
                     ToolTip = 'Specifies the value of the Item field.', Comment = '%';
                 }
+                field(Description; Rec.Description)
+                {
+                    ToolTip = 'Specifies the value of the Description field.', Comment = '%';
+                }
+                field("Description 2"; Rec."Description 2")
+                {
+                    ToolTip = 'Specifies the value of the Description 2 field.', Comment = '%';
+                    Visible = false;
+                }
                 field("Lot Number"; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot Number field.', Comment = '%';
@@ -33,8 +43,13 @@ page 52118 "NTS DOR Subform"
                 field(Consumed; Rec.Consumed)
                 {
                     ToolTip = 'Specifies the value of the Consumable field.', Comment = '%';
+                    Visible = false;
                 }
             }
         }
     }
+    trigger OnNewRecord(BelowxRec: Boolean)
+    begin
+        Rec.Validate(Rec.Consumed, true);
+    end;
 }

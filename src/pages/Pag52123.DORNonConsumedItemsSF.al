@@ -1,14 +1,13 @@
-page 52122 "NTS Posted DOR Subform"
+page 52123 "NTS DOR Non-Consumed Items SF"
 {
     ApplicationArea = All;
-    Caption = 'NTS Posted DOR Subform';
+    Caption = 'Non-Consumed Items';
     PageType = ListPart;
-    Editable = false;
     SourceTable = "NTS DOR Line";
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
-    SourceTableView = where(Consumed = const(true));
+    SourceTableView = where(Consumed = const(false));
 
     layout
     {
@@ -16,11 +15,6 @@ page 52122 "NTS Posted DOR Subform"
         {
             repeater(General)
             {
-                field("Line No."; Rec."Line No.")
-                {
-                    Visible = false;
-                    ToolTip = 'Specifies the value of the Line No. field.', Comment = '%';
-                }
                 field("Item No."; Rec."Item No.")
                 {
                     ToolTip = 'Specifies the value of the Item field.', Comment = '%';
@@ -28,10 +22,12 @@ page 52122 "NTS Posted DOR Subform"
                 field(Description; Rec.Description)
                 {
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
+                    Editable = false;
                 }
                 field("Description 2"; Rec."Description 2")
                 {
                     ToolTip = 'Specifies the value of the Description 2 field.', Comment = '%';
+                    Editable = false;
                     Visible = false;
                 }
                 field("Lot No."; Rec."Lot No.")
@@ -41,6 +37,11 @@ page 52122 "NTS Posted DOR Subform"
                 field(Quantity; Rec.Quantity)
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
+                }
+                field(Consumed; Rec.Consumed)
+                {
+                    ToolTip = 'Specifies the value of the Consumable field.', Comment = '%';
+                    Visible = false;
                 }
             }
         }
