@@ -576,9 +576,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 TransferLine.Validate("NTS Sales Order Line No.", SalesLine."Line No.");
                 TransferLine.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
                 TransferLine.Validate("NTS DOR Line No.", SalesLine."NTS DOR Line No.");
+                TransferLine.Validate("NTS Set Name", SalesLine."NTS Set Name");
                 TransferLine.Modify(true);
                 if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
-                    if not NTSDORLine.Consumed then begin
+                    if NTSDORLine.Consumed then begin
                         ItemTrackingVal := FindItemTrackingCode(TransferLine."Item No.");
                         if (ItemTrackingVal <> 0) then begin
                             ForReservEntry.Init();
