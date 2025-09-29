@@ -168,6 +168,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     if not SalesOrderDict.Get(SelectedDoRHeaders."Customer No.", SalesOrderNo) then begin
                         SalesHeader.Init();
                         SalesHeader."Document Type" := SalesHeader."Document Type"::Order;
+                        SalesHeader."No." := '';
                         SalesHeader.Insert(true);
                         SalesHeader.Validate("Sell-to Customer No.", SelectedDoRHeaders."Customer No.");
                         SalesHeader.Validate("NTS DOR No.", SelectedDoRHeaders."No.");
