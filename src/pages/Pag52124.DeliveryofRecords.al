@@ -90,7 +90,7 @@ page 52124 "NTS Delivery of Records"
                         if not Confirm('Do you want to post the %1', false, Rec."No.") then
                             exit;
 
-                        NexxSpineFunctions.PostDoR(Rec)
+                        NexxSpineFunctions.PostDoR(Rec, false)
                     end;
                 }
             }

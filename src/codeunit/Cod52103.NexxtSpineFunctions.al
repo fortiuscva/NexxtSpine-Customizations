@@ -40,7 +40,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         end;
     end;
 
-    procedure PostDoR(var DoRHeader: Record "NTS DoR Header")
+    procedure PostDoR(var DoRHeader: Record "NTS DoR Header"; CreateMultiple: Boolean)
     var
         DoRLine: Record "NTS DoR Line";
         SalesHeader: Record "Sales Header";
@@ -50,7 +50,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
         CustNoBlankError: Label 'Customer No. is blank on this %1';
     begin
         DoRHeader.TestField("Customer No.");
-        CreateSalesOrder(DoRHeader, true);
+        if CreateMultiple then
+            CreateSalesOrdersFromMultipleDOR(DoRHeader, true)
+        else
+            CreateSalesOrder(DoRHeader, true);
         DoRHeader.Posted := true;
         DoRHeader.Modify();
     end;
@@ -132,6 +135,117 @@ codeunit 52103 "NTS NexxtSpine Functions"
         Commit();
         if Confirm(StrSubstNo(SalesOrderCreatedandOpenSalesOrderMsg, SalesHeader."No.")) then
             Page.RunModal(Page::"Sales Order", SalesHeader);
+    end;
+
+    procedure CreateSalesOrdersFromMultipleDOR(var SelectedDoRHeaders: Record "NTS DoR Header"; PostDisAssemblyPar: Boolean)
+    var
+        DoRHeader: Record "NTS DoR Header";
+        DoRLine: Record "NTS DoR Line";
+        SalesHeader: Record "Sales Header";
+        SalesLine: Record "Sales Line";
+        LastSalesLine: Record "Sales Line";
+        SalesOrderDict: Dictionary of [Code[20], Code[20]];
+        SalesOrderNo: Code[20];
+        NextLineNo: Integer;
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+        ItemTrackingVal: integer;
+    begin
+        if PostDisAssemblyPar then begin
+            if SelectedDoRHeaders.FindSet() then
+                repeat
+                    SelectedDoRHeaders.TestField(Status, SelectedDoRHeaders.Status::Released);
+                    DisassembleSet(SelectedDoRHeaders);
+                until SelectedDoRHeaders.Next() = 0;
+
+            if SelectedDoRHeaders.FindSet() then
+                repeat
+                    if not SalesOrderDict.Get(SelectedDoRHeaders."Customer No.", SalesOrderNo) then begin
+                        SalesHeader.Init();
+                        SalesHeader."Document Type" := SalesHeader."Document Type"::Order;
+                        SalesHeader.Insert(true);
+                        SalesHeader.Validate("Sell-to Customer No.", SelectedDoRHeaders."Customer No.");
+                        SalesHeader.Validate("NTS DOR No.", SelectedDoRHeaders."No.");
+                        SalesHeader.Validate(Status, SalesHeader.Status::Open);
+                        SalesHeader.Validate("NTS Surgeon", SelectedDoRHeaders.Surgeon);
+                        SalesHeader.Validate("NTS Distributor", SelectedDoRHeaders.Distributor);
+                        SalesHeader.Validate("NTS Reps.", SelectedDoRHeaders."Reps.");
+                        SalesHeader.Validate("NTS Set Name", SelectedDoRHeaders."Set Name");
+                        SalesHeader.Validate("Location Code", SelectedDoRHeaders."Location Code");
+                        SalesHeader.Modify(true);
+
+                        SalesOrderNo := SalesHeader."No.";
+                        SalesOrderDict.Add(SelectedDoRHeaders."Customer No.", SalesOrderNo);
+                    end;
+
+                    SalesHeader.Get(SalesHeader."Document Type"::Order, SalesOrderNo);
+
+                    LastSalesLine.Reset();
+                    LastSalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                    LastSalesLine.SetRange("Document No.", SalesHeader."No.");
+                    if LastSalesLine.FindLast() then
+                        NextLineNo := LastSalesLine."Line No." + 10000
+                    else
+                        NextLineNo := 10000;
+
+                    DoRLine.Reset();
+                    DoRLine.SetRange("Document No.", SelectedDoRHeaders."No.");
+                    DoRLine.SetRange(Consumed, true);
+                    if DoRLine.FindSet() then
+                        repeat
+                            SalesLine.Init();
+                            SalesLine."Document Type" := SalesLine."Document Type"::Order;
+                            SalesLine."Document No." := SalesHeader."No.";
+                            SalesLine."Line No." := NextLineNo;
+                            SalesLine.Insert(true);
+                            SalesLine.Type := SalesLine.Type::Item;
+                            SalesLine.Validate("No.", DoRLine."Item No.");
+                            SalesLine.Validate(Quantity, DoRLine.Quantity);
+                            SalesLine.Validate("NTS Lot Number", DoRLine."Lot No.");
+                            SalesLine.Validate("NTS DOR No.", DoRLine."Document No.");
+                            SalesLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
+                            SalesLine.Validate("Location Code", SelectedDoRHeaders."Location Code");
+                            SalesLine.Validate("NTS Lot Number", DoRLine."Lot No.");
+                            SalesLine.Validate("NTS Surgeon", DoRHeader.Surgeon);
+                            SalesLine.Validate("NTS Distributor", DoRHeader.Distributor);
+                            SalesLine.Validate("NTS Reps.", DoRHeader."Reps.");
+                            SalesLine.Validate("NTS Reps. Name", DoRHeader."Reps. Name");
+                            SalesLine.Validate("NTS Set Name", DoRHeader."Set Name");
+                            SalesLine.Modify(true);
+
+                            NextLineNo += 10000;
+
+                            ItemTrackingVal := FindItemTrackingCode(SalesLine."No.");
+                            if (ItemTrackingVal <> 0) then begin
+
+                                ForReservEntry."Lot No." := DoRLine."Lot No.";
+                                TrackingSpec."New Lot No." := DoRLine."Lot No.";
+
+                                CreateReservEntry.CreateReservEntryFor(
+                                Database::"Sales Line", 1,
+                                SalesLine."Document No.", '',
+                                0, SalesLine."Line No.",
+                                SalesLine."Qty. per Unit of Measure", SalesLine.Quantity, SalesLine."Quantity (Base)",
+                                ForReservEntry);
+                                CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                                CreateReservEntry.CreateEntry(
+                                SalesLine."No.", SalesLine."Variant Code",
+                                SalesLine."Location Code", SalesLine.Description,
+                                0D, SalesLine."Shipment Date",
+                                0, ForReservEntry."Reservation Status"::Surplus);
+                            end;
+                        until DoRLine.Next() = 0;
+                until SelectedDoRHeaders.Next() = 0;
+
+            if SelectedDoRHeaders.FindSet() then
+                repeat
+                    SelectedDoRHeaders.Posted := true;
+                    SelectedDoRHeaders.Modify();
+                until SelectedDoRHeaders.Next() = 0;
+
+            Message('Sales Orders created successfully for %1 customers.', SalesOrderDict.Count());
+        end;
     end;
 
     procedure DisassembleSet(DoRHeader: Record "NTS DoR Header")
