@@ -89,25 +89,19 @@ page 52117 "NTS DOR List"
                     begin
                         CurrPage.SetSelectionFilter(DoRHeader);
                         if DoRHeader.IsEmpty() then
-                            Error('Please select at least one DoR record.');
+                            Error('Please select at least one Delivery of Record.');
 
                         if DoRHeader.Count > 5 then
-                            Error('You cannot process more than 5 records');
+                            Error('You cannot select more than 5 Delivery of Records');
 
                         if DoRHeader.Count > 1 then begin
-                            if not Confirm('Do you want to post %1 selected DoRs in batch?', false, DoRHeader.Count) then
+                            if not Confirm('Do you want to post %1 Delivery of Records?', false, DoRHeader.Count) then
                                 exit;
-
-                            NexxSpineFunctions.PostDoR(DoRHeader, true);
-                        end else begin
-                            if Rec.Status <> Rec.Status::Released then
-                                Error(StrSubstNo(ReleasedStatusError, Rec."No."));
-
+                        end else
                             if not Confirm('Do you want to post the %1', false, Rec."No.") then
                                 exit;
 
-                            NexxSpineFunctions.PostDoR(Rec, false);
-                        end;
+                        NexxSpineFunctions.PostDoR(DoRHeader, true);
                     end;
                 }
                 group(DORReleaseGroup)
