@@ -73,4 +73,8 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
 
 
     }
+    keys
+    {
+        Key(Key52100; "NTS DOR No.", "NTS DOR Line No.", "NTS Set Name") { }
+    }
 }

@@ -62,7 +62,8 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                         Rec.TestField(Status, Rec.Status::Released);
                         if not Confirm('Do you want to Create Transfer Order?') then
                             exit;
-                        NTSFunctions.CreateTransferOrder(Rec);
+                        //NTSFunctions.CreateTransferOrder(Rec);
+                        NTSFunctions.CreateTransferOrderforMultipleDoRs(Rec);
                     end;
                 }
                 action("NTS OpenTransferOrder")
@@ -76,8 +77,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                         TransferHeader: Record "Transfer Header";
                     begin
                         TransferHeader.SetRange("NTS DOR No.", Rec."NTS DOR No.");
-                        if TransferHeader.FindFirst() then
-                            Page.RunModal(Page::"Transfer Order", TransferHeader);
+                        Page.RunModal(Page::"Transfer Order", TransferHeader);
                     end;
                 }
             }
