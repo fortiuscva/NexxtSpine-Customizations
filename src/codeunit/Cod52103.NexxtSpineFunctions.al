@@ -49,13 +49,16 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferLine: Record "Transfer Line";
         CustNoBlankError: Label 'Customer No. is blank on this %1';
     begin
-        DoRHeader.TestField("Customer No.");
-        if CreateMultiple then
+
+        if CreateMultiple then begin
             CreateSalesOrdersFromMultipleDOR(DoRHeader, true)
-        else
+        end else begin
+            DoRHeader.TestField("Customer No.");
             CreateSalesOrder(DoRHeader, true);
-        DoRHeader.Posted := true;
-        DoRHeader.Modify();
+            DoRHeader.Posted := true;
+            DoRHeader.Modify();
+        end;
+
     end;
 
     procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header"; PostDisAssemblyPar: Boolean)
@@ -155,6 +158,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if PostDisAssemblyPar then begin
             if SelectedDoRHeaders.FindSet() then
                 repeat
+                    SelectedDoRHeaders.TestField("Customer No.");
                     SelectedDoRHeaders.TestField(Status, SelectedDoRHeaders.Status::Released);
                     DisassembleSet(SelectedDoRHeaders);
                 until SelectedDoRHeaders.Next() = 0;
