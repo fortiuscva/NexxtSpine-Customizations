@@ -7,6 +7,8 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
             group("NTS DORDetails")
             {
                 Caption = 'Deliver of Record';
+                Visible = false;
+
                 field("NTS DoR Number"; Rec."NTS DOR No.")
                 {
                     ApplicationArea = all;
