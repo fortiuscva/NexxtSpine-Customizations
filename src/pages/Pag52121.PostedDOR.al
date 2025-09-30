@@ -163,12 +163,17 @@ page 52121 "NTS Posted DOR"
                     trigger OnAction()
                     var
                         SalesHeader: Record "Sales Header";
+                        SalesLine: Record "Sales Line";
                     begin
-                        SalesHeader.Reset();
-                        SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
-                        SalesHeader.SetRange("NTS DOR No.", Rec."No.");
-                        if SalesHeader.FindFirst() then
-                            Page.RunModal(Page::"Sales Order List", SalesHeader);
+                        SalesLine.Reset();
+                        SalesLine.SetRange("NTS DOR No.", Rec."No.");
+                        if SalesLine.FindFirst() then begin
+                            SalesHeader.Reset();
+                            SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
+                            SalesHeader.SetRange("No.", SalesLine."Document No.");
+                            if SalesHeader.FindFirst() then
+                                Page.RunModal(Page::"Sales Order List", SalesHeader);
+                        end;
                     end;
                 }
                 action("NTS Shipments")
