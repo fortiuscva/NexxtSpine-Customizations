@@ -125,6 +125,31 @@ codeunit 52101 "NTS Event Management"
         TransferReceiptLine."NTS Set Serial No." := TransferLine."NTS Set Serial No.";
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Shipment Header", OnAfterCopyFromTransferHeader, '', false, false)]
+    local procedure "Transfer Shipment Header_OnAfterCopyFromTransferHeader"(var TransferShipmentHeader: Record "Transfer Shipment Header"; TransferHeader: Record "Transfer Header")
+    begin
+        TransferShipmentHeader."NTS Tracking No." := TransferHeader."NTS Tracking No.";
+        TransferShipmentHeader."NTS Tracking URL" := TransferHeader."NTS Tracking URL";
+        TransferShipmentHeader."NTS DOR No." := TransferHeader."NTS DOR No.";
+        TransferShipmentHeader."NTS Sales Order No." := TransferHeader."NTS Sales Order No.";
+        TransferShipmentHeader."NTS Set Name" := TransferHeader."NTS Set Name";
+        TransferShipmentHeader."NTS Set Lot No." := TransferHeader."NTS Set Lot No.";
+        TransferShipmentHeader."NTS Set Serial No." := TransferHeader."NTS Set Serial No.";
+    end;
+
+
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Receipt Header", OnAfterCopyFromTransferHeader, '', false, false)]
+    local procedure "Transfer Receipt Header_OnAfterCopyFromTransferHeader"(var TransferReceiptHeader: Record "Transfer Receipt Header"; TransferHeader: Record "Transfer Header")
+    begin
+        TransferReceiptHeader."NTS Tracking No." := TransferHeader."NTS Tracking No.";
+        TransferReceiptHeader."NTS Tracking URL" := TransferHeader."NTS Tracking URL";
+        TransferReceiptHeader."NTS DOR No." := TransferHeader."NTS DOR No.";
+        TransferReceiptHeader."NTS Sales Order No." := TransferHeader."NTS Sales Order No.";
+        TransferReceiptHeader."NTS Set Name" := TransferHeader."NTS Set Name";
+        TransferReceiptHeader."NTS Set Lot No." := TransferHeader."NTS Set Lot No.";
+        TransferReceiptHeader."NTS Set Serial No." := TransferHeader."NTS Set Serial No.";
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
 }

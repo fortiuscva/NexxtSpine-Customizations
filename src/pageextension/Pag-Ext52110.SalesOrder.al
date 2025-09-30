@@ -76,8 +76,8 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                     var
                         TransferHeader: Record "Transfer Header";
                     begin
-                        TransferHeader.SetRange("NTS DOR No.", Rec."NTS DOR No.");
-                        Page.RunModal(Page::"Transfer Order", TransferHeader);
+                        TransferHeader.SetRange("NTS Sales Order No.", Rec."No.");
+                        Page.RunModal(Page::"Transfer Orders", TransferHeader);
                     end;
                 }
             }

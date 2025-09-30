@@ -1,4 +1,4 @@
-tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
+tableextension 52128 "Transfer Shipment Header" extends "Transfer Shipment Header"
 {
     fields
     {
@@ -38,21 +38,5 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Caption = 'Set Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("NTS Set Name"));
         }
-
-        modify("Shipping Agent Code")
-        {
-            trigger OnAfterValidate()
-            var
-                ShippingAgent: Record "Shipping Agent";
-            begin
-
-                if Rec."Shipping Agent Code" <> '' then begin
-                    if ShippingAgent.Get(Rec."Shipping Agent Code") then begin
-                        Rec."NTS Tracking URL" := ShippingAgent."Internet Address";
-                    end;
-                end;
-            end;
-        }
     }
-
 }
