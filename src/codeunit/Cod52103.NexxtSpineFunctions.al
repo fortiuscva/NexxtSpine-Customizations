@@ -196,13 +196,13 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         SalesLine.Validate("NTS DOR No.", DoRLine."Document No.");
                         SalesLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
                         SalesLine.Validate("Location Code", SelectedDoRHeaders."Location Code");
-                        SalesLine.Validate("NTS Surgeon", DoRHeader.Surgeon);
-                        SalesLine.Validate("NTS Distributor", DoRHeader.Distributor);
-                        SalesLine.Validate("NTS Reps.", DoRHeader."Reps.");
-                        SalesLine.Validate("NTS Reps. Name", DoRHeader."Reps. Name");
-                        SalesLine.Validate("NTS Set Name", DoRHeader."Set Name");
-                        SalesLine.Validate("NTS Set Lot No.", DoRHeader."Lot No.");
-                        SalesLine.Validate("NTS Set Serial No.", DoRHeader."Serial No.");
+                        SalesLine.Validate("NTS Surgeon", SelectedDoRHeaders.Surgeon);
+                        SalesLine.Validate("NTS Distributor", SelectedDoRHeaders.Distributor);
+                        SalesLine.Validate("NTS Reps.", SelectedDoRHeaders."Reps.");
+                        SalesLine.Validate("NTS Reps. Name", SelectedDoRHeaders."Reps. Name");
+                        SalesLine.Validate("NTS Set Name", SelectedDoRHeaders."Set Name");
+                        SalesLine.Validate("NTS Set Lot No.", SelectedDoRHeaders."Lot No.");
+                        SalesLine.Validate("NTS Set Serial No.", SelectedDoRHeaders."Serial No.");
                         SalesLine.Modify(true);
 
                         ItemTrackingVal := FindItemTrackingCode(SalesLine."No.");
