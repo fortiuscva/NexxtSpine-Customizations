@@ -85,14 +85,23 @@ page 52117 "NTS DOR List"
                         SalesHeader: Record "Sales Header";
                         SOExistError: Label 'Sales Order %1 already exist for this %2';
                         ReleasedStatusError: Label 'Status must be Released to Post this %1';
+                        DoRHeader: Record "NTS DoR Header";
                     begin
-                        if Rec.Status <> Rec.Status::Released then
-                            Error(StrSubstNo(ReleasedStatusError, Rec."No."));
+                        CurrPage.SetSelectionFilter(DoRHeader);
+                        if DoRHeader.IsEmpty() then
+                            Error('Please select at least one Delivery of Record.');
 
-                        if not Confirm('Do you want to post the %1', false, Rec."No.") then
-                            exit;
+                        if DoRHeader.Count > 5 then
+                            Error('You cannot select more than 5 Delivery of Records');
 
-                        NexxSpineFunctions.PostDoR(Rec)
+                        if DoRHeader.Count > 1 then begin
+                            if not Confirm('Do you want to post %1 Delivery of Records?', false, DoRHeader.Count) then
+                                exit;
+                        end else
+                            if not Confirm('Do you want to post the %1', false, Rec."No.") then
+                                exit;
+
+                        NexxSpineFunctions.PostDoR(DoRHeader, true);
                     end;
                 }
                 group(DORReleaseGroup)

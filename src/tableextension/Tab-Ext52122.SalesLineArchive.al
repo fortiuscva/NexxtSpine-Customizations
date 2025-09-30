@@ -53,5 +53,16 @@ tableextension 52122 "NTS Sales Line Archive" extends "Sales Line Archive"
             Caption = 'Set Name';
             TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
         }
+        field(52128; "NTS Set Serial No."; Code[50])
+        {
+            Caption = 'Set Serial No.';
+            TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("NTS Set Name"));
+        }
+        field(52131; "NTS Set Lot No."; Code[50])
+        {
+            Caption = 'Set Lot No.';
+            TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("NTS Set Name"));
+        }
+
     }
 }
