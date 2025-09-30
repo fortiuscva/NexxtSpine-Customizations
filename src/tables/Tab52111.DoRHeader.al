@@ -61,7 +61,7 @@ table 52111 "NTS DOR Header"
                 ValidateSetName();
             end;
         }
-        field(5; "Serial No."; Code[20])
+        field(5; "Serial No."; Code[50])
         {
             Caption = 'Serial No.';
             TableRelation = "Serial No. Information"."Serial No." where("Item No." = field("Set Name"));
@@ -216,6 +216,7 @@ table 52111 "NTS DOR Header"
         {
             Clustered = true;
         }
+        key(Key2; "Customer No.", "Location Code") { Clustered = false; }
     }
     fieldgroups
     {
