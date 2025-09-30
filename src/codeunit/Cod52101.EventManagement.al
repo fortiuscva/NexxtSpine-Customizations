@@ -66,6 +66,7 @@ codeunit 52101 "NTS Event Management"
         if (TransferHeader."NTS DOR No." <> '') then
             NexxtSpineFunctions.CreateAssemblyOrder(TransferHeader);
     end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeCalcLevels, '', false, false)]
     local procedure "Calculate Low-Level Code_OnBeforeCalcLevels"(Type: Option; No: Code[20]; Level: Integer; LevelDepth: Integer; var Result: Integer; var IsHandled: Boolean)
     var
@@ -81,6 +82,7 @@ codeunit 52101 "NTS Event Management"
         end;
 
     end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeSetRecursiveLevelsOnBOM, '', false, false)]
     local procedure "Calculate Low-Level Code_OnBeforeSetRecursiveLevelsOnBOM"(var ProductionBOMHeader: Record "Production BOM Header"; LowLevelCode: Integer; IgnoreMissingItemsOrBOMs: Boolean; var IsHandled: Boolean)
     var
@@ -90,6 +92,39 @@ codeunit 52101 "NTS Event Management"
             if ItemRec."NTS Purchase to Production" then
                 IsHandled := true;
     end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Shipment Line", OnAfterCopyFromTransferLine, '', false, false)]
+    local procedure "Transfer Shipment Line_OnAfterCopyFromTransferLine"(var TransferShipmentLine: Record "Transfer Shipment Line"; TransferLine: Record "Transfer Line")
+    begin
+        TransferShipmentLine."NTS DOR No." := TransferLine."NTS DOR No.";
+        TransferShipmentLine."NTS DOR Line No." := TransferLine."NTS DOR Line No.";
+        TransferShipmentLine."NTS Surgeon" := TransferLine."NTS Surgeon";
+        TransferShipmentLine."NTS Distributor" := TransferLine."NTS Distributor";
+        TransferShipmentLine."NTS Reps." := TransferLine."NTS Reps.";
+        TransferShipmentLine."NTS Reps. Name" := TransferLine."NTS Reps. Name";
+        TransferShipmentLine."NTS Sales Order No." := TransferLine."NTS Sales Order No.";
+        TransferShipmentLine."NTS Sales Order Line No." := TransferLine."NTS Sales Order Line No.";
+        TransferShipmentLine."NTS Set Name" := TransferLine."NTS Set Name";
+        TransferShipmentLine."NTS Set Lot No." := TransferLine."NTS Set Lot No.";
+        TransferShipmentLine."NTS Set Serial No." := TransferLine."NTS Set Serial No.";
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Receipt Line", OnAfterCopyFromTransferLine, '', false, false)]
+    local procedure "Transfer Receipt Line_OnAfterCopyFromTransferLine"(var TransferReceiptLine: Record "Transfer Receipt Line"; TransferLine: Record "Transfer Line")
+    begin
+        TransferReceiptLine."NTS DOR No." := TransferLine."NTS DOR No.";
+        TransferReceiptLine."NTS DOR Line No." := TransferLine."NTS DOR Line No.";
+        TransferReceiptLine."NTS Surgeon" := TransferLine."NTS Surgeon";
+        TransferReceiptLine."NTS Distributor" := TransferLine."NTS Distributor";
+        TransferReceiptLine."NTS Reps." := TransferLine."NTS Reps.";
+        TransferReceiptLine."NTS Reps. Name" := TransferLine."NTS Reps. Name";
+        TransferReceiptLine."NTS Sales Order No." := TransferLine."NTS Sales Order No.";
+        TransferReceiptLine."NTS Sales Order Line No." := TransferLine."NTS Sales Order Line No.";
+        TransferReceiptLine."NTS Set Name" := TransferLine."NTS Set Name";
+        TransferReceiptLine."NTS Set Lot No." := TransferLine."NTS Set Lot No.";
+        TransferReceiptLine."NTS Set Serial No." := TransferLine."NTS Set Serial No.";
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
 }
