@@ -236,7 +236,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if SalesOrderCreated then
             Message(SalesOrderscreatedsuccessfullyMsg)
         else
-            Error(NothingtoUpdateMsg);
+            Error(NothingtoUpdateErrMsg);
     end;
 
     procedure DisassembleSet(DoRHeader: Record "NTS DoR Header")
@@ -647,8 +647,9 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     TransferHeader.Validate("Shipment Date", SalesHeader."Shipment Date");
                     TransferHeader.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
                     TransferHeader.Validate("Shipping Time", SalesHeader."Shipping Time");
-                    TransferHeader.Validate("NTS Set Name", SalesHeader."NTS Set Name");
-                    TransferHeader.Validate("NTS DOR No.", SalesHeader."NTS DOR No.");
+                    TransferHeader.Validate("NTS Set Name", SalesLine."NTS Set Name");
+                    TransferHeader.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
+                    TransferHeader.Validate("NTS Sales Order No.", SalesHeader."No.");
                     TransferHeader.Modify(true);
                     TransferOrderCreated := true;
                     NextLineNo := 0;
@@ -668,6 +669,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 TransferLine.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
                 TransferLine.Validate("NTS DOR Line No.", SalesLine."NTS DOR Line No.");
                 TransferLine.Validate("NTS Set Name", SalesLine."NTS Set Name");
+                TransferLine.Validate("NTS Set Serial No.", SalesLine."NTS Set Serial No.");
                 TransferLine.Modify(true);
 
                 if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
@@ -706,7 +708,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader.Validate("NTS Transfer Order Created", true);
         SalesHeader.Modify();
 
-        Message('Transfer Order created, Transfer Order No.:%1', TransferHeader."No.");
+        Message(TransferOrderscreatedsuccessfullyMsg);
     end;
 
 
@@ -826,6 +828,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesReceivablesSetup: Record "Sales & Receivables Setup";
         SalesOrderCreatedandOpenSalesOrderMsg: Label 'Sales Order %1 is successfully created. Do you want to open sales order?';
         SalesOrderscreatedsuccessfullyMsg: Label 'Sales Order(s) created successfully';
-        NothingtoUpdateMsg: Label 'There is nothing to update.';
+        TransferOrderscreatedsuccessfullyMsg: Label 'Transfer Order(s) created successfully';
+        NothingtoUpdateErrMsg: Label 'There is nothing to update.';
 
 }
