@@ -76,67 +76,75 @@ page 52124 "NTS Delivery of Records"
                 action(Post)
                 {
                     Caption = 'Post';
-                    Visible = true;
+                    //Visible = IsPostedVisible;
                     trigger OnAction()
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
                         SalesHeader: Record "Sales Header";
                         SOExistError: Label 'Sales Order %1 already exist for this %2';
                         ReleasedStatusError: Label 'Status must be Released to Post this %1';
+                        DoRHeader: Record "NTS DoR Header";
                     begin
-                        if Rec.Status <> Rec.Status::Released then
-                            Error(StrSubstNo(ReleasedStatusError, Rec."No."));
+                        CurrPage.SetSelectionFilter(DoRHeader);
+                        if DoRHeader.IsEmpty() then
+                            Error('Please select at least one Delivery of Record.');
 
-                        if not Confirm('Do you want to post the %1', false, Rec."No.") then
-                            exit;
+                        if DoRHeader.Count > 5 then
+                            Error('You cannot select more than 5 Delivery of Records');
 
-                        NexxSpineFunctions.PostDoR(Rec)
+                        if DoRHeader.Count > 1 then begin
+                            if not Confirm('Do you want to post %1 Delivery of Records?', false, DoRHeader.Count) then
+                                exit;
+                        end else
+                            if not Confirm('Do you want to post the %1', false, Rec."No.") then
+                                exit;
+
+                        NexxSpineFunctions.PostDoR(DoRHeader, true);
                     end;
                 }
-            }
-            group(DORReleaseGroup)
-            {
-                Caption = 'Release';
-                Image = ReleaseDoc;
-
-
-                action(Release)
+                group(DORReleaseGroup)
                 {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Re&lease';
+                    Caption = 'Release';
                     Image = ReleaseDoc;
-                    ShortCutKey = 'Ctrl+F9';
-                    Enabled = Rec.Status <> Rec.Status::Released;
-                    Visible = IsReleaseVisible;
-                    ToolTip = 'Release the DOR document to the next stage of processing. You must reopen the document before you can make changes to it.';
 
-                    trigger OnAction()
-                    var
-                        DorHeader: Record "NTS DOR Header";
-                    begin
-                        CurrPage.SetSelectionFilter(DorHeader);
-                        Rec.PerformManualRelease(DorHeader);
-                        CurrPage.Update(false);
-                    end;
-                }
+                    action(Release)
+                    {
+                        ApplicationArea = Basic, Suite;
+                        Caption = 'Re&lease';
+                        Image = ReleaseDoc;
+                        Enabled = Rec.Status <> Rec.Status::Released;
+                        Visible = IsReleaseVisible;
+                        ShortCutKey = 'Ctrl+F9';
+                        ToolTip = 'Release the DOR document to the next stage of processing. You must reopen the document before you can make changes to it.';
 
-                action(Reopen)
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Re&open';
-                    Image = ReOpen;
-                    Enabled = Rec.Status <> Rec.Status::Open;
-                    Visible = IsReopenVisible;
-                    ToolTip = 'Reopen the DOR document to change it after it has been approved. Approved DOR documents have the Released status and must be opened before they can be changed.';
+                        trigger OnAction()
+                        var
+                            DorHeader: Record "NTS DOR Header";
+                        begin
+                            CurrPage.SetSelectionFilter(DorHeader);
+                            Rec.PerformManualRelease(DorHeader);
+                            CurrPage.Update(false);
+                        end;
+                    }
 
-                    trigger OnAction()
-                    var
-                        DorHeader: Record "NTS DOR Header";
-                    begin
-                        CurrPage.SetSelectionFilter(DorHeader);
-                        Rec.PerformManualReopen(DorHeader);
-                        CurrPage.Update(false);
-                    end;
+                    action(Reopen)
+                    {
+                        ApplicationArea = Basic, Suite;
+                        Caption = 'Re&open';
+                        Image = ReOpen;
+                        Enabled = Rec.Status <> Rec.Status::Open;
+                        Visible = IsReopenVisible;
+                        ToolTip = 'Reopen the DOR document to change it after it has been approved. Approved DOR documents have the Released status and must be opened before they can be changed.';
+
+                        trigger OnAction()
+                        var
+                            DorHeader: Record "NTS DOR Header";
+                        begin
+                            CurrPage.SetSelectionFilter(DorHeader);
+                            Rec.PerformManualReopen(DorHeader);
+                            CurrPage.Update(false);
+                        end;
+                    }
                 }
             }
         }

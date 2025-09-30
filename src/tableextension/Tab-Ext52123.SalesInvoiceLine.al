@@ -1,4 +1,4 @@
-tableextension 52113 "NTS Sales Line" extends "Sales Line"
+tableextension 52123 "NTS Sales Invoice Line" extends "Sales Invoice Line"
 {
     fields
     {
@@ -19,24 +19,7 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
             Editable = false;
             DataClassification = CustomerContent;
         }
-        modify("No.")
-        {
-            trigger OnAfterValidate()
-            var
-                ItemRec: Record Item;
-            begin
-                if not (Rec.Type = Type::Item) then
-                    exit;
-                if ItemRec.Get(Rec."No.") then begin
-                    case ItemRec.PartStatus of
-                        ItemRec.PartStatus::Released:
-                            Error('Item %1 Status is Released. Item status must be Approved before it can be shipped.', Rec."No.");
-                        ItemRec.PartStatus::Obsolete:
-                            Error('Item %1 Status is Obsolete. Obsolete Items cannot be shipped.', Rec."No.");
-                    end;
-                end;
-            end;
-        }
+
         field(52120; "NTS Surgeon"; Code[20])
         {
             caption = 'Surgeon';
@@ -80,5 +63,6 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
             Caption = 'Set Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("NTS Set Name"));
         }
+
     }
 }
