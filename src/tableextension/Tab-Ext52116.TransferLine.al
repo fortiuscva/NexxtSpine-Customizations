@@ -22,6 +22,11 @@ tableextension 52116 "NTS Transfer Line" extends "Transfer Line"
             Caption = 'DOR Line No.';
             DataClassification = CustomerContent;
         }
+        field(52104; "NTS Set Name"; Code[20])
+        {
+            Caption = 'Set Name';
+            TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
+        }
 
 
         modify("Item No.")
@@ -36,6 +41,5 @@ tableextension 52116 "NTS Transfer Line" extends "Transfer Line"
                 end;
             end;
         }
-
     }
 }
