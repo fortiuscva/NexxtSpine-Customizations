@@ -596,6 +596,120 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader.Modify();
     end;
 
+    procedure CreateTransferOrderforMultipleDoRs(var SalesHeader: Record "Sales Header")
+    var
+        TransferHeader: Record "Transfer Header";
+        TransferLine: Record "Transfer Line";
+        SalesLine: Record "Sales Line";
+        Location: Record Location;
+        NextLineNo: Integer;
+        NTSDORLine: Record "NTS DOR Line";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+        ItemTrackingMgt: Codeunit "Item Tracking Management";
+        ReservStatus: Enum "Reservation Status";
+        CurrentSourceRowID: Text[250];
+        SecondSourceRowID: Text[250];
+        ItemTrackingVal: integer;
+        PrevDORNo: Code[20];
+        TransferOrderCreated: Boolean;
+    begin
+        Clear(PrevDORNo);
+        Clear(TransferOrderCreated);
+
+        Location.Reset;
+        Location.SetRange("NTS Is Finished Goods Location", true);
+        Location.FindFirst();
+
+
+        SalesLine.Reset();
+        SalesLine.SetCurrentKey("NTS DOR No.", "NTS DOR Line No.", "NTS Set Name");
+        SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+        SalesLine.SetRange("Document No.", SalesHeader."No.");
+        SalesLine.SetFilter("NTS DOR No.", '<>%1', '');
+        SalesLine.SetRange(Type, SalesLine.Type::Item);
+        SalesLine.SetFilter("No.", '<>%1', '');
+        if SalesLine.FindSet() then
+            repeat
+                if PrevDORNo <> SalesLine."NTS DOR No." then begin
+                    TransferHeader.Init();
+                    TransferHeader."No." := '';
+                    TransferHeader.Insert(True);
+
+                    TransferHeader.Validate("Transfer-from Code", Location.Code);
+                    TransferHeader.Validate("Transfer-to Code", SalesHeader."Location Code");
+                    TransferHeader.Validate("Direct Transfer", true);
+                    TransferHeader.Validate("Posting Date", WorkDate());
+                    TransferHeader.Validate("Shortcut Dimension 1 Code", SalesHeader."Shortcut Dimension 1 Code");
+                    TransferHeader.Validate("Shortcut Dimension 2 Code", SalesHeader."Shortcut Dimension 2 Code");
+                    TransferHeader.Validate("Assigned User ID", SalesHeader."Salesperson Code");
+                    TransferHeader.Validate("Shipment Date", SalesHeader."Shipment Date");
+                    TransferHeader.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
+                    TransferHeader.Validate("Shipping Time", SalesHeader."Shipping Time");
+                    TransferHeader.Validate("NTS Set Name", SalesHeader."NTS Set Name");
+                    TransferHeader.Validate("NTS DOR No.", SalesHeader."NTS DOR No.");
+                    TransferHeader.Modify(true);
+                    TransferOrderCreated := true;
+                    NextLineNo := 0;
+                end;
+
+                NextLineNo += 10000;
+                TransferLine.Init();
+                TransferLine."Document No." := TransferHeader."No.";
+                TransferLine."Line No." := NextLineNo;
+                TransferLine.Insert(true);
+
+                TransferLine.Validate("Item No.", SalesLine."No.");
+                TransferLine.Validate(Quantity, SalesLine.Quantity);
+                TransferLine.Validate("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                TransferLine.Validate("NTS Sales Order No.", SalesLine."Document No.");
+                TransferLine.Validate("NTS Sales Order Line No.", SalesLine."Line No.");
+                TransferLine.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
+                TransferLine.Validate("NTS DOR Line No.", SalesLine."NTS DOR Line No.");
+                TransferLine.Validate("NTS Set Name", SalesLine."NTS Set Name");
+                TransferLine.Modify(true);
+
+                if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
+                    if NTSDORLine.Consumed then begin
+                        ItemTrackingVal := FindItemTrackingCode(TransferLine."Item No.");
+                        if (ItemTrackingVal <> 0) then begin
+                            ForReservEntry.Init();
+                            ForReservEntry."Lot No." := NTSDORLine."Lot No.";
+                            TrackingSpec."New Lot No." := NTSDORLine."Lot No.";
+
+
+                            CreateReservEntry.SetDates(0D, ForReservEntry."Expiration Date");
+                            CreateReservEntry.CreateReservEntryFor(
+                              Database::"Transfer Line", 0,
+                              TransferLine."Document No.", '', TransferLine."Derived From Line No.", TransferLine."Line No.", TransferLine."Qty. per Unit of Measure",
+                              TransferLine.Quantity, TransferLine."Quantity (Base)" * TransferLine."Qty. per Unit of Measure", ForReservEntry);
+                            CreateReservEntry.CreateEntry(
+                              TransferLine."Item No.", TransferLine."Variant Code", TransferLine."Transfer-from Code", '', TransferLine."Receipt Date", TransferLine."Shipment Date", 0, ReservStatus::Surplus);
+
+                            CurrentSourceRowID := ItemTrackingMgt.ComposeRowID(Database::"Transfer Line", 0, TransferLine."Document No.", '', 0, TransferLine."Line No.");
+
+                            SecondSourceRowID := ItemTrackingMgt.ComposeRowID(Database::"Transfer Line", 1, TransferLine."Document No.", '', 0, TransferLine."Line No.");
+
+                            ItemTrackingMgt.SynchronizeItemTracking(CurrentSourceRowID, SecondSourceRowID, '');
+                        end;
+                        NextLineNo += 10000;
+                    end;
+                end;
+
+                PrevDORNo := SalesLine."NTS DOR No.";
+            until SalesLine.Next() = 0;
+
+        if not TransferOrderCreated then
+            Error(NothingToUpdateErrMsg);
+
+        SalesHeader.Validate("NTS Transfer Order Created", true);
+        SalesHeader.Modify();
+
+        Message('Transfer Order created, Transfer Order No.:%1', TransferHeader."No.");
+    end;
+
+
     procedure FindItemTrackingCode(ItemNoPar: Code[20]) TrackingType: Integer
     var
         ItemTrackingCodeRecLcl: Record "Item Tracking Code";
@@ -711,7 +825,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
     var
         SalesReceivablesSetup: Record "Sales & Receivables Setup";
         SalesOrderCreatedandOpenSalesOrderMsg: Label 'Sales Order %1 is successfully created. Do you want to open sales order?';
+        NothingToUpdateErrMsg: Label 'There is nothing to update.';
         SalesOrderscreatedsuccessfullyMsg: Label 'Sales Order(s) created successfully';
-        NothingtoUpdateMsg: Label 'There is nothing to update.';
-
 }
