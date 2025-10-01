@@ -33,12 +33,12 @@ table 52111 "NTS DOR Header"
                     if (Rec."Customer No." <> '') then begin
                         CustomerRec.get("Customer No.");
                         "Customer Name" := CustomerRec.Name;
-                        Validate(Surgeon, '');
-                        Validate("Reps.", '');
+                        // Validate(Surgeon, '');
+                        // Validate("Reps.", '');
                     end else begin
                         "Customer Name" := '';
-                        Validate(Surgeon, '');
-                        Validate("Reps.", '');
+                        // Validate(Surgeon, '');
+                        // Validate("Reps.", '');
                     end;
                 end;
             end;
@@ -83,29 +83,34 @@ table 52111 "NTS DOR Header"
         field(7; Surgeon; Code[20])
         {
             Caption = 'Surgeon';
-            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Customer No."));
+            TableRelation = "NTS Surgeon".Code;
             trigger OnValidate()
             begin
-                ValidateSurgeon();
+                // ValidateSurgeon();
             end;
         }
         field(8; Distributor; Code[20])
         {
             Caption = 'Distributor';
-            Editable = false;
+            TableRelation = Customer."No." WHERE("NTS Distributor" = CONST(true));
+
             trigger OnValidate()
             var
                 Customer: Record Customer;
             begin
                 TestStatusOpen();
-                if Distributor <> '' then begin
-                    Customer.Get(Distributor);
-                    if Customer."Location Code" <> '' then
-                        Rec.Validate("Location Code", Customer."Location Code")
-                    else
+                if (Rec.Distributor <> xRec.Distributor) then begin
+                    if Distributor <> '' then begin
+                        Customer.Get(Distributor);
+                        if Customer."Location Code" <> '' then
+                            Rec.Validate("Location Code", Customer."Location Code")
+                        else
+                            Rec.Validate("Location Code", '');
+                        Rec.Validate("Reps.", '');
+                    end else begin
                         Rec.Validate("Location Code", '');
-                end else begin
-                    Rec.Validate("Location Code", '');
+                        Rec.Validate("Reps.", '');
+                    end;
                 end;
             end;
         }
@@ -167,6 +172,7 @@ table 52111 "NTS DOR Header"
         field(21; Quantity; Integer)
         {
             Caption = 'Quantity';
+            Editable = false;
             trigger OnValidate()
             begin
                 TestStatusOpen();
@@ -447,32 +453,34 @@ table 52111 "NTS DOR Header"
                 "Set Description" := ItemRec.Description;
                 Validate("Lot No.", '');
                 Validate("Serial No.");
+                Validate(Quantity, 1);
             end else begin
                 "Set Description" := '';
                 Validate("Lot No.", '');
                 Validate("Serial No.");
+                Validate(Quantity, 0);
             end;
         end;
     end;
 
-    procedure ValidateSurgeon()
-    var
-        HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
-    begin
-        if (xRec.Surgeon <> Rec.Surgeon) then begin
-            if Surgeon <> '' then begin
-                HSDMappingRec.Reset();
-                HSDMappingRec.SetRange(Hospital, Rec."Customer No.");
-                HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
-                HSDMappingRec.FindFirst();
-                Rec.Validate(Distributor, HSDMappingRec.Distributor);
-                Rec.Validate("Reps.", '');
-            end else begin
-                Rec.Validate(Distributor, '');
-                Rec.Validate("Reps.", '');
-            end;
-        end;
-    end;
+    // procedure ValidateSurgeon()
+    // var
+    //     HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
+    // begin
+    //     if (xRec.Surgeon <> Rec.Surgeon) then begin
+    //         if Surgeon <> '' then begin
+    //             HSDMappingRec.Reset();
+    //             HSDMappingRec.SetRange(Hospital, Rec."Customer No.");
+    //             HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
+    //             HSDMappingRec.FindFirst();
+    //             Rec.Validate(Distributor, HSDMappingRec.Distributor);
+    //             Rec.Validate("Reps.", '');
+    //         end else begin
+    //             Rec.Validate(Distributor, '');
+    //             Rec.Validate("Reps.", '');
+    //         end;
+    //     end;
+    // end;
 
     procedure ValidateReps()
     begin

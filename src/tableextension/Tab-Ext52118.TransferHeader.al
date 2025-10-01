@@ -16,7 +16,7 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
         {
             Caption = 'Set Name';
             DataClassification = ToBeClassified;
-            TableRelation = "Sales Header"."NTS Set Name";
+            TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
         }
         field(52103; "NTS DOR No."; Code[20])
         {

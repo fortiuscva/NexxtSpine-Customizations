@@ -1,4 +1,4 @@
-tableextension 52128 "Transfer Shipment Header" extends "Transfer Shipment Header"
+tableextension 52128 "NTS Transfer Shipment Header" extends "Transfer Shipment Header"
 {
     fields
     {
@@ -16,7 +16,7 @@ tableextension 52128 "Transfer Shipment Header" extends "Transfer Shipment Heade
         {
             Caption = 'Set Name';
             DataClassification = ToBeClassified;
-            TableRelation = "Sales Header"."NTS Set Name";
+            TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
         }
         field(52103; "NTS DOR No."; Code[20])
         {
