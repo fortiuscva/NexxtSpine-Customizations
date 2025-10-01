@@ -627,12 +627,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesLine.SetCurrentKey("NTS DOR No.", "NTS DOR Line No.", "NTS Set Name");
         SalesLine.SetRange("Document Type", SalesHeader."Document Type");
         SalesLine.SetRange("Document No.", SalesHeader."No.");
-        SalesLine.SetFilter("NTS DOR No.", '<>%1', '');
+        // SalesLine.SetFilter("NTS DOR No.", '<>%1', '');
         SalesLine.SetRange(Type, SalesLine.Type::Item);
         SalesLine.SetFilter("No.", '<>%1', '');
         if SalesLine.FindSet() then
             repeat
-                if PrevDORNo <> SalesLine."NTS DOR No." then begin
+                if (PrevDORNo <> SalesLine."NTS DOR No.") or ((SalesLine."NTS DOR No." = '') and (not TransferOrderCreated)) then begin
                     TransferHeader.Init();
                     TransferHeader."No." := '';
                     TransferHeader.Insert(True);
@@ -647,8 +647,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     TransferHeader.Validate("Shipment Date", SalesHeader."Shipment Date");
                     TransferHeader.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
                     TransferHeader.Validate("Shipping Time", SalesHeader."Shipping Time");
-                    TransferHeader.Validate("NTS Set Name", SalesLine."NTS Set Name");
-                    TransferHeader.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
+                    if SalesLine."NTS DOR No." <> '' then begin
+                        TransferHeader.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
+                        TransferHeader.Validate("NTS Set Name", SalesLine."NTS Set Name");
+                    end;
                     TransferHeader.Validate("NTS Sales Order No.", SalesHeader."No.");
                     TransferHeader.Modify(true);
                     TransferOrderCreated := true;
@@ -666,36 +668,40 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 TransferLine.Validate("Unit of Measure Code", SalesLine."Unit of Measure Code");
                 TransferLine.Validate("NTS Sales Order No.", SalesLine."Document No.");
                 TransferLine.Validate("NTS Sales Order Line No.", SalesLine."Line No.");
-                TransferLine.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
-                TransferLine.Validate("NTS DOR Line No.", SalesLine."NTS DOR Line No.");
-                TransferLine.Validate("NTS Set Name", SalesLine."NTS Set Name");
-                TransferLine.Validate("NTS Set Serial No.", SalesLine."NTS Set Serial No.");
+                if SalesLine."NTS DOR No." <> '' then begin
+                    TransferLine.Validate("NTS DOR No.", SalesLine."NTS DOR No.");
+                    TransferLine.Validate("NTS DOR Line No.", SalesLine."NTS DOR Line No.");
+                    TransferLine.Validate("NTS Set Name", SalesLine."NTS Set Name");
+                    TransferLine.Validate("NTS Set Serial No.", SalesLine."NTS Set Serial No.");
+                end;
                 TransferLine.Modify(true);
 
-                if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
-                    if NTSDORLine.Consumed then begin
-                        ItemTrackingVal := FindItemTrackingCode(TransferLine."Item No.");
-                        if (ItemTrackingVal <> 0) then begin
-                            ForReservEntry.Init();
-                            ForReservEntry."Lot No." := NTSDORLine."Lot No.";
-                            TrackingSpec."New Lot No." := NTSDORLine."Lot No.";
+                if SalesLine."NTS DOR No." <> '' then begin
+                    if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
+                        if NTSDORLine.Consumed then begin
+                            ItemTrackingVal := FindItemTrackingCode(TransferLine."Item No.");
+                            if (ItemTrackingVal <> 0) then begin
+                                ForReservEntry.Init();
+                                ForReservEntry."Lot No." := NTSDORLine."Lot No.";
+                                TrackingSpec."New Lot No." := NTSDORLine."Lot No.";
 
 
-                            CreateReservEntry.SetDates(0D, ForReservEntry."Expiration Date");
-                            CreateReservEntry.CreateReservEntryFor(
-                              Database::"Transfer Line", 0,
-                              TransferLine."Document No.", '', TransferLine."Derived From Line No.", TransferLine."Line No.", TransferLine."Qty. per Unit of Measure",
-                              TransferLine.Quantity, TransferLine."Quantity (Base)" * TransferLine."Qty. per Unit of Measure", ForReservEntry);
-                            CreateReservEntry.CreateEntry(
-                              TransferLine."Item No.", TransferLine."Variant Code", TransferLine."Transfer-from Code", '', TransferLine."Receipt Date", TransferLine."Shipment Date", 0, ReservStatus::Surplus);
+                                CreateReservEntry.SetDates(0D, ForReservEntry."Expiration Date");
+                                CreateReservEntry.CreateReservEntryFor(
+                                  Database::"Transfer Line", 0,
+                                  TransferLine."Document No.", '', TransferLine."Derived From Line No.", TransferLine."Line No.", TransferLine."Qty. per Unit of Measure",
+                                  TransferLine.Quantity, TransferLine."Quantity (Base)" * TransferLine."Qty. per Unit of Measure", ForReservEntry);
+                                CreateReservEntry.CreateEntry(
+                                  TransferLine."Item No.", TransferLine."Variant Code", TransferLine."Transfer-from Code", '', TransferLine."Receipt Date", TransferLine."Shipment Date", 0, ReservStatus::Surplus);
 
-                            CurrentSourceRowID := ItemTrackingMgt.ComposeRowID(Database::"Transfer Line", 0, TransferLine."Document No.", '', 0, TransferLine."Line No.");
+                                CurrentSourceRowID := ItemTrackingMgt.ComposeRowID(Database::"Transfer Line", 0, TransferLine."Document No.", '', 0, TransferLine."Line No.");
 
-                            SecondSourceRowID := ItemTrackingMgt.ComposeRowID(Database::"Transfer Line", 1, TransferLine."Document No.", '', 0, TransferLine."Line No.");
+                                SecondSourceRowID := ItemTrackingMgt.ComposeRowID(Database::"Transfer Line", 1, TransferLine."Document No.", '', 0, TransferLine."Line No.");
 
-                            ItemTrackingMgt.SynchronizeItemTracking(CurrentSourceRowID, SecondSourceRowID, '');
+                                ItemTrackingMgt.SynchronizeItemTracking(CurrentSourceRowID, SecondSourceRowID, '');
+                            end;
+                            NextLineNo += 10000;
                         end;
-                        NextLineNo += 10000;
                     end;
                 end;
 

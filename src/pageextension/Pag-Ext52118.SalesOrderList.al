@@ -30,7 +30,8 @@ pageextension 52118 "NTS Sales Order List" extends "Sales Order List"
                 begin
                     if not Confirm('Do you want to Create Transfer Order?') then
                         exit;
-                    NTSFunctions.CreateTransferOrder(Rec);
+                    // NTSFunctions.CreateTransferOrder(Rec);
+                    NTSFunctions.CreateTransferOrderforMultipleDoRs(Rec);
                 end;
             }
         }
