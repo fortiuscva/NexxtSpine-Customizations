@@ -37,15 +37,15 @@ table 52102 "NTS Reference IR Code"
         }
         field(12; "IR Number"; Code[20])
         {
-            Caption = 'IR Number';
+            Caption = 'IR/IP Number';
         }
         field(13; "IR Sheet Name"; Text[80])
         {
-            Caption = 'IR Sheet Name';
+            Caption = 'IR/IP Sheet Name';
         }
-        field(14; Link; Text[2048])
+        field(14; "Sharepoint Link"; Text[2048])
         {
-            Caption = 'Link';
+            Caption = 'Sharepoint Link';
         }
         field(15; "Operation No."; Code[20])
         {
@@ -54,6 +54,14 @@ table 52102 "NTS Reference IR Code"
         field(16; "Mobile Link"; text[2048])
         {
             Caption = 'Mobile Link';
+        }
+        field(17; "Template Link"; Text[2048])
+        {
+            Caption = 'Template Link';
+        }
+        field(18; "IR/IP Type"; Enum "NTS IR/IP Type")
+        {
+            Caption = 'IR/IP Type';
         }
     }
     keys

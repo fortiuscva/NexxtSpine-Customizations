@@ -1,6 +1,6 @@
 table 52101 "NTS IR Code"
 {
-    Caption = 'IR Code';
+    Caption = 'IR/IP Code';
     DataClassification = CustomerContent;
     LookupPageId = "NTS IR Codes";
     DrillDownPageId = "NTS IR Codes";
@@ -13,11 +13,11 @@ table 52101 "NTS IR Code"
         }
         field(2; "IR Number"; Code[20])
         {
-            Caption = 'IR Number';
+            Caption = 'IR/IP Number';
         }
         field(3; "IR Sheet Name"; Text[80])
         {
-            Caption = 'IR Sheet Name';
+            Caption = 'IR/IP Sheet Name';
         }
         field(4; Link; Text[2048])
         {
@@ -26,6 +26,10 @@ table 52101 "NTS IR Code"
         field(5; "File Name"; Text[2048])
         {
             Caption = 'File Name';
+        }
+        field(18; "IR/IP Type"; Enum "NTS IR/IP Type")
+        {
+            Caption = 'IR/IP Type';
         }
     }
 
@@ -40,4 +44,20 @@ table 52101 "NTS IR Code"
     fieldgroups
     {
     }
+
+    trigger OnInsert()
+    begin
+        if CopyStr(rec."IR Number", 1, 2) = 'IR' then
+            rec."IR/IP Type" := rec."IR/IP Type"::IR
+        else if CopyStr(rec."IR Number", 1, 2) = 'IP' then
+            rec."IR/IP Type" := rec."IR/IP Type"::IP;
+    end;
+
+    trigger OnModify()
+    begin
+        if CopyStr(rec."IR Number", 1, 2) = 'IR' then
+            rec."IR/IP Type" := rec."IR/IP Type"::IR
+        else if CopyStr(rec."IR Number", 1, 2) = 'IP' then
+            rec."IR/IP Type" := rec."IR/IP Type"::IP;
+    end;
 }

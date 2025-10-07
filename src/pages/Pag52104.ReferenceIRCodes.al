@@ -1,7 +1,7 @@
 page 52104 "NTS Reference IR Codes"
 {
     ApplicationArea = All;
-    Caption = 'Reference IR Codes';
+    Caption = 'Reference IR/IP Codes';
     PageType = List;
     SourceTable = "NTS Reference IR Code";
     UsageCategory = Lists;
@@ -24,9 +24,13 @@ page 52104 "NTS Reference IR Codes"
                 {
                     ToolTip = 'Specifies the value of the IR Sheet Name field.', Comment = '%';
                 }
-                field(Link; Rec.Link)
+                field("Template Link"; Rec."Template Link")
                 {
-                    ToolTip = 'Specifies the value of the Link field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Template Link field.', Comment = '%';
+                }
+                field("Sharepoint Link"; Rec."Sharepoint Link")
+                {
+                    ToolTip = 'Specifies the value of the Sharepoint Link field.', Comment = '%';
                 }
                 field("Mobile Link"; Rec."Mobile Link")
                 {
@@ -47,8 +51,8 @@ page 52104 "NTS Reference IR Codes"
 
                 trigger OnAction()
                 begin
-                    if Rec.Link <> '' then
-                        Hyperlink(Rec.Link)
+                    if Rec."Sharepoint Link" <> '' then
+                        Hyperlink(Rec."Sharepoint Link")
                     else
                         Message(LineErr);
                 end;

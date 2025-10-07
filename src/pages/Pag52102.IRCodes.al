@@ -1,7 +1,7 @@
 page 52102 "NTS IR Codes"
 {
     ApplicationArea = All;
-    Caption = 'IR Codes';
+    Caption = 'IR/IP Codes';
     PageType = List;
     SourceTable = "NTS IR Code";
     UsageCategory = Lists;
@@ -42,7 +42,21 @@ page 52102 "NTS IR Codes"
                     ToolTip = 'Specifies the value of the Link field.';
                     ApplicationArea = All;
                 }
+                field("IR/IP Type"; Rec."IR/IP Type")
+                {
+                    ApplicationArea = all;
+                }
             }
         }
     }
+
+    trigger OnQueryClosePage(CloseAction: Action): Boolean
+    var
+        IRCodeRec: Record "NTS IR Code";
+    begin
+        IRCodeRec.SetRange("IR/IP Type", IRCodeRec."IR/IP Type"::" ");
+        if not IRCodeRec.IsEmpty() then
+            if Confirm('Do you want to verify IR/IP Type with Blank Values.', false) then
+                exit(false);
+    end;
 }
