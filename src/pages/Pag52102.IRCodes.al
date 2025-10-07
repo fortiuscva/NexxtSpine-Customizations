@@ -27,6 +27,10 @@ page 52102 "NTS IR Codes"
                         CurrPage.Update(true);
                     end;
                 }
+                field("IR/IP Type"; Rec."IR/IP Type")
+                {
+                    ApplicationArea = all;
+                }
                 field("IR Sheet Name"; Rec."IR Sheet Name")
                 {
                     ApplicationArea = All;
@@ -41,10 +45,6 @@ page 52102 "NTS IR Codes"
                 {
                     ToolTip = 'Specifies the value of the Link field.';
                     ApplicationArea = All;
-                }
-                field("IR/IP Type"; Rec."IR/IP Type")
-                {
-                    ApplicationArea = all;
                 }
             }
         }
