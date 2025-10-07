@@ -14,6 +14,10 @@ table 52101 "NTS IR Code"
         field(2; "IR Number"; Code[20])
         {
             Caption = 'IR/IP Number';
+            trigger OnValidate()
+            begin
+                UpdateIRIPType();
+            end;
         }
         field(3; "IR Sheet Name"; Text[80])
         {
@@ -45,19 +49,19 @@ table 52101 "NTS IR Code"
     {
     }
 
-    trigger OnInsert()
+    procedure UpdateIRIPType()
     begin
-        if CopyStr(rec."IR Number", 1, 2) = 'IR' then
-            rec."IR/IP Type" := rec."IR/IP Type"::IR
-        else if CopyStr(rec."IR Number", 1, 2) = 'IP' then
-            rec."IR/IP Type" := rec."IR/IP Type"::IP;
-    end;
+        if ("IR Number" <> xRec."IR Number") then begin
+            if "IR Number" <> '' then begin
+                if CopyStr(rec."IR Number", 1, 2) = 'IR' then
+                    rec."IR/IP Type" := rec."IR/IP Type"::IR
+                else if CopyStr(rec."IR Number", 1, 2) = 'IP' then
+                    rec."IR/IP Type" := rec."IR/IP Type"::IP
+                else
+                    Validate(rec."IR/IP Type", rec."IR/IP Type"::" ");
+            end else
+                Validate(rec."IR/IP Type", rec."IR/IP Type"::" ");
 
-    trigger OnModify()
-    begin
-        if CopyStr(rec."IR Number", 1, 2) = 'IR' then
-            rec."IR/IP Type" := rec."IR/IP Type"::IR
-        else if CopyStr(rec."IR Number", 1, 2) = 'IP' then
-            rec."IR/IP Type" := rec."IR/IP Type"::IP;
+        end;
     end;
 }
