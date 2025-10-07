@@ -1,7 +1,7 @@
 page 52106 "NTS Reference IR Code Factbox"
 {
     ApplicationArea = All;
-    Caption = 'NTS Reference IR Code Factbox';
+    Caption = 'NTS Reference IR/IP Code Factbox';
     PageType = ListPart;
     SourceTable = "NTS Reference IR Code";
     InsertAllowed = false;
@@ -36,7 +36,7 @@ page 52106 "NTS Reference IR Code Factbox"
                 Image = Open;
                 trigger OnAction()
                 begin
-                    Hyperlink(rec.Link);
+                    Hyperlink(rec."Sharepoint Link");
                 end;
             }
             action(OpenMobileURL)
