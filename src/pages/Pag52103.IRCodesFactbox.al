@@ -1,7 +1,7 @@
 page 52103 "NTS IR Codes Factbox"
 {
     ApplicationArea = All;
-    Caption = 'IR Codes Factbox';
+    Caption = 'IR/IP Codes Factbox';
     PageType = ListPart;
     SourceTable = "NTS IR Code";
     InsertAllowed = false;
