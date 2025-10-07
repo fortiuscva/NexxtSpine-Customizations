@@ -118,6 +118,7 @@ page 52121 "NTS Posted DOR"
                 PromotedCategory = Process;
                 PromotedIsBig = true;
                 Image = Redo;
+                Visible = false;
                 trigger OnAction()
                 var
                     SalesOrderAlreadyCreatedVarLcl: Boolean;
