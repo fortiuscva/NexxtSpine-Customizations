@@ -26,11 +26,20 @@ xmlport 52100 "Import Assembly BOM Components"
                 textelement(InstalledInItemNo) { }
                 trigger OnAfterInsertRecord()
                 begin
-                    if LastParentItemNo <> ParentItemNo then begin
-                        LastParentItemNo := ParentItemNo;
+
+                    BOMComponentRec.Reset();
+                    BOMComponentRec.SetRange("Parent Item No.", ParentItemNo);
+                    BOMComponentRec.SetRange("No.", No);
+                    if BOMComponentRec.FindFirst() then
+                        exit; // Skip this line if already exists
+
+                    BOMComponentRec.Reset();
+                    BOMComponentRec.SetRange("Parent Item No.", ParentItemNo);
+                    if BOMComponentRec.FindLast() then
+                        NextLineNo := BOMComponentRec."Line No." + 10000
+                    else
                         NextLineNo := 10000;
-                    end else
-                        NextLineNo += 10000;
+
 
                     BOMComponentRec.Init();
                     BOMComponentRec."Parent Item No." := ParentItemNo;
@@ -54,7 +63,6 @@ xmlport 52100 "Import Assembly BOM Components"
 
     var
         BOMComponentRec: Record "BOM Component";
-        LastParentItemNo: Code[20];
         NextLineNo: Integer;
         LineType: Enum "BOM Type";
 
