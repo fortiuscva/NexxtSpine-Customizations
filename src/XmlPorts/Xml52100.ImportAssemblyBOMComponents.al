@@ -24,7 +24,7 @@ xmlport 52100 "Import Assembly BOM Components"
                 textelement(QuantityPer) { }
                 textelement(UnitOfMeasure) { }
                 textelement(InstalledInItemNo) { }
-                trigger OnAfterInsertRecord()
+                trigger OnBeforeInsertRecord()
                 begin
 
                     BOMComponentRec.Reset();
