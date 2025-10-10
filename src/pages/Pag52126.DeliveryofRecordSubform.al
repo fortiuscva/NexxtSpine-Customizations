@@ -7,7 +7,7 @@ page 52126 "NTS Delivery of Record Subform"
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
-    SourceTableView = where(Consumed = const(true));
+    SourceTableView = where(Consumed = const(true), Adjustment = const(false));
     layout
     {
         area(Content)

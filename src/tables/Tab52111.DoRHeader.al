@@ -58,7 +58,10 @@ table 52111 "NTS DOR Header"
             trigger OnValidate()
             begin
                 TestStatusOpen();
+                if LinesExists() then
+                    Error(StrSubstNo(LinesAlreadyExistsMsg, FieldCaption("Set Name")));
                 ValidateSetName();
+
             end;
         }
         field(5; "Serial No."; Code[50])
@@ -71,6 +74,8 @@ table 52111 "NTS DOR Header"
 
             begin
                 TestStatusOpen();
+                if LinesExists() then
+                    Error(StrSubstNo(LinesAlreadyExistsMsg, FieldCaption("Serial No.")));
                 if Rec."Serial No." <> '' then
                     NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
             end;
@@ -147,6 +152,8 @@ table 52111 "NTS DOR Header"
                 NTSFunctions: Codeunit "NTS NexxtSpine Functions";
             begin
                 TestStatusOpen();
+                if LinesExists() then
+                    Error(StrSubstNo(LinesAlreadyExistsMsg, FieldCaption("Lot No.")));
                 if ("Lot No." <> '') then
                     NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
             end;
@@ -259,6 +266,7 @@ table 52111 "NTS DOR Header"
         ItemRec: Record Item;
         Text051: Label 'The DOR %1 already exists.';
         DORLineRec: Record "NTS DOR Line";
+        LinesAlreadyExistsMsg: Label 'There are existing line(s) and %1 cannot be changed. Please delete existing lines to continue.';
 
     procedure InitInsert()
     var
@@ -490,5 +498,12 @@ table 52111 "NTS DOR Header"
         end else
             Validate(Rec."Reps. Name", '');
 
+    end;
+
+    procedure LinesExists(): Boolean;
+    begin
+        DORLineRec.Reset();
+        DORLineRec.SetRange("Document No.", "No.");
+        exit(DORLineRec.FindFirst());
     end;
 }

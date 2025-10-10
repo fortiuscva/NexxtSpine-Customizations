@@ -1,24 +1,20 @@
-page 52118 "NTS DOR Subform"
+page 52127 "NTS DOR Adjusted Items SF"
 {
     ApplicationArea = All;
-    Caption = 'Lines';
+    Caption = 'Adjustment Entries';
     PageType = ListPart;
     SourceTable = "NTS DOR Line";
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
-    SourceTableView = where(Consumed = const(true), Adjustment = const(false));
+    SourceTableView = where(Adjustment = const(true));
+
     layout
     {
         area(Content)
         {
             repeater(General)
             {
-                field("Line No."; Rec."Line No.")
-                {
-                    Visible = false;
-                    ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
-                }
                 field("Item No."; Rec."Item No.")
                 {
                     ToolTip = 'Specifies the value of the Item field.', Comment = '%';
@@ -26,13 +22,15 @@ page 52118 "NTS DOR Subform"
                 field(Description; Rec.Description)
                 {
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
+                    Editable = false;
                 }
                 field("Description 2"; Rec."Description 2")
                 {
                     ToolTip = 'Specifies the value of the Description 2 field.', Comment = '%';
+                    Editable = false;
                     Visible = false;
                 }
-                field("Lot Number"; Rec."Lot No.")
+                field("Lot No."; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot Number field.', Comment = '%';
                 }
@@ -40,16 +38,30 @@ page 52118 "NTS DOR Subform"
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
                 }
-                field(Consumed; Rec.Consumed)
-                {
-                    ToolTip = 'Specifies the value of the Consumable field.', Comment = '%';
-                    Visible = false;
-                }
             }
         }
     }
-    trigger OnNewRecord(BelowxRec: Boolean)
-    begin
-        Rec.Validate(Rec.Consumed, true);
-    end;
+    actions
+    {
+        area(Processing)
+        {
+            action(ApplyAdjustments)
+            {
+                Caption = 'Apply Adjustments';
+                ApplicationArea = All;
+                trigger OnAction()
+                begin
+                    if Confirm(ProceedAndApplyAdjustmentsMsg) then begin
+                        DORHeader.get(Rec."Document No.");
+                        NexxtSpineFunctions.ApplyPostedDORAdjustments(DORHeader);
+                    end;
+                end;
+            }
+        }
+    }
+
+    var
+        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+        DORHeader: Record "NTS DOR Header";
+        ProceedAndApplyAdjustmentsMsg: Label 'Do you want to proceed and apply adjustments to open sales order?';
 }
