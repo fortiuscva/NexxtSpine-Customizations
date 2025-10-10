@@ -49,9 +49,9 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferLine: Record "Transfer Line";
         CustNoBlankError: Label 'Customer No. is blank on this %1';
     begin
-        if CreateMultiple then begin
-            CreateSalesOrdersFromMultipleDOR(DoRHeader, true)
-        end;
+        //if CreateMultiple then begin
+        CreateSalesOrdersFromMultipleDOR(DoRHeader, true)
+        //end;
     end;
 
     procedure CreateSalesOrder(DoRHeader: Record "NTS DoR Header"; PostDisAssemblyPar: Boolean)
@@ -777,6 +777,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
         DORLine2: Record "NTS DOR Line";
         NextLineNo: Integer;
         ItemTrackingVal: Integer;
+        BOMComponentRecLcl: Record "BOM Component";
+        QtyPerVarLcl: Integer;
     begin
         DORHeader.TestField(DORHeader."Set Name");
         ItemTrackingVal := FindItemTrackingCode(DORHeader."Set Name");
@@ -800,6 +802,14 @@ codeunit 52103 "NTS NexxtSpine Functions"
             ItemLedgEntry2.SetRange("Entry Type", ItemLedgEntry2."Entry Type"::"Assembly Consumption");
             if ItemLedgEntry2.FindSet() then begin
                 repeat
+                    //QtyPerVarLcl := ItemLedgEntry2.Quantity / ItemLedgEntry.Quantity;
+
+                    BOMComponentRecLcl.Reset();
+                    BOMComponentRecLcl.SetRange("Parent Item No.", ItemLedgEntry."Item No.");
+                    BOMComponentRecLcl.SetRange("No.", ItemLedgEntry2."Item No.");
+                    if BOMComponentRecLcl.FindFirst() then
+                        QtyPerVarLcl := BOMComponentRecLcl."Quantity per";
+
                     DORLine.Reset();
                     DORLine.SetRange("Document No.", DORHeader."No.");
                     DORLine.SetRange(Consumed, true);
@@ -812,7 +822,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         DORLine2.Validate("Item No.", ItemLedgEntry2."Item No.");
                         DORLine2.Validate("Lot No.", ItemLedgEntry2."Lot No.");
                         //DORLine2.Validate(Quantity, ItemLedgEntry2.Quantity);
-                        DORLine2.Validate(Quantity, ItemLedgEntry2."Qty. per Unit of Measure" * DORHeader.Quantity);
+                        //DORLine2.Validate(Quantity, ItemLedgEntry2."Qty. per Unit of Measure" * DORHeader.Quantity);
+                        DORLine2.Validate(Quantity, QtyPerVarLcl * DORHeader.Quantity);
                         DORLine2.Validate(Consumed, false);
                         DORLine2.Modify();
                         NextLineNo += 10000;
@@ -828,6 +839,105 @@ codeunit 52103 "NTS NexxtSpine Functions"
     begin
         ItemTrackingVal := FindItemTrackingCode(ItemNo);
         ValidateLOTSerial(ItemTrackingVal, LotNo, SerialNo);
+
+    end;
+
+    procedure ApplyPostedDORAdjustments(DORHeaderPar: Record "NTS DOR Header")
+    var
+        DORLineRecLcl: Record "NTS DOR Line";
+        TransHeadRecLcl: Record "Transfer Header";
+        TransShptHeadRecLcl: Record "Transfer Shipment Header";
+        SalesLineRecLcl: Record "Sales Line";
+        DocNoVarLcl: Code[20];
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+        ItemTrackingVal: integer;
+    begin
+        DORLineRecLcl.Reset();
+        DORLineRecLcl.SetRange("Document No.", DORHeaderPar."No.");
+        DORLineRecLcl.SetRange(Adjustment, true);
+        DORLineRecLcl.SetRange("Adjustment Processed", false);
+        if not DORLineRecLcl.FindFirst() then
+            Error(NothingToUpdateErrMsg);
+
+
+        TransHeadRecLcl.Reset();
+        TransHeadRecLcl.SetRange("NTS DOR No.", DORHeaderPar."No.");
+        if TransHeadRecLcl.FindFirst() then
+            error(StrSubstNo(ApplyAdjustmentMsg, 'Transfer Order', TransHeadRecLcl."No.", DORHeaderPar."No."));
+
+        TransShptHeadRecLcl.Reset();
+        TransShptHeadRecLcl.SetRange("NTS DOR No.", DORHeaderPar."No.");
+        if TransShptHeadRecLcl.FindFirst() then
+            error(StrSubstNo(ApplyAdjustmentMsg, 'Transfer Order Shipment', TransShptHeadRecLcl."No.", DORHeaderPar."No."));
+
+
+        SalesLineRecLcl.Reset();
+        SalesLineRecLcl.SetRange("NTS DOR No.", DORHeaderPar."No.");
+        SalesLineRecLcl.FindFirst();
+        DocNoVarLcl := SalesLineRecLcl."Document No.";
+
+        NextLineNo := 0;
+        SalesLineRecLcl.Reset();
+        SalesLineRecLcl.SetRange("Document Type", SalesLineRecLcl."Document Type"::Order);
+        SalesLineRecLcl.SetRange("Document No.", DocNoVarLcl);
+        if SalesLineRecLcl.FindLast() then
+            NextLineNo := SalesLineRecLcl."Line No.";
+
+
+
+        DORLineRecLcl.Reset();
+        DORLineRecLcl.SetRange("Document No.", DORHeaderPar."No.");
+        DORLineRecLcl.SetRange(Adjustment, true);
+        DORLineRecLcl.SetRange("Adjustment Processed", false);
+        if DORLineRecLcl.FindSet() then
+            repeat
+                NextLineNo += 10000;
+                SalesLineRecLcl.Init();
+                SalesLineRecLcl."Document Type" := SalesLineRecLcl."Document Type"::Order;
+                SalesLineRecLcl."Document No." := DocNoVarLcl;
+                SalesLineRecLcl."Line No." := NextLineNo;
+                SalesLineRecLcl.Insert(true);
+
+                SalesLineRecLcl.Type := SalesLineRecLcl.Type::Item;
+                SalesLineRecLcl.Validate("No.", DORLineRecLcl."Item No.");
+                SalesLineRecLcl.Validate(Quantity, DORLineRecLcl.Quantity);
+                SalesLineRecLcl.Validate("NTS Lot Number", DORLineRecLcl."Lot No.");
+                SalesLineRecLcl.Validate("NTS DOR No.", DORLineRecLcl."Document No.");
+                SalesLineRecLcl.Validate("NTS DOR Line No.", DORLineRecLcl."Line No.");
+                SalesLineRecLcl.Validate("Location Code", DORHeaderPar."Location Code");
+                SalesLineRecLcl.Validate("NTS Surgeon", DORHeaderPar.Surgeon);
+                SalesLineRecLcl.Validate("NTS Distributor", DORHeaderPar.Distributor);
+                SalesLineRecLcl.Validate("NTS Reps.", DORHeaderPar."Reps.");
+                SalesLineRecLcl.Validate("NTS Reps. Name", DORHeaderPar."Reps. Name");
+                SalesLineRecLcl.Validate("NTS Set Name", DORHeaderPar."Set Name");
+                SalesLineRecLcl.Validate("NTS Set Lot No.", DORHeaderPar."Lot No.");
+                SalesLineRecLcl.Validate("NTS Set Serial No.", DORHeaderPar."Serial No.");
+                SalesLineRecLcl.Modify(true);
+
+                ItemTrackingVal := FindItemTrackingCode(SalesLineRecLcl."No.");
+                if (ItemTrackingVal <> 0) then begin
+
+                    ForReservEntry."Lot No." := DORLineRecLcl."Lot No.";
+                    TrackingSpec."New Lot No." := DORLineRecLcl."Lot No.";
+
+                    CreateReservEntry.CreateReservEntryFor(
+                    Database::"Sales Line", 1,
+                    SalesLineRecLcl."Document No.", '',
+                    0, SalesLineRecLcl."Line No.",
+                    SalesLineRecLcl."Qty. per Unit of Measure", SalesLineRecLcl.Quantity, SalesLineRecLcl."Quantity (Base)",
+                    ForReservEntry);
+                    CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                    CreateReservEntry.CreateEntry(
+                    SalesLineRecLcl."No.", SalesLineRecLcl."Variant Code",
+                    SalesLineRecLcl."Location Code", SalesLineRecLcl.Description,
+                    0D, SalesLineRecLcl."Shipment Date",
+                    0, ForReservEntry."Reservation Status"::Surplus);
+                end;
+                DORLineRecLcl."Adjustment Processed" := true;
+                DORLineRecLcl.Modify();
+            until DORLineRecLcl.Next() = 0;
     end;
 
     var
@@ -836,4 +946,5 @@ codeunit 52103 "NTS NexxtSpine Functions"
         NothingToUpdateErrMsg: Label 'There is nothing to update.';
         SalesOrderscreatedsuccessfullyMsg: Label 'Sales Order(s) created successfully';
         TransferOrderscreatedsuccessfullyMsg: Label 'Transfer Order(s) created successfully';
+        ApplyAdjustmentMsg: Label 'Adjusments cannot be applied. There is %1 %2 already created for this No. %3';
 }

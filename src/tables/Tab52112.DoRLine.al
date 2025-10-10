@@ -103,6 +103,18 @@ table 52112 "NTS DOR Line"
             DataClassification = CustomerContent;
             Editable = false;
         }
+        field(20; Adjustment; Boolean)
+        {
+            Caption = 'Adjustment';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
+        field(23; "Adjustment Processed"; Boolean)
+        {
+            Caption = 'Adjustment Processed';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
 
     }
     keys
@@ -112,6 +124,16 @@ table 52112 "NTS DOR Line"
             Clustered = true;
         }
     }
+
+    trigger OnModify()
+    begin
+        TestStatusOpen();
+    end;
+
+    trigger OnDelete()
+    begin
+        TestStatusOpen();
+    end;
 
     var
         ItemTrackingMgt: Codeunit "Item Tracking Management";
@@ -126,6 +148,17 @@ table 52112 "NTS DOR Line"
         end;
     end;
 
+    procedure TestStatusOpen()
+    begin
+        if DORHeader.Get("Document No.") then begin
+            if not DORHeader.Posted then
+                DORHeader.TestField(Status, DORHeader.Status::Open);
+        end;
+    end;
+
+
+
     var
         ItemRec: Record Item;
+        DORHeader: Record "NTS DOR Header";
 }
