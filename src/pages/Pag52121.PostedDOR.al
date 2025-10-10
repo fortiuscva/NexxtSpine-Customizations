@@ -104,12 +104,28 @@ page 52121 "NTS Posted DOR"
                 ApplicationArea = All;
                 SubPageLink = "Document No." = field("No.");
             }
+            part(DORAdjustmentItems; "NTS DOR Adjusted Items SF")
+            {
+                ApplicationArea = All;
+                SubPageLink = "Document No." = field("No.");
+            }
         }
     }
     actions
     {
         area(Processing)
         {
+            action(Adjustments)
+            {
+                Caption = 'Adjustments';
+                ApplicationArea = all;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                Image = AdjustEntries;
+                RunObject = page "NTS DOR Adjusted Items WrkSht";
+                RunPageLink = "Document No." = field("No.");
+            }
             action("NTS Re-create Sales Order")
             {
                 Caption = 'Re-create Sales Order';
@@ -119,6 +135,7 @@ page 52121 "NTS Posted DOR"
                 PromotedIsBig = true;
                 Image = Redo;
                 Visible = false;
+                Enabled = false;
                 trigger OnAction()
                 var
                     SalesOrderAlreadyCreatedVarLcl: Boolean;
