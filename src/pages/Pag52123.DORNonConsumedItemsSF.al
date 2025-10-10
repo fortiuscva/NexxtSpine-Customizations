@@ -7,7 +7,7 @@ page 52123 "NTS DOR Non-Consumed Items SF"
     AutoSplitKey = true;
     DelayedInsert = true;
     UsageCategory = None;
-    SourceTableView = where(Consumed = const(false));
+    SourceTableView = where(Consumed = const(false), Adjustment = const(false));
 
     layout
     {
