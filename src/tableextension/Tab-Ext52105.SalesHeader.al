@@ -7,24 +7,23 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;
-            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Sell-to Customer No."));
-            trigger OnValidate()
-            var
-                HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
-            begin
-                HSDMappingRec.Reset();
-                HSDMappingRec.SetRange(Hospital, Rec."Sell-to Customer No.");
-                HSDMappingRec.SetRange(Surgeon, Rec."NTS Surgeon");
-                if HSDMappingRec.FindFirst() then
-                    Rec."NTS Distributor" := HSDMappingRec.Distributor
-                else
-                    Rec."NTS Distributor" := '';
-            end;
+            TableRelation = "NTS Surgeon".Code;
+            // trigger OnValidate()
+            // var
+            //     HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
+            // begin
+            //     HSDMappingRec.Reset();
+            //     HSDMappingRec.SetRange(Hospital, Rec."Sell-to Customer No.");
+            //     HSDMappingRec.SetRange(Surgeon, Rec."NTS Surgeon");
+            //     if HSDMappingRec.FindFirst() then
+            //         Rec."NTS Distributor" := HSDMappingRec.Distributor
+            //     else
+            //         Rec."NTS Distributor" := '';
+            // end;
         }
         field(52102; "NTS Distributor"; Code[20])
         {
             Caption = 'Distributor';
-            Editable = false;
             DataClassification = ToBeClassified;
             TableRelation = Customer."No." where("NTS Distributor" = const(true));
         }

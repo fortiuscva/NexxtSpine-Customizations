@@ -24,7 +24,7 @@ tableextension 52125 "NTS Sales Cr.Memo Line" extends "Sales Cr.Memo Line"
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;
-            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Sell-to Customer No."));
+            TableRelation = "NTS Surgeon".Code;
 
         }
         field(52121; "NTS Distributor"; Code[20])

@@ -24,13 +24,12 @@ tableextension 52124 "NTS Sales Shipment Line" extends "Sales Shipment Line"
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;
-            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Sell-to Customer No."));
+            TableRelation = "NTS Surgeon".Code;
 
         }
         field(52121; "NTS Distributor"; Code[20])
         {
             Caption = 'Distributor';
-            Editable = false;
             DataClassification = ToBeClassified;
             TableRelation = Customer."No." where("NTS Distributor" = const(true));
         }

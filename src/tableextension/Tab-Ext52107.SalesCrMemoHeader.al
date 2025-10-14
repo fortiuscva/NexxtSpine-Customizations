@@ -7,7 +7,7 @@ tableextension 52107 "NTS Sales Cr.Memo Header" extends "Sales Cr.Memo Header"
         {
             caption = 'Surgeon';
             DataClassification = CustomerContent;
-            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Sell-to Customer No."));
+            TableRelation = "NTS Surgeon".Code;
         }
         field(52102; "NTS Distributor"; Code[20])
         {
