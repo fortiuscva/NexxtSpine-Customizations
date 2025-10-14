@@ -16,6 +16,10 @@ page 52115 "NTS Surgeon List"
                 {
                     ToolTip = 'Specifies the value of the Surgeon Name field.', Comment = '%';
                 }
+                field(Name; Rec.Name)
+                {
+                    ToolTip = 'Specifies the value of the Name field.', Comment = '%';
+                }
             }
         }
     }
