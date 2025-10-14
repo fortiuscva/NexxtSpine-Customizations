@@ -5,6 +5,7 @@ page 52115 "NTS Surgeon List"
     PageType = List;
     SourceTable = "NTS Surgeon";
     UsageCategory = Lists;
+    DataCaptionFields = Name;
 
     layout
     {

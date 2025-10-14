@@ -5,6 +5,7 @@ table 52109 "NTS Surgeon"
     LookupPageId = "NTS Surgeon List";
     DrillDownPageId = "NTS Surgeon List";
 
+
     fields
     {
         field(1; "Code"; Code[100])
@@ -22,5 +23,17 @@ table 52109 "NTS Surgeon"
         {
             Clustered = true;
         }
+
     }
+
+    fieldgroups
+    {
+        fieldgroup(DropDown; Code, Name)
+        {
+        }
+        fieldgroup(Brick; Code, Name)
+        {
+        }
+    }
+
 }
