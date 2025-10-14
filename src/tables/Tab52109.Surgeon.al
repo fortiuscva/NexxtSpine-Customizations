@@ -2,10 +2,13 @@ table 52109 "NTS Surgeon"
 {
     Caption = 'Surgeon';
     DataClassification = CustomerContent;
+    LookupPageId = "NTS Surgeon List";
+    DrillDownPageId = "NTS Surgeon List";
+
 
     fields
     {
-        field(1; "Code"; Code[10])
+        field(1; "Code"; Code[100])
         {
             Caption = 'Code';
         }
@@ -20,5 +23,17 @@ table 52109 "NTS Surgeon"
         {
             Clustered = true;
         }
+
     }
+
+    fieldgroups
+    {
+        fieldgroup(DropDown; Code, Name)
+        {
+        }
+        fieldgroup(Brick; Code, Name)
+        {
+        }
+    }
+
 }

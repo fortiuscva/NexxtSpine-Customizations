@@ -28,7 +28,7 @@ tableextension 52127 "NTS Transfer Receipt Line" extends "Transfer Receipt Line"
             TableRelation = Item."No." WHERE("Assembly BOM" = CONST(true));
         }
 
-        field(52120; "NTS Surgeon"; Code[20])
+        field(52120; "NTS Surgeon"; Code[100])
         {
             caption = 'Surgeon';
             DataClassification = CustomerContent;

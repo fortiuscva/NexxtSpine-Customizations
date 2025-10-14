@@ -20,7 +20,7 @@ tableextension 52125 "NTS Sales Cr.Memo Line" extends "Sales Cr.Memo Line"
             DataClassification = CustomerContent;
         }
 
-        field(52120; "NTS Surgeon"; Code[20])
+        field(52120; "NTS Surgeon"; Code[100])
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;

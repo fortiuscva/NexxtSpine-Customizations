@@ -20,7 +20,7 @@ tableextension 52122 "NTS Sales Line Archive" extends "Sales Line Archive"
             DataClassification = CustomerContent;
         }
 
-        field(52120; "NTS Surgeon"; Code[20])
+        field(52120; "NTS Surgeon"; Code[100])
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;

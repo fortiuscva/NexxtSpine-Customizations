@@ -20,7 +20,7 @@ tableextension 52123 "NTS Sales Invoice Line" extends "Sales Invoice Line"
             DataClassification = CustomerContent;
         }
 
-        field(52120; "NTS Surgeon"; Code[20])
+        field(52120; "NTS Surgeon"; Code[100])
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;
