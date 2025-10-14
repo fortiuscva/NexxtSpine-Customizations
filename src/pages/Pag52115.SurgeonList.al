@@ -5,6 +5,7 @@ page 52115 "NTS Surgeon List"
     PageType = List;
     SourceTable = "NTS Surgeon";
     UsageCategory = Lists;
+    DataCaptionFields = Name;
 
     layout
     {
@@ -15,6 +16,10 @@ page 52115 "NTS Surgeon List"
                 field("Surgeon Name"; Rec.Code)
                 {
                     ToolTip = 'Specifies the value of the Surgeon Name field.', Comment = '%';
+                }
+                field(Name; Rec.Name)
+                {
+                    ToolTip = 'Specifies the value of the Name field.', Comment = '%';
                 }
             }
         }

@@ -3,7 +3,7 @@ tableextension 52106 "NTS Sales Shipment Header" extends "Sales Shipment Header"
     fields
     {
         //field(52100; "NTS Requested Delivery Date"; Date) //already used on invoice header.
-        field(52101; "NTS Surgeon"; Code[20])
+        field(52101; "NTS Surgeon"; Code[100])
         {
             caption = 'Surgeon';
             DataClassification = CustomerContent;

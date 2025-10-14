@@ -33,12 +33,8 @@ table 52111 "NTS DOR Header"
                     if (Rec."Customer No." <> '') then begin
                         CustomerRec.get("Customer No.");
                         "Customer Name" := CustomerRec.Name;
-                        // Validate(Surgeon, '');
-                        // Validate("Reps.", '');
                     end else begin
                         "Customer Name" := '';
-                        // Validate(Surgeon, '');
-                        // Validate("Reps.", '');
                     end;
                 end;
             end;
@@ -85,13 +81,13 @@ table 52111 "NTS DOR Header"
             Caption = 'Status';
             Editable = false;
         }
-        field(7; Surgeon; Code[20])
+        field(7; Surgeon; Code[100])
         {
             Caption = 'Surgeon';
             TableRelation = "NTS Surgeon".Code;
             trigger OnValidate()
             begin
-                // ValidateSurgeon();
+
             end;
         }
         field(8; Distributor; Code[20])
@@ -471,24 +467,7 @@ table 52111 "NTS DOR Header"
         end;
     end;
 
-    // procedure ValidateSurgeon()
-    // var
-    //     HSDMappingRec: Record "Hosp. Surg. Distrib. Mapping";
-    // begin
-    //     if (xRec.Surgeon <> Rec.Surgeon) then begin
-    //         if Surgeon <> '' then begin
-    //             HSDMappingRec.Reset();
-    //             HSDMappingRec.SetRange(Hospital, Rec."Customer No.");
-    //             HSDMappingRec.SetRange(Surgeon, Rec.Surgeon);
-    //             HSDMappingRec.FindFirst();
-    //             Rec.Validate(Distributor, HSDMappingRec.Distributor);
-    //             Rec.Validate("Reps.", '');
-    //         end else begin
-    //             Rec.Validate(Distributor, '');
-    //             Rec.Validate("Reps.", '');
-    //         end;
-    //     end;
-    // end;
+
 
     procedure ValidateReps()
     begin
