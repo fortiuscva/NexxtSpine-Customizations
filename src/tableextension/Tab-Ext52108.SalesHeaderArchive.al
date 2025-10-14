@@ -3,7 +3,7 @@ tableextension 52108 "NTS Sales Header Archive" extends "Sales Header Archive"
     fields
     {
         //field(52100; "NTS Requested Delivery Date"; Date) //already used on invoice header.
-        field(52101; "NTS Surgeon"; Code[20])
+        field(52101; "NTS Surgeon"; Code[100])
         {
             caption = 'Surgeon';
             DataClassification = CustomerContent;

@@ -37,7 +37,7 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
                 end;
             end;
         }
-        field(52120; "NTS Surgeon"; Code[20])
+        field(52120; "NTS Surgeon"; Code[100])
         {
             caption = 'Surgeon';
             DataClassification = ToBeClassified;

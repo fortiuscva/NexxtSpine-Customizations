@@ -5,13 +5,9 @@ table 52109 "NTS Surgeon"
 
     fields
     {
-        field(1; "Code"; Code[10])
+        field(1; "Code"; Code[100])
         {
             Caption = 'Code';
-        }
-        field(5; Name; Text[100])
-        {
-            Caption = 'Name';
         }
     }
     keys
