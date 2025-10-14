@@ -81,6 +81,10 @@ page 52125 "NTS Delivery of Record"
                     {
                         ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
                     }
+                    field(Distributor; Rec.Distributor)
+                    {
+                        ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
+                    }
                     field(Reps; Rec."Reps.")
                     {
                         ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
@@ -88,11 +92,6 @@ page 52125 "NTS Delivery of Record"
                     field("Reps. Name"; Rec."Reps. Name")
                     {
                         ToolTip = 'Specifies the value of the Reps. Name field.', Comment = '%';
-                    }
-
-                    field(Distributor; Rec.Distributor)
-                    {
-                        ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
                     }
                     field("Location Code"; Rec."Location Code")
                     {

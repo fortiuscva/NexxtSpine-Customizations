@@ -7,12 +7,11 @@ tableextension 52108 "NTS Sales Header Archive" extends "Sales Header Archive"
         {
             caption = 'Surgeon';
             DataClassification = CustomerContent;
-            TableRelation = "Hosp. Surg. Distrib. Mapping".Surgeon where(Hospital = field("Sell-to Customer No."));
+            TableRelation = "NTS Surgeon".Code;
         }
         field(52102; "NTS Distributor"; Code[20])
         {
             Caption = 'Distributor';
-            Editable = false;
             DataClassification = CustomerContent;
             TableRelation = Customer."No." where("NTS Distributor" = const(true));
         }

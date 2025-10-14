@@ -68,6 +68,7 @@ page 52119 "NTS DOR"
                     }
                     field(Quantity; Rec.Quantity)
                     {
+                        Editable = false;
                         ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
                     }
                 }
@@ -83,6 +84,10 @@ page 52119 "NTS DOR"
                     {
                         ToolTip = 'Specifies the value of the Surgery Date field.', Comment = '%';
                     }
+                    field(Distributor; Rec.Distributor)
+                    {
+                        ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
+                    }
                     field(Reps; Rec."Reps.")
                     {
                         ToolTip = 'Specifies the value of the Reps field.', Comment = '%';
@@ -90,10 +95,6 @@ page 52119 "NTS DOR"
                     field("Reps. Name"; Rec."Reps. Name")
                     {
                         ToolTip = 'Specifies the value of the Reps. Name field.', Comment = '%';
-                    }
-                    field(Distributor; Rec.Distributor)
-                    {
-                        ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
                     }
                     field("Location Code"; Rec."Location Code")
                     {
