@@ -129,6 +129,7 @@ page 52125 "NTS Delivery of Record"
                         SalesHeader: Record "Sales Header";
                         SOExistError: Label 'Sales Order %1 already exist for this %2';
                         ReleasedStatusError: Label 'Status must be Released to Post this %1';
+                        DoRHeader: Record "NTS DOR Header";
                     begin
                         if Rec.Status <> Rec.Status::Released then
                             Error(StrSubstNo(ReleasedStatusError, Rec."No."));
@@ -136,7 +137,10 @@ page 52125 "NTS Delivery of Record"
                         if not Confirm('Do you want to post the %1', false, Rec."No.") then
                             exit;
 
-                        NexxSpineFunctions.PostDoR(Rec, false)
+                        DoRHeader.Reset();
+                        DoRHeader.SetRange("No.", Rec."No.");
+                        DoRHeader.FindFirst();
+                        NexxSpineFunctions.PostDoR(DoRHeader, true);
                     end;
                 }
             }
