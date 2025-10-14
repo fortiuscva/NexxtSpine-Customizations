@@ -7,7 +7,7 @@ tableextension 52103 "NTS Sales Invoice Header" extends "Sales Invoice Header"
             Caption = 'Requested Delivery Date';
             DataClassification = ToBeClassified;
         }
-        field(52101; "NTS Surgeon"; Code[20])
+        field(52101; "NTS Surgeon"; Code[100])
         {
             caption = 'Surgeon';
             DataClassification = CustomerContent;
