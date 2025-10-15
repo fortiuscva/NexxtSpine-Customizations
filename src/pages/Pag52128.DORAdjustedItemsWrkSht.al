@@ -72,6 +72,8 @@ page 52128 "NTS DOR Adjusted Items WrkSht"
     trigger OnNewRecord(BelowxRec: Boolean)
     begin
         Rec.Adjustment := true;
+        if Rec."Action Type" = Rec."Action Type"::" " then
+            Rec."Action Type" := Rec."Action Type"::Insertion;
     end;
 
     trigger OnModifyRecord(): Boolean

@@ -848,8 +848,11 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransHeadRecLcl: Record "Transfer Header";
         TransShptHeadRecLcl: Record "Transfer Shipment Header";
         SalesLineRecLcl: Record "Sales Line";
+        SalesHeaderRecLcl: Record "Sales Header";
+        ArchiveManagement: Codeunit ArchiveManagement;
         DocNoVarLcl: Code[20];
         CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ReleaseSalesDocument: Codeunit "Release Sales Document";
         ForReservEntry: Record "Reservation Entry";
         TrackingSpec: Record "Tracking Specification";
         ItemTrackingVal: integer;
@@ -872,7 +875,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if TransShptHeadRecLcl.FindFirst() then
             error(StrSubstNo(ApplyAdjustmentMsg, 'Transfer Order Shipment', TransShptHeadRecLcl."No.", DORHeaderPar."No."));
 
-
         SalesLineRecLcl.Reset();
         SalesLineRecLcl.SetRange("NTS DOR No.", DORHeaderPar."No.");
         SalesLineRecLcl.FindFirst();
@@ -885,13 +887,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if SalesLineRecLcl.FindLast() then
             NextLineNo := SalesLineRecLcl."Line No.";
 
-
-
         DORLineRecLcl.Reset();
         DORLineRecLcl.SetRange("Document No.", DORHeaderPar."No.");
         DORLineRecLcl.SetRange(Adjustment, true);
         DORLineRecLcl.SetRange("Adjustment Processed", false);
-        if DORLineRecLcl.FindSet() then
+        DORLineRecLcl.SetRange("Action Type", DORLineRecLcl."Action Type"::Insertion); //check with shiva
+        if DORLineRecLcl.FindSet() then begin
             repeat
                 NextLineNo += 10000;
                 SalesLineRecLcl.Init();
@@ -938,6 +939,51 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 DORLineRecLcl."Adjustment Processed" := true;
                 DORLineRecLcl.Modify();
             until DORLineRecLcl.Next() = 0;
+        end else begin
+            DORLineRecLcl.SetRange("Action Type", DORLineRecLcl."Action Type"::Modification); //check with shiva
+            if DORLineRecLcl.FindSet() then begin
+                //Archiving the Sales Document
+                if SalesHeaderRecLcl.Get(SalesLineRecLcl."Document Type", SalesLineRecLcl."Document No.") then
+                    ArchiveManagement.ArchiveSalesDocument(SalesHeaderRecLcl);
+
+                repeat
+                    SalesLineRecLcl.Reset();
+                    SalesLineRecLcl.SetRange("NTS DOR No.", DORLineRecLcl."Document No.");
+                    SalesLineRecLcl.SetRange("NTS DOR Line No.", DORLineRecLcl."Line No.");
+                    if SalesLineRecLcl.FindFirst() then begin
+                        if SalesHeaderRecLcl.Status = SalesHeaderRecLcl.Status::Released then
+                            ReleaseSalesDocument.PerformManualReopen(SalesHeaderRecLcl);
+
+                        SalesLineRecLcl.Validate("No.", DORLineRecLcl."Item No.");
+                        SalesLineRecLcl.Validate(Quantity, DORLineRecLcl.Quantity);
+                        SalesLineRecLcl.Validate("NTS Lot Number", DORLineRecLcl."Lot No.");
+                        SalesLineRecLcl.Modify(true);
+                        ItemTrackingVal := FindItemTrackingCode(SalesLineRecLcl."No.");
+                        if (ItemTrackingVal <> 0) then begin
+
+                            ForReservEntry."Lot No." := DORLineRecLcl."Lot No.";
+                            TrackingSpec."New Lot No." := DORLineRecLcl."Lot No.";
+
+                            CreateReservEntry.CreateReservEntryFor(
+                            Database::"Sales Line", 1,
+                            SalesLineRecLcl."Document No.", '',
+                            0, SalesLineRecLcl."Line No.",
+                            SalesLineRecLcl."Qty. per Unit of Measure", SalesLineRecLcl.Quantity, SalesLineRecLcl."Quantity (Base)",
+                            ForReservEntry);
+                            CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                            CreateReservEntry.CreateEntry(
+                            SalesLineRecLcl."No.", SalesLineRecLcl."Variant Code",
+                            SalesLineRecLcl."Location Code", SalesLineRecLcl.Description,
+                            0D, SalesLineRecLcl."Shipment Date",
+                            0, ForReservEntry."Reservation Status"::Surplus);
+                        end;
+                        ReleaseSalesDocument.PerformManualRelease(SalesHeaderRecLcl);
+                    end;
+                    DORLineRecLcl."Adjustment Processed" := true;
+                    DORLineRecLcl.Modify();
+                until DORLineRecLcl.Next() = 0;
+            end;
+        end;
     end;
 
     var

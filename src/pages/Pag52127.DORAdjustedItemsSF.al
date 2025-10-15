@@ -38,6 +38,10 @@ page 52127 "NTS DOR Adjusted Items SF"
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
                 }
+                field("Action Type"; Rec."Action Type")
+                {
+                    ToolTip = 'Specifies the value of the Action Type field.', Comment = '%';
+                }
             }
         }
     }

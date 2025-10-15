@@ -115,6 +115,22 @@ table 52112 "NTS DOR Line"
             DataClassification = CustomerContent;
             Editable = false;
         }
+        field(31; "Action Type"; Enum "NTS Action Type")
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Action Type';
+            Editable = false;
+        }
+        field(32; "Source DOR No."; Code[20])
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Source DOR No.';
+        }
+        field(33; "Source DOR Line No."; Integer)
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Source DOR Line No.';
+        }
 
     }
     keys
