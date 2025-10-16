@@ -7,7 +7,10 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
     {
         add("Prod. Order Line")
         {
-            column(NTSQRCodeText; GenerateQRCode(GetGTIN("Item No.") + ',' + GetLotNo("Prod. Order No.", "Line No.")))
+            column(NTSQRCode; GenerateQRCode(GetGTIN("Item No.") + ',' + GetLotNo("Prod. Order No.", "Line No.")))
+            {
+            }
+            column(NTSQRCodeText; GetGTIN("Item No.") + ',' + GetLotNo("Prod. Order No.", "Line No."))
             {
             }
             column(NTSLaserEtchQRCodeLbl; LaserEtchQRCodeLbl)
