@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-08-14T12:37:24.7460325Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-10-16T20:12:00.3382120Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -35,7 +35,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.51042in</Height>
+                  <Height>0.52375in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -162,7 +162,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>1in</Height>
+                  <Height>1.01333in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -180,12 +180,14 @@
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style />
+                                  <Style>
+                                    <TextAlign>Left</TextAlign>
+                                  </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox4</rd:DefaultName>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.225in</Width>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
                                 <PaddingRight>2pt</PaddingRight>
@@ -205,13 +207,15 @@
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style />
+                                  <Style>
+                                    <TextAlign>Left</TextAlign>
+                                  </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox5</rd:DefaultName>
                               <Top>0.25in</Top>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.225in</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -226,19 +230,21 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Shelf No.</Value>
+                                      <Value EvaluationMode="Constant">Drawing#</Value>
                                       <Style>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style />
+                                  <Style>
+                                    <TextAlign>Left</TextAlign>
+                                  </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox6</rd:DefaultName>
                               <Top>0.5in</Top>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.225in</Width>
                               <ZIndex>2</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -260,12 +266,12 @@
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox7</rd:DefaultName>
-                              <Left>5.125in</Left>
+                              <Left>4.875in</Left>
                               <Height>0.25in</Height>
                               <Width>1.25in</Width>
                               <ZIndex>3</ZIndex>
@@ -289,13 +295,13 @@
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox8</rd:DefaultName>
                               <Top>0.5in</Top>
-                              <Left>5.125in</Left>
+                              <Left>4.875in</Left>
                               <Height>0.25in</Height>
                               <Width>1.25in</Width>
                               <ZIndex>4</ZIndex>
@@ -312,20 +318,20 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Ending Date</Value>
+                                      <Value EvaluationMode="Constant">~Ending Date</Value>
                                       <Style>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox9</rd:DefaultName>
                               <Top>0.75in</Top>
-                              <Left>5.125in</Left>
+                              <Left>4.875in</Left>
                               <Height>0.25in</Height>
                               <Width>1.25in</Width>
                               <ZIndex>5</ZIndex>
@@ -342,20 +348,20 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Est. Weight</Value>
+                                      <Value EvaluationMode="Constant">Lot or Serial #</Value>
                                       <Style>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox10</rd:DefaultName>
                               <Top>0.25in</Top>
-                              <Left>5.125in</Left>
+                              <Left>4.875in</Left>
                               <Height>0.25in</Height>
                               <Width>1.25in</Width>
                               <ZIndex>6</ZIndex>
@@ -379,14 +385,14 @@
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Quantity</rd:DefaultName>
-                              <Left>6.375in</Left>
+                              <Left>6.125in</Left>
                               <Height>0.25in</Height>
-                              <Width>0.75in</Width>
+                              <Width>0.975in</Width>
                               <ZIndex>7</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -401,20 +407,20 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Prod_Order_Est_Weight.Value</Value>
+                                      <Value>=Fields!NTSLotOrSerial.Value</Value>
                                       <Style />
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Est_Weight</rd:DefaultName>
                               <Top>0.25in</Top>
-                              <Left>6.375in</Left>
+                              <Left>6.125in</Left>
                               <Height>0.25in</Height>
-                              <Width>0.75in</Width>
+                              <Width>0.975in</Width>
                               <ZIndex>8</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -434,15 +440,15 @@
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Start_Date</rd:DefaultName>
                               <Top>0.5in</Top>
-                              <Left>6.375in</Left>
+                              <Left>6.125in</Left>
                               <Height>0.25in</Height>
-                              <Width>0.75in</Width>
+                              <Width>0.975in</Width>
                               <ZIndex>9</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -462,15 +468,15 @@
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_End_Date</rd:DefaultName>
                               <Top>0.75in</Top>
-                              <Left>6.375in</Left>
+                              <Left>6.125in</Left>
                               <Height>0.25in</Height>
-                              <Width>0.75in</Width>
+                              <Width>0.975in</Width>
                               <ZIndex>10</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -496,7 +502,7 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Source_No</rd:DefaultName>
-                              <Left>1in</Left>
+                              <Left>1.25in</Left>
                               <Height>0.25in</Height>
                               <Width>2.625in</Width>
                               <ZIndex>11</ZIndex>
@@ -516,7 +522,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Prod_Order_Shelf_No.Value</Value>
+                                      <Value>=Fields!NTSDrawingNo.Value</Value>
                                       <Style />
                                     </TextRun>
                                   </TextRuns>
@@ -525,9 +531,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Shelf_No</rd:DefaultName>
                               <Top>0.5in</Top>
-                              <Left>1in</Left>
+                              <Left>1.25in</Left>
                               <Height>0.25in</Height>
-                              <Width>4.0875in</Width>
+                              <Width>3.3125in</Width>
                               <ZIndex>12</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -554,9 +560,9 @@
                               </Paragraphs>
                               <rd:DefaultName>textbox11</rd:DefaultName>
                               <Top>0.25in</Top>
-                              <Left>1in</Left>
+                              <Left>1.25in</Left>
                               <Height>0.25in</Height>
-                              <Width>4.0875in</Width>
+                              <Width>3.3125in</Width>
                               <ZIndex>13</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -571,20 +577,18 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Prod_Order_Line_Line_No.Value</Value>
+                                      <Value>=Fields!NTSRevisionLevel.Value</Value>
                                       <Style />
                                     </TextRun>
                                   </TextRuns>
-                                  <Style>
-                                    <TextAlign>Left</TextAlign>
-                                  </Style>
+                                  <Style />
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Shelf_No</rd:DefaultName>
                               <Top>0.75in</Top>
-                              <Left>1in</Left>
+                              <Left>1.25in</Left>
                               <Height>0.25in</Height>
-                              <Width>4.0875in</Width>
+                              <Width>3.3125in</Width>
                               <ZIndex>14</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -599,19 +603,21 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Line No.</Value>
+                                      <Value EvaluationMode="Constant">Revision Level</Value>
                                       <Style>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
-                                  <Style />
+                                  <Style>
+                                    <TextAlign>Left</TextAlign>
+                                  </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox6</rd:DefaultName>
                               <Top>0.75in</Top>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.225in</Width>
                               <ZIndex>15</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -629,7 +635,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.45291in</Height>
+                  <Height>0.59958in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -652,7 +658,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=First(Fields!NTSQRCodeText.Value)</Value>
+                                      <Value>=First(Fields!NTSQRCode.Value, "DataSet_Result")</Value>
                                       <Style>
                                         <FontFamily>IDAutomation2D</FontFamily>
                                         <FontSize>8pt</FontSize>
@@ -713,6 +719,36 @@
                                 <PaddingBottom>2pt</PaddingBottom>
                               </Style>
                             </Textbox>
+                            <Textbox Name="Textbox12">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!NTSQRCodeText.Value</Value>
+                                      <Style />
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox12</rd:DefaultName>
+                              <Top>0.48458in</Top>
+                              <Left>0.18833in</Left>
+                              <Height>0.1125in</Height>
+                              <Width>2.3875in</Width>
+                              <ZIndex>3</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
                           </ReportItems>
                           <DataElementOutput>ContentsOnly</DataElementOutput>
                           <Style />
@@ -722,7 +758,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.26333in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -747,7 +783,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.39584in</Height>
+                  <Height>0.40917in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -780,7 +816,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.26042in</Height>
+                  <Height>0.27375in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -793,7 +829,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.26042in</Height>
+                                <Height>0.27375in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -864,7 +900,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.22917in</Height>
+                  <Height>0.2425in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -877,7 +913,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.22917in</Height>
+                                <Height>0.2425in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -925,7 +961,7 @@
                                   </GroupExpressions>
                                 </Group>
                                 <Visibility>
-                                  <Hidden>=IIf(Count(Fields!fldRtngComment.Value).Equals(0),true,false)</Hidden>
+                                  <Hidden>true</Hidden>
                                 </Visibility>
                               </TablixMember>
                             </TablixMembers>
@@ -941,7 +977,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>1in</Height>
+                  <Height>1.01333in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -963,7 +999,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.22222in</Height>
+                                <Height>0.22555in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -992,7 +1028,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.33333in</Height>
+                                <Height>0.33666in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1029,7 +1065,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.22222in</Height>
+                                <Height>0.22555in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1134,7 +1170,13 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>textbox34</rd:DefaultName>
+                                        <Visibility>
+                                          <Hidden>true</Hidden>
+                                        </Visibility>
                                         <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
                                           <PaddingLeft>2pt</PaddingLeft>
                                           <PaddingRight>2pt</PaddingRight>
                                           <PaddingTop>2pt</PaddingTop>
@@ -1146,7 +1188,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.22223in</Height>
+                                <Height>0.22556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1245,7 +1287,13 @@
                                           </Paragraph>
                                         </Paragraphs>
                                         <rd:DefaultName>Prod_Comp_Shelf</rd:DefaultName>
+                                        <Visibility>
+                                          <Hidden>true</Hidden>
+                                        </Visibility>
                                         <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
                                           <PaddingLeft>2pt</PaddingLeft>
                                           <PaddingRight>2pt</PaddingRight>
                                           <PaddingTop>2pt</PaddingTop>
@@ -1315,7 +1363,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>2.16625in</Height>
+                  <Height>2.17958in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1352,7 +1400,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.16428in</Height>
+                                <Height>0.1665in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1387,7 +1435,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.46057in</Height>
+                                <Height>0.46279in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1563,7 +1611,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.375in</Height>
+                                <Height>0.37722in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1671,7 +1719,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.125in</Height>
+                                <Height>0.12722in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1706,7 +1754,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.79472in</Height>
+                                <Height>0.79694in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1863,7 +1911,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.24668in</Height>
+                                <Height>0.2489in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2054,7 +2102,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.03125in</Height>
+                  <Height>0.04458in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents />
@@ -2142,15 +2190,15 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Height>6.29626in</Height>
+            <Height>6.5629in</Height>
             <Width>18.0975cm</Width>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>15.99251cm</Height>
+        <Height>16.66984cm</Height>
         <Style />
       </Body>
-      <Width>18.40748cm</Width>
+      <Width>18.0975cm</Width>
       <Page>
         <PageHeight>11.5in</PageHeight>
         <PageWidth>8in</PageWidth>
@@ -2398,11 +2446,23 @@ End Function</Code>
         <Field Name="Integer_Number">
           <DataField>Integer_Number</DataField>
         </Field>
+        <Field Name="NTSQRCode">
+          <DataField>NTSQRCode</DataField>
+        </Field>
         <Field Name="NTSQRCodeText">
           <DataField>NTSQRCodeText</DataField>
         </Field>
         <Field Name="NTSLaserEtchQRCodeLbl">
           <DataField>NTSLaserEtchQRCodeLbl</DataField>
+        </Field>
+        <Field Name="NTSDrawingNo">
+          <DataField>NTSDrawingNo</DataField>
+        </Field>
+        <Field Name="NTSRevisionLevel">
+          <DataField>NTSRevisionLevel</DataField>
+        </Field>
+        <Field Name="NTSLotOrSerial">
+          <DataField>NTSLotOrSerial</DataField>
         </Field>
       </Fields>
       <Query>
