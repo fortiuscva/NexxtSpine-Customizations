@@ -293,7 +293,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
             end;
             CreateReservEntry.CreateReservEntryFor(
             Database::"Item Journal Line", 3,
-            'ITEM', ItemJournalLine."Journal Batch Name",
+            SalesReceivablesSetup."NTS DOR Journal Batch Name", ItemJournalLine."Journal Batch Name",
             0, ItemJournalLine."Line No.",
             ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
             ForReservEntry);
@@ -340,7 +340,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
                     CreateReservEntry.CreateReservEntryFor(
                     Database::"Item Journal Line", 2,
-                    'ITEM', ItemJournalLine."Journal Batch Name",
+                    SalesReceivablesSetup."NTS DOR Journal Batch Name", ItemJournalLine."Journal Batch Name",
                     0, ItemJournalLine."Line No.",
                     ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
                     ForReservEntry);
@@ -405,7 +405,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
                     CreateReservEntry.CreateReservEntryFor(
                     Database::"Item Journal Line", 2,
-                    'ITEM', ItemJournalLine."Journal Batch Name",
+                    SalesReceivablesSetup."NTS DOR Journal Batch Name", ItemJournalLine."Journal Batch Name",
                     0, ItemJournalLine."Line No.",
                     ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
                     ForReservEntry);
