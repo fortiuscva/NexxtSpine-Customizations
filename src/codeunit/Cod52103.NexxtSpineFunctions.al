@@ -643,7 +643,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     TransferHeader.Validate("Posting Date", WorkDate());
                     TransferHeader.Validate("Shortcut Dimension 1 Code", SalesHeader."Shortcut Dimension 1 Code");
                     TransferHeader.Validate("Shortcut Dimension 2 Code", SalesHeader."Shortcut Dimension 2 Code");
-                    TransferHeader.Validate("Assigned User ID", SalesHeader."Salesperson Code");
+                    //TransferHeader.Validate("Assigned User ID", SalesHeader."Salesperson Code");
                     TransferHeader.Validate("Shipment Date", SalesHeader."Shipment Date");
                     TransferHeader.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
                     TransferHeader.Validate("Shipping Time", SalesHeader."Shipping Time");
@@ -676,6 +676,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 end;
                 TransferLine.Modify(true);
 
+                /*
                 if SalesLine."NTS DOR No." <> '' then begin
                     if NTSDORLine.Get(TransferLine."NTS DOR No.", TransferLine."NTS DOR Line No.") then begin
                         if NTSDORLine.Consumed then begin
@@ -704,7 +705,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         end;
                     end;
                 end;
-
+                */
                 PrevDORNo := SalesLine."NTS DOR No.";
             until SalesLine.Next() = 0;
 
@@ -793,7 +794,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         ItemLedgEntry.Reset();
         ItemLedgEntry.SetRange("Item No.", DORHeader."Set Name");
         ItemLedgEntry.SetRange("Entry Type", ItemLedgEntry."Entry Type"::"Assembly Output");
-        ItemLedgEntry.SetFilter("Remaining Quantity", '<>%1', 0);
+        //ItemLedgEntry.SetFilter("Remaining Quantity", '<>%1', 0);
         ItemLedgEntry.SetRange("Lot No.", DORHeader."Lot No.");
         ItemLedgEntry.SetRange("Serial No.", DORHeader."Serial No.");
         if ItemLedgEntry.FindLast() then begin
