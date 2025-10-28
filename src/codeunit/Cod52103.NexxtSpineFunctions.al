@@ -226,8 +226,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         end;
                     until DoRLine.Next() = 0;
 
-                SelectedDoRHeaders.Posted := true;
-                SelectedDoRHeaders.Modify();
+                // SelectedDoRHeaders.Posted := true;
+                // SelectedDoRHeaders.Modify();
 
                 PrevCustNo := SelectedDoRHeaders."Customer No.";
                 PrevLocation := SelectedDoRHeaders."Location Code";
@@ -712,6 +712,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         PrevDORNo: Code[20];
         TransferOrderCreated: Boolean;
         NTSDORHeader: Record "NTS DOR Header";
+        GroupSalesLinesByDORNo: Query "Group Sales Lines By DOR No.";
     begin
         Clear(PrevDORNo);
         Clear(TransferOrderCreated);
@@ -720,21 +721,20 @@ codeunit 52103 "NTS NexxtSpine Functions"
         Location.SetRange("NTS Is Finished Goods Location", true);
         Location.FindFirst();
 
-
-        SalesLine.Reset();
-        SalesLine.SetRange("Document Type", SalesHeader."Document Type");
-        SalesLine.SetRange("Document No.", SalesHeader."No.");
-        SalesLine.SetFilter("NTS DOR No.", '<>%1', '');
-        if SalesLine.FindSet() then
-            repeat
-                NTSDORHeader.Reset();
-                NTSDORHeader.SetRange("No.", SalesLine."NTS DOR No.");
-                if NTSDORHeader.FindFirst() then begin
-                    NTSDORHeader.TestField("Customer No.");
-                    NTSDORHeader.TestField(Status, NTSDORHeader.Status::Released);
-                    DisassembleSet(NTSDORHeader);
-                end;
-            until SalesLine.Next() = 0;
+        GroupSalesLinesByDORNo.SetRange(DocumentType, SalesHeader."Document Type");
+        GroupSalesLinesByDORNo.SetRange(DocumentNo, SalesHeader."No.");
+        GroupSalesLinesByDORNo.Open();
+        while GroupSalesLinesByDORNo.Read() do begin
+            NTSDORHeader.Reset();
+            NTSDORHeader.SetRange("No.", GroupSalesLinesByDORNo.DORNo);
+            if NTSDORHeader.FindFirst() then begin
+                NTSDORHeader.TestField("Customer No.");
+                NTSDORHeader.TestField(Status, NTSDORHeader.Status::Released);
+                DisassembleSet(NTSDORHeader);
+                NTSDORHeader.Posted := true;
+                NTSDORHeader.Modify();
+            end;
+        end;
 
         SalesLine.Reset();
         SalesLine.SetCurrentKey("NTS DOR No.", "NTS DOR Line No.", "NTS Set Name");
