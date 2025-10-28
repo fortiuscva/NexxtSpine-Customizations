@@ -432,6 +432,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
         ForReservEntry: Record "Reservation Entry";
         TrackingSpec: Record "Tracking Specification";
         DORHeader: Record "NTS DOR Header";
+        ItemTrackingMgmt: Codeunit "Item Tracking Management";
+        ReservationEntry: Record "Reservation Entry";
+        Direction: Enum "Transfer Direction";
+        Item: Record Item;
     begin
         AssemblyHeader.Init();
         AssemblyHeader."Document Type" := AssemblyHeader."Document Type"::Order;
@@ -449,18 +453,36 @@ codeunit 52103 "NTS NexxtSpine Functions"
         DORHeader.Get(AssemblyHeader."NTS DOR No.");
         AssemblyHeader.Validate(Quantity, DORHeader.Quantity);
         AssemblyHeader.Modify(true);
+        //Creating tracking for Assembly Item
+        ItemTrackingVal := FindItemTrackingCode(AssemblyHeader."Item No.");
+        if (ItemTrackingVal <> 0) then begin
+            ForReservEntry."Lot No." := DORHeader."Serial No.";
+            TrackingSpec."New Lot No." := DORHeader."Serial No.";
 
+            CreateReservEntry.CreateReservEntryFor(
+            Database::"Assembly Header", 1,
+            AssemblyHeader."No.", '',
+            0, 0,
+            AssemblyHeader."Qty. per Unit of Measure", AssemblyHeader.Quantity, AssemblyHeader."Quantity (Base)",
+            ForReservEntry);
+            CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+            CreateReservEntry.CreateEntry(
+            AssemblyHeader."No.", AssemblyHeader."Variant Code",
+            AssemblyHeader."Location Code", AssemblyHeader.Description,
+            0D, AssemblyHeader."Due Date",
+            0, ForReservEntry."Reservation Status"::Surplus);
+        end;
 
         AssemblyLine.Reset();
         AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
         if AssemblyLine.FindSet() then
             AssemblyLine.DeleteAll(true);
 
+        //Transfer Lines to Assembly
         NextLineNo := 10000;
         TransLine.Reset();
         TransLine.SetRange("Document No.", TransferHeader."No.");
         TransLine.Setrange("Derived From Line No.", 0);
-
         if TransLine.FindSet() then
             repeat
                 AssemblyLine.Init();
@@ -478,10 +500,83 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 AssemblyLine.Modify(true);
                 NextLineNo += 10000;
 
+                // ItemTrackingVal := FindItemTrackingCode(AssemblyLine."No.");
+                // if (ItemTrackingVal <> 0) then begin
+                //     NTSDORLine.Get(AssemblyLine."NTS DOR No.", AssemblyLine."NTS DOR Line No.");
+                //     ForReservEntry."Lot No." := NTSDORLine."Lot No.";
+                //     TrackingSpec."New Lot No." := NTSDORLine."Lot No.";
+
+                //     CreateReservEntry.CreateReservEntryFor(
+                //     Database::"Assembly Line", 1,
+                //     AssemblyLine."Document No.", '',
+                //     0, AssemblyLine."Line No.",
+                //     AssemblyLine."Qty. per Unit of Measure", AssemblyLine.Quantity, AssemblyLine."Quantity (Base)",
+                //     ForReservEntry);
+                //     CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                //     CreateReservEntry.CreateEntry(
+                //     AssemblyLine."No.", AssemblyLine."Variant Code",
+                //     AssemblyLine."Location Code", AssemblyLine.Description,
+                //     0D, AssemblyLine."Due Date",
+                //     0, ForReservEntry."Reservation Status"::Surplus);
+                // end;
+
+                //Retrieve Tracking Lines for Transfer Line
+                Direction := Direction::Inbound;
+                ReservationEntry.SetSourceFilter(
+                    Database::"Transfer Line", Direction.AsInteger(), TransferHeader."No.", -1, true);
+                ReservationEntry.SetRange("Source Batch Name", '');
+                if Direction = Direction::Outbound then
+                    ReservationEntry.SetRange("Source Prod. Order Line", 0)
+                else
+                    ReservationEntry.SetFilter("Source Prod. Order Line", '<>%1', 0);
+                if ReservationEntry.FindFirst() then begin
+                    //processes this to assembly line.
+                    ItemTrackingVal := FindItemTrackingCode(AssemblyLine."No.");
+                    if (ItemTrackingVal <> 0) then begin
+
+                        ForReservEntry."Lot No." := ReservationEntry."Lot No.";
+                        TrackingSpec."New Lot No." := ReservationEntry."Lot No.";
+
+                        CreateReservEntry.CreateReservEntryFor(
+                        Database::"Assembly Line", 1,
+                        AssemblyLine."Document No.", '',
+                        0, AssemblyLine."Line No.",
+                        AssemblyLine."Qty. per Unit of Measure", AssemblyLine.Quantity, AssemblyLine."Quantity (Base)",
+                        ForReservEntry);
+                        CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                        CreateReservEntry.CreateEntry(
+                        AssemblyLine."No.", AssemblyLine."Variant Code",
+                        AssemblyLine."Location Code", AssemblyLine.Description,
+                        0D, AssemblyLine."Due Date",
+                        0, ForReservEntry."Reservation Status"::Surplus);
+                    end;
+                end;
+            //ItemJnlPostLine.RunWithCheck(ItemJournalLine);
+            until TransLine.Next() = 0;
+
+        //Transfer Non consumed DOR Lines
+        NTSDORLine.Reset();
+        NTSDORLine.SetRange("Document No.", TransferHeader."NTS DOR No.");
+        NTSDORLine.SetRange(Consumed, false);
+        if NTSDORLine.FindSet() then
+            repeat
+                Item.get(NTSDORLine."Item No.");
+                AssemblyLine.Init();
+                AssemblyLine."Document Type" := AssemblyLine."Document Type"::Order;
+                AssemblyLine."Document No." := AssemblyHeader."No.";
+                AssemblyLine."Line No." := NextLineNo;
+                AssemblyLine.Insert(True);
+                AssemblyLine.Validate(Type, AssemblyLine.Type::Item);
+                AssemblyLine.Validate("No.", NTSDORLine."Item No.");
+                AssemblyLine.Validate(Quantity, NTSDORLine.Quantity);
+                AssemblyLine.Validate("Quantity per", NTSDORLine.Quantity);
+                AssemblyLine.Validate("NTS DOR No.", NTSDORLine."Document No.");
+                AssemblyLine.Validate("NTS DOR Line No.", NTSDORLine."Line No.");
+                AssemblyLine.Modify(true);
+                NextLineNo += 10000;
 
                 ItemTrackingVal := FindItemTrackingCode(AssemblyLine."No.");
                 if (ItemTrackingVal <> 0) then begin
-                    NTSDORLine.Get(AssemblyLine."NTS DOR No.", AssemblyLine."NTS DOR Line No.");
                     ForReservEntry."Lot No." := NTSDORLine."Lot No.";
                     TrackingSpec."New Lot No." := NTSDORLine."Lot No.";
 
@@ -498,8 +593,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     0D, AssemblyLine."Due Date",
                     0, ForReservEntry."Reservation Status"::Surplus);
                 end;
-            //ItemJnlPostLine.RunWithCheck(ItemJournalLine);
-            until TransLine.Next() = 0;
+            until NTSDORLine.Next() = 0;
+
+
+
         Message('Assembly Order created, Assembly Order No.:%1', AssemblyHeader."No.");
     end;
 
