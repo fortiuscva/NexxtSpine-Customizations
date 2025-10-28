@@ -120,25 +120,25 @@ page 52119 "NTS DOR"
     {
         area(processing)
         {
-            group("P&osting")
+            group("C&reating")
             {
-                Caption = 'P&osting';
-                action(Post)
+                Caption = 'C&reating';
+                action(CreateSalesOrder)
                 {
-                    Caption = 'Post';
-                    Visible = IsPostedVisible;
+                    Caption = 'Create Sales Order';
+                    Visible = IsCreatedVisible;
                     trigger OnAction()
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
                         SalesHeader: Record "Sales Header";
                         SOExistError: Label 'Sales Order %1 already exist for this %2';
-                        ReleasedStatusError: Label 'Status must be Released to Post this %1';
+                        ReleasedStatusError: Label 'Status must be Released to Create Sales Order for this %1';
                         DoRHeader: Record "NTS DOR Header";
                     begin
                         if Rec.Status <> Rec.Status::Released then
                             Error(StrSubstNo(ReleasedStatusError, Rec."No."));
 
-                        if not Confirm('Do you want to post the %1', false, Rec."No.") then
+                        if not Confirm('Do you want to create the Sales Order from this %1', false, Rec."No.") then
                             exit;
 
                         DoRHeader.Reset();
@@ -211,10 +211,10 @@ page 52119 "NTS DOR"
 
                 group(Category_Category6)
                 {
-                    Caption = 'Posting', Comment = 'Generated from the PromotedActionCategories property index 5.';
+                    Caption = 'Creating', Comment = 'Generated from the PromotedActionCategories property index 5.';
                     ShowAs = SplitButton;
 
-                    actionref(Post_Promoted; Post)
+                    actionref(CreateSalesOrder_Promoted; CreateSalesOrder)
                     {
                     }
                 }
@@ -271,11 +271,11 @@ page 52119 "NTS DOR"
         if Rec.Posted then begin
             IsReleaseVisible := false;
             IsReopenVisible := false;
-            IsPostedVisible := false;
+            IsCreatedVisible := false;
         end else begin
             IsReleaseVisible := true;
             IsReopenVisible := true;
-            IsPostedVisible := true;
+            IsCreatedVisible := true;
         end;
     end;
 
@@ -338,5 +338,5 @@ page 52119 "NTS DOR"
         DocNoVisible: Boolean;
         IsReleaseVisible: Boolean;
         IsReopenVisible: Boolean;
-        IsPostedVisible: Boolean;
+        IsCreatedVisible: Boolean;
 }
