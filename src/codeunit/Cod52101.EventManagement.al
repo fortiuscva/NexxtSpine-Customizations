@@ -150,6 +150,25 @@ codeunit 52101 "NTS Event Management"
         TransferReceiptHeader."NTS Set Serial No." := TransferHeader."NTS Set Serial No.";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforePostSalesLines, '', false, false)]
+    local procedure "Sales-Post_OnBeforePostSalesLines"(var SalesHeader: Record "Sales Header"; var TempSalesLineGlobal: Record "Sales Line" temporary; var TempVATAmountLine: Record "VAT Amount Line" temporary; var EverythingInvoiced: Boolean)
+    var
+        NTSDoRHeader: Record "NTS DoR Header";
+    begin
+        if SalesHeader.Ship then begin
+            if TempSalesLineGlobal.FindSet() then
+                repeat
+                    if TempSalesLineGlobal."NTS DOR No." <> '' then begin
+                        NTSDoRHeader.SetRange("No.", TempSalesLineGlobal."NTS DOR No.");
+                        if NTSDoRHeader.FindFirst() then
+                            if not NTSDoRHeader.Posted then
+                                Error(SalesPostErrorMsg, SalesHeader."No.", NTSDoRHeader."No.");
+                    end;
+                until TempSalesLineGlobal.Next() = 0;
+        end;
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+        SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
 }
