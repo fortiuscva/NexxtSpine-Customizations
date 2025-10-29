@@ -127,6 +127,7 @@ page 52119 "NTS DOR"
                 {
                     Caption = 'Create Sales Order';
                     Visible = IsCreatedVisible;
+                    Image = Create;
                     trigger OnAction()
                     var
                         NexxSpineFunctions: Codeunit "NTS NexxtSpine Functions";
