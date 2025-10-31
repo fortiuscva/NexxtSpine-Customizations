@@ -64,7 +64,7 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         exit('');
     end;
 
-    local procedure GetGTIN(ItemNo: Code[20]): Code[20]
+    local procedure GetGTIN(ItemNo: Code[20]): Code[30]
     var
         ItemRec: Record Item;
     begin
@@ -75,7 +75,7 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         exit('GTIN(UDI): ');
     end;
 
-    local procedure GetLotNo(ProdOrderNo: Code[20]; LineNo: Integer): Code[50]
+    local procedure GetLotNo(ProdOrderNo: Code[20]; LineNo: Integer): Code[60]
     var
         ReservationEntryRec: Record "Reservation Entry";
     begin
@@ -99,11 +99,11 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
 
 
     var
-        GTIN: code[25];
+        GTIN: code[30];
         QRCodeText: Text;
         BarcodeFontProvider2D: Interface "Barcode Font Provider 2D";
         BarcodeSymbology2D: Enum "Barcode Symbology 2D";
         LaserEtchQRCodeLbl: Label 'Laser Etch QR Code.';
-        LotNo: Code[50];
+        LotNo: Code[60];
 
 }
