@@ -631,7 +631,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferHeader.Validate("Posting Date", WorkDate());
         TransferHeader.Validate("Shortcut Dimension 1 Code", SalesHeader."Shortcut Dimension 1 Code");
         TransferHeader.Validate("Shortcut Dimension 2 Code", SalesHeader."Shortcut Dimension 2 Code");
-        TransferHeader.Validate("Assigned User ID", SalesHeader."Salesperson Code");
+        // TransferHeader.Validate("Assigned User ID", SalesHeader."Salesperson Code");
         TransferHeader.Validate("Shipment Date", SalesHeader."Shipment Date");
         TransferHeader.Validate("Shipping Agent Code", SalesHeader."Shipping Agent Code");
         TransferHeader.Validate("Shipping Time", SalesHeader."Shipping Time");
