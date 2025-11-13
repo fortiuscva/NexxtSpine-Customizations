@@ -53,6 +53,58 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
                 end;
             end;
         }
+        field(52132; "NTS Customer Code"; Code[20])
+        {
+            Caption = 'Customer Code';
+            TableRelation = Customer."No.";
+
+            trigger OnValidate()
+            begin
+                Rec."NTS Ship-to Code" := '';
+                ClearTransferToAddress();
+            end;
+
+        }
+        field(52133; "NTS Ship-to Code"; Code[10])
+        {
+            Caption = 'Ship-to Code';
+            TableRelation = "Ship-to Address".Code where("Customer No." = field("NTS Customer Code"));
+
+            trigger OnValidate()
+            var
+                ShipToAddr: Record "Ship-to Address";
+            begin
+                if "NTS Ship-to Code" <> '' then begin
+                    ShipToAddr.Get("NTS Customer Code", "NTS Ship-to Code");
+                    SetTransferToAddressFromShipTo(ShipToAddr);
+                end else
+                    ClearTransferToAddress();
+            end;
+        }
     }
 
+    local procedure SetTransferToAddressFromShipTo(ShipToAddr: Record "Ship-to Address")
+    begin
+        Rec."Transfer-to Name" := ShipToAddr.Name;
+        Rec."Transfer-to Address" := ShipToAddr.Address;
+        Rec."Transfer-to Address 2" := ShipToAddr."Address 2";
+        Rec."Transfer-to City" := ShipToAddr.City;
+        Rec."Transfer-to Post Code" := ShipToAddr."Post Code";
+        Rec."Trsf.-to Country/Region Code" := ShipToAddr."Country/Region Code";
+        Rec."Transfer-to County" := ShipToAddr.County;
+        Rec."Transfer-to Contact" := ShipToAddr.Contact;
+    end;
+
+    local procedure ClearTransferToAddress()
+    begin
+        Rec."Transfer-to Name" := '';
+        Rec."Transfer-to Address" := '';
+        Rec."Transfer-to Address 2" := '';
+        Rec."Transfer-to City" := '';
+        Rec."Transfer-to Post Code" := '';
+        Rec."Trsf.-to Country/Region Code" := '';
+        Rec."Transfer-to County" := '';
+        Rec."Transfer-to Contact" := '';
+    end;
 }
+
