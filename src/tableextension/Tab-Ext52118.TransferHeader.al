@@ -126,6 +126,7 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
         }
         field(52143; "NTS Ship-to Post Code"; Code[20])
         {
+            CaptionClass = '';
             Caption = 'Ship-to Post Code';
             TableRelation = if ("NTS Ship-to Country/Region Code" = const('')) "Post Code"
             else
