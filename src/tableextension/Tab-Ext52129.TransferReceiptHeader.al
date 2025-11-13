@@ -38,6 +38,16 @@ tableextension 52129 "NTS Transfer Receipt Header" extends "Transfer Receipt Hea
             Caption = 'Set Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("NTS Set Name"));
         }
+        field(52132; "NTS Customer Code"; Code[20])
+        {
+            Caption = 'Customer Code';
+            TableRelation = Customer."No.";
+        }
+        field(52133; "NTS Ship-to Code"; Code[10])
+        {
+            Caption = 'Ship-to Code';
+            TableRelation = "Ship-to Address".Code where("Customer No." = field("NTS Customer Code"));
 
+        }
     }
 }

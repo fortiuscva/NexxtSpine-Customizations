@@ -13,5 +13,23 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
                 ApplicationArea = all;
             }
         }
+        addafter(Shipment)
+        {
+            group("NTS ShipTo")
+            {
+                Caption = 'Ship-To';
+
+                field("NTS Customer Code"; Rec."NTS Customer Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Customer Code field.', Comment = '%';
+                }
+                field("NTS Ship-to Code"; Rec."NTS Ship-to Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Ship-to Code field.', Comment = '%';
+                }
+            }
+        }
     }
 }
