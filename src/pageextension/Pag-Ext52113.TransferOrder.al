@@ -76,7 +76,7 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
                 field("NTS Ship-to Post Code"; Rec."NTS Ship-to Post Code")
                 {
                     ApplicationArea = All;
-                    Caption = 'Post Code';
+                    Caption = 'Zip Code';
                     ToolTip = 'Specifies the value of the Ship-to Post Code field.', Comment = '%';
                 }
                 field("NTS Ship-to Country/Region Code"; Rec."NTS Ship-to Country/Region Code")
