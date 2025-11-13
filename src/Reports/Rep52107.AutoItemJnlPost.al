@@ -3,6 +3,7 @@ report 52107 "NTS Auto Item Jnl Post"
     Caption = 'Auto Item Jnl Post';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = all;
+    ProcessingOnly = true;
 
     dataset
     {
