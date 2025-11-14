@@ -168,6 +168,40 @@ codeunit 52101 "NTS Event Management"
         end;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", OnBeforeInsertTransShptHeader, '', false, false)]
+    local procedure "TransferOrder-Post Shipment_OnBeforeInsertTransShptHeader"(var TransShptHeader: Record "Transfer Shipment Header"; TransHeader: Record "Transfer Header"; CommitIsSuppressed: Boolean)
+    begin
+        TransShptHeader."NTS Customer Code" := TransHeader."NTS Customer Code";
+        TransShptHeader."NTS Ship-to Code" := TransHeader."NTS Ship-to Code";
+        TransShptHeader."NTS Ship-to Name" := TransHeader."NTS Ship-to Name";
+        TransShptHeader."NTS Ship-to Name 2" := TransHeader."NTS Ship-to Name 2";
+        TransShptHeader."NTS Ship-to Address" := TransHeader."NTS Ship-to Address";
+        TransShptHeader."NTS Ship-to Address 2" := TransHeader."NTS Ship-to Address 2";
+        TransShptHeader."NTS Ship-to Contact" := TransHeader."NTS Ship-to Contact";
+        TransShptHeader."NTS Ship-to City" := TransHeader."NTS Ship-to City";
+        TransShptHeader."NTS Ship-to County" := TransHeader."NTS Ship-to County";
+        TransShptHeader."NTS Ship-to Country/Region Code" := TransHeader."NTS Ship-to Country/Region Code";
+        TransShptHeader."NTS Ship-to Post Code" := TransHeader."NTS Ship-to Post Code";
+        TransShptHeader."NTS Ship-to Phone No." := TransHeader."NTS Ship-to Phone No.";
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", OnBeforeTransRcptHeaderInsert, '', false, false)]
+    local procedure "TransferOrder-Post Receipt_OnBeforeTransRcptHeaderInsert"(var TransferReceiptHeader: Record "Transfer Receipt Header"; TransferHeader: Record "Transfer Header")
+    begin
+        TransferReceiptHeader."NTS Customer Code" := TransferHeader."NTS Customer Code";
+        TransferReceiptHeader."NTS Ship-to Code" := TransferHeader."NTS Ship-to Code";
+        TransferReceiptHeader."NTS Ship-to Name" := TransferHeader."NTS Ship-to Name";
+        TransferReceiptHeader."NTS Ship-to Name 2" := TransferHeader."NTS Ship-to Name 2";
+        TransferReceiptHeader."NTS Ship-to Address" := TransferHeader."NTS Ship-to Address";
+        TransferReceiptHeader."NTS Ship-to Address 2" := TransferHeader."NTS Ship-to Address 2";
+        TransferReceiptHeader."NTS Ship-to Contact" := TransferHeader."NTS Ship-to Contact";
+        TransferReceiptHeader."NTS Ship-to City" := TransferHeader."NTS Ship-to City";
+        TransferReceiptHeader."NTS Ship-to County" := TransferHeader."NTS Ship-to County";
+        TransferReceiptHeader."NTS Ship-to Country/Region Code" := TransferHeader."NTS Ship-to Country/Region Code";
+        TransferReceiptHeader."NTS Ship-to Post Code" := TransferHeader."NTS Ship-to Post Code";
+        TransferReceiptHeader."NTS Ship-to Phone No." := TransferHeader."NTS Ship-to Phone No.";
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
