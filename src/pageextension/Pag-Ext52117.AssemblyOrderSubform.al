@@ -16,4 +16,30 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
             }
         }
     }
+    actions
+    {
+        addlast(processing)
+        {
+            action("NTS UpdateLocation")
+            {
+                Caption = 'Update Location';
+                ApplicationArea = All;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+                trigger OnAction()
+                var
+                    AsmHdr: Record "Assembly Header";
+                    UpdateLocationonAssemblyLine: report "Update Location on Ass. Lines";
+                begin
+                    if not AsmHdr.Get(Rec."Document Type"::Order, Rec."Document No.") then
+                        exit;
+                    AsmHdr.SetRange("No.", Rec."Document No.");
+                    UpdateLocationonAssemblyLine.SetTableView(AsmHdr);
+                    UpdateLocationonAssemblyLine.SetAsmHeader(AsmHdr);
+                    UpdateLocationonAssemblyLine.RunModal();
+                end;
+            }
+        }
+    }
 }
