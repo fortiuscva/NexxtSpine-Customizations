@@ -60,8 +60,8 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
 
             trigger OnValidate()
             begin
-                Rec."NTS Ship-to Code" := '';
-                ClearTransferToAddress();
+                if "NTS Customer Code" <> xRec."NTS Customer Code" then
+                    Rec.Validate("NTS Ship-to Code", '');
             end;
 
         }
@@ -74,11 +74,8 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             var
                 ShipToAddr: Record "Ship-to Address";
             begin
-                if "NTS Ship-to Code" <> '' then begin
-                    ShipToAddr.Get("NTS Customer Code", "NTS Ship-to Code");
-                    SetTransferToAddressFromShipTo(ShipToAddr);
-                end else
-                    ClearTransferToAddress();
+                if "NTS Ship-to Code" <> xRec."NTS Ship-to Code" then
+                    UpdateShipToAddress("NTS Customer Code", "NTS Ship-to Code");
             end;
         }
         field(52134; "NTS Ship-to Name"; Text[100])
@@ -136,30 +133,32 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
 
     }
 
-    local procedure SetTransferToAddressFromShipTo(ShipToAddr: Record "Ship-to Address")
+    local procedure UpdateShipToAddress(CustomerNo: Code[20]; ShipToCode: Code[10])
+    var
+        ShipToAddress: Record "Ship-to Address";
     begin
-        Rec."NTS Ship-to Name" := ShipToAddr.Name;
-        Rec."NTS Ship-to Address" := ShipToAddr.Address;
-        Rec."NTS Ship-to Address 2" := ShipToAddr."Address 2";
-        Rec."NTS Ship-to City" := ShipToAddr.City;
-        Rec."NTS Ship-to Post Code" := ShipToAddr."Post Code";
-        Rec."NTS Ship-to Country/Region Code" := ShipToAddr."Country/Region Code";
-        Rec."NTS Ship-to County" := ShipToAddr.County;
-        Rec."NTS Ship-to Contact" := ShipToAddr.Contact;
-        Rec."NTS Ship-to Phone No." := ShipToAddr."Phone No.";
-    end;
-
-    local procedure ClearTransferToAddress()
-    begin
-        Rec."NTS Ship-to Name" := '';
-        Rec."NTS Ship-to Address" := '';
-        Rec."NTS Ship-to Address 2" := '';
-        Rec."NTS Ship-to City" := '';
-        Rec."NTS Ship-to Post Code" := '';
-        Rec."NTS Ship-to Country/Region Code" := '';
-        Rec."NTS Ship-to County" := '';
-        Rec."NTS Ship-to Contact" := '';
-        Rec."NTS Ship-to Phone No." := '';
+        if (CustomerNo <> '') and (ShipToCode <> '') then begin
+            ShipToAddress.Get(CustomerNo, ShipToCode);
+            Rec."NTS Ship-to Name" := ShipToAddress.Name;
+            Rec."NTS Ship-to Address" := ShipToAddress.Address;
+            Rec."NTS Ship-to Address 2" := ShipToAddress."Address 2";
+            Rec."NTS Ship-to City" := ShipToAddress.City;
+            Rec."NTS Ship-to Post Code" := ShipToAddress."Post Code";
+            Rec."NTS Ship-to Country/Region Code" := ShipToAddress."Country/Region Code";
+            Rec."NTS Ship-to County" := ShipToAddress.County;
+            Rec."NTS Ship-to Contact" := ShipToAddress.Contact;
+            Rec."NTS Ship-to Phone No." := ShipToAddress."Phone No.";
+        end else begin
+            Rec."NTS Ship-to Name" := '';
+            Rec."NTS Ship-to Address" := '';
+            Rec."NTS Ship-to Address 2" := '';
+            Rec."NTS Ship-to City" := '';
+            Rec."NTS Ship-to Post Code" := '';
+            Rec."NTS Ship-to Country/Region Code" := '';
+            Rec."NTS Ship-to County" := '';
+            Rec."NTS Ship-to Contact" := '';
+            Rec."NTS Ship-to Phone No." := '';
+        end;
     end;
 }
 
