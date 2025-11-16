@@ -1,14 +1,16 @@
-report 52108 "Update Location on Ass. Lines"
+report 52108 "Update Location on Assm. Lines"
 {
     Caption = 'Update Location on Assembly Lines';
-    UsageCategory = ReportsAndAnalysis;
+    UsageCategory = None;
     ProcessingOnly = true;
     UseRequestPage = true;
+
     dataset
     {
         dataitem(AssemblyHeader; "Assembly Header")
         {
             RequestFilterFields = "No.";
+            DataItemTableView = sorting("Document Type", "No.");
             dataitem(AssemblyLine; "Assembly Line")
             {
                 DataItemLink = "Document No." = field("No.");
@@ -16,11 +18,19 @@ report 52108 "Update Location on Ass. Lines"
                 trigger OnAfterGetRecord()
                 begin
                     if LocationCode <> '' then begin
-                        AssemblyLine."Location Code" := LocationCode;
-                        AssemblyLine.Modify(true);
+                        if AssemblyLine."Location Code" <> LocationCode then begin
+                            AssemblyLine.Validate("Location Code", LocationCode);
+                            AssemblyLine.Modify(true);
+                        end;
                     end;
                 end;
             }
+
+            trigger OnPreDataItem()
+            begin
+                if LocationCode <> '' then
+                    Error(LocationCannotBeEmptyErrMsg);
+            end;
         }
     }
 
@@ -59,4 +69,5 @@ report 52108 "Update Location on Ass. Lines"
     var
         LocationCode: Code[10];
         AsmHeaderRec: Record "Assembly Header";
+        LocationCannotBeEmptyErrMsg: Label 'Location Code cannot be empty.';
 }
