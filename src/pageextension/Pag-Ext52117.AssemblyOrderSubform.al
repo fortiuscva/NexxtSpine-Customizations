@@ -30,7 +30,7 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
                 trigger OnAction()
                 var
                     AsmHdr: Record "Assembly Header";
-                    UpdateLocationonAssemblyLine: report "Update Location on Ass. Lines";
+                    UpdateLocationonAssemblyLine: report "Update Location on Assm. Lines";
                 begin
                     if not AsmHdr.Get(Rec."Document Type"::Order, Rec."Document No.") then
                         exit;
