@@ -27,6 +27,7 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
                 Promoted = true;
                 PromotedIsBig = true;
                 PromotedCategory = Process;
+                Image = Allocate;
                 trigger OnAction()
                 var
                     AsmHdr: Record "Assembly Header";

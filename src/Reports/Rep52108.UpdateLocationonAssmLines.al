@@ -9,16 +9,16 @@ report 52108 "Update Location on Assm. Lines"
     {
         dataitem(AssemblyHeader; "Assembly Header")
         {
-            RequestFilterFields = "No.";
             DataItemTableView = sorting("Document Type", "No.");
             dataitem(AssemblyLine; "Assembly Line")
             {
                 DataItemLink = "Document No." = field("No.");
+                DataItemTableView = sorting("Document Type", "Document No.", "Line No.") where(Type = const(item));
 
                 trigger OnAfterGetRecord()
                 begin
                     if LocationCode <> '' then begin
-                        if AssemblyLine."Location Code" <> LocationCode then begin
+                        if (AssemblyLine."Location Code" <> LocationCode) then begin
                             AssemblyLine.Validate("Location Code", LocationCode);
                             AssemblyLine.Modify(true);
                         end;
@@ -28,7 +28,7 @@ report 52108 "Update Location on Assm. Lines"
 
             trigger OnPreDataItem()
             begin
-                if LocationCode <> '' then
+                if LocationCode = '' then
                     Error(LocationCannotBeEmptyErrMsg);
             end;
         }
