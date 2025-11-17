@@ -78,6 +78,45 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
                 Visible = false;
                 ToolTip = 'Specifies the value of the Sales Order Line No. field.', Comment = '%';
             }
+            field("NTS ItemTrackingFlag"; ItemTrackingFlag)
+            {
+                ApplicationArea = All;
+                Editable = false;
+                DrillDown = true;
+                Style = StrongAccent;
+                StyleExpr = true;
+                Caption = 'Item Tracking';
+
+                trigger OnDrillDown()
+                var
+                    TransferLineReserve: Codeunit "Transfer Line-Reserve";
+                    Direction: Enum "Transfer Direction";
+                begin
+                    if ItemTrackingFlag then begin
+                        if Rec.IsInbound() then
+                            Direction := Direction::Inbound
+                        else
+                            Direction := Direction::Outbound;
+
+                        TransferLineReserve.CallItemTracking(Rec, Direction);
+                    end;
+                end;
+            }
         }
     }
+    trigger OnAfterGetRecord()
+    var
+        ReservEntry: Record "Reservation Entry";
+    begin
+        ItemTrackingFlag := false;
+        ReservEntry.SetRange("Source Type", DATABASE::"Transfer Line");
+        ReservEntry.SetRange("Source ID", Rec."Document No.");
+        ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
+        ItemTrackingFlag := ReservEntry.FindFirst();
+    end;
+
+    var
+        ItemTrackingFlag: Boolean;
+
+
 }
