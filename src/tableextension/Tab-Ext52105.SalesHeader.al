@@ -73,6 +73,15 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             TableRelation = Contact.Name where("No." = field("NTS Reps."));
             ValidateTableRelation = false;
         }
+        modify("Document Date")
+        {
+            Caption = 'Surgery Date';
+        }
+        modify("External Document No.")
+        {
+            Caption = 'Customer PO';
+        }
+
     }
 
     Var

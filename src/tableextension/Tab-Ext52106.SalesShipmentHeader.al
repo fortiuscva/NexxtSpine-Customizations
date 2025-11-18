@@ -53,5 +53,13 @@ tableextension 52106 "NTS Sales Shipment Header" extends "Sales Shipment Header"
             TableRelation = Contact.Name where("No." = field("NTS Reps."));
             ValidateTableRelation = false;
         }
+        modify("Document Date")
+        {
+            Caption = 'Surgery Date';
+        }
+        modify("External Document No.")
+        {
+            Caption = 'Customer PO';
+        }
     }
 }
