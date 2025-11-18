@@ -61,15 +61,19 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
             }
         }
     }
-    trigger OnAfterGetRecord()
+    trigger OnAfterGetCurrRecord()
     var
         ReservEntry: Record "Reservation Entry";
     begin
         ItemTrackingFlag := false;
+        if (Rec."Document No." = '') and (Rec.Type <> Rec.Type::Item) and (Rec."No." = '') then
+            exit;
         ReservEntry.SetRange("Source Type", DATABASE::"Assembly Line");
         ReservEntry.SetRange("Source ID", Rec."Document No.");
         ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
-        ItemTrackingFlag := ReservEntry.FindFirst();
+        if ReservEntry.FindFirst() then
+            ItemTrackingFlag := true;
+        CurrPage.Update(false);
     end;
 
     var

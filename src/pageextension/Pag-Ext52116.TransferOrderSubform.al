@@ -104,15 +104,19 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
             }
         }
     }
-    trigger OnAfterGetRecord()
+    trigger OnAfterGetCurrRecord()
     var
         ReservEntry: Record "Reservation Entry";
     begin
         ItemTrackingFlag := false;
+        if (Rec."Document No." = '') and (Rec."Line No." = 0) and (Rec."Item No." = '') then
+            exit;
         ReservEntry.SetRange("Source Type", DATABASE::"Transfer Line");
         ReservEntry.SetRange("Source ID", Rec."Document No.");
         ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
-        ItemTrackingFlag := ReservEntry.FindFirst();
+        if ReservEntry.FindFirst() then
+            ItemTrackingFlag := true;
+        CurrPage.Update(false);
     end;
 
     var
