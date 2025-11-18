@@ -1,14 +1,21 @@
-pageextension 52109 "Customer List" extends "Customer List"
+pageextension 52109 "NTS Customer List" extends "Customer List"
 {
     layout
     {
         addlast(Control1)
         {
-            field("Is Distributor"; Rec."NTS Distributor")
+            field("NTS Is Distributor"; Rec."NTS Distributor")
             {
                 ApplicationArea = All;
                 ToolTip = 'Is Distributor';
             }
+            field("NTS Shortcut Dimension 3"; Rec."NTS Shortcut Dimension 3 Code")
+            {
+                ApplicationArea = All;
+                CaptionClass = '1,2,3';
+                ToolTip = 'Specifies the value of the Shortcut Dimension 3 Code field.', Comment = '%';
+            }
         }
     }
 }
+
