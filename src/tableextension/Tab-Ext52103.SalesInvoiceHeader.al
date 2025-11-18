@@ -57,5 +57,13 @@ tableextension 52103 "NTS Sales Invoice Header" extends "Sales Invoice Header"
             TableRelation = Contact.Name where("No." = field("NTS Reps."));
             ValidateTableRelation = false;
         }
+        modify("Document Date")
+        {
+            Caption = 'Surgery Date';
+        }
+        modify("External Document No.")
+        {
+            Caption = 'Customer PO';
+        }
     }
 }

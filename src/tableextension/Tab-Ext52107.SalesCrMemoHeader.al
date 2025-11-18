@@ -54,5 +54,13 @@ tableextension 52107 "NTS Sales Cr.Memo Header" extends "Sales Cr.Memo Header"
             TableRelation = Contact.Name where("No." = field("NTS Reps."));
             ValidateTableRelation = false;
         }
+        modify("Document Date")
+        {
+            Caption = 'Surgery Date';
+        }
+        modify("External Document No.")
+        {
+            Caption = 'Customer PO';
+        }
     }
 }
