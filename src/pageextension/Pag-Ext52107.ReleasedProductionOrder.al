@@ -6,8 +6,33 @@ pageextension 52107 "NTS Released Production Order" extends "Released Production
         {
             Visible = true;
         }
-        addlast(content)
+        addlast(General)
         {
+            field("Material #1"; Rec."Material #1")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Material #1 field.', Comment = '%';
+            }
+            field("Material #2"; Rec."Material #2")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Material #2 field.', Comment = '%';
+            }
+            field("Material #3"; Rec."Material #3")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Material #3 field.', Comment = '%';
+            }
+            field("Material #4"; Rec."Material #4")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Material #4 field.', Comment = '%';
+            }
+            field("Material #5"; Rec."Material #5")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Material #5 field.', Comment = '%';
+            }
             field("NTS System Name"; Rec."NTS System Name")
             {
                 ApplicationArea = All;
