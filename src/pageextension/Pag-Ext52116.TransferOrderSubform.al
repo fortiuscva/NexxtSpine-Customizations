@@ -78,21 +78,21 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
                 Visible = false;
                 ToolTip = 'Specifies the value of the Sales Order Line No. field.', Comment = '%';
             }
-            field("NTS ItemTrackingFlag"; ItemTrackingFlag)
+            field("NTS ItemTrackingLines"; Rec."NTS Item Tracking Lines")
             {
                 ApplicationArea = All;
                 Editable = false;
                 DrillDown = true;
                 Style = StrongAccent;
                 StyleExpr = true;
-                Caption = 'Item Tracking';
+                Caption = 'Item Tracking Lines';
 
                 trigger OnDrillDown()
                 var
                     TransferLineReserve: Codeunit "Transfer Line-Reserve";
                     Direction: Enum "Transfer Direction";
                 begin
-                    if ItemTrackingFlag then begin
+                    if Rec."NTS Item Tracking Lines" then begin
                         if Rec.IsInbound() then
                             Direction := Direction::Inbound
                         else
@@ -104,23 +104,4 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
             }
         }
     }
-    trigger OnAfterGetCurrRecord()
-    var
-        ReservEntry: Record "Reservation Entry";
-    begin
-        ItemTrackingFlag := false;
-        if (Rec."Document No." = '') and (Rec."Line No." = 0) and (Rec."Item No." = '') then
-            exit;
-        ReservEntry.SetRange("Source Type", DATABASE::"Transfer Line");
-        ReservEntry.SetRange("Source ID", Rec."Document No.");
-        ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
-        if ReservEntry.FindFirst() then
-            ItemTrackingFlag := true;
-        CurrPage.Update(false);
-    end;
-
-    var
-        ItemTrackingFlag: Boolean;
-
-
 }

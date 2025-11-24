@@ -79,6 +79,14 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
             Caption = 'Set Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("NTS Set Name"));
         }
+        field(52132; "NTS Item Tracking Lines"; Boolean)
+        {
+            Caption = 'Item Tracking Lines';
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = exist("Reservation Entry" where("Source ID" = field("Document No."), "Source Ref. No." = field("Line No."),
+                                                                                        "Source Type" = const(37), "Source Subtype" = field("Document Type")));
+        }
     }
     keys
     {
