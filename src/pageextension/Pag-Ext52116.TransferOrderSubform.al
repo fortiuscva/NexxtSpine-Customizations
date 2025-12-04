@@ -4,6 +4,31 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
     {
         addfirst(Control1)
         {
+            field("NTS ItemTrackingLines"; Rec."NTS Item Tracking Lines")
+            {
+                ApplicationArea = All;
+                Editable = false;
+                DrillDown = true;
+                Style = StrongAccent;
+                StyleExpr = true;
+                Caption = 'Item Tracking Lines';
+
+                trigger OnDrillDown()
+                var
+                    TransferLineReserve: Codeunit "Transfer Line-Reserve";
+                    Direction: Enum "Transfer Direction";
+                begin
+                    if Rec."NTS Item Tracking Lines" then begin
+                        if Rec.IsInbound() then
+                            Direction := Direction::Inbound
+                        else
+                            Direction := Direction::Outbound;
+
+                        TransferLineReserve.CallItemTracking(Rec, Direction);
+                    end;
+                end;
+            }
+
             field("NTS DOR No."; Rec."NTS DOR No.")
             {
                 Editable = false;
@@ -77,30 +102,6 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
                 Editable = false;
                 Visible = false;
                 ToolTip = 'Specifies the value of the Sales Order Line No. field.', Comment = '%';
-            }
-            field("NTS ItemTrackingLines"; Rec."NTS Item Tracking Lines")
-            {
-                ApplicationArea = All;
-                Editable = false;
-                DrillDown = true;
-                Style = StrongAccent;
-                StyleExpr = true;
-                Caption = 'Item Tracking Lines';
-
-                trigger OnDrillDown()
-                var
-                    TransferLineReserve: Codeunit "Transfer Line-Reserve";
-                    Direction: Enum "Transfer Direction";
-                begin
-                    if Rec."NTS Item Tracking Lines" then begin
-                        if Rec.IsInbound() then
-                            Direction := Direction::Inbound
-                        else
-                            Direction := Direction::Outbound;
-
-                        TransferLineReserve.CallItemTracking(Rec, Direction);
-                    end;
-                end;
             }
         }
     }
