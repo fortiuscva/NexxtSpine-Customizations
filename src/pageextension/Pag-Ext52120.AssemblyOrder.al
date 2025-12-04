@@ -19,40 +19,16 @@ pageextension 52120 "NTS Assembly Order" extends "Assembly Order"
         }
         addlast(Control2)
         {
-            field("NTS Comments"; ShowComments())
+            field("NTS Comments"; Rec.Comment)
             {
                 ApplicationArea = All;
-                Caption = ' Comments';
+                Caption = 'Comment';
                 Editable = false;
                 Style = StrongAccent;
                 StyleExpr = true;
                 DrillDown = true;
                 ToolTip = 'Indicates if comments exist. Click to view or add comments.';
-                trigger OnDrillDown()
-                var
-                    AssmCommentLine: Record "Assembly Comment Line";
-                begin
-                    AssmCommentLine.SetRange("Document Type", Rec."Document Type");
-                    AssmCommentLine.SetRange("Document No.", Rec."No.");
-                    AssmCommentLine.SetRange("Document Line No.", 0);
-                    AssmCommentLine.SetFilter(Comment, '<>%1', '');
-                    if AssmCommentLine.FindFirst() then
-                        PAGE.Run(PAGE::"Assembly Comment Sheet", AssmCommentLine);
-                end;
             }
         }
     }
-    procedure ShowComments(): Boolean
-    var
-        AssmCommentLine: Record "Assembly Comment Line";
-    begin
-        AssmCommentLine.SetRange("Document Type", Rec."Document Type");
-        AssmCommentLine.SetRange("Document No.", Rec."No.");
-        AssmCommentLine.SetRange("Document Line No.", 0);
-        AssmCommentLine.SetFilter(Comment, '<>%1', '');
-        if AssmCommentLine.FindFirst() then
-            exit(true);
-
-    end;
-
 }
