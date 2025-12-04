@@ -17,7 +17,7 @@ tableextension 52120 "NTS Assembly Line" extends "Assembly Line"
             Caption = 'Item Tracking Lines';
             Editable = false;
             FieldClass = FlowField;
-            CalcFormula = exist("Reservation Entry" where("Source ID" = field("Document No."), "Source Ref. No." = field("Line No."), "Source Type" = const(901), "Source Subtype" = field("Document Type")));
+            CalcFormula = exist("Reservation Entry" where("Source ID" = field("Document No."), "Source Ref. No." = field("Line No."), "Source Type" = const(901), "Source Subtype" = field("Document Type"), "Reservation Status" = filter(Surplus)));
         }
     }
 }
