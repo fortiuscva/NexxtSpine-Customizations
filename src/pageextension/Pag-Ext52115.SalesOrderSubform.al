@@ -86,17 +86,20 @@ pageextension 52115 "NTS Sales Order Subform" extends "Sales Order Subform"
 
 
 
-    trigger OnAfterGetRecord()
+    trigger OnAfterGetCurrRecord()
     var
         ReservEntry: Record "Reservation Entry";
     begin
         ItemTrackingFlag := false;
-        if Rec."Document No." <> '' then begin
-            ReservEntry.SetRange("Source Type", DATABASE::"Sales Line");
-            ReservEntry.SetRange("Source ID", Rec."Document No.");
-            ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
-            ItemTrackingFlag := ReservEntry.FindFirst();
-        end;
+        if (Rec."Document No." = '') and (Rec."Line No." = 0) and (Rec.Type <> Rec.Type::Item) then
+            exit;
+
+        ReservEntry.SetRange("Source Type", DATABASE::"Sales Line");
+        ReservEntry.SetRange("Source ID", Rec."Document No.");
+        ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
+        if ReservEntry.FindFirst() then
+            ItemTrackingFlag := true;
+        CurrPage.Update(false);
     end;
 
     var
