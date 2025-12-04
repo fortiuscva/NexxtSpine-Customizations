@@ -19,6 +19,11 @@ pageextension 52120 "NTS Assembly Order" extends "Assembly Order"
         }
         addlast(Control2)
         {
+            field("NTS Item Tracking Lines"; Rec."NTS Item Tracking Lines")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Item Tracking Lines field.', Comment = '%';
+            }
             field("NTS Comments"; Rec.Comment)
             {
                 ApplicationArea = All;
@@ -29,6 +34,7 @@ pageextension 52120 "NTS Assembly Order" extends "Assembly Order"
                 DrillDown = true;
                 ToolTip = 'Indicates if comments exist. Click to view or add comments.';
             }
+
         }
     }
 }
