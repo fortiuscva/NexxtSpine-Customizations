@@ -17,6 +17,18 @@ pageextension 52120 "NTS Assembly Order" extends "Assembly Order"
                 ToolTip = 'Specifies the value of the Posting No. Series field.', Comment = '%';
             }
         }
-
+        addlast(Control2)
+        {
+            field("NTS Comments"; Rec.Comment)
+            {
+                ApplicationArea = All;
+                Caption = 'Comment';
+                Editable = false;
+                Style = StrongAccent;
+                StyleExpr = true;
+                DrillDown = true;
+                ToolTip = 'Indicates if comments exist. Click to view or add comments.';
+            }
+        }
     }
 }

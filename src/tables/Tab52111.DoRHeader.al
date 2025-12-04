@@ -274,25 +274,25 @@ table 52111 "NTS DOR Header"
     var
         DORHeader2: Record "NTS DOR Header";
         NoSeries: Codeunit "No. Series";
-        NoSeriesMgt2: Codeunit NoSeriesManagement;
+        // NoSeriesMgt2: Codeunit NoSeriesManagement;
         NoSeriesCode: Code[20];
         IsHandled: Boolean;
     begin
         if "No." = '' then begin
             TestNoSeries();
             NoSeriesCode := GetNoSeriesCode();
-            NoSeriesMgt2.RaiseObsoleteOnBeforeInitSeries(NoSeriesCode, xRec."No. Series", "Posting Date", "No.", "No. Series", IsHandled);
-            if not IsHandled then begin
-                "No. Series" := NoSeriesCode;
-                if NoSeries.AreRelated("No. Series", xRec."No. Series") then
-                    "No. Series" := xRec."No. Series";
+            //  NoSeriesMgt2.RaiseObsoleteOnBeforeInitSeries(NoSeriesCode, xRec."No. Series", "Posting Date", "No.", "No. Series", IsHandled);
+            //  if not IsHandled then begin
+            "No. Series" := NoSeriesCode;
+            if NoSeries.AreRelated("No. Series", xRec."No. Series") then
+                "No. Series" := xRec."No. Series";
+            "No." := NoSeries.GetNextNo("No. Series", "Posting Date");
+            DORHeader2.ReadIsolation(IsolationLevel::ReadUncommitted);
+            DORHeader2.SetLoadFields("No.");
+            while DORHeader2.Get("No.") do
                 "No." := NoSeries.GetNextNo("No. Series", "Posting Date");
-                DORHeader2.ReadIsolation(IsolationLevel::ReadUncommitted);
-                DORHeader2.SetLoadFields("No.");
-                while DORHeader2.Get("No.") do
-                    "No." := NoSeries.GetNextNo("No. Series", "Posting Date");
-                NoSeriesMgt2.RaiseObsoleteOnAfterInitSeries("No. Series", NoSeriesCode, "Posting Date", "No.");
-            end;
+            //  NoSeriesMgt2.RaiseObsoleteOnAfterInitSeries("No. Series", NoSeriesCode, "Posting Date", "No.");
+            //  end;
         end;
         InitRecord();
     end;
