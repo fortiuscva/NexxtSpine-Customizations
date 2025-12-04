@@ -63,6 +63,42 @@ pageextension 52115 "NTS Sales Order Subform" extends "Sales Order Subform"
                 ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
                 Visible = false;
             }
+            field("NTS ItemTrackingLines"; ItemTrackingFlag)
+            {
+                ApplicationArea = All;
+                Editable = false;
+                DrillDown = true;
+                Style = StrongAccent;
+                StyleExpr = true;
+                Caption = 'Item Tracking Lines';
+
+                trigger OnDrillDown()
+                var
+                    SalesLineReserve: Codeunit "Sales Line-Reserve";
+                begin
+                    if ItemTrackingFlag then begin
+                        SalesLineReserve.CallItemTracking(Rec);
+                    end;
+                end;
+            }
         }
     }
+
+
+
+    trigger OnAfterGetRecord()
+    var
+        ReservEntry: Record "Reservation Entry";
+    begin
+        ItemTrackingFlag := false;
+        if Rec."Document No." <> '' then begin
+            ReservEntry.SetRange("Source Type", DATABASE::"Sales Line");
+            ReservEntry.SetRange("Source ID", Rec."Document No.");
+            ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
+            ItemTrackingFlag := ReservEntry.FindFirst();
+        end;
+    end;
+
+    var
+        ItemTrackingFlag: Boolean;
 }
