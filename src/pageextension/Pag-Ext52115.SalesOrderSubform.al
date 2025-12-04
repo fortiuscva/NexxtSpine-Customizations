@@ -63,7 +63,7 @@ pageextension 52115 "NTS Sales Order Subform" extends "Sales Order Subform"
                 ToolTip = 'Specifies the value of the Distributor field.', Comment = '%';
                 Visible = false;
             }
-            field("NTS ItemTrackingLines"; ItemTrackingFlag)
+            field("NTS ItemTrackingLines"; Rec."NTS Item Tracking Lines")
             {
                 ApplicationArea = All;
                 Editable = false;
@@ -76,7 +76,7 @@ pageextension 52115 "NTS Sales Order Subform" extends "Sales Order Subform"
                 var
                     SalesLineReserve: Codeunit "Sales Line-Reserve";
                 begin
-                    if ItemTrackingFlag then begin
+                    if Rec."NTS Item Tracking Lines" then begin
                         SalesLineReserve.CallItemTracking(Rec);
                     end;
                 end;
@@ -84,24 +84,4 @@ pageextension 52115 "NTS Sales Order Subform" extends "Sales Order Subform"
         }
     }
 
-
-
-    trigger OnAfterGetCurrRecord()
-    var
-        ReservEntry: Record "Reservation Entry";
-    begin
-        ItemTrackingFlag := false;
-        if (Rec."Document No." = '') and (Rec."Line No." = 0) and (Rec.Type <> Rec.Type::Item) then
-            exit;
-
-        ReservEntry.SetRange("Source Type", DATABASE::"Sales Line");
-        ReservEntry.SetRange("Source ID", Rec."Document No.");
-        ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
-        if ReservEntry.FindFirst() then
-            ItemTrackingFlag := true;
-        CurrPage.Update(false);
-    end;
-
-    var
-        ItemTrackingFlag: Boolean;
 }

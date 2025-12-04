@@ -14,7 +14,7 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
                 Editable = false;
                 ApplicationArea = all;
             }
-            field("NTS ItemTrackingLines"; ItemTrackingFlag)
+            field("NTS ItemTrackingLines"; Rec."NTS Item Tracking Lines")
             {
                 ApplicationArea = All;
                 Editable = false;
@@ -27,7 +27,7 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
                 var
                     AssemblyLineReserve: Codeunit "Assembly Line-Reserve";
                 begin
-                    if ItemTrackingFlag then begin
+                    if Rec."NTS Item Tracking Lines" then begin
                         AssemblyLineReserve.CallItemTracking(Rec);
                     end;
                 end;
@@ -60,21 +60,4 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
             }
         }
     }
-    trigger OnAfterGetCurrRecord()
-    var
-        ReservEntry: Record "Reservation Entry";
-    begin
-        ItemTrackingFlag := false;
-        if (Rec."Document No." = '') and (Rec.Type <> Rec.Type::Item) and (Rec."No." = '') then
-            exit;
-        ReservEntry.SetRange("Source Type", DATABASE::"Assembly Line");
-        ReservEntry.SetRange("Source ID", Rec."Document No.");
-        ReservEntry.SetRange("Source Ref. No.", Rec."Line No.");
-        if ReservEntry.FindFirst() then
-            ItemTrackingFlag := true;
-        CurrPage.Update(false);
-    end;
-
-    var
-        ItemTrackingFlag: Boolean;
 }

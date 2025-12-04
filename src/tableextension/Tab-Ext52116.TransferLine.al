@@ -66,6 +66,16 @@ tableextension 52116 "NTS Transfer Line" extends "Transfer Line"
             Caption = 'Set Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("NTS Set Name"));
         }
+        field(52132; "NTS Item Tracking Lines"; Boolean)
+        {
+            Caption = 'Item Tracking Lines';
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = exist("Reservation Entry" where("Source ID" = field("Document No."),
+                                                                  "Source Ref. No." = field("Line No."),
+                                                                  "Source Type" = const(5741),
+                                                                  "Source Subtype" = const("1")));
+        }
 
         modify("Item No.")
         {
