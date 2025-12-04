@@ -12,9 +12,13 @@ report 52109 "NTS Auto Approve Time Cards"
             trigger OnAfterGetRecord()
             var
                 cuTCMApproval: Codeunit "SFI Time Card Approval Mgmt";
+                cuTCMPost: Codeunit "SFI Time Card-Post";
             begin
-                if not SFITimeCardHeader.Open then
+                if not SFITimeCardHeader.Open then begin
                     cuTCMApproval.approveTimecard(SFITimeCardHeader);
+                    cuTCMPost.setHidePrompt(true);
+                    cuTCMPost.RUN(SFITimeCardHeader);
+                end;
             end;
         }
     }

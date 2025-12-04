@@ -28,6 +28,12 @@
       "name": "Shop Floor Insight",
       "version": "7.13.9187.5",
       "publisher": "Insight Works" 
+    },
+    {
+      "id": "ba1776ba-1198-4b4c-a61e-c4612f1880d5",
+      "name": "IWorks Common",
+      "version": "2.18.9389.1",
+      "publisher": "Insight Works" 
     }
   ],
   "screenshots": [],
