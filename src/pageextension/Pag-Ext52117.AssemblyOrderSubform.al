@@ -14,6 +14,24 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
                 Editable = false;
                 ApplicationArea = all;
             }
+            field("NTS ItemTrackingLines"; Rec."NTS Item Tracking Lines")
+            {
+                ApplicationArea = All;
+                Editable = false;
+                DrillDown = true;
+                Style = StrongAccent;
+                StyleExpr = true;
+                Caption = 'Item Tracking Lines';
+
+                trigger OnDrillDown()
+                var
+                    AssemblyLineReserve: Codeunit "Assembly Line-Reserve";
+                begin
+                    if Rec."NTS Item Tracking Lines" then begin
+                        AssemblyLineReserve.CallItemTracking(Rec);
+                    end;
+                end;
+            }
         }
     }
     actions
