@@ -168,7 +168,16 @@ codeunit 52101 "NTS Event Management"
         end;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post", OnBeforeCode, '', false, false)]
+    local procedure "Item Jnl.-Post_OnBeforeCode"(var ItemJournalLine: Record "Item Journal Line"; var HideDialog: Boolean; var SuppressCommit: Boolean; var IsHandled: Boolean)
+    begin
+        if NexxtSingleInstance.GetFromAutoPostItemJnl() then
+            HideDialog := true;
+
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
+        NexxtSingleInstance: Codeunit "NTS Single Instance";
 }
