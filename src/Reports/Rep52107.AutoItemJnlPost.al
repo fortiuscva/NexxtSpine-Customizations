@@ -13,7 +13,7 @@ report 52107 "NTS Auto Item Jnl Post"
 
             trigger OnAfterGetRecord()
             begin
-                if (not Codeunit.Run(Codeunit::"Item Jnl.-Post Batch", ItemJnlLine)) then;
+                if (not Codeunit.Run(Codeunit::"Item Jnl.-Post Line", ItemJnlLine)) then;
             end;
         }
     }
