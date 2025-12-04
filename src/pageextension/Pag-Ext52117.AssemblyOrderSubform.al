@@ -2,18 +2,8 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
 {
     layout
     {
-        addlast(content)
+        addfirst(Group)
         {
-            field("NTS DOR No."; Rec."NTS DOR No.")
-            {
-                Editable = false;
-                ApplicationArea = all;
-            }
-            field("NTS DOR Line No."; Rec."NTS DOR Line No.")
-            {
-                Editable = false;
-                ApplicationArea = all;
-            }
             field("NTS ItemTrackingLines"; Rec."NTS Item Tracking Lines")
             {
                 ApplicationArea = All;
@@ -33,6 +23,19 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
                 end;
             }
         }
+        addlast(content)
+        {
+            field("NTS DOR No."; Rec."NTS DOR No.")
+            {
+                Editable = false;
+                ApplicationArea = all;
+            }
+            field("NTS DOR Line No."; Rec."NTS DOR Line No.")
+            {
+                Editable = false;
+                ApplicationArea = all;
+            }
+        }
     }
     actions
     {
@@ -45,7 +48,7 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
                 Promoted = true;
                 PromotedIsBig = true;
                 PromotedCategory = Process;
-                Image = Allocate;
+                Image = Action;
                 trigger OnAction()
                 var
                     AsmHdr: Record "Assembly Header";

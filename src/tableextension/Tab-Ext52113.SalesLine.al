@@ -85,7 +85,7 @@ tableextension 52113 "NTS Sales Line" extends "Sales Line"
             Editable = false;
             FieldClass = FlowField;
             CalcFormula = exist("Reservation Entry" where("Source ID" = field("Document No."), "Source Ref. No." = field("Line No."),
-                                                                                        "Source Type" = const(37), "Source Subtype" = field("Document Type")));
+                                                                                        "Source Type" = const(37), "Source Subtype" = field("Document Type"), "Reservation Status" = filter(Surplus)));
         }
     }
     keys
