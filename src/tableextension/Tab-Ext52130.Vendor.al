@@ -7,7 +7,7 @@ tableextension 52130 "NTS Vendor" extends Vendor
             CaptionClass = '1,2,3';
             Caption = 'Shortcut 3 Dimension Code';
             FieldClass = FlowField;
-            CalcFormula = Lookup("Default Dimension"."Dimension Value Code" WHERE("Table ID" = CONST(Database::Vendor), "No." = FIELD("No."), "Dimension Code" = CONST('SPECIAL PROJECTS')));
+            CalcFormula = Lookup("Default Dimension"."Dimension Value Code" WHERE("Table ID" = CONST(Database::Vendor), "No." = FIELD("No."), "Dimension Code" = CONST('GROUP')));
             Editable = false;
         }
     }

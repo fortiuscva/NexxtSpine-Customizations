@@ -72,7 +72,7 @@ tableextension 52116 "NTS Transfer Line" extends "Transfer Line"
             Editable = false;
             FieldClass = FlowField;
             CalcFormula = exist("Reservation Entry" where("Source ID" = field("Document No."),
-                                                                  "Source Prod. Order Line" = field("Line No."),
+                                                                  "Source Ref. No." = field("Line No."),
                                                                   "Source Type" = const(5741),
                                                                   "Source Subtype" = filter('1'),
                                                                   "Reservation Status" = filter(Surplus)));
