@@ -206,7 +206,7 @@ codeunit 52101 "NTS Event Management"
     local procedure "SFI AL Hooks_OnBeforeValidateTimeCard"(var precTimeCard: Record "SFI Time Card Header"; var pbCancel: Boolean)
     begin
         if Session.CurrentClientType = ClientType::Background then
-            if precTimeCard.Approved then
+            if not precTimeCard.open then
                 pbCancel := true;
     end;
 
