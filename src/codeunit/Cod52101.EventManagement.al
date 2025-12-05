@@ -202,6 +202,21 @@ codeunit 52101 "NTS Event Management"
         TransferReceiptHeader."NTS Ship-to Phone No." := TransferHeader."NTS Ship-to Phone No.";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"SFI AL Hooks", OnBeforeValidateTimeCard, '', false, false)]
+    local procedure "SFI AL Hooks_OnBeforeValidateTimeCard"(var precTimeCard: Record "SFI Time Card Header"; var pbCancel: Boolean)
+    begin
+        if Session.CurrentClientType = ClientType::Background then
+            if precTimeCard.Approved then
+                pbCancel := true;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", OnAfterSubcontractingWorkCenterUsed, '', false, false)]
+    local procedure "Item Journal Line_OnAfterSubcontractingWorkCenterUsed"(ItemJournalLine: Record "Item Journal Line"; WorkCenter: Record "Work Center"; var Result: Boolean)
+    begin
+        if Session.CurrentClientType = ClientType::Background then
+            Result := false;
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
