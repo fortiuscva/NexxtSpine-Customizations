@@ -173,6 +173,7 @@ codeunit 52101 "NTS Event Management"
     begin
         if NexxtSingleInstance.GetFromAutoPostItemJnl() then
             HideDialog := true;
+    end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", OnBeforeInsertTransShptHeader, '', false, false)]
     local procedure "TransferOrder-Post Shipment_OnBeforeInsertTransShptHeader"(var TransShptHeader: Record "Transfer Shipment Header"; TransHeader: Record "Transfer Header"; CommitIsSuppressed: Boolean)
