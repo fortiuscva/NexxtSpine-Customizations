@@ -60,8 +60,10 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
 
             trigger OnValidate()
             begin
-                if "NTS Customer Code" <> xRec."NTS Customer Code" then
+                if "NTS Customer Code" <> xRec."NTS Customer Code" then begin
                     Rec.Validate("NTS Ship-to Code", '');
+                    UpdateShipToAddress("NTS Customer Code", "NTS Ship-to Code");
+                end;
             end;
 
         }
