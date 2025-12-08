@@ -34,6 +34,12 @@
       "name": "IWorks Common",
       "version": "2.18.9389.1",
       "publisher": "Insight Works" 
+    },
+     {
+      "id": "9c55319d-f3b9-441b-9956-0a0a04decd4b",
+      "name": "Dynamic Ship: Integrated Shipping",
+      "version": "2.8.9188.2",
+      "publisher": "Insight Works" 
     }
   ],
   "screenshots": [],

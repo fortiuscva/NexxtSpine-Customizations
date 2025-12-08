@@ -397,7 +397,9 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 ItemJournalLine.VALIDATE("Posting Date", SalesHeader."Posting Date");
                 // ItemJournalLine.Modify(TRUE);
 
-                DORLine.get(SalesLine."NTS DOR No.", SalesLine."NTS DOR Line No.");
+                if not DORLine.get(SalesLine."NTS DOR No.", SalesLine."NTS DOR Line No.") then
+                    exit;
+
                 ItemTrackingVal := FindItemTrackingCode(ItemJournalLine."Item No.");
                 if (ItemTrackingVal <> 0) then begin
                     ForReservEntry."Lot No." := DoRLine."Lot No.";
