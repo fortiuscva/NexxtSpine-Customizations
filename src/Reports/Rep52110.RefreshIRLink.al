@@ -6,76 +6,63 @@ report 52110 "NTS Refresh IR Link"
     ProcessingOnly = true;
     dataset
     {
-        dataitem(ProdOrderRoutingLine; "Prod. Order Routing Line")
+        dataitem("Production Order"; "Production Order")
         {
-            trigger OnAfterGetRecord()
-            var
-                NewRecLink: Record "Record Link";
-            begin
-                if RecreateVar then begin
+            RequestFilterFields = "No.";
+            DataItemTableView = where(Status = const(Released));
+            dataitem(ProdOrderRoutingLine; "Prod. Order Routing Line")
+            {
+                DataItemLink = "Prod. Order No." = field("No.");
+
+                trigger OnAfterGetRecord()
+                var
+                    NewRecLink: Record "Record Link";
+                begin
                     if "NTS IR Sheet 1" <> '' then
-                        DeleteIRLinkForSheet(ProdOrderRoutingLine, "NTS IR Sheet 1");
+                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1");
 
                     if "NTS IR Sheet 2" <> '' then
-                        DeleteIRLinkForSheet(ProdOrderRoutingLine, "NTS IR Sheet 2");
+                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2");
 
                     if "NTS IR Sheet 3" <> '' then
-                        DeleteIRLinkForSheet(ProdOrderRoutingLine, "NTS IR Sheet 3");
+                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3");
                 end;
 
-                if "NTS IR Sheet 1" <> '' then
-                    CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1");
-
-                if "NTS IR Sheet 2" <> '' then
-                    CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2");
-
-                if "NTS IR Sheet 3" <> '' then
-                    CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3");
-            end;
-
-        }
-    }
-    requestpage
-    {
-        layout
-        {
-            area(Content)
-            {
-                group(Options)
-                {
-                    field(RecreateVar; RecreateVar)
-                    {
-                        ApplicationArea = all;
-                        Caption = 'Recreate';
-                    }
-                }
             }
+
+            trigger OnAfterGetRecord()
+            begin
+                DeleteIRLinkForSheet("Production Order");
+            end;
         }
     }
     var
-        RecreateVar: Boolean;
         SheetName1Gbl: Code[20];
         SheetName2Gbl: Code[20];
 
         SheetName3Gbl: Code[20];
 
 
-    local procedure DeleteIRLinkForSheet(ProdOrderRoutingLinepar: Record "Prod. Order Routing Line"; SheetName: Code[20])
+    local procedure DeleteIRLinkForSheet(ProductionOrderRecPar: Record "Production Order")
     var
         RecLink: Record "Record Link";
         IRCode: Record "NTS IR Code";
+        ReferenceIRCode: Record "NTS Reference IR Code";
     begin
-        IRCode.Get(SheetName);
 
         RecLink.Reset();
-        if IRCode."IR/IP Type" = IRCode."IR/IP Type"::IR then
-            RecLink.SetRange(Description, ProdOrderRoutingLinepar."Prod. Order No." + ',' + IRCode."IR Number")
-        else
-            RecLink.SetRange(Description, ProdOrderRoutingLinepar."Prod. Order No." + ',' + ProdOrderRoutingLinepar."Operation No." + ',' + IRCode."IR Number");
+        RecLink.SetRange("Record ID", ProductionOrderRecPar.RecordId);
         if RecLink.FindSet() then
-            repeat
-                RecLink.Delete();
-            until RecLink.Next() = 0;
+            RecLink.DeleteAll();
+
+        //Delete Reference IR code Specific to the Line
+        ReferenceIRCode.Reset();
+        ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
+        ReferenceIRCode.SetRange("Source Subtype", ProductionOrderRecPar.Status);
+        ReferenceIRCode.SetRange("Source No.", ProductionOrderRecPar."No.");
+        if ReferenceIRCode.FindSet() then
+            ReferenceIRCode.DeleteAll();
+
     end;
 
 
