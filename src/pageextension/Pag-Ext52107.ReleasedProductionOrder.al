@@ -55,34 +55,4 @@ pageextension 52107 "NTS Released Production Order" extends "Released Production
             }
         }
     }
-    actions
-    {
-        addafter(RefreshProductionOrder)
-        {
-            action("NTS Refresh IR/AP Link for Line")
-            {
-                ApplicationArea = all;
-                Caption = 'Refresh IR/AP Link for Line';
-
-                trigger OnAction()
-                var
-                    ProdOrderRec: Record "Production Order";
-                    NTSRefreshIRReport: Report "NTS Refresh IR Link";
-                begin
-                    ProdOrderRec.Reset();
-                    ProdOrderRec.SetRange(Status, Rec.Status);
-                    ProdOrderRec.SetRange("No.", Rec."No.");
-                    ProdOrderRec.FindFirst();
-
-                    NTSRefreshIRReport.SetTableView(ProdOrderRec);
-                    NTSRefreshIRReport.RunModal();
-                end;
-            }
-        }
-        addafter(RefreshProductionOrder_Promoted)
-        {
-            Actionref(RefreshIRIPLink; "NTS Refresh IR/AP Link for Line")
-            { }
-        }
-    }
 }
