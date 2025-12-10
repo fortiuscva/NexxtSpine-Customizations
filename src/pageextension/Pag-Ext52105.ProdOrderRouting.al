@@ -33,4 +33,29 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
             }
         }
     }
+    actions
+    {
+        addafter("Order &Tracking")
+        {
+            action("NTS Refresh IR/AP Link for Line")
+            {
+                ApplicationArea = all;
+                Caption = 'Refresh IR/AP Link for Line';
+
+                trigger OnAction()
+                var
+                    ProdOrderRec: Record "Production Order";
+                    NTSRefreshIRReport: Report "NTS Refresh IR Link";
+                begin
+                    ProdOrderRec.Reset();
+                    ProdOrderRec.SetRange(Status, Rec.Status);
+                    ProdOrderRec.SetRange("No.", Rec."No.");
+                    ProdOrderRec.FindFirst();
+
+                    NTSRefreshIRReport.SetTableView(ProdOrderRec);
+                    NTSRefreshIRReport.RunModal();
+                end;
+            }
+        }
+    }
 }
