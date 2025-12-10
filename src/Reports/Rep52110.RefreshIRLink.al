@@ -3,6 +3,7 @@ report 52110 "NTS Refresh IR Link"
     ApplicationArea = All;
     Caption = 'Refresh IR Link';
     UsageCategory = ReportsAndAnalysis;
+    ProcessingOnly = true;
     dataset
     {
         dataitem(ProdOrderRoutingLine; "Prod. Order Routing Line")
