@@ -64,6 +64,7 @@ report 52110 "NTS Refresh IR Link"
     var
         RecLink: Record "Record Link";
         IRCode: Record "NTS IR Code";
+        ReferenceIRCode: Record "NTS Reference IR Code";
     begin
         IRCode.Get(SheetName);
 
@@ -76,6 +77,22 @@ report 52110 "NTS Refresh IR Link"
             repeat
                 RecLink.Delete();
             until RecLink.Next() = 0;
+
+        //Delete Reference IR code Specific to the Line
+        ReferenceIRCode.Reset();
+        ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
+        ReferenceIRCode.SetRange("Source Subtype", ProdOrderRoutingLinepar.Status);
+        ReferenceIRCode.SetRange("Source No.", ProdOrderRoutingLinepar."Prod. Order No.");
+        ReferenceIRCode.SetRange("Source Line No.", ProdOrderRoutingLinepar."Routing Reference No.");
+        ReferenceIRCode.SetRange("Source Subline No.", 0);
+
+        if IRCode."IR/IP Type" = IRCode."IR/IP Type"::IP then
+            ReferenceIRCode.SetRange("Operation No.", ProdOrderRoutingLinepar."Operation No.");
+
+        ReferenceIRCode.SetRange("IR Number", IRCode."IR Number");
+        if ReferenceIRCode.FindSet() then
+            ReferenceIRCode.DeleteAll(true);
+
     end;
 
 
