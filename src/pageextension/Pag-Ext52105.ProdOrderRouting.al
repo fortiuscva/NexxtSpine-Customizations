@@ -49,7 +49,7 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
                 begin
                     ProdOrderRec.Reset();
                     ProdOrderRec.SetRange(Status, Rec.Status);
-                    ProdOrderRec.SetRange("No.", Rec."No.");
+                    ProdOrderRec.SetRange("No.", Rec."Prod. Order No.");
                     ProdOrderRec.FindFirst();
 
                     NTSRefreshIRReport.SetTableView(ProdOrderRec);
