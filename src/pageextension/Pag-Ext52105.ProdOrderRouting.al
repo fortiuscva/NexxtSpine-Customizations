@@ -40,6 +40,7 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
             action("NTS Refresh IR/AP Link for Line")
             {
                 ApplicationArea = all;
+                Caption = 'Refresh IR/AP Link for Line';
 
                 trigger OnAction()
                 var
