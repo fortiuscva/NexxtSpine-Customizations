@@ -18,6 +18,9 @@ report 52102 "NTS Sales Credit Memo"
             column(No_SalesCrMemoHeader; "No.")
             {
             }
+            column(CurrencySymbol; CurrencySymbol)
+            {
+            }
             dataitem("Sales Cr.Memo Line"; "Sales Cr.Memo Line")
             {
                 DataItemLink = "Document No." = field("No.");
@@ -367,6 +370,13 @@ report 52102 "NTS Sales Credit Memo"
 
                         trigger OnAfterGetRecord()
                         begin
+                            if "Sales Cr.Memo Header"."Currency Code" = '' then begin
+                                GLSetup.Get();
+                                if Currency.Get(GLSetup."LCY Code") then
+                                    CurrencySymbol := Currency.Symbol;
+                            end else
+                                if Currency.Get("Sales Cr.Memo Header"."Currency Code") then
+                                    CurrencySymbol := Currency.Symbol;
                             OnLineNumber := OnLineNumber + 1;
                             with TempSalesCrMemoLine do begin
                                 if OnLineNumber = 1 then
@@ -601,6 +611,9 @@ report 52102 "NTS Sales Credit Memo"
     end;
 
     var
+        CurrencySymbol: Text[10];
+        Currency: Record Currency;
+        GLSetup: Record "General Ledger Setup";
         TaxLiable: Decimal;
         UnitPriceToPrint: Decimal;
         AmountExclInvDisc: Decimal;
