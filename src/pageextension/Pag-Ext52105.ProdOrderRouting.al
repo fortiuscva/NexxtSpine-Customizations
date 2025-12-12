@@ -37,10 +37,10 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
     {
         addafter("Order &Tracking")
         {
-            action("NTS Refresh IR/AP Link for Line")
+            action("NTS Refresh IR/IP links")
             {
                 ApplicationArea = all;
-                Caption = 'Refresh IR/AP Link for Line';
+                Caption = 'Refresh IR/IP links';
 
                 trigger OnAction()
                 var
