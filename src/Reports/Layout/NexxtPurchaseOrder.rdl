@@ -1,5 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
+  <am:AuthoringMetadata>
+    <am:CreatedBy>
+      <am:Name>MSRB</am:Name>
+      <am:Version>15.0.20283.0</am:Version>
+    </am:CreatedBy>
+    <am:UpdatedBy>
+      <am:Name>MSRB</am:Name>
+      <am:Version>15.0.20283.0</am:Version>
+    </am:UpdatedBy>
+    <am:LastModifiedTimestamp>2025-12-12T21:17:32.0917821Z</am:LastModifiedTimestamp>
+  </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
     <DataSource Name="DataSource">
@@ -1334,8 +1345,117 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
               </Border>
             </Style>
           </Tablix>
+          <Textbox Name="Textbox6">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value />
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox6</rd:DefaultName>
+            <Top>0.81469in</Top>
+            <Height>0.51042in</Height>
+            <Width>7.25in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+              <TopBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </TopBorder>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+              <LeftBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </LeftBorder>
+              <RightBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </RightBorder>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox11">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>="(" &amp; Fields!ShipperBoxesQty_Var.Value &amp; ")" &amp; Fields!ShipperBoxesCaption_Var.Value</Value>
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox11</rd:DefaultName>
+            <Top>0.83719in</Top>
+            <Height>0.2125in</Height>
+            <Width>1.7625in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox12">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>="(" &amp; Fields!MailerBoxesQty_Var.Value &amp; ")" &amp; Fields!MailerBoxesCaption_Var.Value</Value>
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox11</rd:DefaultName>
+            <Top>1.06261in</Top>
+            <Height>0.2in</Height>
+            <Width>1.7875in</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>0.80219in</Height>
+        <Height>1.32511in</Height>
         <Style />
       </Body>
       <Width>7.28107in</Width>
@@ -2328,7 +2448,7 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
           <Style />
         </PageHeader>
         <PageFooter>
-          <Height>2.66605in</Height>
+          <Height>2.57214in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -2982,6 +3102,24 @@ IoNIwatKlBkxECgFKguiDDxs2pZC3IOKAIdIwYhRrgQ01IMH8063P2rA2C0wKqkyUlUvg6iyZc+RFW7f
         </Field>
         <Field Name="CompanyInformation_Picture">
           <DataField>CompanyInformation_Picture</DataField>
+        </Field>
+        <Field Name="ShipperBoxesCaption_Var">
+          <DataField>ShipperBoxesCaption_Var</DataField>
+        </Field>
+        <Field Name="ShipperBoxesQty_Var">
+          <DataField>ShipperBoxesQty_Var</DataField>
+        </Field>
+        <Field Name="ShipperBoxesQty_VarFormat">
+          <DataField>ShipperBoxesQty_VarFormat</DataField>
+        </Field>
+        <Field Name="MailerBoxesCaption_Var">
+          <DataField>MailerBoxesCaption_Var</DataField>
+        </Field>
+        <Field Name="MailerBoxesQty_Var">
+          <DataField>MailerBoxesQty_Var</DataField>
+        </Field>
+        <Field Name="MailerBoxesQty_VarFormat">
+          <DataField>MailerBoxesQty_VarFormat</DataField>
         </Field>
         <Field Name="CompanyAddress1">
           <DataField>CompanyAddress1</DataField>
