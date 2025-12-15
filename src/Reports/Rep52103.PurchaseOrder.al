@@ -20,6 +20,10 @@ report 52103 "NTS Purchase Order"
             { }
             column(CompanyInformation_Picture; CompanyInformation.Picture)
             { }
+            column(ShipperBoxesCaption_Var; ShipperBoxesCaption_Var) { }
+            column(ShipperBoxesQty_Var; ShipperBoxesQty_Var) { }
+            column(MailerBoxesCaption_Var; MailerBoxesCaption_Var) { }
+            column(MailerBoxesQty_Var; MailerBoxesQty_Var) { }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = sorting(Number);
@@ -222,7 +226,7 @@ report 52103 "NTS Purchase Order"
                         {
                             DecimalPlaces = 2 : 5;
                         }
-                        column(Description_PurchaseLine; Description)
+                        column(Description_PurchaseLine; PrintDescription_Var)
                         {
                         }
                         column(PrintFooter; PrintFooter)
@@ -311,8 +315,65 @@ report 52103 "NTS Purchase Order"
                         }
 
                         trigger OnAfterGetRecord()
+                        var
+                            ReservEntry: Record "Reservation Entry";
+                            ItemNoVar: Code[20];
+                            DescriptionLclVar: Text;
+                            AnyFound: Boolean;
+                            QtyTxt: Text;
+                            ItemRec: Record Item;
                         begin
                             OnLineNumber := OnLineNumber + 1;
+
+                            Clear(SterilePkgInfo_Var);
+                            Clear(PrintDescription_Var);
+
+                            if not ("Purchase Line".Type = "Purchase Line".Type::Item) then exit;
+                            ItemRec.Get("Purchase Line"."No.");
+                            ItemNoVar := "Purchase Line"."No.";
+                            DescriptionLclVar := "Purchase Line".Description;
+                            if (ItemNoVar = 'STERILIZATION') then begin
+                                PrintDescription_Var := "Purchase Line".Description;
+                            end else if (ItemNoVar = 'STERILE PACKAGING') then begin
+                                DescriptionLclVar := "Purchase Line".Description;
+                                AnyFound := false;
+                                SterilePkgInfo_Var := '';
+
+                                ReservEntry.Reset();
+                                ReservEntry.SetRange("Source Type", DATABASE::"Purchase Line");
+                                ReservEntry.SetRange("Source Subtype", 0);
+                                ReservEntry.SetRange("Source ID", "Purchase Line"."Document No.");
+                                ReservEntry.SetRange("Source Ref. No.", "Purchase Line"."Line No.");
+                                ReservEntry.SetRange("Item No.", "Purchase Line"."No.");
+
+                                if ReservEntry.FindSet() then
+                                    repeat
+                                        if ReservEntry."Serial No." <> '' then begin
+                                            if ReservEntry."Lot No." <> '' then begin
+                                                QtyTxt := Format(ReservEntry.Quantity);
+                                                SterilePkgInfo_Var += StrSubstNo('Serial No.: %1,Lot No.: %2, Qty: %3', ReservEntry."Serial No.", ReservEntry."Lot No.", QtyTxt);
+                                                AnyFound := true;
+                                            end else begin
+                                                QtyTxt := Format(ReservEntry.Quantity);
+                                                SterilePkgInfo_Var += StrSubstNo('Serial No.: %1, Qty: %2', ReservEntry."Serial No.", QtyTxt);
+                                                AnyFound := true;
+                                            end;
+                                        end else
+                                            if ReservEntry."Lot No." <> '' then begin
+                                                QtyTxt := Format(ReservEntry.Quantity);
+                                                SterilePkgInfo_Var += StrSubstNo('Lot No.: %1, Qty: %2', ReservEntry."Lot No.", QtyTxt);
+                                                AnyFound := true;
+                                            end;
+                                    until ReservEntry.Next() = 0;
+
+                                if not AnyFound then
+                                    SterilePkgInfo_Var := StrSubstNo('Qty: %1 ', Format("Purchase Line".Quantity));
+
+                                if SterilePkgInfo_Var <> '' then
+                                    PrintDescription_Var := CopyStr(DescriptionLclVar + ' ' + SterilePkgInfo_Var, 1, MaxStrLen(DescriptionLclVar))
+                            end else begin
+                                PrintDescription_Var := DescriptionLclVar;
+                            end;
 
                             if ("Purchase Header"."Tax Area Code" <> '') and not UseExternalTaxEngine then
                                 SalesTaxCalc.AddPurchLine("Purchase Line");
@@ -438,6 +499,11 @@ report 52103 "NTS Purchase Order"
             }
 
             trigger OnAfterGetRecord()
+            Var
+                PurchaseLine: Record "Purchase Line";
+                ItemNoVar: Code[20];
+                DescriptionLclVar: Text;
+                ItemRec: Record Item;
             begin
                 /* if PrintCompany then
                     if RespCenter.Get("Responsibility Center") then begin
@@ -445,6 +511,34 @@ report 52103 "NTS Purchase Order"
                         CompanyInformation."Phone No." := RespCenter."Phone No.";
                         CompanyInformation."Fax No." := RespCenter."Fax No.";
                     end; */
+                ShipperBoxesQty_Var := 0;
+                MailerBoxesQty_Var := 0;
+
+
+                // Iterate all lines of the current order
+                PurchaseLine.Reset();
+                PurchaseLine.SetRange("Document Type", "Purchase Header"."Document Type");
+                PurchaseLine.SetRange("Document No.", "Purchase Header"."No.");
+
+                if PurchaseLine.FindSet() then
+                    repeat
+                        if PurchaseLine.Type = PurchaseLine.Type::Item then begin
+                            ItemNoVar := PurchaseLine."No.";
+                            DescriptionLclVar := PurchaseLine.Description;
+
+                            if ItemNoVar = 'STERILIZATION' then begin
+                                if StrPos(DescriptionLclVar, 'Unboxing fee') > 0 then begin
+                                    ShipperBoxesQty_Var += PurchaseLine.Quantity;
+                                    ShipperBoxesCaption_Var := 'Shipper Boxes';
+                                end else
+                                    if StrPos(DescriptionLclVar, 'Mailer Boxes') > 0 then begin
+                                        MailerBoxesQty_Var += PurchaseLine.Quantity;
+                                        MailerBoxesCaption_Var := 'Mailer Boxes';
+                                    end;
+                            end;
+                        end;
+                    until PurchaseLine.Next() = 0;
+
 
                 CurrReport.Language := LanguageGbl.GetLanguageIdOrDefault("Language Code");
                 CurrReport.FormatRegion := LanguageGbl.GetFormatRegionOrDefault("Format Region");
@@ -584,6 +678,12 @@ report 52103 "NTS Purchase Order"
     end;
 
     var
+        ShipperBoxesCaption_Var: Text;
+        MailerBoxesCaption_Var: Text;
+        ShipperBoxesQty_Var: Decimal;
+        MailerBoxesQty_Var: Decimal;
+        SterilePkgInfo_Var: Text;
+        PrintDescription_Var: Text[100];
         UnitPriceToPrint: Decimal;
         AmountExclInvDisc: Decimal;
         ShipmentMethod: Record "Shipment Method";
@@ -661,5 +761,6 @@ report 52103 "NTS Purchase Order"
         VendorInvoiceNoLbl: Label 'Vendor Invoice No.';
         VendorItemNo: Code[50];
         ReasonCode: Record "NTS Purchase Reason Code";
+
 }
 
