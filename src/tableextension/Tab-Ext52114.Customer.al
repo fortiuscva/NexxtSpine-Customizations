@@ -10,7 +10,7 @@ tableextension 52114 "NTS Customer" extends Customer
         {
             Caption = 'Shortcut Dimension 3 Code';
             FieldClass = FlowField;
-            CalcFormula = Lookup("Default Dimension"."Dimension Value Code" WHERE("Table ID" = CONST(Database::Customer), "No." = FIELD("No."), "Dimension Code" = CONST('SPECIAL PROJECTS')));
+            CalcFormula = Lookup("Default Dimension"."Dimension Value Code" WHERE("Table ID" = CONST(Database::Customer), "No." = FIELD("No."), "Dimension Code" = CONST('GROUP')));
             Editable = false;
         }
     }

@@ -173,6 +173,7 @@ codeunit 52101 "NTS Event Management"
     begin
         if NexxtSingleInstance.GetFromAutoPostItemJnl() then
             HideDialog := true;
+    end;
 
     end;
 
