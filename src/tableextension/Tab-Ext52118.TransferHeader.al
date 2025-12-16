@@ -60,8 +60,10 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
 
             trigger OnValidate()
             begin
-                if "NTS Customer Code" <> xRec."NTS Customer Code" then
+                if "NTS Customer Code" <> xRec."NTS Customer Code" then begin
                     Rec.Validate("NTS Ship-to Code", '');
+                    UpdateShipToAddress("NTS Customer Code", "NTS Ship-to Code");
+                end;
             end;
 
         }
@@ -136,6 +138,7 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
     local procedure UpdateShipToAddress(CustomerNo: Code[20]; ShipToCode: Code[10])
     var
         ShipToAddress: Record "Ship-to Address";
+        CustomerRec: Record Customer;
     begin
         if (CustomerNo <> '') and (ShipToCode <> '') then begin
             ShipToAddress.Get(CustomerNo, ShipToCode);
@@ -148,6 +151,16 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Rec."NTS Ship-to County" := ShipToAddress.County;
             Rec."NTS Ship-to Contact" := ShipToAddress.Contact;
             Rec."NTS Ship-to Phone No." := ShipToAddress."Phone No.";
+        end else if CustomerNo <> '' then begin
+            CustomerRec.Get(CustomerNo);
+            Rec."NTS Ship-to Address" := CustomerRec.Address;
+            Rec."NTS Ship-to Address 2" := CustomerRec."Address 2";
+            Rec."NTS Ship-to City" := CustomerRec.City;
+            Rec."NTS Ship-to Post Code" := CustomerRec."Post Code";
+            Rec."NTS Ship-to Country/Region Code" := CustomerRec."Country/Region Code";
+            Rec."NTS Ship-to County" := CustomerRec.County;
+            Rec."NTS Ship-to Contact" := CustomerRec.Contact;
+            Rec."NTS Ship-to Phone No." := CustomerRec."Phone No.";
         end else begin
             Rec."NTS Ship-to Name" := '';
             Rec."NTS Ship-to Address" := '';
