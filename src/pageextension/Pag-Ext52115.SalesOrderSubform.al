@@ -17,9 +17,7 @@ pageextension 52115 "NTS Sales Order Subform" extends "Sales Order Subform"
                 var
                     SalesLineReserve: Codeunit "Sales Line-Reserve";
                 begin
-                    if Rec."NTS Item Tracking Lines" then begin
-                        SalesLineReserve.CallItemTracking(Rec);
-                    end;
+                    SalesLineReserve.CallItemTracking(Rec);
                 end;
             }
             field("NTS DOR No."; Rec."NTS DOR No.")

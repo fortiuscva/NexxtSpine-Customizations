@@ -17,9 +17,7 @@ pageextension 52117 "NTS Assembly Order Subform" extends "Assembly Order Subform
                 var
                     AssemblyLineReserve: Codeunit "Assembly Line-Reserve";
                 begin
-                    if Rec."NTS Item Tracking Lines" then begin
-                        AssemblyLineReserve.CallItemTracking(Rec);
-                    end;
+                    AssemblyLineReserve.CallItemTracking(Rec);
                 end;
             }
         }

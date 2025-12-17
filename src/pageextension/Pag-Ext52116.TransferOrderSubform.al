@@ -18,14 +18,12 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
                     TransferLineReserve: Codeunit "Transfer Line-Reserve";
                     Direction: Enum "Transfer Direction";
                 begin
-                    if Rec."NTS Item Tracking Lines" then begin
-                        if Rec.IsInbound() then
-                            Direction := Direction::Inbound
-                        else
-                            Direction := Direction::Outbound;
+                    if Rec.IsInbound() then
+                        Direction := Direction::Inbound
+                    else
+                        Direction := Direction::Outbound;
 
-                        TransferLineReserve.CallItemTracking(Rec, Direction);
-                    end;
+                    TransferLineReserve.CallItemTracking(Rec, Direction);
                 end;
             }
 
