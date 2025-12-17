@@ -22,8 +22,10 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
                         Direction := Direction::Inbound
                     else
                         Direction := Direction::Outbound;
-
-                    TransferLineReserve.CallItemTracking(Rec, Direction);
+                    if Rec."NTS Item Tracking Lines" then
+                        TransferLineReserve.CallItemTracking(Rec, Direction)
+                    else
+                        Rec.OpenItemTrackingLines(Direction);
                 end;
             }
 
