@@ -73,7 +73,19 @@ pageextension 52108 "NTS Customer Card" extends "Customer Card"
         {
             Importance = Standard;
         }
+        modify("Registration Number")
+        {
+            Importance = Standard;
+        }
         modify("Gen. Bus. Posting Group")
+        {
+            Importance = Standard;
+        }
+        modify("Allow Multiple Posting Groups")
+        {
+            Importance = Standard;
+        }
+        modify("VAT Bus. Posting Group")
         {
             Importance = Standard;
         }
