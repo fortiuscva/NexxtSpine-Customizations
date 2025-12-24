@@ -209,6 +209,82 @@ codeunit 52101 "NTS Event Management"
         TransferReceiptHeader."NTS Ship-to Phone No." := TransferHeader."NTS Ship-to Phone No.";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"DSHIP Event Publisher", OnAfterScan, '', false, false)]
+    local procedure "DSHIP Event Publisher_OnAfterScan"(scan: Text; docType: Option; docNo: Code[50]; lp: Code[50]; item: Code[50])
+    var
+        LPHeader: Record "IWX LP Header";
+        SalesHeader: Record "Sales Header";
+        TransferHeader: Record "Transfer Header";
+        ShipToAddr: Record "Ship-to Address";
+        ShippingAgent: Record "Shipping Agent";
+    begin
+        // Only proceed if we have a License Plate
+        if lp = '' then
+            exit;
+
+        if not LPHeader.Get(lp) then
+            exit;
+
+        // Handle by source document type
+
+
+        case LPHeader."Source Document" of
+            LPHeader."Source Document"::"Sales Order":
+                begin
+                    if SalesHeader.Get(SalesHeader."Document Type"::Order, docNo) then begin
+                        // Ship-to block from Sales Header
+                        LPHeader.Validate("NTS Ship-to Name", SalesHeader."Ship-to Name");
+                        LPHeader.Validate("NTS Ship-to Name 2", SalesHeader."Ship-to Name 2");
+                        LPHeader.Validate("NTS Ship-to Address", SalesHeader."Ship-to Address");
+                        LPHeader.Validate("NTS Ship-to Address 2", SalesHeader."Ship-to Address 2");
+                        LPHeader.Validate("NTS Ship-to City", SalesHeader."Ship-to City");
+                        LPHeader.Validate("NTS Ship-to Post Code", SalesHeader."Ship-to Post Code");
+                        LPHeader.Validate("NTS Ship-to Country/Region Code", SalesHeader."Ship-to Country/Region Code");
+                        LPHeader.Validate("NTS Ship-to County", SalesHeader."Ship-to County");
+                        LPHeader.Validate("NTS Ship-to Contact", SalesHeader."Ship-to Contact");
+                        if (SalesHeader."Ship-to Code" <> '') and ShipToAddr.Get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code") then
+                            LPHeader.Validate("NTS Ship-to Phone No.", ShipToAddr."Phone No.")
+                        else
+                            LPHeader.Validate("NTS Ship-to Phone No.", SalesHeader."Sell-to Phone No.");
+
+                        LPHeader.Modify();
+                    end;
+                end;
+
+            LPHeader."Source Document"::"Outbound Transfer":
+                begin
+                    if TransferHeader.Get(docNo) then begin
+                        // Transfer-from
+                        LPHeader.Validate("NTS Transfer-from Code", TransferHeader."Transfer-from Code");
+                        LPHeader.Validate("NTS Transfer-from Name", TransferHeader."Transfer-from Name");
+                        LPHeader.Validate("NTS Transfer-from Address", TransferHeader."Transfer-from Address");
+                        LPHeader.Validate("NTS Transfer-from Address 2", TransferHeader."Transfer-from Address 2");
+                        LPHeader.Validate("NTS Transfer-from City", TransferHeader."Transfer-from City");
+                        LPHeader.Validate("NTS Transfer-from Post Code", TransferHeader."Transfer-from Post Code");
+                        LPHeader.Validate("NTS Trsf.-from Country/Region Code", TransferHeader."Trsf.-from Country/Region Code");
+                        LPHeader.Validate("NTS Transfer-from County", TransferHeader."Transfer-from County");
+                        LPHeader.Validate("NTS Transfer-from Contact", TransferHeader."Transfer-from Contact");
+
+                        // Transfer-to
+                        LPHeader.Validate("NTS Transfer-to Code", TransferHeader."Transfer-to Code");
+                        LPHeader.Validate("NTS Transfer-to Name", TransferHeader."Transfer-to Name");
+                        LPHeader.Validate("NTS Transfer-to Address", TransferHeader."Transfer-to Address");
+                        LPHeader.Validate("NTS Transfer-to Address 2", TransferHeader."Transfer-to Address 2");
+                        LPHeader.Validate("NTS Transfer-to City", TransferHeader."Transfer-to City");
+                        LPHeader.Validate("NTS Transfer-to Post Code", TransferHeader."Transfer-to Post Code");
+                        LPHeader.Validate("NTS Trsf.-to Country/Region Code", TransferHeader."Trsf.-to Country/Region Code");
+                        LPHeader.Validate("NTS Transfer-to County", TransferHeader."Transfer-to County");
+                        LPHeader.Validate("NTS Transfer-to Contact", TransferHeader."Transfer-to Contact");
+
+                        LPHeader.Modify();
+                    end;
+                end;
+        end;
+
+
+    end;
+
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
