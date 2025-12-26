@@ -715,10 +715,14 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TransferOrderCreated: Boolean;
         NTSDORHeader: Record "NTS DOR Header";
         GroupSalesLinesByDORNo: Query "Group Sales Lines By DOR No.";
+        LinkMgt: Codeunit "Record Link Management";
+        RecordLink: Record "Record Link";
+        NoteText: Text;
+        CreatedTONosTxt: Text;
     begin
         Clear(PrevDORNo);
         Clear(TransferOrderCreated);
-
+        Clear(CreatedTONosTxt);
         Location.Reset;
         Location.SetRange("NTS Is Finished Goods Location", true);
         Location.FindFirst();
@@ -768,6 +772,24 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     end;
                     TransferHeader.Validate("NTS Sales Order No.", SalesHeader."No.");
                     TransferHeader.Modify(true);
+                    LinkMgt.CopyLinks(SalesHeader, TransferHeader);
+
+                    // 2) Convert Sales Order Work Description (BLOB) into a Note on Transfer Order
+                    NoteText := SalesHeader.GetWorkDescription();
+                    if NoteText <> '' then begin
+                        RecordLink.Init();
+                        RecordLink.Company := CompanyName();
+                        RecordLink.Type := RecordLink.Type::Note;
+                        RecordLink."Record ID" := TransferHeader.RecordId; // attach to the new Transfer Order header
+                        RecordLink.Created := CurrentDateTime;
+                        RecordLink."User ID" := UserId();
+                        LinkMgt.WriteNote(RecordLink, NoteText); // write the note BLOB so it shows in Notes FactBox
+                        RecordLink.Insert(true);
+                    end;
+                    if CreatedTONosTxt = '' then
+                        CreatedTONosTxt := TransferHeader."No."
+                    else
+                        CreatedTONosTxt += ', ' + TransferHeader."No.";
                     TransferOrderCreated := true;
                     NextLineNo := 0;
                 end;
@@ -830,7 +852,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesHeader.Validate("NTS Transfer Order Created", true);
         SalesHeader.Modify();
 
-        Message(TransferOrderscreatedsuccessfullyMsg);
+        if CreatedTONosTxt <> '' then
+            Message(TransferOrderscreatedsuccessfullyMsg, CreatedTONosTxt);
     end;
 
 
@@ -1061,6 +1084,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesOrderCreatedandOpenSalesOrderMsg: Label 'Sales Order %1 is successfully created. Do you want to open sales order?';
         NothingToUpdateErrMsg: Label 'There is nothing to update.';
         SalesOrderscreatedsuccessfullyMsg: Label 'Sales Order(s) created successfully';
-        TransferOrderscreatedsuccessfullyMsg: Label 'Transfer Order(s) created successfully';
+        TransferOrderscreatedsuccessfullyMsg: Label 'Transfer Order(s)- %1 created successfully';
         ApplyAdjustmentMsg: Label 'Adjusments cannot be applied. There is %1 %2 already created for this No. %3';
 }
