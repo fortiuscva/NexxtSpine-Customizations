@@ -190,6 +190,7 @@ codeunit 52101 "NTS Event Management"
         TransShptHeader."NTS Ship-to Country/Region Code" := TransHeader."NTS Ship-to Country/Region Code";
         TransShptHeader."NTS Ship-to Post Code" := TransHeader."NTS Ship-to Post Code";
         TransShptHeader."NTS Ship-to Phone No." := TransHeader."NTS Ship-to Phone No.";
+        TransShptHeader."NTS Work Description" := TransHeader."NTS Work Description";
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", OnBeforeTransRcptHeaderInsert, '', false, false)]
@@ -207,6 +208,7 @@ codeunit 52101 "NTS Event Management"
         TransferReceiptHeader."NTS Ship-to Country/Region Code" := TransferHeader."NTS Ship-to Country/Region Code";
         TransferReceiptHeader."NTS Ship-to Post Code" := TransferHeader."NTS Ship-to Post Code";
         TransferReceiptHeader."NTS Ship-to Phone No." := TransferHeader."NTS Ship-to Phone No.";
+        TransferReceiptHeader."NTS Work Description" := TransferHeader."NTS Work Description";
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"SFI AL Hooks", OnBeforeValidateTimeCard, '', false, false)]
