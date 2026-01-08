@@ -5,6 +5,13 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
 
     dataset
     {
+        add("Production Order")
+        {
+            column(NTSLineNotes; GetNotesTextForRecord("Production Order"))
+            {
+            }
+        }
+
         add("Prod. Order Line")
         {
             column(NTSQRCode; GenerateQRCode(GetGTIN("Item No.") + ',' + GetLotNo("Prod. Order No.", "Line No.")))
@@ -26,7 +33,10 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
             column(NTSLotOrSerial; GetLotOrSerial("Prod. Order No.", "Line No."))
             {
             }
-
+            // column(NTSLineNotes; GetNotesTextForRecord("Prod. Order Line".RecordId))
+            // {
+            // }
+            // column(NTSLineNotes; GetNotesTextForRecord("Prod. Order Line")) { }
         }
     }
     local procedure GetLotOrSerial(ProdOrderNo: Code[20]; LineNo: Integer): Code[50]
@@ -98,6 +108,38 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
     end;
 
 
+    local procedure GetNotesTextForRecord(ProdOrder: Record "Production Order"): Text
+    var
+        RecLink: Record "Record Link";
+        RecordMgt: Codeunit "Record Link Management";
+        NoteTxt: Text;
+        ResultTxt: Text;
+        ProdOrderRecLcl: Record "Production Order";
+        OutStreamLcl: OutStream;
+    begin
+        NoteTxt := '';
+        // if ProdOrderRecLcl.Get(ProdOrder.Status::Released, ProdOrder."No.") then begin
+        RecLink.SetRange("Record ID", ProdOrder.RecordId);
+        RecLink.SetRange(Type, RecLink.Type::Note);
+        if RecLink.FindSet() then begin
+            repeat
+                RecLink.CalcFields(Note);
+                if NoteText <> '' then
+                    NoteText := NoteText + ' ' + RecordMgt.ReadNote(RecLink)
+                else
+                    NoteText := RecordMgt.ReadNote(RecLink);
+            until RecLink.Next() = 0;
+        end;
+        exit(NoteTxt);
+    end;
+
+    trigger OnPostReport()
+    var
+        myInt: Integer;
+    begin
+        // Error('A) %1', GetNotesTextForRecord("Production Order".RecordId));
+    end;
+
     var
         GTIN: code[30];
         QRCodeText: Text;
@@ -105,5 +147,6 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         BarcodeSymbology2D: Enum "Barcode Symbology 2D";
         LaserEtchQRCodeLbl: Label 'Laser Etch QR Code.';
         LotNo: Code[60];
-
+        MaxNoteReadChars: Integer;
+        NoteText: Text;
 }

@@ -719,10 +719,16 @@ codeunit 52103 "NTS NexxtSpine Functions"
         RecordLink: Record "Record Link";
         NoteText: Text;
         CreatedTONosTxt: Text;
+        TOCount: Integer;
+        WDescText: Text;
+        ins: InStream;
+        outs: OutStream;
+
     begin
         Clear(PrevDORNo);
         Clear(TransferOrderCreated);
         Clear(CreatedTONosTxt);
+        Clear(TOCount);
         Location.Reset;
         Location.SetRange("NTS Is Finished Goods Location", true);
         Location.FindFirst();
@@ -771,25 +777,33 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         TransferHeader.Validate("NTS Set Name", SalesLine."NTS Set Name");
                     end;
                     TransferHeader.Validate("NTS Sales Order No.", SalesHeader."No.");
+
+                    SalesHeader.CalcFields("Work Description"); // ensure BLOB is loaded
+                    SalesHeader."Work Description".CreateInStream(ins);
+                    TransferHeader."NTS Work Description".CreateOutStream(outs);
+                    CopyStream(outs, ins);
+
+                    // WDescText := SalesHeader.GetWorkDescription(); // returns Text from SO Work Description BLOB
+                    // Evaluate(TransferHeader."NTS Work Description", WDescText);
                     TransferHeader.Modify(true);
                     LinkMgt.CopyLinks(SalesHeader, TransferHeader);
 
-                    // 2) Convert Sales Order Work Description (BLOB) into a Note on Transfer Order
-                    NoteText := SalesHeader.GetWorkDescription();
-                    if NoteText <> '' then begin
-                        RecordLink.Init();
-                        RecordLink.Company := CompanyName();
-                        RecordLink.Type := RecordLink.Type::Note;
-                        RecordLink."Record ID" := TransferHeader.RecordId; // attach to the new Transfer Order header
-                        RecordLink.Created := CurrentDateTime;
-                        RecordLink."User ID" := UserId();
-                        LinkMgt.WriteNote(RecordLink, NoteText); // write the note BLOB so it shows in Notes FactBox
-                        RecordLink.Insert(true);
-                    end;
-                    if CreatedTONosTxt = '' then
-                        CreatedTONosTxt := TransferHeader."No."
-                    else
-                        CreatedTONosTxt += ', ' + TransferHeader."No.";
+                    // // 2) Convert Sales Order Work Description (BLOB) into a Note on Transfer Order
+                    // NoteText := SalesHeader.GetWorkDescription();
+                    // if NoteText <> '' then begin
+                    //     RecordLink.Init();
+                    //     RecordLink.Company := CompanyName();
+                    //     RecordLink.Type := RecordLink.Type::Note;
+                    //     RecordLink."Record ID" := TransferHeader.RecordId; // attach to the new Transfer Order header
+                    //     RecordLink.Created := CurrentDateTime;
+                    //     RecordLink."User ID" := UserId();
+                    //     LinkMgt.WriteNote(RecordLink, NoteText); // write the note BLOB so it shows in Notes FactBox
+                    //     RecordLink.Insert(true);
+                    // end;
+                    // if CreatedTONosTxt = '' then
+                    //     CreatedTONosTxt := TransferHeader."No."
+                    // else
+                    //     CreatedTONosTxt += ', ' + TransferHeader."No.";
                     TransferOrderCreated := true;
                     NextLineNo := 0;
                 end;
