@@ -81,7 +81,20 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
         {
             Caption = 'Customer PO';
         }
-
+        field(52109; "NTS No. of Transfer Orders"; Integer)
+        {
+            Caption = 'No. of Transfer Orders';
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = Count("Transfer Header" where("NTS Sales Order No." = field("No.")));
+        }
+        field(52110; "NTS No. of Posted Transfer Shipments"; Integer)
+        {
+            Caption = 'No. of Posted Transfer Shipments';
+            FieldClass = FlowField;
+            CalcFormula = Count("Transfer Shipment Header" where("NTS Sales Order No." = field("No.")));
+            Editable = false;
+        }
     }
 
     Var
