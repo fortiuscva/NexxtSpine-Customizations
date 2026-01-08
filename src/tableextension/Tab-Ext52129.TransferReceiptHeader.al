@@ -100,10 +100,10 @@ tableextension 52129 "NTS Transfer Receipt Header" extends "Transfer Receipt Hea
             if ("NTS Ship-to Country/Region Code" = filter(<> '')) "Post Code" where("Country/Region Code" = field("NTS Ship-to Country/Region Code"));
             ValidateTableRelation = false;
         }
-        field(52144; "NTS Work Description"; Blob)
+
+        field(52144; "NTS Work Description"; Text[250])
         {
             Caption = 'Work Description';
-            SubType = Memo;
             DataClassification = CustomerContent;
         }
     }

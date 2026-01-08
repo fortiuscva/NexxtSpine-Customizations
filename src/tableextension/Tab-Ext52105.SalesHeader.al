@@ -88,7 +88,7 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             FieldClass = FlowField;
             CalcFormula = Count("Transfer Header" where("NTS Sales Order No." = field("No.")));
         }
-        field(52110; "NTS No. of Posted Transfer Shipments"; Integer)
+        field(52110; "NTS No. of Posted Trans. Shpt."; Integer)
         {
             Caption = 'No. of Posted Transfer Shipments';
             FieldClass = FlowField;

@@ -94,5 +94,13 @@ pageextension 52123 "NTS Posted Transfer Receipt" extends "Posted Transfer Recei
                 }
             }
         }
+        addlast(General)
+        {
+            field("NTS Work Description"; Rec."NTS Work Description")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Work Description field.', Comment = '%';
+            }
+        }
     }
 }

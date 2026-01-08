@@ -93,5 +93,13 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
                 }
             }
         }
+        addlast(General)
+        {
+            field("NTS Work Description"; Rec."NTS Work Description")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Work Description field.', Comment = '%';
+            }
+        }
     }
 }

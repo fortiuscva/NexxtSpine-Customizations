@@ -54,7 +54,7 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                     end;
                 }
 
-                field("NTS No. of Posted Transfer Shipments"; Rec."NTS No. of Posted Transfer Shipments")
+                field("NTS No. of Posted Transfer Shipments"; Rec."NTS No. of Posted Trans. Shpt.")
                 {
                     ApplicationArea = All;
                     Editable = false;
