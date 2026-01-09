@@ -20,6 +20,14 @@ report 52111 "NTS Transfer Shipment"
             { }
             column(TransferToCaption; TransferToCaptionLbl)
             { }
+            column(Transfer_Order_No_; "Transfer Order No.")
+            { }
+            column(Transfer_Order_Date; "Transfer Order Date")
+            { }
+            column(TransferOrderNoCaption; TransferOrderNoCaptionLbl)
+            { }
+            column(TransferDateCaption; TransferDateCaptionLbl)
+            { }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = sorting(Number);
@@ -342,8 +350,8 @@ report 52111 "NTS Transfer Shipment"
 
     labels
     {
-        PostingDateCaption = 'Posting Date';
-        ShptMethodCaption = 'Shipment Method';
+        PostingDateCaption = 'Posting Date: ';
+        ShptMethodCaption = 'Shipment Method: ';
     }
 
     trigger OnPreReport()
@@ -380,6 +388,8 @@ report 52111 "NTS Transfer Shipment"
         LineDimCaptionLbl: Label 'Line Dimensions';
         TransferFromCaptionLbl: Label 'Transfer-From:';
         TransferToCaptionLbl: Label 'Transfer-To:';
+        TransferOrderNoCaptionLbl: Label 'Transfer Order No.:';
+        TransferDateCaptionLbl: Label 'Transfer Order Date:';
 
     protected var
         FormatAddr: Codeunit "Format Address";
