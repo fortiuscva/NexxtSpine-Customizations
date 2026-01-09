@@ -7,7 +7,7 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
             group("NTS ShipTo")
             {
                 Caption = 'Ship To';
-                Visible = Rec."Source Document" = Rec."Source Document"::"Sales Order";
+                Visible = (Rec."Source Document" = Rec."Source Document"::"Sales Order") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Sales Order");
 
                 field("NTS Ship-to Name"; Rec."NTS Ship-to Name")
                 {
@@ -72,7 +72,7 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
             group("NTS TransferFrom")
             {
                 Caption = 'Transfer From';
-                Visible = Rec."Source Document" = Rec."Source Document"::"Outbound Transfer";
+                Visible = (Rec."Source Document" = Rec."Source Document"::"Outbound Transfer") or (Rec."Source Document" = Rec."Source Document"::"Inbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Outbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Inbound Transfer");
                 field("NTS Transfer-from Code"; Rec."NTS Transfer-from Code")
                 {
                     ApplicationArea = All;
@@ -128,8 +128,7 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
             group("NTS TransferTo")
             {
                 Caption = 'Transfer To';
-                Visible = Rec."Source Document" = Rec."Source Document"::"Outbound Transfer";
-
+                Visible = (Rec."Source Document" = Rec."Source Document"::"Outbound Transfer") or (Rec."Source Document" = Rec."Source Document"::"Inbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Outbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Inbound Transfer");
                 field("NTS Transfer-to Name"; Rec."NTS Transfer-to Name")
                 {
                     ApplicationArea = All;
