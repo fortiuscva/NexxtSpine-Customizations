@@ -301,6 +301,53 @@ codeunit 52101 "NTS Event Management"
 
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", OnInsertPurchOrderLineOnAfterTransferFromReqLineToPurchLine, '', false, false)]
+    local procedure "Req. Wksh.-Make Order_OnInsertPurchOrderLineOnAfterTransferFromReqLineToPurchLine"(var PurchOrderLine: Record "Purchase Line"; RequisitionLine: Record "Requisition Line")
+    begin
+        SetRpoLotNoFromReservations(PurchOrderLine);
+    end;
+
+    local procedure SetRpoLotNoFromReservations(var PurchLine: Record "Purchase Line")
+    var
+        ReservEntry: Record "Reservation Entry";
+        LotsText: Text;
+        LastLot: Text;
+        LotNoTxt: Text;
+    begin
+        if PurchLine."Document Type" <> PurchLine."Document Type"::Order then
+            exit;
+        if (PurchLine."Prod. Order No." = '') or (PurchLine."Prod. Order Line No." = 0) then
+            exit;
+
+        ReservEntry.Reset();
+        ReservEntry.SetRange("Source Type", DATABASE::"Prod. Order Line");
+        ReservEntry.SetRange("Source ID", PurchLine."Prod. Order No.");
+        ReservEntry.SetRange("Source Ref. No.", 0);
+        ReservEntry.SetRange("Source Batch Name", '');
+        ReservEntry.SetRange("Source Prod. Order Line", PurchLine."Prod. Order Line No.");
+        ReservEntry.SetRange("Reservation Status", ReservEntry."Reservation Status"::Surplus);
+        ReservEntry.SetFilter("Lot No.", '<>%1', '');
+        ReservEntry.SetCurrentKey("Lot No.");
+
+        LotsText := '';
+        if ReservEntry.FindSet() then begin
+            LastLot := '';
+            repeat
+                LotNoTxt := ReservEntry."Lot No.";
+                if (LotNoTxt <> '') and (LotNoTxt <> LastLot) then begin
+                    if LotsText = '' then
+                        LotsText := LotNoTxt
+                    else
+                        LotsText += ', ' + LotNoTxt;
+                    LastLot := LotNoTxt;
+                end;
+            until ReservEntry.Next() = 0;
+        end;
+
+        LotsText := CopyStr(LotsText, 1, MaxStrLen(PurchLine."NTS RPO Lot No."));
+        PurchLine.Validate("NTS RPO Lot No.", LotsText);
+    end;
+
 
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
