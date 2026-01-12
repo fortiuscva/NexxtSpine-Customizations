@@ -34,6 +34,43 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                     Editable = false;
                 }
             }
+            group("NTS Transfer Order Details")
+            {
+                Caption = 'Transfer Order Details';
+                field("NTS No. of Transfer Orders"; Rec."NTS No. of Transfer Orders")
+                {
+
+                    ApplicationArea = All;
+                    Editable = false;
+                    DrillDown = true;
+
+                    trigger OnDrillDown()
+                    var
+                        TransferHeader: Record "Transfer Header";
+                    begin
+                        TransferHeader.Reset();
+                        TransferHeader.SetRange("NTS Sales Order No.", Rec."No.");
+                        PAGE.RunModal(PAGE::"Transfer Orders", TransferHeader);
+                    end;
+                }
+
+                field("NTS No. of Posted Transfer Shipments"; Rec."NTS No. of Posted Transfer Shipments")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    DrillDown = true;
+
+                    trigger OnDrillDown()
+                    var
+                        TransferShptHdr: Record "Transfer Shipment Header";
+                    begin
+                        TransferShptHdr.Reset();
+                        TransferShptHdr.SetRange("NTS Sales Order No.", Rec."No.");
+                        PAGE.RunModal(PAGE::"Posted Transfer Shipments", TransferShptHdr);
+                    end;
+                }
+
+            }
         }
     }
     actions

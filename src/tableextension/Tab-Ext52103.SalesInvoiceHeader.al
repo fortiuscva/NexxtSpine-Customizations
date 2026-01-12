@@ -65,5 +65,17 @@ tableextension 52103 "NTS Sales Invoice Header" extends "Sales Invoice Header"
         {
             Caption = 'Customer PO';
         }
+        field(52109; "NTS No. of Transfer Orders"; Integer)
+        {
+            DataClassification = CustomerContent;
+            Caption = 'No. of Transfer Orders';
+            Editable = false;
+        }
+        field(52110; "NTS No. of Posted Transfer Shipments"; Integer)
+        {
+            Caption = 'No. of Posted Transfer Shipments';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
     }
 }
