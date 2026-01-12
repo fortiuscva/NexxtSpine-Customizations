@@ -723,7 +723,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
         WDescText: Text;
         ins: InStream;
         outs: OutStream;
-
+        SalesInStr: InStream;
+        TransOutStr: OutStream;
     begin
         Clear(PrevDORNo);
         Clear(TransferOrderCreated);
@@ -777,8 +778,17 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         TransferHeader.Validate("NTS Set Name", SalesLine."NTS Set Name");
                     end;
                     TransferHeader.Validate("NTS Sales Order No.", SalesHeader."No.");
-                    TransferHeader.validate("NTS Work Description", SalesHeader.GetWorkDescription());
+                    SalesHeader.CalcFields("Work Description");
+                    Clear(TransferHeader."NTS Work Description");
+                    if SalesHeader."Work Description".HasValue then begin
+                        SalesHeader."Work Description".CreateInStream(SalesInStr);
+                        TransferHeader."NTS Work Description".CreateOutStream(TransOutStr);
+                        CopyStream(TransOutStr, SalesInStr);
+                    end;
                     TransferHeader.Modify(true);
+                    TransferHeader.Get(TransferHeader."No.");
+                    TransferHeader.CalcFields("NTS Work Description");
+                    Error('copied %1', TransferHeader."NTS Work Description".HasValue);
                     LinkMgt.CopyLinks(SalesHeader, TransferHeader);
 
                     if CreatedTONosTxt = '' then

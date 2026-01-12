@@ -101,7 +101,7 @@ tableextension 52129 "NTS Transfer Receipt Header" extends "Transfer Receipt Hea
             ValidateTableRelation = false;
         }
 
-        field(52144; "NTS Work Description"; Text[250])
+        field(52144; "NTS Work Description"; Blob)
         {
             Caption = 'Work Description';
             DataClassification = CustomerContent;
