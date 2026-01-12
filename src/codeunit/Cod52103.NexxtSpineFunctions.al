@@ -779,7 +779,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     end;
                     TransferHeader.Validate("NTS Sales Order No.", SalesHeader."No.");
                     SalesHeader.CalcFields("Work Description");
-                    Clear(TransferHeader."NTS Work Description");
+                    //Clear(TransferHeader."NTS Work Description");
                     if SalesHeader."Work Description".HasValue then begin
                         SalesHeader."Work Description".CreateInStream(SalesInStr);
                         TransferHeader."NTS Work Description".CreateOutStream(TransOutStr);

@@ -95,7 +95,7 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
         }
         addlast(General)
         {
-            field("NTS Work Description"; Rec."NTS Work Description")
+            field("NTS Work Description"; WorkDescription)
             {
                 ApplicationArea = All;
                 MultiLine = true;
@@ -104,4 +104,25 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
             }
         }
     }
+
+    trigger OnAfterGetRecord()
+    begin
+        GetWorkDescription()
+    end;
+
+    var
+        WorkDescription: Text;
+
+
+
+    procedure GetWorkDescription() WorkDescription: Text
+    var
+        TypeHelper: Codeunit "Type Helper";
+        InStream: InStream;
+    begin
+        Rec.CalcFields("NTS Work Description");
+        Rec."NTS Work Description".CreateInStream(InStream, TEXTENCODING::UTF8);
+        exit(TypeHelper.TryReadAsTextWithSepAndFieldErrMsg(InStream, TypeHelper.LFSeparator(), Rec.FieldName("NTS Work Description")));
+    end;
+
 }
