@@ -69,7 +69,12 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
                         PAGE.RunModal(PAGE::"Posted Transfer Shipments", TransferShptHdr);
                     end;
                 }
-
+                field("NTS Transfer Order Created"; Rec."NTS Transfer Order Created")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Transfer Order Created field.', Comment = '%';
+                    Visible = false;
+                }
             }
         }
     }
