@@ -187,21 +187,28 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
 
     trigger OnOpenPage()
     begin
-        UpdateLPVisibility();
+        SetControlVisibility();
     end;
 
     trigger OnAfterGetRecord()
     begin
-        UpdateLPVisibility();
+        SetControlVisibility();
     end;
 
-    local procedure UpdateLPVisibility()
+    trigger OnAfterGetCurrRecord()
     begin
+        SetControlVisibility();
+    end;
+
+    local procedure SetControlVisibility()
+    begin
+        clear(IsShipToVisible);
+        clear(IsTransferFromandToVisible);
         IsShipToVisible := (Rec."Source Document" = Rec."Source Document"::"Sales Order") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Sales Order");
 
         IsTransferFromandToVisible := (Rec."Source Document" = Rec."Source Document"::"Outbound Transfer") or (Rec."Source Document" = Rec."Source Document"::"Inbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Outbound Transfer") or
             (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Inbound Transfer");
-        CurrPage.Update(false);
+        //CurrPage.Update(false);
     end;
 
     var
