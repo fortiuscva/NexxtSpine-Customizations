@@ -788,9 +788,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     TransferHeader.Modify(true);
                     TransferHeader.Get(TransferHeader."No.");
                     TransferHeader.CalcFields("NTS Work Description");
-                    Error('copied %1', TransferHeader."NTS Work Description".HasValue);
                     LinkMgt.CopyLinks(SalesHeader, TransferHeader);
-
                     if CreatedTONosTxt = '' then
                         CreatedTONosTxt := TransferHeader."No."
                     else

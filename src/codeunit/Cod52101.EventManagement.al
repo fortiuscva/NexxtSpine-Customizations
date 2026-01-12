@@ -178,6 +178,7 @@ codeunit 52101 "NTS Event Management"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", OnBeforeInsertTransShptHeader, '', false, false)]
     local procedure "TransferOrder-Post Shipment_OnBeforeInsertTransShptHeader"(var TransShptHeader: Record "Transfer Shipment Header"; TransHeader: Record "Transfer Header"; CommitIsSuppressed: Boolean)
     begin
+        TransHeader.CalcFields("NTS Work Description");
         TransShptHeader."NTS Customer Code" := TransHeader."NTS Customer Code";
         TransShptHeader."NTS Ship-to Code" := TransHeader."NTS Ship-to Code";
         TransShptHeader."NTS Ship-to Name" := TransHeader."NTS Ship-to Name";
@@ -196,6 +197,7 @@ codeunit 52101 "NTS Event Management"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", OnBeforeTransRcptHeaderInsert, '', false, false)]
     local procedure "TransferOrder-Post Receipt_OnBeforeTransRcptHeaderInsert"(var TransferReceiptHeader: Record "Transfer Receipt Header"; TransferHeader: Record "Transfer Header")
     begin
+        TransferHeader.CalcFields("NTS Work Description");
         TransferReceiptHeader."NTS Customer Code" := TransferHeader."NTS Customer Code";
         TransferReceiptHeader."NTS Ship-to Code" := TransferHeader."NTS Ship-to Code";
         TransferReceiptHeader."NTS Ship-to Name" := TransferHeader."NTS Ship-to Name";
