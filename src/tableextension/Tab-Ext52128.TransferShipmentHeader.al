@@ -100,5 +100,10 @@ tableextension 52128 "NTS Transfer Shipment Header" extends "Transfer Shipment H
             if ("NTS Ship-to Country/Region Code" = filter(<> '')) "Post Code" where("Country/Region Code" = field("NTS Ship-to Country/Region Code"));
             ValidateTableRelation = false;
         }
+        field(52144; "NTS Work Description"; Blob)
+        {
+            Caption = 'Work Description';
+            DataClassification = CustomerContent;
+        }
     }
 }
