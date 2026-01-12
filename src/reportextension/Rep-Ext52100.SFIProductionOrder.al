@@ -112,47 +112,21 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
     var
         RecLink: Record "Record Link";
         RecordMgt: Codeunit "Record Link Management";
-<<<<<<< HEAD
-=======
-        NoteTxt: Text;
->>>>>>> a8743ac (Nexxt Misc Enhancements)
-        ResultTxt: Text;
         ProdOrderRecLcl: Record "Production Order";
-        OutStreamLcl: OutStream;
     begin
-<<<<<<< HEAD
         NoteText := '';
-=======
-        NoteTxt := '';
->>>>>>> a8743ac (Nexxt Misc Enhancements)
-        // if ProdOrderRecLcl.Get(ProdOrder.Status::Released, ProdOrder."No.") then begin
         RecLink.SetRange("Record ID", ProdOrder.RecordId);
         RecLink.SetRange(Type, RecLink.Type::Note);
         if RecLink.FindSet() then begin
             repeat
                 RecLink.CalcFields(Note);
                 if NoteText <> '' then
-<<<<<<< HEAD
                     NoteText := NoteText + '' + RecordMgt.ReadNote(RecLink)
-=======
-                    NoteText := NoteText + ' ' + RecordMgt.ReadNote(RecLink)
->>>>>>> a8743ac (Nexxt Misc Enhancements)
                 else
                     NoteText := RecordMgt.ReadNote(RecLink);
             until RecLink.Next() = 0;
         end;
-<<<<<<< HEAD
         exit(NoteText);
-=======
-        exit(NoteTxt);
->>>>>>> a8743ac (Nexxt Misc Enhancements)
-    end;
-
-    trigger OnPostReport()
-    var
-        myInt: Integer;
-    begin
-        // Error('A) %1', GetNotesTextForRecord("Production Order".RecordId));
     end;
 
     var
