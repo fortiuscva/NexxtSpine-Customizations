@@ -1,4 +1,4 @@
-tableextension 52135 "NTS Purch. Inv. Line" extends "Purch. Inv. Line"
+tableextension 52138 "NTS Purchase Line Archive" extends "Purchase Line Archive"
 {
     fields
     {
