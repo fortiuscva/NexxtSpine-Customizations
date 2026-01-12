@@ -14,8 +14,13 @@ report 52111 "NTS Transfer Shipment"
             RequestFilterFields = "No.", "Transfer-from Code", "Transfer-to Code";
             RequestFilterHeading = 'Posted Transfer Shipment';
             column(No_TransShptHeader; "No.")
-            {
-            }
+            { }
+            column(ShippedCaption; ShippedCaptionLbl)
+            { }
+            column(OrderedCaption; OrderedCaptionLbl)
+            { }
+            column(BackOrderedCaption; BackOrderedCaptionLbl)
+            { }
             column(TransferFromCaption; TransferFromCaptionLbl)
             { }
             column(TransferToCaption; TransferToCaptionLbl)
@@ -212,6 +217,14 @@ report 52111 "NTS Transfer Shipment"
                         column(LineNo_TransShptLine; "Line No.")
                         {
                         }
+                        column(OrderedQuantity; OrderedQuantity)
+                        {
+                            DecimalPlaces = 0 : 5;
+                        }
+                        column(BackOrderedQuantity; BackOrderedQuantity)
+                        {
+                            DecimalPlaces = 0 : 5;
+                        }
                         column(DocNo_TransShptLine; "Document No.")
                         {
                         }
@@ -264,8 +277,29 @@ report 52111 "NTS Transfer Shipment"
                         }
 
                         trigger OnAfterGetRecord()
+                        var
+                            TransferLine: Record "Transfer Line";
+                            ReceiptLine: Record "Transfer Shipment Line";
                         begin
                             DimSetEntry2.SetRange("Dimension Set ID", "Dimension Set ID");
+
+                            OrderedQuantity := 0;
+                            BackOrderedQuantity := 0;
+                            if "Transfer Order No." = '' then
+                                OrderedQuantity := Quantity
+                            else
+                                if TransferLine.Get("Transfer Order No.", "Trans. Order Line No.") then begin
+                                    OrderedQuantity := TransferLine.Quantity;
+                                    BackOrderedQuantity := TransferLine."Outstanding Quantity";
+                                end else begin
+                                    ReceiptLine.SetCurrentKey("Transfer Order No.", "Trans. Order Line No.");
+                                    ReceiptLine.SetRange("Transfer Order No.", "Transfer Order No.");
+                                    ReceiptLine.SetRange("Trans. Order Line No.", "Trans. Order Line No.");
+                                    ReceiptLine.Find('-');
+                                    repeat
+                                        OrderedQuantity := OrderedQuantity + ReceiptLine.Quantity;
+                                    until 0 = ReceiptLine.Next();
+                                end;
                         end;
 
                         trigger OnPreDataItem()
@@ -402,4 +436,8 @@ report 52111 "NTS Transfer Shipment"
         ShowInternalInfo: Boolean;
         PrintCompany: Boolean;
         CompanyInformation: Record "Company Information";
+        OrderedQuantity, BackOrderedQuantity : Decimal;
+        ShippedCaptionLbl: Label 'Shipped';
+        OrderedCaptionLbl: Label 'Ordered';
+        BackOrderedCaptionLbl: Label 'Back Ordered';
 }
