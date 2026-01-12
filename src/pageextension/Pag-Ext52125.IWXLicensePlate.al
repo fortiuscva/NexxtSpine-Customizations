@@ -7,8 +7,7 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
             group("NTS ShipTo")
             {
                 Caption = 'Ship To';
-                Visible = (Rec."Source Document" = Rec."Source Document"::"Sales Order") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Sales Order");
-
+                Visible = IsShipToVisible;
                 field("NTS Ship-to Name"; Rec."NTS Ship-to Name")
                 {
                     ApplicationArea = all;
@@ -72,7 +71,7 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
             group("NTS TransferFrom")
             {
                 Caption = 'Transfer From';
-                Visible = (Rec."Source Document" = Rec."Source Document"::"Outbound Transfer") or (Rec."Source Document" = Rec."Source Document"::"Inbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Outbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Inbound Transfer");
+                Visible = IsTransferFromandToVisible;
                 field("NTS Transfer-from Code"; Rec."NTS Transfer-from Code")
                 {
                     ApplicationArea = All;
@@ -128,7 +127,7 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
             group("NTS TransferTo")
             {
                 Caption = 'Transfer To';
-                Visible = (Rec."Source Document" = Rec."Source Document"::"Outbound Transfer") or (Rec."Source Document" = Rec."Source Document"::"Inbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Outbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Inbound Transfer");
+                Visible = IsTransferFromandToVisible;
                 field("NTS Transfer-to Name"; Rec."NTS Transfer-to Name")
                 {
                     ApplicationArea = All;
@@ -185,4 +184,27 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
         }
     }
 
+
+    trigger OnOpenPage()
+    begin
+        UpdateLPVisibility();
+    end;
+
+    trigger OnAfterGetRecord()
+    begin
+        UpdateLPVisibility();
+    end;
+
+    local procedure UpdateLPVisibility()
+    begin
+        IsShipToVisible := (Rec."Source Document" = Rec."Source Document"::"Sales Order") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Sales Order");
+
+        IsTransferFromandToVisible := (Rec."Source Document" = Rec."Source Document"::"Outbound Transfer") or (Rec."Source Document" = Rec."Source Document"::"Inbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Outbound Transfer") or
+            (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Inbound Transfer");
+        CurrPage.Update(false);
+    end;
+
+    var
+        IsShipToVisible: Boolean;
+        IsTransferFromandToVisible: Boolean;
 }

@@ -301,10 +301,13 @@ codeunit 52101 "NTS Event Management"
 
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", OnInsertPurchOrderLineOnAfterTransferFromReqLineToPurchLine, '', false, false)]
-    local procedure "Req. Wksh.-Make Order_OnInsertPurchOrderLineOnAfterTransferFromReqLineToPurchLine"(var PurchOrderLine: Record "Purchase Line"; RequisitionLine: Record "Requisition Line")
+
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", OnBeforePurchOrderLineInsert, '', false, false)]
+    local procedure "Req. Wksh.-Make Order_OnBeforePurchOrderLineInsert"(var PurchOrderHeader: Record "Purchase Header"; var PurchOrderLine: Record "Purchase Line"; var ReqLine: Record "Requisition Line"; CommitIsSuppressed: Boolean)
     begin
         SetRpoLotNoFromReservations(PurchOrderLine);
+
     end;
 
     local procedure SetRpoLotNoFromReservations(var PurchLine: Record "Purchase Line")
@@ -345,7 +348,9 @@ codeunit 52101 "NTS Event Management"
         end;
 
         LotsText := CopyStr(LotsText, 1, MaxStrLen(PurchLine."NTS RPO Lot No."));
-        PurchLine.Validate("NTS RPO Lot No.", LotsText);
+
+        if LotsText <> '' then
+            PurchLine.Validate("NTS RPO Lot No.", LotsText);
     end;
 
 
