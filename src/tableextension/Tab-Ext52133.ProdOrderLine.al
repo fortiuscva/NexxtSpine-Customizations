@@ -72,7 +72,43 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
                                                                  "Reservation Status" = filter(Surplus)));
             Editable = false;
         }
-
+        modify("Item No.")
+        {
+            trigger OnAfterValidate()
+            begin
+                UpdateMaterialInfoForProdLineItem();
+            end;
+        }
 
     }
+
+    procedure UpdateMaterialInfoForProdLineItem()
+    begin
+        if "Item No." <> '' then begin
+            ItemRec.Get("Item No.");
+            Rec.Validate("Material #1", ItemRec."Material #1");
+            Rec.Validate("Material #2", ItemRec."Material #2");
+            Rec.Validate("Material #3", ItemRec."Material #3");
+            Rec.Validate("Material #4", ItemRec."Material #4");
+            Rec.Validate("Material #5", ItemRec."Material #5");
+            Rec.Validate("NTS Height/Depth", ItemRec."IMP Height/Depth");
+            Rec.Validate("NTS System Name", ItemRec."IMP System Name");
+            Rec.Validate("NTS Sterile Product", ItemRec."IMP Sterile Product");
+            Rec.Validate("NTS IFU Number", ItemRec."IMP IFU Number");
+        end else begin
+            Rec.Validate("Material #1", '');
+            Rec.Validate("Material #2", '');
+            Rec.Validate("Material #3", '');
+            Rec.Validate("Material #4", '');
+            Rec.Validate("Material #5", '');
+            Rec.Validate("NTS Height/Depth", '');
+            Rec.Validate("NTS System Name", '');
+            Rec.Validate("NTS Sterile Product", '');
+            Rec.Validate("NTS IFU Number", '');
+        end;
+    end;
+
+    var
+        ItemRec: Record Item;
+
 }

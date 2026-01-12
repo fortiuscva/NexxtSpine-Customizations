@@ -178,6 +178,7 @@ codeunit 52101 "NTS Event Management"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", OnBeforeInsertTransShptHeader, '', false, false)]
     local procedure "TransferOrder-Post Shipment_OnBeforeInsertTransShptHeader"(var TransShptHeader: Record "Transfer Shipment Header"; TransHeader: Record "Transfer Header"; CommitIsSuppressed: Boolean)
     begin
+        TransHeader.CalcFields("NTS Work Description");
         TransShptHeader."NTS Customer Code" := TransHeader."NTS Customer Code";
         TransShptHeader."NTS Ship-to Code" := TransHeader."NTS Ship-to Code";
         TransShptHeader."NTS Ship-to Name" := TransHeader."NTS Ship-to Name";
@@ -190,11 +191,13 @@ codeunit 52101 "NTS Event Management"
         TransShptHeader."NTS Ship-to Country/Region Code" := TransHeader."NTS Ship-to Country/Region Code";
         TransShptHeader."NTS Ship-to Post Code" := TransHeader."NTS Ship-to Post Code";
         TransShptHeader."NTS Ship-to Phone No." := TransHeader."NTS Ship-to Phone No.";
+        TransShptHeader."NTS Work Description" := TransHeader."NTS Work Description";
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", OnBeforeTransRcptHeaderInsert, '', false, false)]
     local procedure "TransferOrder-Post Receipt_OnBeforeTransRcptHeaderInsert"(var TransferReceiptHeader: Record "Transfer Receipt Header"; TransferHeader: Record "Transfer Header")
     begin
+        TransferHeader.CalcFields("NTS Work Description");
         TransferReceiptHeader."NTS Customer Code" := TransferHeader."NTS Customer Code";
         TransferReceiptHeader."NTS Ship-to Code" := TransferHeader."NTS Ship-to Code";
         TransferReceiptHeader."NTS Ship-to Name" := TransferHeader."NTS Ship-to Name";
@@ -207,6 +210,22 @@ codeunit 52101 "NTS Event Management"
         TransferReceiptHeader."NTS Ship-to Country/Region Code" := TransferHeader."NTS Ship-to Country/Region Code";
         TransferReceiptHeader."NTS Ship-to Post Code" := TransferHeader."NTS Ship-to Post Code";
         TransferReceiptHeader."NTS Ship-to Phone No." := TransferHeader."NTS Ship-to Phone No.";
+        TransferReceiptHeader."NTS Work Description" := TransferHeader."NTS Work Description";
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"SFI AL Hooks", OnBeforeValidateTimeCard, '', false, false)]
+    local procedure "SFI AL Hooks_OnBeforeValidateTimeCard"(var precTimeCard: Record "SFI Time Card Header"; var pbCancel: Boolean)
+    begin
+        if Session.CurrentClientType = ClientType::Background then
+            if not precTimeCard.open then
+                pbCancel := true;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", OnAfterSubcontractingWorkCenterUsed, '', false, false)]
+    local procedure "Item Journal Line_OnAfterSubcontractingWorkCenterUsed"(ItemJournalLine: Record "Item Journal Line"; WorkCenter: Record "Work Center"; var Result: Boolean)
+    begin
+        if Session.CurrentClientType = ClientType::Background then
+            Result := false;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"DSHIP Event Publisher", OnAfterScan, '', false, false)]
@@ -285,23 +304,51 @@ codeunit 52101 "NTS Event Management"
     end;
 
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"SFI AL Hooks", OnBeforeValidateTimeCard, '', false, false)]
-    local procedure "SFI AL Hooks_OnBeforeValidateTimeCard"(var precTimeCard: Record "SFI Time Card Header"; var pbCancel: Boolean)
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", OnBeforePurchOrderLineInsert, '', false, false)]
+    local procedure "Req. Wksh.-Make Order_OnBeforePurchOrderLineInsert"(var PurchOrderHeader: Record "Purchase Header"; var PurchOrderLine: Record "Purchase Line"; var ReqLine: Record "Requisition Line"; CommitIsSuppressed: Boolean)
     begin
-        if Session.CurrentClientType = ClientType::Background then
-            if not precTimeCard.open then
-                pbCancel := true;
+        CopyLotInformatonFromProdOrderToSubconPO(PurchOrderLine);
+
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", OnAfterSubcontractingWorkCenterUsed, '', false, false)]
-    local procedure "Item Journal Line_OnAfterSubcontractingWorkCenterUsed"(ItemJournalLine: Record "Item Journal Line"; WorkCenter: Record "Work Center"; var Result: Boolean)
+    local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin
-        if Session.CurrentClientType = ClientType::Background then
-            Result := false;
+        if PurchLine."Document Type" <> PurchLine."Document Type"::Order then
+            exit;
+        if (PurchLine."Prod. Order No." = '') or (PurchLine."Prod. Order Line No." = 0) then
+            exit;
+
+        LotInfo := '';
+        ReservEntry.Reset();
+        ReservEntry.SetCurrentKey("Lot No.");
+        ReservEntry.SetRange("Source Type", DATABASE::"Prod. Order Line");
+        ReservEntry.SetRange("Source ID", PurchLine."Prod. Order No.");
+        ReservEntry.SetRange("Source Ref. No.", 0);
+        ReservEntry.SetRange("Source Batch Name", '');
+        ReservEntry.SetRange("Source Prod. Order Line", PurchLine."Prod. Order Line No.");
+        ReservEntry.SetRange("Reservation Status", ReservEntry."Reservation Status"::Surplus);
+        ReservEntry.SetFilter("Lot No.", '<>%1', '');
+        if ReservEntry.FindSet() then
+            repeat
+                If LotInfo <> '' then
+                    LotInfo := LotInfo + ',' + ReservEntry."Lot No."
+                else
+                    LotInfo := ReservEntry."Lot No.";
+            until ReservEntry.Next() = 0;
+
+        LotInfo := CopyStr(LotInfo, 1, MaxStrLen(PurchLine."NTS Prod. Lot No."));
+
+        if LotInfo <> '' then
+            PurchLine.Validate("NTS Prod. Lot No.", LotInfo);
     end;
+
 
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
         NexxtSingleInstance: Codeunit "NTS Single Instance";
+        ReservEntry: Record "Reservation Entry";
+        LotInfo: Text;
+
 }
