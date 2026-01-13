@@ -6,8 +6,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         {
             Caption = 'IR Sheet 1';
             DataClassification = ToBeClassified;
-            TableRelation = "NTS Reference IR Code".Code where("Source No." = field("Prod. Order No."));
-
+            TableRelation = "NTS IR Code".Code;
             trigger OnValidate()
             begin
                 CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1");
@@ -17,7 +16,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         {
             Caption = 'IR Sheet 2';
             DataClassification = ToBeClassified;
-            TableRelation = "NTS Reference IR Code".Code where("Source No." = field("Prod. Order No."));
+            TableRelation = "NTS IR Code".Code;
 
             trigger OnValidate()
             begin
@@ -28,7 +27,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         {
             Caption = 'IR Sheet 3';
             DataClassification = ToBeClassified;
-            TableRelation = "NTS Reference IR Code".Code where("Source No." = field("Prod. Order No."));
+            TableRelation = "NTS IR Code".Code;
 
             trigger OnValidate()
             begin
