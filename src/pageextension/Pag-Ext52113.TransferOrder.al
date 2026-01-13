@@ -107,22 +107,9 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
 
     trigger OnAfterGetRecord()
     begin
-        GetWorkDescription()
+        WorkDescription := Rec.GetWorkDescription();
     end;
 
     var
         WorkDescription: Text;
-
-
-
-    procedure GetWorkDescription() WorkDescription: Text
-    var
-        TypeHelper: Codeunit "Type Helper";
-        InStream: InStream;
-    begin
-        Rec.CalcFields("NTS Work Description");
-        Rec."NTS Work Description".CreateInStream(InStream, TEXTENCODING::UTF8);
-        exit(TypeHelper.TryReadAsTextWithSepAndFieldErrMsg(InStream, TypeHelper.LFSeparator(), Rec.FieldName("NTS Work Description")));
-    end;
-
 }
