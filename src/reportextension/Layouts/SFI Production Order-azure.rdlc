@@ -2520,7 +2520,6 @@ End Function</Code>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>42187710-417d-4557-880b-79b9a5946947</rd:ReportID>
-<<<<<<< HEAD
   <DataSets>
     <DataSet Name="DataSet_Result">
       <Fields>
@@ -2732,6 +2731,4 @@ End Function</Code>
       </Query>
     </DataSet>
   </DataSets>
-=======
->>>>>>> a8743ac (Nexxt Misc Enhancements)
 </Report>
