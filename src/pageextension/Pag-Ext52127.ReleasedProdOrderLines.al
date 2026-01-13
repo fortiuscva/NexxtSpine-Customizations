@@ -58,6 +58,12 @@ pageextension 52127 "NTS Released Prod. Order Lines" extends "Released Prod. Ord
                 ToolTip = 'Specifies the value of the Sterile Product field.', Comment = '%';
                 Editable = false;
             }
+            field("NTS GTIN"; Rec."NTS GTIN")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the GTIN field.', Comment = '%';
+                Editable = false;
+            }
         }
         addfirst(Control1)
         {
