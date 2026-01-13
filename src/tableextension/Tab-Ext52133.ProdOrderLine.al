@@ -72,6 +72,11 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
                                                                  "Reservation Status" = filter(Surplus)));
             Editable = false;
         }
+        field(50110; "NTS GTIN"; Code[14])
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'GTIN';
+        }
         modify("Item No.")
         {
             trigger OnAfterValidate()
@@ -95,6 +100,7 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
             Rec.Validate("NTS System Name", ItemRec."IMP System Name");
             Rec.Validate("NTS Sterile Product", ItemRec."IMP Sterile Product");
             Rec.Validate("NTS IFU Number", ItemRec."IMP IFU Number");
+            Rec.Validate("NTS GTIN", ItemRec.GTIN);
         end else begin
             Rec.Validate("Material #1", '');
             Rec.Validate("Material #2", '');
@@ -105,6 +111,7 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
             Rec.Validate("NTS System Name", '');
             Rec.Validate("NTS Sterile Product", '');
             Rec.Validate("NTS IFU Number", '');
+            Rec.Validate("NTS GTIN", '');
         end;
     end;
 
