@@ -61,7 +61,7 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
         field(52107; "NTS Transfer Order Created"; Boolean)
         {
             Caption = 'Transfer Order Created';
-            Editable = false;
+            //Editable = false;
             DataClassification = CustomerContent;
         }
 

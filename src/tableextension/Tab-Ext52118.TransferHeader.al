@@ -178,5 +178,18 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Rec."NTS Ship-to Phone No." := '';
         end;
     end;
+
+    procedure GetWorkDescription() WorkDescription: Text
+    var
+        TypeHelper: Codeunit "Type Helper";
+        InStream: InStream;
+        HasValue: Boolean;
+    begin
+        Rec.CalcFields("NTS Work Description");
+        HasValue := Rec."NTS Work Description".HasValue;
+        Rec."NTS Work Description".CreateInStream(InStream, TEXTENCODING::UTF8);
+        exit(TypeHelper.TryReadAsTextWithSepAndFieldErrMsg(InStream, TypeHelper.LFSeparator(), Rec.FieldName("NTS Work Description")));
+    end;
+
 }
 
