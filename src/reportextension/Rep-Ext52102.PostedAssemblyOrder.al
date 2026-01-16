@@ -1,6 +1,6 @@
 reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order"
 {
-    RDLCLayout = './src/reportextension/Layouts/PostedAssemblyOrder.rdlc';
+    RDLCLayout = './src/reportextension/Layouts/PostedAssemblyOrder.rdl';
     dataset
     {
         add("Posted Assembly Header")
@@ -82,11 +82,18 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
                         SerialNo := ItemLedgerEntry."Serial No."
                     else
                         SerialNo += ',' + ItemLedgerEntry."Serial No.";
+                end else begin
+                    if LotNo = '' then
+                        LotNo := ItemLedgerEntry."Lot No."
+                    else
+                        LotNo += ',' + ItemLedgerEntry."Lot No.";
                 end;
             until ItemLedgerEntry.Next() = 0;
 
         if SerialNo <> '' then
-            exit(SerialNo);
+            exit(SerialNo)
+        else
+            exit(LotNo);
     end;
 
 }
