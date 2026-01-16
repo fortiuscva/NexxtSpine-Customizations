@@ -3,9 +3,14 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
     RDLCLayout = './src/reportextension/Layouts/PostedAssemblyOrder.rdlc';
     dataset
     {
+        add("Posted Assembly Header")
+        {
+            column(NTSTracking_PostedAssemblyHeader; GetAssmHeaderSerial("Posted Assembly Header"."No.", "Posted Assembly Header"."Item No."))
+            { }
+        }
         add("Posted Assembly Line")
         {
-            column(NTSTracking_PostedAssemblyLine; GetLotOrSerial())
+            column(NTSTracking_PostedAssemblyLine; GetAssmLineLotOrSerial())
             {
             }
         }
@@ -14,9 +19,10 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
     {
         BOMCaption = 'BOM';
         LotOrSerialCaption = 'LOT/SERIAL#';
+        SerialCaption = 'SERIAL#';
 
     }
-    local procedure GetLotOrSerial(): Text[1024]
+    local procedure GetAssmLineLotOrSerial(): Text
     var
         ItemLedgerEntry: Record "Item Ledger Entry";
         LotNo: Text;
@@ -26,6 +32,8 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
         Clear(SerialNo);
         Clear(LotNo);
         ItemLedgerEntry.Reset();
+        ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Posted Assembly");
+        ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::"Assembly Consumption");
         ItemLedgerEntry.SetRange("Document No.", "Posted Assembly Line"."Document No.");
         ItemLedgerEntry.SetRange("Document Line No.", "Posted Assembly Line"."Line No.");
         ItemLedgerEntry.SetRange("Item No.", "Posted Assembly Line"."No.");
@@ -49,6 +57,35 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
         if LotNo <> '' then
             exit(LotNo)
         else
+            exit(SerialNo);
+    end;
+
+    local procedure GetAssmHeaderSerial(DocumentNo: Code[20]; ItemNo: Code[20]): Text
+    var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+        LotNo: Text;
+        SerialNo: Text;
+    begin
+        Clear(SerialNo);
+        Clear(LotNo);
+
+        ItemLedgerEntry.Reset();
+        ItemLedgerEntry.SetRange("Document No.", DocumentNo);
+        ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Posted Assembly");
+        ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::"Assembly Output");
+        ItemLedgerEntry.SetRange("Item No.", ItemNo);
+
+        if ItemLedgerEntry.FindSet() then
+            repeat
+                if ItemLedgerEntry."Serial No." <> '' then begin
+                    if SerialNo = '' then
+                        SerialNo := ItemLedgerEntry."Serial No."
+                    else
+                        SerialNo += ',' + ItemLedgerEntry."Serial No.";
+                end;
+            until ItemLedgerEntry.Next() = 0;
+
+        if SerialNo <> '' then
             exit(SerialNo);
     end;
 

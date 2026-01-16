@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-12-23T17:26:59.1981067Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-01-14T14:03:14.1491394Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -128,6 +128,7 @@
                                                             <PaddingRight>5pt</PaddingRight>
                                                           </Style>
                                                         </Textbox>
+                                                        <rd:Selected>true</rd:Selected>
                                                       </CellContents>
                                                     </TablixCell>
                                                   </TablixCells>
@@ -2530,7 +2531,7 @@
                                                             <Paragraph>
                                                               <TextRuns>
                                                                 <TextRun>
-                                                                  <Value>=Parameters!UnitofMeasureCaption.Value</Value>
+                                                                  <Value>=Parameters!SerialCaption.Value</Value>
                                                                   <Style>
                                                                     <FontFamily>Segoe UI</FontFamily>
                                                                     <FontSize>8pt</FontSize>
@@ -2554,14 +2555,14 @@
                                                     </TablixCell>
                                                     <TablixCell>
                                                       <CellContents>
-                                                        <Textbox Name="UnitOfMeasure_PostedAssemblyHeader">
+                                                        <Textbox Name="NTSTracking_PostedAssemblyHeader">
                                                           <CanGrow>true</CanGrow>
                                                           <KeepTogether>true</KeepTogether>
                                                           <Paragraphs>
                                                             <Paragraph>
                                                               <TextRuns>
                                                                 <TextRun>
-                                                                  <Value>=Fields!UnitOfMeasure_PostedAssemblyHeader.Value</Value>
+                                                                  <Value>=Fields!NTSTracking_PostedAssemblyHeader.Value</Value>
                                                                   <Style>
                                                                     <FontFamily>Segoe UI</FontFamily>
                                                                     <FontSize>8pt</FontSize>
@@ -2571,7 +2572,7 @@
                                                               <Style />
                                                             </Paragraph>
                                                           </Paragraphs>
-                                                          <rd:DefaultName>UnitOfMeasure_PostedAssemblyHeader</rd:DefaultName>
+                                                          <rd:DefaultName>NTSTracking_PostedAssemblyHeader</rd:DefaultName>
                                                           <Style>
                                                             <Border>
                                                               <Color>LightGrey</Color>
@@ -3196,6 +3197,15 @@
       </DefaultValue>
       <Prompt>LotOrSerialCaption</Prompt>
     </ReportParameter>
+    <ReportParameter Name="SerialCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>SerialCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>SerialCaption</Prompt>
+    </ReportParameter>
     <ReportParameter Name="No_PostedAssemblyHeaderCaption">
       <DataType>String</DataType>
       <DefaultValue>
@@ -3290,7 +3300,7 @@
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>1</NumberOfColumns>
-      <NumberOfRows>29</NumberOfRows>
+      <NumberOfRows>30</NumberOfRows>
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
@@ -3390,51 +3400,56 @@
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>19</RowIndex>
-          <ParameterName>No_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>SerialCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>20</RowIndex>
-          <ParameterName>OrderNo_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>No_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>21</RowIndex>
-          <ParameterName>ItemNo_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>OrderNo_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>22</RowIndex>
-          <ParameterName>Description_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>ItemNo_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>23</RowIndex>
-          <ParameterName>AssembledQuantity_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>Description_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>24</RowIndex>
-          <ParameterName>Type_PostedAssemblyLineCaption</ParameterName>
+          <ParameterName>AssembledQuantity_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>25</RowIndex>
-          <ParameterName>No_PostedAssemblyLineCaption</ParameterName>
+          <ParameterName>Type_PostedAssemblyLineCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>26</RowIndex>
-          <ParameterName>Description_PostedAssemblyLineCaption</ParameterName>
+          <ParameterName>No_PostedAssemblyLineCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>27</RowIndex>
-          <ParameterName>Quantity_PostedAssemblyLineCaption</ParameterName>
+          <ParameterName>Description_PostedAssemblyLineCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>28</RowIndex>
+          <ParameterName>Quantity_PostedAssemblyLineCaption</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>29</RowIndex>
           <ParameterName>Quantityper_PostedAssemblyLineCaption</ParameterName>
         </CellDefinition>
       </CellDefinitions>
@@ -3603,6 +3618,9 @@ End Function
         </Field>
         <Field Name="DimLineNo2">
           <DataField>DimLineNo2</DataField>
+        </Field>
+        <Field Name="NTSTracking_PostedAssemblyHeader">
+          <DataField>NTSTracking_PostedAssemblyHeader</DataField>
         </Field>
         <Field Name="NTSTracking_PostedAssemblyLine">
           <DataField>NTSTracking_PostedAssemblyLine</DataField>
