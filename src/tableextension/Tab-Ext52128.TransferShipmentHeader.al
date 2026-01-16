@@ -106,4 +106,16 @@ tableextension 52128 "NTS Transfer Shipment Header" extends "Transfer Shipment H
             DataClassification = CustomerContent;
         }
     }
+    procedure GetWorkDescription() WorkDescription: Text
+    var
+        TypeHelper: Codeunit "Type Helper";
+        InStream: InStream;
+        HasValue: Boolean;
+    begin
+        Rec.CalcFields("NTS Work Description");
+        HasValue := Rec."NTS Work Description".HasValue;
+        Rec."NTS Work Description".CreateInStream(InStream, TEXTENCODING::UTF8);
+        exit(TypeHelper.TryReadAsTextWithSepAndFieldErrMsg(InStream, TypeHelper.LFSeparator(), Rec.FieldName("NTS Work Description")));
+    end;
+
 }
