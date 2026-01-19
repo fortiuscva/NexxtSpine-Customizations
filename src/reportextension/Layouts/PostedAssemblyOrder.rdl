@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-12-23T17:26:59.1981067Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-01-16T21:14:24.9266862Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -22,6 +22,103 @@
       <rd:DataSourceID>ace23880-ab05-4ebb-af60-13aee80ed1a7</rd:DataSourceID>
     </DataSource>
   </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+      <Fields>
+        <Field Name="Number">
+          <DataField>Number</DataField>
+        </Field>
+        <Field Name="No_PostedAssemblyHeader">
+          <DataField>No_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="OrderNo_PostedAssemblyHeader">
+          <DataField>OrderNo_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="PostingDate_PostedAssemblyHeader">
+          <DataField>PostingDate_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="Reversed_PostedAssemblyHeader">
+          <DataField>Reversed_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="ItemNo_PostedAssemblyHeader">
+          <DataField>ItemNo_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="Description_PostedAssemblyHeader">
+          <DataField>Description_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="AssembledQuantity_PostedAssemblyHeader">
+          <DataField>AssembledQuantity_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="AssembledQuantity_PostedAssemblyHeaderFormat">
+          <DataField>AssembledQuantity_PostedAssemblyHeaderFormat</DataField>
+        </Field>
+        <Field Name="UnitOfMeasure_PostedAssemblyHeader">
+          <DataField>UnitOfMeasure_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="LinkedSalesShipment">
+          <DataField>LinkedSalesShipment</DataField>
+        </Field>
+        <Field Name="CompanyNameConstant">
+          <DataField>CompanyNameConstant</DataField>
+        </Field>
+        <Field Name="DateConstant">
+          <DataField>DateConstant</DataField>
+        </Field>
+        <Field Name="PostingDateConstant">
+          <DataField>PostingDateConstant</DataField>
+        </Field>
+        <Field Name="DimText">
+          <DataField>DimText</DataField>
+        </Field>
+        <Field Name="DimLineNo">
+          <DataField>DimLineNo</DataField>
+        </Field>
+        <Field Name="LineNo_PostedAssemblyLine">
+          <DataField>LineNo_PostedAssemblyLine</DataField>
+        </Field>
+        <Field Name="Type_PostedAssemblyLine">
+          <DataField>Type_PostedAssemblyLine</DataField>
+        </Field>
+        <Field Name="No_PostedAssemblyLine">
+          <DataField>No_PostedAssemblyLine</DataField>
+        </Field>
+        <Field Name="Description_PostedAssemblyLine">
+          <DataField>Description_PostedAssemblyLine</DataField>
+        </Field>
+        <Field Name="Quantity_PostedAssemblyLine">
+          <DataField>Quantity_PostedAssemblyLine</DataField>
+        </Field>
+        <Field Name="Quantity_PostedAssemblyLineFormat">
+          <DataField>Quantity_PostedAssemblyLineFormat</DataField>
+        </Field>
+        <Field Name="Quantityper_PostedAssemblyLine">
+          <DataField>Quantityper_PostedAssemblyLine</DataField>
+        </Field>
+        <Field Name="Quantityper_PostedAssemblyLineFormat">
+          <DataField>Quantityper_PostedAssemblyLineFormat</DataField>
+        </Field>
+        <Field Name="UnitOfMeasureDescription_PostedAssemblyLine">
+          <DataField>UnitOfMeasureDescription_PostedAssemblyLine</DataField>
+        </Field>
+        <Field Name="DimText2">
+          <DataField>DimText2</DataField>
+        </Field>
+        <Field Name="DimLineNo2">
+          <DataField>DimLineNo2</DataField>
+        </Field>
+        <Field Name="NTSTracking_PostedAssemblyHeader">
+          <DataField>NTSTracking_PostedAssemblyHeader</DataField>
+        </Field>
+        <Field Name="NTSTracking_PostedAssemblyLine">
+          <DataField>NTSTracking_PostedAssemblyLine</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -2530,7 +2627,7 @@
                                                             <Paragraph>
                                                               <TextRuns>
                                                                 <TextRun>
-                                                                  <Value>=Parameters!UnitofMeasureCaption.Value</Value>
+                                                                  <Value>=Parameters!LotOrSerialCaption.Value</Value>
                                                                   <Style>
                                                                     <FontFamily>Segoe UI</FontFamily>
                                                                     <FontSize>8pt</FontSize>
@@ -2550,18 +2647,19 @@
                                                             <PaddingRight>5pt</PaddingRight>
                                                           </Style>
                                                         </Textbox>
+                                                        <rd:Selected>true</rd:Selected>
                                                       </CellContents>
                                                     </TablixCell>
                                                     <TablixCell>
                                                       <CellContents>
-                                                        <Textbox Name="UnitOfMeasure_PostedAssemblyHeader">
+                                                        <Textbox Name="NTSTracking_PostedAssemblyHeader">
                                                           <CanGrow>true</CanGrow>
                                                           <KeepTogether>true</KeepTogether>
                                                           <Paragraphs>
                                                             <Paragraph>
                                                               <TextRuns>
                                                                 <TextRun>
-                                                                  <Value>=Fields!UnitOfMeasure_PostedAssemblyHeader.Value</Value>
+                                                                  <Value>=Fields!NTSTracking_PostedAssemblyHeader.Value</Value>
                                                                   <Style>
                                                                     <FontFamily>Segoe UI</FontFamily>
                                                                     <FontSize>8pt</FontSize>
@@ -2571,7 +2669,7 @@
                                                               <Style />
                                                             </Paragraph>
                                                           </Paragraphs>
-                                                          <rd:DefaultName>UnitOfMeasure_PostedAssemblyHeader</rd:DefaultName>
+                                                          <rd:DefaultName>NTSTracking_PostedAssemblyHeader</rd:DefaultName>
                                                           <Style>
                                                             <Border>
                                                               <Color>LightGrey</Color>
@@ -3196,6 +3294,15 @@
       </DefaultValue>
       <Prompt>LotOrSerialCaption</Prompt>
     </ReportParameter>
+    <ReportParameter Name="SerialCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>SerialCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>SerialCaption</Prompt>
+    </ReportParameter>
     <ReportParameter Name="No_PostedAssemblyHeaderCaption">
       <DataType>String</DataType>
       <DefaultValue>
@@ -3290,7 +3397,7 @@
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>1</NumberOfColumns>
-      <NumberOfRows>29</NumberOfRows>
+      <NumberOfRows>30</NumberOfRows>
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
@@ -3390,51 +3497,56 @@
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>19</RowIndex>
-          <ParameterName>No_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>SerialCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>20</RowIndex>
-          <ParameterName>OrderNo_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>No_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>21</RowIndex>
-          <ParameterName>ItemNo_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>OrderNo_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>22</RowIndex>
-          <ParameterName>Description_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>ItemNo_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>23</RowIndex>
-          <ParameterName>AssembledQuantity_PostedAssemblyHeaderCaption</ParameterName>
+          <ParameterName>Description_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>24</RowIndex>
-          <ParameterName>Type_PostedAssemblyLineCaption</ParameterName>
+          <ParameterName>AssembledQuantity_PostedAssemblyHeaderCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>25</RowIndex>
-          <ParameterName>No_PostedAssemblyLineCaption</ParameterName>
+          <ParameterName>Type_PostedAssemblyLineCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>26</RowIndex>
-          <ParameterName>Description_PostedAssemblyLineCaption</ParameterName>
+          <ParameterName>No_PostedAssemblyLineCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>27</RowIndex>
-          <ParameterName>Quantity_PostedAssemblyLineCaption</ParameterName>
+          <ParameterName>Description_PostedAssemblyLineCaption</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>28</RowIndex>
+          <ParameterName>Quantity_PostedAssemblyLineCaption</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>29</RowIndex>
           <ParameterName>Quantityper_PostedAssemblyLineCaption</ParameterName>
         </CellDefinition>
       </CellDefinitions>
@@ -3520,98 +3632,4 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Fields>
-        <Field Name="Number">
-          <DataField>Number</DataField>
-        </Field>
-        <Field Name="No_PostedAssemblyHeader">
-          <DataField>No_PostedAssemblyHeader</DataField>
-        </Field>
-        <Field Name="OrderNo_PostedAssemblyHeader">
-          <DataField>OrderNo_PostedAssemblyHeader</DataField>
-        </Field>
-        <Field Name="PostingDate_PostedAssemblyHeader">
-          <DataField>PostingDate_PostedAssemblyHeader</DataField>
-        </Field>
-        <Field Name="Reversed_PostedAssemblyHeader">
-          <DataField>Reversed_PostedAssemblyHeader</DataField>
-        </Field>
-        <Field Name="ItemNo_PostedAssemblyHeader">
-          <DataField>ItemNo_PostedAssemblyHeader</DataField>
-        </Field>
-        <Field Name="Description_PostedAssemblyHeader">
-          <DataField>Description_PostedAssemblyHeader</DataField>
-        </Field>
-        <Field Name="AssembledQuantity_PostedAssemblyHeader">
-          <DataField>AssembledQuantity_PostedAssemblyHeader</DataField>
-        </Field>
-        <Field Name="AssembledQuantity_PostedAssemblyHeaderFormat">
-          <DataField>AssembledQuantity_PostedAssemblyHeaderFormat</DataField>
-        </Field>
-        <Field Name="UnitOfMeasure_PostedAssemblyHeader">
-          <DataField>UnitOfMeasure_PostedAssemblyHeader</DataField>
-        </Field>
-        <Field Name="LinkedSalesShipment">
-          <DataField>LinkedSalesShipment</DataField>
-        </Field>
-        <Field Name="CompanyNameConstant">
-          <DataField>CompanyNameConstant</DataField>
-        </Field>
-        <Field Name="DateConstant">
-          <DataField>DateConstant</DataField>
-        </Field>
-        <Field Name="PostingDateConstant">
-          <DataField>PostingDateConstant</DataField>
-        </Field>
-        <Field Name="DimText">
-          <DataField>DimText</DataField>
-        </Field>
-        <Field Name="DimLineNo">
-          <DataField>DimLineNo</DataField>
-        </Field>
-        <Field Name="LineNo_PostedAssemblyLine">
-          <DataField>LineNo_PostedAssemblyLine</DataField>
-        </Field>
-        <Field Name="Type_PostedAssemblyLine">
-          <DataField>Type_PostedAssemblyLine</DataField>
-        </Field>
-        <Field Name="No_PostedAssemblyLine">
-          <DataField>No_PostedAssemblyLine</DataField>
-        </Field>
-        <Field Name="Description_PostedAssemblyLine">
-          <DataField>Description_PostedAssemblyLine</DataField>
-        </Field>
-        <Field Name="Quantity_PostedAssemblyLine">
-          <DataField>Quantity_PostedAssemblyLine</DataField>
-        </Field>
-        <Field Name="Quantity_PostedAssemblyLineFormat">
-          <DataField>Quantity_PostedAssemblyLineFormat</DataField>
-        </Field>
-        <Field Name="Quantityper_PostedAssemblyLine">
-          <DataField>Quantityper_PostedAssemblyLine</DataField>
-        </Field>
-        <Field Name="Quantityper_PostedAssemblyLineFormat">
-          <DataField>Quantityper_PostedAssemblyLineFormat</DataField>
-        </Field>
-        <Field Name="UnitOfMeasureDescription_PostedAssemblyLine">
-          <DataField>UnitOfMeasureDescription_PostedAssemblyLine</DataField>
-        </Field>
-        <Field Name="DimText2">
-          <DataField>DimText2</DataField>
-        </Field>
-        <Field Name="DimLineNo2">
-          <DataField>DimLineNo2</DataField>
-        </Field>
-        <Field Name="NTSTracking_PostedAssemblyLine">
-          <DataField>NTSTracking_PostedAssemblyLine</DataField>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-    </DataSet>
-  </DataSets>
 </Report>
