@@ -22,106 +22,6 @@
       <rd:DataSourceID>ace23880-ab05-4ebb-af60-13aee80ed1a7</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="No_AssemblyHeader">
-          <DataField>No_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="ItemNo_AssemblyHeader">
-          <DataField>ItemNo_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="Description_AssemblyHeader">
-          <DataField>Description_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="Quantity_AssemblyHeader">
-          <DataField>Quantity_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="Quantity_AssemblyHeaderFormat">
-          <DataField>Quantity_AssemblyHeaderFormat</DataField>
-        </Field>
-        <Field Name="QuantityToAssemble_AssemblyHeader">
-          <DataField>QuantityToAssemble_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="QuantityToAssemble_AssemblyHeaderFormat">
-          <DataField>QuantityToAssemble_AssemblyHeaderFormat</DataField>
-        </Field>
-        <Field Name="UnitOfMeasureCode_AssemblyHeader">
-          <DataField>UnitOfMeasureCode_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="DueDate_AssemblyHeader">
-          <DataField>DueDate_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="StartingDate_AssemblyHeader">
-          <DataField>StartingDate_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="EndingDate_AssemblyHeader">
-          <DataField>EndingDate_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="LocationCode_AssemblyHeader">
-          <DataField>LocationCode_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="BinCode_AssemblyHeader">
-          <DataField>BinCode_AssemblyHeader</DataField>
-        </Field>
-        <Field Name="SalesDocNo">
-          <DataField>SalesDocNo</DataField>
-        </Field>
-        <Field Name="COMPANYNAME">
-          <DataField>COMPANYNAME</DataField>
-        </Field>
-        <Field Name="Type_AssemblyLine">
-          <DataField>Type_AssemblyLine</DataField>
-        </Field>
-        <Field Name="No_AssemblyLine">
-          <DataField>No_AssemblyLine</DataField>
-        </Field>
-        <Field Name="Description_AssemblyLine">
-          <DataField>Description_AssemblyLine</DataField>
-        </Field>
-        <Field Name="VariantCode_AssemblyLine">
-          <DataField>VariantCode_AssemblyLine</DataField>
-        </Field>
-        <Field Name="DueDate_AssemblyLine">
-          <DataField>DueDate_AssemblyLine</DataField>
-        </Field>
-        <Field Name="QuantityPer_AssemblyLine">
-          <DataField>QuantityPer_AssemblyLine</DataField>
-        </Field>
-        <Field Name="QuantityPer_AssemblyLineFormat">
-          <DataField>QuantityPer_AssemblyLineFormat</DataField>
-        </Field>
-        <Field Name="Quantity_AssemblyLine">
-          <DataField>Quantity_AssemblyLine</DataField>
-        </Field>
-        <Field Name="Quantity_AssemblyLineFormat">
-          <DataField>Quantity_AssemblyLineFormat</DataField>
-        </Field>
-        <Field Name="UnitOfMeasureCode_AssemblyLine">
-          <DataField>UnitOfMeasureCode_AssemblyLine</DataField>
-        </Field>
-        <Field Name="LocationCode_AssemblyLine">
-          <DataField>LocationCode_AssemblyLine</DataField>
-        </Field>
-        <Field Name="BinCode_AssemblyLine">
-          <DataField>BinCode_AssemblyLine</DataField>
-        </Field>
-        <Field Name="QuantityToConsume_AssemblyLine">
-          <DataField>QuantityToConsume_AssemblyLine</DataField>
-        </Field>
-        <Field Name="QuantityToConsume_AssemblyLineFormat">
-          <DataField>QuantityToConsume_AssemblyLineFormat</DataField>
-        </Field>
-        <Field Name="NTSTracking_AssemblyHeader">
-          <DataField>NTSTracking_AssemblyHeader</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -4628,4 +4528,104 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="No_AssemblyHeader">
+          <DataField>No_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="ItemNo_AssemblyHeader">
+          <DataField>ItemNo_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="Description_AssemblyHeader">
+          <DataField>Description_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="Quantity_AssemblyHeader">
+          <DataField>Quantity_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="Quantity_AssemblyHeaderFormat">
+          <DataField>Quantity_AssemblyHeaderFormat</DataField>
+        </Field>
+        <Field Name="QuantityToAssemble_AssemblyHeader">
+          <DataField>QuantityToAssemble_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="QuantityToAssemble_AssemblyHeaderFormat">
+          <DataField>QuantityToAssemble_AssemblyHeaderFormat</DataField>
+        </Field>
+        <Field Name="UnitOfMeasureCode_AssemblyHeader">
+          <DataField>UnitOfMeasureCode_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="DueDate_AssemblyHeader">
+          <DataField>DueDate_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="StartingDate_AssemblyHeader">
+          <DataField>StartingDate_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="EndingDate_AssemblyHeader">
+          <DataField>EndingDate_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="LocationCode_AssemblyHeader">
+          <DataField>LocationCode_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="BinCode_AssemblyHeader">
+          <DataField>BinCode_AssemblyHeader</DataField>
+        </Field>
+        <Field Name="SalesDocNo">
+          <DataField>SalesDocNo</DataField>
+        </Field>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
+        <Field Name="Type_AssemblyLine">
+          <DataField>Type_AssemblyLine</DataField>
+        </Field>
+        <Field Name="No_AssemblyLine">
+          <DataField>No_AssemblyLine</DataField>
+        </Field>
+        <Field Name="Description_AssemblyLine">
+          <DataField>Description_AssemblyLine</DataField>
+        </Field>
+        <Field Name="VariantCode_AssemblyLine">
+          <DataField>VariantCode_AssemblyLine</DataField>
+        </Field>
+        <Field Name="DueDate_AssemblyLine">
+          <DataField>DueDate_AssemblyLine</DataField>
+        </Field>
+        <Field Name="QuantityPer_AssemblyLine">
+          <DataField>QuantityPer_AssemblyLine</DataField>
+        </Field>
+        <Field Name="QuantityPer_AssemblyLineFormat">
+          <DataField>QuantityPer_AssemblyLineFormat</DataField>
+        </Field>
+        <Field Name="Quantity_AssemblyLine">
+          <DataField>Quantity_AssemblyLine</DataField>
+        </Field>
+        <Field Name="Quantity_AssemblyLineFormat">
+          <DataField>Quantity_AssemblyLineFormat</DataField>
+        </Field>
+        <Field Name="UnitOfMeasureCode_AssemblyLine">
+          <DataField>UnitOfMeasureCode_AssemblyLine</DataField>
+        </Field>
+        <Field Name="LocationCode_AssemblyLine">
+          <DataField>LocationCode_AssemblyLine</DataField>
+        </Field>
+        <Field Name="BinCode_AssemblyLine">
+          <DataField>BinCode_AssemblyLine</DataField>
+        </Field>
+        <Field Name="QuantityToConsume_AssemblyLine">
+          <DataField>QuantityToConsume_AssemblyLine</DataField>
+        </Field>
+        <Field Name="QuantityToConsume_AssemblyLineFormat">
+          <DataField>QuantityToConsume_AssemblyLineFormat</DataField>
+        </Field>
+        <Field Name="NTSTracking_AssemblyHeader">
+          <DataField>NTSTracking_AssemblyHeader</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>
