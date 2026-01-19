@@ -103,7 +103,7 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
     local procedure GenerateQRCode(Value: Text): Text
     begin
         BarcodeFontProvider2D := Enum::"Barcode Font Provider 2D"::IDAutomation2D;
-        BarcodeSymbology2D := Enum::"Barcode Symbology 2D"::"QR-Code";
+        BarcodeSymbology2D := Enum::"Barcode Symbology 2D"::"Data Matrix";
         exit(BarcodeFontProvider2D.EncodeFont(Value, BarcodeSymbology2D));
     end;
 
@@ -134,7 +134,7 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         QRCodeText: Text;
         BarcodeFontProvider2D: Interface "Barcode Font Provider 2D";
         BarcodeSymbology2D: Enum "Barcode Symbology 2D";
-        LaserEtchQRCodeLbl: Label 'Laser Etch QR Code.';
+        LaserEtchQRCodeLbl: Label 'Laser Etch Data Matrix.';
         LotNo: Code[60];
         MaxNoteReadChars: Integer;
         NoteText: Text;
