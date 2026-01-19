@@ -96,9 +96,11 @@ pageextension 52122 "NTS Posted Transfer Shipment" extends "Posted Transfer Ship
         }
         addlast(General)
         {
-            field("NTS Work Description"; Rec."NTS Work Description")
+            field("NTS Work Description"; Rec.GetWorkDescription())
             {
                 ApplicationArea = All;
+                MultiLine = true;
+                Editable = false;
                 ToolTip = 'Specifies the value of the Work Description field.', Comment = '%';
             }
         }
