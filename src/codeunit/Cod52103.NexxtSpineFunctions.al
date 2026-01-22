@@ -1114,9 +1114,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
     var
         SerialNoInfoRecLcl: Record "Serial No. Information";
         LotNoInfoRecLcl: Record "Lot No. Information";
-        RowNoVarLcl: Integer;
-        ColNoVarLcl: Integer;
-        MaxRowNoVarLcl: Integer;
         ItemNoVarLcl: Code[20];
         VariantCodeVarLcl: Code[10];
         SerialNoVarLcl: Code[50];
@@ -1131,7 +1128,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
         CLear(SerialNoVarLcl);
         Clear(LotNoVarLcl);
         Clear(NotesVarLcl);
-
         TempExcelBufferRecGbl.Reset();
         if TempExcelBufferRecGbl.FindLast() then begin
             MaxRowNoVarLcl := TempExcelBufferRecGbl."Row No.";
@@ -1152,6 +1148,50 @@ codeunit 52103 "NTS NexxtSpine Functions"
             end;
         end;
         Message(ExcelImportSucess);
+        end;
+        
+    procedure ImportLinksForItems()
+    var
+        RowNoVarLcl: Integer;
+        ColNoVarLcl: Integer;
+        MaxRowNoVarLcl: Integer;
+        ItemNoVarLcl: Code[20];
+        LinkDescriptionVarLcl: Text;
+        LinkTextVarLcl: Text;
+        ItemRecLcl: Record Item;
+    begin
+        RowNoVarLcl := 0;
+        ColNoVarLcl := 0;
+        MaxRowNoVarLcl := 0;
+
+        Clear(ItemNoVarLcl);
+        Clear(LinkDescriptionVarLcl);
+
+        TempExcelBufferRecGbl.Reset();
+        if TempExcelBufferRecGbl.FindLast() then begin
+            MaxRowNoVarLcl := TempExcelBufferRecGbl."Row No.";
+        end;
+        for RowNoVarLcl := 2 to MaxRowNoVarLcl do begin
+            ItemNoVarLcl := GetValueAtCell(RowNoVarLcl, 1);
+            LinkDescriptionVarLcl := GetValueAtCell(RowNoVarLcl, 2);
+            ItemRecLcl.Get(ItemNoVarlcl);
+            if not LinkExistsForItem(ItemRecLcl, LinkDescriptionVarLcl) then
+                ItemRecLcl.AddLink(LinkDescriptionVarLcl);
+            Message(ExcelImportSucess);
+        end;
+    end;
+
+    procedure LinkExistsForItem(var ItemRec: Record Item; LinkVar: Text): Boolean
+    var
+        RecRefLcl: RecordRef;
+        RecLinkLcl: Record "Record Link";
+    begin
+        RecRefLcl.GetTable(ItemRec);
+        RecLinkLcl.Reset();
+        RecLinkLcl.SetRange("Record ID", RecRefLcl.RecordId);
+        RecLinkLcl.SetRange(URL1, LinkVar);
+        RecLinkLcl.SetRange(Company, CompanyName);
+        exit(not RecLinkLcl.IsEmpty);
     end;
 
     var
