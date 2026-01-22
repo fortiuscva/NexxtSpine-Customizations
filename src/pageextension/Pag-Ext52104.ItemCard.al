@@ -77,7 +77,27 @@ pageextension 52104 "NTS Item Card" extends "Item Card"
             }
         }
     }
-
+    actions
+    {
+        addlast(processing)
+        {
+            action("NTS ImportItemLinks")
+            {
+                Caption = 'Import Links';
+                Image = Import;
+                ApplicationArea = All;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                ToolTip = 'Import item links from an Excel file.';
+                trigger OnAction()
+                begin
+                    NexxtSpineFunctionsCU.ReadExcelSheet();
+                    NexxtSpineFunctionsCU.ImportLinksForItems();
+                end;
+            }
+        }
+    }
     trigger OnAfterGetRecord()
     begin
         CurrPage.IRCodesFactbox.Page.InitValues(Rec."Routing No.");
@@ -89,4 +109,8 @@ pageextension 52104 "NTS Item Card" extends "Item Card"
         CurrPage.IRCodesFactbox.Page.InitValues(Rec."Routing No.");
         CurrPage.IRCodesFactbox.Page.SummarizeIRCodes();
     end;
+
+    var
+        SerialNoNotes: Text;
+        NexxtSpineFunctionsCU: Codeunit "NTS NexxtSpine Functions";
 }

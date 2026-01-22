@@ -1082,7 +1082,86 @@ codeunit 52103 "NTS NexxtSpine Functions"
             until DORLineRecLcl.Next() = 0;
     end;
 
+    procedure ReadExcelSheet()
     var
+        FileMgtCULcl: Codeunit "File Management";
+        IStreamVarLcl: InStream;
+        FromFileVarLcl: Text[100];
+    begin
+        UploadIntoStream(UploadExcelMsg, '', '', FromFileVarLcl, IStreamVarLcl);
+        if FromFileVarLcl <> '' then begin
+            FileNameVarLcl := FileMgtCULcl.GetFileName(FromFileVarLcl);
+            SheetNameVarLcl := TempExcelBufferRecGbl.SelectSheetsNameStream(IStreamVarLcl);
+        end else
+            Error(NoFileFoundMsg);
+        TempExcelBufferRecGbl.Reset();
+        TempExcelBufferRecGbl.DeleteAll();
+        TempExcelBufferRecGbl.OpenBookStream(IStreamVarLcl, SheetNameVarLcl);
+        TempExcelBufferRecGbl.ReadSheet();
+    end;
+
+    local procedure GetValueAtCell(RowNoVarLcl: Integer; ColNoVarLcl: Integer): Text
+    begin
+
+        TempExcelBufferRecGbl.Reset();
+        If TempExcelBufferRecGbl.Get(RowNoVarLcl, ColNoVarLcl) then
+            exit(TempExcelBufferRecGbl."Cell Value as Text")
+        else
+            exit('');
+    end;
+
+    procedure ImportLinksForItems()
+    var
+
+        RowNoVarLcl: Integer;
+        ColNoVarLcl: Integer;
+        MaxRowNoVarLcl: Integer;
+        ItemNoVarLcl: Code[20];
+        LinkDescriptionVarLcl: Text;
+        LinkTextVarLcl: Text;
+        ItemRecLcl: Record Item;
+    begin
+
+        RowNoVarLcl := 0;
+        ColNoVarLcl := 0;
+        MaxRowNoVarLcl := 0;
+
+        Clear(ItemNoVarLcl);
+        Clear(LinkDescriptionVarLcl);
+        TempExcelBufferRecGbl.Reset();
+        if TempExcelBufferRecGbl.FindLast() then begin
+            MaxRowNoVarLcl := TempExcelBufferRecGbl."Row No.";
+        end;
+        for RowNoVarLcl := 2 to MaxRowNoVarLcl do begin
+            ItemNoVarLcl := GetValueAtCell(RowNoVarLcl, 1);
+            LinkDescriptionVarLcl := GetValueAtCell(RowNoVarLcl, 2);
+            ItemRecLcl.Get(ItemNoVarlcl);
+            if not LinkExistsForItem(ItemRecLcl, LinkDescriptionVarLcl) then
+                ItemRecLcl.AddLink(LinkDescriptionVarLcl);
+            Message(ExcelImportSucess);
+        end;
+    end;
+
+    procedure LinkExistsForItem(var ItemRec: Record Item; LinkVar: Text): Boolean
+    var
+        RecRefLcl: RecordRef;
+        RecLinkLcl: Record "Record Link";
+    begin
+        RecRefLcl.GetTable(ItemRec);
+        RecLinkLcl.Reset();
+        RecLinkLcl.SetRange("Record ID", RecRefLcl.RecordId);
+        RecLinkLcl.SetRange(URL1, LinkVar);
+        RecLinkLcl.SetRange(Company, CompanyName);
+        exit(not RecLinkLcl.IsEmpty);
+    end;
+
+    var
+        TempExcelBufferRecGbl: Record "Excel Buffer" temporary;
+        FileNameVarLcl: Text[100];
+        SheetNameVarLcl: Text[100];
+        UploadExcelMsg: Label 'Please Choose the Excel file.';
+        NoFileFoundMsg: Label 'No Excel file found!';
+        ExcelImportSucess: Label 'Excel is successfully imported.';
         SalesReceivablesSetup: Record "Sales & Receivables Setup";
         SalesOrderCreatedandOpenSalesOrderMsg: Label 'Sales Order %1 is successfully created. Do you want to open sales order?';
         NothingToUpdateErrMsg: Label 'There is nothing to update.';
