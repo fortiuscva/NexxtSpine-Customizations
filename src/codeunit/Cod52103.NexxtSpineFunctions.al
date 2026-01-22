@@ -1114,6 +1114,9 @@ codeunit 52103 "NTS NexxtSpine Functions"
     var
         SerialNoInfoRecLcl: Record "Serial No. Information";
         LotNoInfoRecLcl: Record "Lot No. Information";
+        RowNoVarLcl: Integer;
+        ColNoVarLcl: Integer;
+        MaxRowNoVarLcl: Integer;
         ItemNoVarLcl: Code[20];
         VariantCodeVarLcl: Code[10];
         SerialNoVarLcl: Code[50];
@@ -1148,8 +1151,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
             end;
         end;
         Message(ExcelImportSucess);
-        end;
-        
+    end;
+
     procedure ImportLinksForItems()
     var
         RowNoVarLcl: Integer;
