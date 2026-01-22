@@ -1110,9 +1110,48 @@ codeunit 52103 "NTS NexxtSpine Functions"
             exit('');
     end;
 
+    procedure ImportNotesForSerialNoInfoAndLotNoInfo()
+    var
+        SerialNoInfoRecLcl: Record "Serial No. Information";
+        LotNoInfoRecLcl: Record "Lot No. Information";
+        ItemNoVarLcl: Code[20];
+        VariantCodeVarLcl: Code[10];
+        SerialNoVarLcl: Code[50];
+        LotNoVarLcl: Code[50];
+        NotesVarLcl: Text;
+    begin
+        RowNoVarLcl := 0;
+        ColNoVarLcl := 0;
+        MaxRowNoVarLcl := 0;
+        Clear(ItemNoVarLcl);
+        Clear(VariantCodeVarLcl);
+        CLear(SerialNoVarLcl);
+        Clear(LotNoVarLcl);
+        Clear(NotesVarLcl);
+        TempExcelBufferRecGbl.Reset();
+        if TempExcelBufferRecGbl.FindLast() then begin
+            MaxRowNoVarLcl := TempExcelBufferRecGbl."Row No.";
+        end;
+        for RowNoVarLcl := 2 to MaxRowNoVarLcl do begin
+            ItemNoVarLcl := GetValueAtCell(RowNoVarLcl, 1);
+            VariantCodeVarLcl := GetValueAtCell(RowNoVarLcl, 2);
+            SerialNoVarLcl := GetValueAtCell(RowNoVarLcl, 3);
+            LotNoVarLcl := GetValueAtCell(RowNoVarLcl, 4);
+            NotesVarLcl := GetValueAtCell(RowNoVarLcl, 5);
+            if SerialNoVarLcl <> '' then begin
+                SerialNoInfoRecLcl.Get(ItemNoVarLcl, VariantCodeVarLcl, SerialNoVarLcl);
+                SerialNoInfoRecLcl.SetSerialNoNotes(NotesVarLcl);
+            end;
+            if LotNoVarLcl <> '' then begin
+                LotNoInfoRecLcl.Get(ItemNoVarLcl, VariantCodeVarLcl, LotNoVarLcl);
+                LotNoInfoRecLcl.SetLotNoNotes(NotesVarLcl);
+            end;
+        end;
+        Message(ExcelImportSucess);
+        end;
+        
     procedure ImportLinksForItems()
     var
-
         RowNoVarLcl: Integer;
         ColNoVarLcl: Integer;
         MaxRowNoVarLcl: Integer;
@@ -1121,13 +1160,13 @@ codeunit 52103 "NTS NexxtSpine Functions"
         LinkTextVarLcl: Text;
         ItemRecLcl: Record Item;
     begin
-
         RowNoVarLcl := 0;
         ColNoVarLcl := 0;
         MaxRowNoVarLcl := 0;
 
         Clear(ItemNoVarLcl);
         Clear(LinkDescriptionVarLcl);
+
         TempExcelBufferRecGbl.Reset();
         if TempExcelBufferRecGbl.FindLast() then begin
             MaxRowNoVarLcl := TempExcelBufferRecGbl."Row No.";
