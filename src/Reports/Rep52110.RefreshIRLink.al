@@ -18,6 +18,7 @@ report 52110 "NTS Refresh IR Link"
                 var
                     NewRecLink: Record "Record Link";
                 begin
+                    SingleInstanceCU.SetFromProdRoutingPage(true);
                     if "NTS IR Sheet 1" <> '' then
                         CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1", false);
 
@@ -26,6 +27,11 @@ report 52110 "NTS Refresh IR Link"
 
                     if "NTS IR Sheet 3" <> '' then
                         CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3", false);
+                end;
+
+                trigger OnPostDataItem()
+                begin
+                    SingleInstanceCU.SetFromProdRoutingPage(false);
                 end;
 
             }
@@ -37,6 +43,7 @@ report 52110 "NTS Refresh IR Link"
         }
     }
     var
+        SingleInstanceCU: Codeunit "NTS Single Instance";
         SheetName1Gbl: Code[20];
         SheetName2Gbl: Code[20];
 

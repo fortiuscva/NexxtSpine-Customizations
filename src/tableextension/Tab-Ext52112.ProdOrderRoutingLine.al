@@ -9,7 +9,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             TableRelation = "NTS IR Code".Code;
             trigger OnValidate()
             begin
-                if not SingleInstanceCU.GetFromProdRoutingPage() then
+                if SingleInstanceCU.GetFromProdRoutingPage() then
                     CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1", false);
             end;
         }
@@ -21,7 +21,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
 
             trigger OnValidate()
             begin
-                if not SingleInstanceCU.GetFromProdRoutingPage() then
+                if SingleInstanceCU.GetFromProdRoutingPage() then
                     CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2", false);
             end;
         }
@@ -33,7 +33,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
 
             trigger OnValidate()
             begin
-                if not SingleInstanceCU.GetFromProdRoutingPage() then
+                if SingleInstanceCU.GetFromProdRoutingPage() then
                     CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3", false);
             end;
         }
