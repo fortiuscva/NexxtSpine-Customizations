@@ -13,6 +13,7 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
                 begin
                     SingleInstanceCU.SetFromProdRoutingPage(true);
                     Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 1", true);
+                    SingleInstanceCU.SetFromProdRoutingPage(false);
                 end;
             }
             field("NTS IR Sheet 2"; Rec."NTS IR Sheet 2")
@@ -23,6 +24,7 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
                 begin
                     SingleInstanceCU.SetFromProdRoutingPage(true);
                     Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 2", true);
+                    SingleInstanceCU.SetFromProdRoutingPage(false);
                 end;
             }
             field("NTS IR Sheet 3"; Rec."NTS IR Sheet 3")
@@ -34,6 +36,7 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
                 begin
                     SingleInstanceCU.SetFromProdRoutingPage(true);
                     Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 3", true);
+                    SingleInstanceCU.SetFromProdRoutingPage(false);
                 end;
             }
         }
