@@ -13,7 +13,19 @@ codeunit 52108 "NTS Single Instance"
 
     end;
 
+    procedure SetFromProdRoutingPage(SetFromProdRoutingLinePagePar: Boolean)
+    begin
+        SetFromProdRoutingLinePage := SetFromProdRoutingLinePagePar;
+    end;
+
+    procedure GetFromProdRoutingPage(): Boolean
+    begin
+        exit(SetFromProdRoutingLinePage);
+
+    end;
+
     var
         AutoPostItemJnlGbl: Boolean;
+        SetFromProdRoutingLinePage: Boolean;
 
 }
