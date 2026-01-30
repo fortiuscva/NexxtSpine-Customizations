@@ -22,7 +22,26 @@ pageextension 52131 "NTS Lot No. Information Card" extends "Lot No. Information 
             }
         }
     }
-
+    actions
+    {
+        addlast(processing)
+        {
+            action("NTS ImportNotes")
+            {
+                ApplicationArea = All;
+                Caption = 'Import Notes';
+                Image = Import;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                trigger OnAction()
+                begin
+                    NexxtSpineFunctionsCU.ReadExcelSheet();
+                    NexxtSpineFunctionsCU.ImportNotesForSerialNoInfoAndLotNoInfo();
+                end;
+            }
+        }
+    }
     trigger OnAfterGetRecord()
     begin
         LotNoNotes := Rec.GetLotNoNotes();
@@ -30,4 +49,5 @@ pageextension 52131 "NTS Lot No. Information Card" extends "Lot No. Information 
 
     var
         LotNoNotes: Text;
+        NexxtSpineFunctionsCU: Codeunit "NTS NexxtSpine Functions";
 }
