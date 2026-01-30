@@ -26,7 +26,27 @@ pageextension 52112 "Serial No. Information Card" extends "Serial No. Informatio
             }
         }
     }
+    actions
+    {
+        addlast(processing)
+        {
+            action("NTS ImportNotes")
+            {
+                ApplicationArea = All;
+                Caption = 'Import Notes';
+                Image = Import;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                trigger OnAction()
+                begin
+                    NexxtSpineFunctionsCU.ReadExcelSheet();
+                    NexxtSpineFunctionsCU.ImportNotesForSerialNoInfoAndLotNoInfo();
+                end;
 
+            }
+        }
+    }
     trigger OnAfterGetRecord()
     begin
         SerialNoNotes := Rec.GetSerialNoNotes();
@@ -34,4 +54,6 @@ pageextension 52112 "Serial No. Information Card" extends "Serial No. Informatio
 
     var
         SerialNoNotes: Text;
+        NexxtSpineFunctionsCU: Codeunit "NTS NexxtSpine Functions";
+
 }
