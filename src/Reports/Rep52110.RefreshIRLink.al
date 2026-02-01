@@ -16,24 +16,45 @@ report 52110 "NTS Refresh IR Link"
 
                 trigger OnAfterGetRecord()
                 var
+                    ManualLog: Record "NTS Manual IR Sheet Log";
                     NewRecLink: Record "Record Link";
                 begin
-                    SingleInstanceCU.SetFromProdRoutingPage(true);
-                    if "NTS IR Sheet 1" <> '' then
-                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1", false);
+                    if "NTS IR Sheet 1" <> '' then begin
+                        ManualLog.Reset();
+                        ManualLog.SetRange("Source No.", ProdOrderRoutingLine."Prod. Order No.");
+                        ManualLog.SetRange("Source Line No.", ProdOrderRoutingLine."Routing Reference No.");
+                        ManualLog.SetRange("Operation No.", ProdOrderRoutingLine."Operation No.");
+                        ManualLog.SetRange("IR Code", ProdOrderRoutingLine."NTS IR Sheet 1");
+                        if ManualLog.FindFirst() then
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1", true)
+                        else
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1", false);
+                    end;
 
-                    if "NTS IR Sheet 2" <> '' then
-                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2", false);
+                    if "NTS IR Sheet 2" <> '' then begin
+                        ManualLog.Reset();
+                        ManualLog.SetRange("Source No.", ProdOrderRoutingLine."Prod. Order No.");
+                        ManualLog.SetRange("Source Line No.", ProdOrderRoutingLine."Routing Reference No.");
+                        ManualLog.SetRange("Operation No.", ProdOrderRoutingLine."Operation No.");
+                        ManualLog.SetRange("IR Code", ProdOrderRoutingLine."NTS IR Sheet 2");
+                        if ManualLog.FindFirst() then
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2", true)
+                        else
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2", false);
+                    end;
 
-                    if "NTS IR Sheet 3" <> '' then
-                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3", false);
+                    if "NTS IR Sheet 3" <> '' then begin
+                        ManualLog.Reset();
+                        ManualLog.SetRange("Source No.", ProdOrderRoutingLine."Prod. Order No.");
+                        ManualLog.SetRange("Source Line No.", ProdOrderRoutingLine."Routing Reference No.");
+                        ManualLog.SetRange("Operation No.", ProdOrderRoutingLine."Operation No.");
+                        ManualLog.SetRange("IR Code", ProdOrderRoutingLine."NTS IR Sheet 3");
+                        if ManualLog.FindFirst() then
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3", true)
+                        else
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3", false);
+                    end;
                 end;
-
-                trigger OnPostDataItem()
-                begin
-                    SingleInstanceCU.SetFromProdRoutingPage(false);
-                end;
-
             }
 
             trigger OnAfterGetRecord()
@@ -43,7 +64,6 @@ report 52110 "NTS Refresh IR Link"
         }
     }
     var
-        SingleInstanceCU: Codeunit "NTS Single Instance";
         SheetName1Gbl: Code[20];
         SheetName2Gbl: Code[20];
 

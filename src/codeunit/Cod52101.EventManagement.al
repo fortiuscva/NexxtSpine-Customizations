@@ -25,8 +25,12 @@ codeunit 52101 "NTS Event Management"
     [EventSubscriber(ObjectType::Table, Database::"Prod. Order Routing Line", 'OnAfterCopyFromRoutingLine', '', true, true)]
     local procedure OnAfterCopyFromRoutingLine(var ProdOrderRoutingLine: Record "Prod. Order Routing Line"; RoutingLine: Record "Routing Line")
     var
+        ManualIRLog: Record "NTS Manual IR Sheet Log";
         IRCode: Record "NTS IR Code";
     begin
+        ManualIRLog.Reset();
+        ManualIRLog.SetRange("Source No.", ProdOrderRoutingLine."Prod. Order No.");
+        ManualIRLog.DeleteAll();
 
         if RoutingLine."NTS IR Sheet 1" <> '' then
             ProdOrderRoutingLine.CopyIRCodesToReferenceIRCodes(RoutingLine."NTS IR Sheet 1", false);

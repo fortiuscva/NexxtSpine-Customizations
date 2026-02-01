@@ -36,6 +36,10 @@ page 52104 "NTS Reference IR Codes"
                 {
                     ToolTip = 'Specifies the value of the Mobile Link field.', Comment = '%';
                 }
+                field("Manual Entry"; Rec."Manual Entry")
+                {
+                    ToolTip = 'Specifies the value of the Manual Entry field.', Comment = '%';
+                }
             }
         }
     }

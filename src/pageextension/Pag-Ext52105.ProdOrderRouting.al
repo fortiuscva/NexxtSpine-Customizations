@@ -11,9 +11,8 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
 
                 trigger OnValidate()
                 begin
-                    SingleInstanceCU.SetFromProdRoutingPage(true);
+                    InsertManualLog(Rec."NTS IR Sheet 1");
                     Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 1", true);
-                    SingleInstanceCU.SetFromProdRoutingPage(false);
                 end;
             }
             field("NTS IR Sheet 2"; Rec."NTS IR Sheet 2")
@@ -22,9 +21,8 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
                 ToolTip = 'Specifies the value of the NTS IR Sheet 2 field.';
                 trigger OnValidate()
                 begin
-                    SingleInstanceCU.SetFromProdRoutingPage(true);
+                    InsertManualLog(Rec."NTS IR Sheet 2");
                     Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 2", true);
-                    SingleInstanceCU.SetFromProdRoutingPage(false);
                 end;
             }
             field("NTS IR Sheet 3"; Rec."NTS IR Sheet 3")
@@ -34,9 +32,8 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
 
                 trigger OnValidate()
                 begin
-                    SingleInstanceCU.SetFromProdRoutingPage(true);
+                    InsertManualLog(Rec."NTS IR Sheet 3");
                     Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 3", true);
-                    SingleInstanceCU.SetFromProdRoutingPage(false);
                 end;
             }
         }
@@ -76,6 +73,19 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
         }
     }
 
+    procedure InsertManualLog(IRSheetPar: Code[20])
     var
-        SingleInstanceCU: Codeunit "NTS Single Instance";
+        ManualIRLog: Record "NTS Manual IR Sheet Log";
+    begin
+        ManualIRLog.Init();
+        ManualIRLog."Source Type" := Database::"Prod. Order Routing Line";
+        ManualIRLog."Source Subtype" := Rec.Status;
+        ManualIRLog."Source No." := Rec."Prod. Order No.";
+        ManualIRLog."Source Line No." := Rec."Routing Reference No.";
+        ManualIRLog."Operation No." := Rec."Operation No.";
+        ManualIRLog."IR Code" := IRSheetPar;
+        ManualIRLog."Entered By" := UserId;
+        ManualIRLog."Entered On" := CurrentDateTime;
+        ManualIRLog.Insert();
+    end;
 }
