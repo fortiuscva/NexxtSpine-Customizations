@@ -121,7 +121,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
 
             //TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode.Link, Rec, IRCode, '');
             if ReferenceIRCode."Mobile Link" <> '' then
-                if ReferenceIRCode."IR/IP Type" = ReferenceIRCode."IR/IP Type"::IR then
+                if (ReferenceIRCode."IR/IP Type" = ReferenceIRCode."IR/IP Type"::IR) and (not IsManualEntry) then
                     TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode."Mobile Link", Rec, IRCode, ReferenceIRCode."Source No." + ',' + ReferenceIRCode."IR Number")
                 else
                     TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode."Mobile Link", Rec, IRCode, ReferenceIRCode."Source No." + ',' + ReferenceIRCode."Operation No." + ',' + ReferenceIRCode."IR Number");
