@@ -268,7 +268,7 @@ codeunit 52101 "NTS Event Management"
                         if (SalesHeader."Ship-to Code" <> '') and ShipToAddr.Get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code") then
                             LPHeader.Validate("NTS Ship-to Phone No.", ShipToAddr."Phone No.")
                         else
-                            LPHeader.Validate("NTS Ship-to Phone No.", SalesHeader."Sell-to Phone No.");
+                            LPHeader.Validate("NTS Ship-to Phone No.", SalesHeader."Ship-to Phone No.");
 
                         LPHeader.Modify();
                     end;
