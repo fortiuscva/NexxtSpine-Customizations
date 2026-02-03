@@ -14,10 +14,10 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
 
         add("Prod. Order Line")
         {
-            column(NTSQRCode; GenerateQRCode(GetGTIN("Item No.") + ',' + GetLotOrSerialNo("Prod. Order No.", "Line No.")))
+            column(NTSQRCode; GenerateQRCode(GetGTIN("Item No.") + GetLotOrSerialNo("Prod. Order No.", "Line No.")))
             {
             }
-            column(NTSQRCodeText; GetGTIN("Item No.") + ',' + GetLotOrSerialNo("Prod. Order No.", "Line No."))
+            column(NTSQRCodeText; GetGTIN("Item No.") + GetLotOrSerialNo("Prod. Order No.", "Line No."))
             {
             }
             column(NTSLaserEtchQRCodeLbl; LaserEtchQRCodeLbl)
@@ -33,10 +33,6 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
             column(NTSLotOrSerial; GetLotOrSerial("Prod. Order No.", "Line No."))
             {
             }
-            // column(NTSLineNotes; GetNotesTextForRecord("Prod. Order Line".RecordId))
-            // {
-            // }
-            // column(NTSLineNotes; GetNotesTextForRecord("Prod. Order Line")) { }
         }
     }
     local procedure GetLotOrSerial(ProdOrderNo: Code[20]; LineNo: Integer): Code[50]
@@ -125,7 +121,6 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         OutStreamLcl: OutStream;
     begin
         NoteText := '';
-        // if ProdOrderRecLcl.Get(ProdOrder.Status::Released, ProdOrder."No.") then begin
         RecLink.SetRange("Record ID", ProdOrder.RecordId);
         RecLink.SetRange(Type, RecLink.Type::Note);
         if RecLink.FindSet() then begin
@@ -150,8 +145,8 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         SerialNo: Code[60];
         MaxNoteReadChars: Integer;
         NoteText: Text;
-        GTINUDILbl: Label '01: ';
-        LotNoLbl: Label '10: ';
-        SerialNoLbl: Label '21: ';
+        GTINUDILbl: Label '(01)';
+        LotNoLbl: Label '(10)';
+        SerialNoLbl: Label '(21)';
 
 }
