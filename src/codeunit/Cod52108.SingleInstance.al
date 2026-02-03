@@ -13,7 +13,9 @@ codeunit 52108 "NTS Single Instance"
 
     end;
 
+
     var
         AutoPostItemJnlGbl: Boolean;
+        SetFromProdRoutingLinePage: Boolean;
 
 }

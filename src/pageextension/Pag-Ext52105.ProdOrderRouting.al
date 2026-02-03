@@ -8,16 +8,33 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the NTS IR Sheet 1 field.';
+
+                trigger OnValidate()
+                begin
+                    InsertManualLog(Rec."NTS IR Sheet 1");
+                    Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 1", true);
+                end;
             }
             field("NTS IR Sheet 2"; Rec."NTS IR Sheet 2")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the NTS IR Sheet 2 field.';
+                trigger OnValidate()
+                begin
+                    InsertManualLog(Rec."NTS IR Sheet 2");
+                    Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 2", true);
+                end;
             }
             field("NTS IR Sheet 3"; Rec."NTS IR Sheet 3")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the NTS IR Sheet 3 field.';
+
+                trigger OnValidate()
+                begin
+                    InsertManualLog(Rec."NTS IR Sheet 3");
+                    Rec.CopyIRCodesToReferenceIRCodes(Rec."NTS IR Sheet 3", true);
+                end;
             }
         }
         addlast(factboxes)
@@ -55,4 +72,20 @@ pageextension 52105 "NTS Prod. Order Routing" extends "Prod. Order Routing"
             }
         }
     }
+
+    procedure InsertManualLog(IRSheetPar: Code[20])
+    var
+        ManualIRLog: Record "NTS Manual IR Sheet Log";
+    begin
+        ManualIRLog.Init();
+        ManualIRLog."Source Type" := Database::"Prod. Order Routing Line";
+        ManualIRLog."Source Subtype" := Rec.Status;
+        ManualIRLog."Source No." := Rec."Prod. Order No.";
+        ManualIRLog."Source Line No." := Rec."Routing Reference No.";
+        ManualIRLog."Operation No." := Rec."Operation No.";
+        ManualIRLog."IR Code" := IRSheetPar;
+        ManualIRLog."Entered By" := UserId;
+        ManualIRLog."Entered On" := CurrentDateTime;
+        ManualIRLog.Insert();
+    end;
 }

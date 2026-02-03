@@ -7,10 +7,10 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             Caption = 'IR Sheet 1';
             DataClassification = ToBeClassified;
             TableRelation = "NTS IR Code".Code;
-            trigger OnValidate()
-            begin
-                CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1");
-            end;
+            // trigger OnValidate()
+            // begin
+            //     CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1", false);
+            // end;
         }
         field(52101; "NTS IR Sheet 2"; Code[20])
         {
@@ -18,10 +18,10 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             DataClassification = ToBeClassified;
             TableRelation = "NTS IR Code".Code;
 
-            trigger OnValidate()
-            begin
-                CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2");
-            end;
+            // trigger OnValidate()
+            // begin
+            //     CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2", false);
+            // end;
         }
         field(52102; "NTS IR Sheet 3"; Code[20])
         {
@@ -29,12 +29,13 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             DataClassification = ToBeClassified;
             TableRelation = "NTS IR Code".Code;
 
-            trigger OnValidate()
-            begin
-                CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3");
-            end;
+            // trigger OnValidate()
+            // begin
+            //     CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3", false);
+            // end;
         }
     }
+
     trigger OnAfterDelete()
     var
         ReferenceIRCode: Record "NTS Reference IR Code";
@@ -51,10 +52,11 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             ReferenceIRCode.Delete();
     end;
 
-    procedure CopyIRCodesToReferenceIRCodes(IRSheetPar: Code[20])
+    procedure CopyIRCodesToReferenceIRCodes(IRSheetPar: Code[20]; IsManualEntry: Boolean)
     var
         IRCode: Record "NTS IR Code";
         ReferenceIRCode: Record "NTS Reference IR Code";
+        ManualIRLog: Record "NTS Manual IR Sheet Log";
         OneDriveIntegrationCULcl: Codeunit "NTS OneDrive Integration";
         NewFileName: Text;
     begin
@@ -71,10 +73,12 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
         ReferenceIRCode.SetRange("Source Subline No.", 0);
         // ReferenceIRCode.SetRange(Code, IRSheetPar);
 
-        if IRCode."IR/IP Type" = IRCode."IR/IP Type"::IP then
+        if (IRCode."IR/IP Type" = IRCode."IR/IP Type"::IP) or IsManualEntry then
             ReferenceIRCode.SetRange("Operation No.", Rec."Operation No.");
 
         ReferenceIRCode.SetRange("IR Number", IRCode."IR Number");
+        if IsManualEntry then
+            ReferenceIRCode.SetRange("Manual Entry", true);
         if not ReferenceIRCode.FindSet() then begin
             //if IRCode.Get(IRSheetPar) then begin
             ReferenceIRCode.Init();
@@ -91,9 +95,23 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             //ReferenceIRCode.Link := IRCode.Link;
             ReferenceIRCode."Template Link" := IRCode.Link;
             ReferenceIRCode."IR Sheet Name" := Rec."Prod. Order No." + IRCode."IR Number" + IRCode."IR Sheet Name";
-            OneDriveIntegrationCULcl.ConnectOneDriveFile(Rec."Prod. Order No." + '-' + format(Rec."Routing Reference No.") + '-' + IRCode."IR Number", IRCode."File Name", ReferenceIRCode."Sharepoint Link");
+
+            if IsManualEntry then
+                ReferenceIRCode."Manual Entry" := true;
+
+            if IsManualEntry then
+                NewFileName := 'Manual_' + Rec."Prod. Order No." + '-' +
+                               Format(Rec."Routing Reference No.") + '-' +
+                               ReferenceIRCode."Operation No." + '-' +
+                               IRCode."IR Number"
+            else
+                NewFileName := Rec."Prod. Order No." + '-' +
+                               Format(Rec."Routing Reference No.") + '-' +
+                               IRCode."IR Number";
+
+            OneDriveIntegrationCULcl.ConnectOneDriveFile(NewFileName, IRCode."File Name", ReferenceIRCode."Sharepoint Link");
             //ReferenceIRCode."Mobile Link" := 'ms-excel:ofe|u|' + ReferenceIRCode.Link;
-            NewFileName := Rec."Prod. Order No." + '-' + format(Rec."Routing Reference No.") + '-' + IRCode."IR Number";
+            // NewFileName := Rec."Prod. Order No." + '-' + format(Rec."Routing Reference No.") + '-' + IRCode."IR Number";
             //ReferenceIRCode."Mobile Link" := 'https://convert.nexxtspine.com:3000' + '/' + NewFileName + '.xlsm' + '&file=' + NewFileName + '.xlsm';
             ReferenceIRCode."Mobile Link" := ReplaceFirst(ReferenceIRCode."Sharepoint Link", 'https://nexxtspinellc-my.sharepoint.com', 'https://convert.nexxtspine.com:3000');
 
@@ -103,7 +121,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
 
             //TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode.Link, Rec, IRCode, '');
             if ReferenceIRCode."Mobile Link" <> '' then
-                if ReferenceIRCode."IR/IP Type" = ReferenceIRCode."IR/IP Type"::IR then
+                if (ReferenceIRCode."IR/IP Type" = ReferenceIRCode."IR/IP Type"::IR) and (not IsManualEntry) then
                     TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode."Mobile Link", Rec, IRCode, ReferenceIRCode."Source No." + ',' + ReferenceIRCode."IR Number")
                 else
                     TransferReferenceIRCodeLinkToProdOrderLinks(ReferenceIRCode."Mobile Link", Rec, IRCode, ReferenceIRCode."Source No." + ',' + ReferenceIRCode."Operation No." + ',' + ReferenceIRCode."IR Number");

@@ -16,18 +16,45 @@ report 52110 "NTS Refresh IR Link"
 
                 trigger OnAfterGetRecord()
                 var
+                    ManualLog: Record "NTS Manual IR Sheet Log";
                     NewRecLink: Record "Record Link";
                 begin
-                    if "NTS IR Sheet 1" <> '' then
-                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1");
+                    if "NTS IR Sheet 1" <> '' then begin
+                        ManualLog.Reset();
+                        ManualLog.SetRange("Source No.", ProdOrderRoutingLine."Prod. Order No.");
+                        ManualLog.SetRange("Source Line No.", ProdOrderRoutingLine."Routing Reference No.");
+                        ManualLog.SetRange("Operation No.", ProdOrderRoutingLine."Operation No.");
+                        ManualLog.SetRange("IR Code", ProdOrderRoutingLine."NTS IR Sheet 1");
+                        if ManualLog.FindFirst() then
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1", true)
+                        else
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 1", false);
+                    end;
 
-                    if "NTS IR Sheet 2" <> '' then
-                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2");
+                    if "NTS IR Sheet 2" <> '' then begin
+                        ManualLog.Reset();
+                        ManualLog.SetRange("Source No.", ProdOrderRoutingLine."Prod. Order No.");
+                        ManualLog.SetRange("Source Line No.", ProdOrderRoutingLine."Routing Reference No.");
+                        ManualLog.SetRange("Operation No.", ProdOrderRoutingLine."Operation No.");
+                        ManualLog.SetRange("IR Code", ProdOrderRoutingLine."NTS IR Sheet 2");
+                        if ManualLog.FindFirst() then
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2", true)
+                        else
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 2", false);
+                    end;
 
-                    if "NTS IR Sheet 3" <> '' then
-                        CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3");
+                    if "NTS IR Sheet 3" <> '' then begin
+                        ManualLog.Reset();
+                        ManualLog.SetRange("Source No.", ProdOrderRoutingLine."Prod. Order No.");
+                        ManualLog.SetRange("Source Line No.", ProdOrderRoutingLine."Routing Reference No.");
+                        ManualLog.SetRange("Operation No.", ProdOrderRoutingLine."Operation No.");
+                        ManualLog.SetRange("IR Code", ProdOrderRoutingLine."NTS IR Sheet 3");
+                        if ManualLog.FindFirst() then
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3", true)
+                        else
+                            CopyIRCodesToReferenceIRCodes("NTS IR Sheet 3", false);
+                    end;
                 end;
-
             }
 
             trigger OnAfterGetRecord()
@@ -48,6 +75,7 @@ report 52110 "NTS Refresh IR Link"
         RecLink: Record "Record Link";
         IRCode: Record "NTS IR Code";
         ReferenceIRCode: Record "NTS Reference IR Code";
+        ManualIRLog: Record "NTS Manual IR Sheet Log";
     begin
 
         RecLink.Reset();
@@ -56,12 +84,31 @@ report 52110 "NTS Refresh IR Link"
             RecLink.DeleteAll();
 
         //Delete Reference IR code Specific to the Line
+        // ReferenceIRCode.Reset();
+        // ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
+        // ReferenceIRCode.SetRange("Source Subtype", ProductionOrderRecPar.Status);
+        // ReferenceIRCode.SetRange("Source No.", ProductionOrderRecPar."No.");
+        // if ReferenceIRCode.FindSet() then
+        //     ReferenceIRCode.DeleteAll();
+
         ReferenceIRCode.Reset();
         ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
         ReferenceIRCode.SetRange("Source Subtype", ProductionOrderRecPar.Status);
         ReferenceIRCode.SetRange("Source No.", ProductionOrderRecPar."No.");
+
         if ReferenceIRCode.FindSet() then
-            ReferenceIRCode.DeleteAll();
+            repeat
+                ManualIRLog.Reset();
+                ManualIRLog.SetRange("Source Type", ReferenceIRCode."Source Type");
+                ManualIRLog.SetRange("Source Subtype", ReferenceIRCode."Source Subtype");
+                ManualIRLog.SetRange("Source No.", ReferenceIRCode."Source No.");
+                ManualIRLog.SetRange("Source Line No.", ReferenceIRCode."Source Line No.");
+                ManualIRLog.SetRange("Operation No.", ReferenceIRCode."Operation No.");
+                ManualIRLog.SetRange("IR Code", ReferenceIRCode.Code);
+
+                if not ManualIRLog.FindFirst() then
+                    ReferenceIRCode.Delete();
+            until ReferenceIRCode.Next() = 0;
 
     end;
 

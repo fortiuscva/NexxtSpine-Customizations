@@ -63,6 +63,10 @@ table 52102 "NTS Reference IR Code"
         {
             Caption = 'IR/IP Type';
         }
+        field(20; "Manual Entry"; Boolean)
+        {
+            Caption = 'Manual Entry';
+        }
     }
     keys
     {
