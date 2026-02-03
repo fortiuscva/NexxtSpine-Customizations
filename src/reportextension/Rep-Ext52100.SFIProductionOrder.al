@@ -14,10 +14,10 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
 
         add("Prod. Order Line")
         {
-            column(NTSQRCode; GenerateQRCode(GetGTIN("Item No.") + ',' + GetLotNo("Prod. Order No.", "Line No.")))
+            column(NTSQRCode; GenerateQRCode(GetGTIN("Item No.") + ',' + GetLotOrSerialNo("Prod. Order No.", "Line No.")))
             {
             }
-            column(NTSQRCodeText; GetGTIN("Item No.") + ',' + GetLotNo("Prod. Order No.", "Line No."))
+            column(NTSQRCodeText; GetGTIN("Item No.") + ',' + GetLotOrSerialNo("Prod. Order No.", "Line No."))
             {
             }
             column(NTSLaserEtchQRCodeLbl; LaserEtchQRCodeLbl)
@@ -79,25 +79,33 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         ItemRec: Record Item;
     begin
         if ItemRec.Get(ItemNo) then begin
-            GTIN := 'GTIN(UDI): ' + ItemRec.GTIN;
+            GTIN := GTINUDILbl + ItemRec.GTIN;
             exit(GTIN);
         end;
-        exit('GTIN(UDI): ');
+        exit(GTINUDILbl);
     end;
 
-    local procedure GetLotNo(ProdOrderNo: Code[20]; LineNo: Integer): Code[60]
+    local procedure GetLotOrSerialNo(ProdOrderNo: Code[20]; LineNo: Integer): Code[60]
     var
         ReservationEntryRec: Record "Reservation Entry";
+        ResultTxt: Text[60];
     begin
         ReservationEntryRec.Reset();
         ReservationEntryRec.SetRange("Source Type", DATABASE::"Prod. Order Line");
         ReservationEntryRec.SetRange("Source ID", ProdOrderNo);
         ReservationEntryRec.SetRange("Source Prod. Order Line", LineNo);
         if ReservationEntryRec.FindFirst() then begin
-            LotNo := 'Lot#: ' + ReservationEntryRec."Lot No.";
-            exit(LotNo);
+            ResultTxt := '';
+            if ReservationEntryRec."Lot No." <> '' then
+                ResultTxt := LotNoLbl + ReservationEntryRec."Lot No.";
+            if ReservationEntryRec."Serial No." <> '' then begin
+                if ResultTxt <> '' then
+                    ResultTxt := ResultTxt + ' ';
+                ResultTxt := ResultTxt + SerialNoLbl + ReservationEntryRec."Serial No.";
+            end;
+            exit(ResultTxt);
         end;
-        exit('Lot#: ');
+        exit('');
     end;
 
     local procedure GenerateQRCode(Value: Text): Text
@@ -136,6 +144,11 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         BarcodeSymbology2D: Enum "Barcode Symbology 2D";
         LaserEtchQRCodeLbl: Label 'Laser Etch Data Matrix.';
         LotNo: Code[60];
+        SerialNo: Code[60];
         MaxNoteReadChars: Integer;
         NoteText: Text;
+        GTINUDILbl: Label '01: ';
+        LotNoLbl: Label '10: ';
+        SerialNoLbl: Label '21: ';
+
 }
