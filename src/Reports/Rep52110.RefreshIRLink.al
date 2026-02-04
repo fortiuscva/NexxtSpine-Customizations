@@ -84,31 +84,31 @@ report 52110 "NTS Refresh IR Link"
             RecLink.DeleteAll();
 
         //Delete Reference IR code Specific to the Line
-        // ReferenceIRCode.Reset();
-        // ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
-        // ReferenceIRCode.SetRange("Source Subtype", ProductionOrderRecPar.Status);
-        // ReferenceIRCode.SetRange("Source No.", ProductionOrderRecPar."No.");
-        // if ReferenceIRCode.FindSet() then
-        //     ReferenceIRCode.DeleteAll();
-
         ReferenceIRCode.Reset();
         ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
         ReferenceIRCode.SetRange("Source Subtype", ProductionOrderRecPar.Status);
         ReferenceIRCode.SetRange("Source No.", ProductionOrderRecPar."No.");
-
         if ReferenceIRCode.FindSet() then
-            repeat
-                ManualIRLog.Reset();
-                ManualIRLog.SetRange("Source Type", ReferenceIRCode."Source Type");
-                ManualIRLog.SetRange("Source Subtype", ReferenceIRCode."Source Subtype");
-                ManualIRLog.SetRange("Source No.", ReferenceIRCode."Source No.");
-                ManualIRLog.SetRange("Source Line No.", ReferenceIRCode."Source Line No.");
-                ManualIRLog.SetRange("Operation No.", ReferenceIRCode."Operation No.");
-                ManualIRLog.SetRange("IR Code", ReferenceIRCode.Code);
+            ReferenceIRCode.DeleteAll();
 
-                if not ManualIRLog.FindFirst() then
-                    ReferenceIRCode.Delete();
-            until ReferenceIRCode.Next() = 0;
+        // ReferenceIRCode.Reset();
+        // ReferenceIRCode.SetRange("Source Type", Database::"Prod. Order Routing Line");
+        // ReferenceIRCode.SetRange("Source Subtype", ProductionOrderRecPar.Status);
+        // ReferenceIRCode.SetRange("Source No.", ProductionOrderRecPar."No.");
+
+        // if ReferenceIRCode.FindSet() then
+        //     repeat
+        //         ManualIRLog.Reset();
+        //         ManualIRLog.SetRange("Source Type", ReferenceIRCode."Source Type");
+        //         ManualIRLog.SetRange("Source Subtype", ReferenceIRCode."Source Subtype");
+        //         ManualIRLog.SetRange("Source No.", ReferenceIRCode."Source No.");
+        //         ManualIRLog.SetRange("Source Line No.", ReferenceIRCode."Source Line No.");
+        //         ManualIRLog.SetRange("Operation No.", ReferenceIRCode."Operation No.");
+        //         ManualIRLog.SetRange("IR Code", ReferenceIRCode.Code);
+
+        //         if not ManualIRLog.FindFirst() then
+        //             ReferenceIRCode.Delete();
+        //     until ReferenceIRCode.Next() = 0;
 
     end;
 
