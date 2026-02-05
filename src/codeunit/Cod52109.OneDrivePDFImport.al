@@ -27,11 +27,10 @@ codeunit 52109 "NTS OneDrive PDF Import"
         Headers.Add('Authorization', StrSubstNo('Bearer %1', AccessToken));
 
         Request.SetRequestUri(
-            StrSubstNo(
-                'https://graph.microsoft.com/v1.0/drives/%1/root:/BCOneDrive/Attachments:/children',
-                GetDriveId()
-            )
-        );
+    'https://graph.microsoft.com/v1.0/users/ldavis%40nexxtspine.com/drive/root:/Attachments:/children'
+);
+
+
         Request.Method := 'GET';
 
         Client.Send(Request, Response);
@@ -111,7 +110,9 @@ codeunit 52109 "NTS OneDrive PDF Import"
     begin
         ItemNo := GetItemNoFromFileName(Staging."File Name");
 
-        if not Item.Get(ItemNo) then begin
+        Item.Reset();
+        Item.SetRange("IMP Drawing Number", ItemNo);
+        if not Item.FindFirst() then begin
             Staging."Error Message" := 'Item not found';
             Staging.Modify();
             exit;
