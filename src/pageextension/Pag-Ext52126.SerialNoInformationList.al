@@ -21,6 +21,8 @@ pageextension 52126 "Serial No. Information List" extends "Serial No. Informatio
     }
     trigger OnAfterGetRecord()
     begin
+        SerialNoNotes := '';
+        SerialNoNotesExists := false;
         SerialNoNotes := Rec.GetSerialNoNotes();
         if SerialNoNotes <> '' then
             SerialNoNotesExists := true;
