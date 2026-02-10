@@ -14,6 +14,8 @@ pageextension 52133 "NTS Lot No. Information List" extends "Lot No. Information 
     }
     trigger OnAfterGetRecord()
     begin
+        LotNoNotes := '';
+        LotNoNotesExists := false;
         LotNoNotes := Rec.GetLotNoNotes();
         if LotNoNotes <> '' then
             LotNoNotesExists := true;
