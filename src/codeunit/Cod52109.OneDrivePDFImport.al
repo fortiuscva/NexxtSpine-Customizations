@@ -118,28 +118,33 @@ codeunit 52109 "NTS OneDrive PDF Import"
             exit;
         end;
 
-        DocAttach.Init();
-        DocAttach."Table ID" := Database::Item;
-        DocAttach."No." := Item."No.";
-        DocAttach."Line No." := 0;
+        Item.Reset();
+        Item.SetRange("IMP Drawing Number", ItemNo);
+        if Item.FindFirst() then begin
+            repeat
+                DocAttach.Init();
+                DocAttach."Table ID" := Database::Item;
+                DocAttach."No." := Item."No.";
+                DocAttach."Line No." := 0;
 
-        DocAttach."File Name" := Staging."File Name";
-        DocAttach."File Extension" := 'pdf';
-        DocAttach."File Type" :=
-            DocAttach."File Type"::PDF;
+                DocAttach."File Name" := Staging."File Name";
+                DocAttach."File Extension" := 'pdf';
+                DocAttach."File Type" :=
+                    DocAttach."File Type"::PDF;
 
-        DocAttach."Attached Date" := CurrentDateTime();
-        DocAttach."Attached By" := UserSecurityId();
-        DocAttach.User := UserId();
+                DocAttach."Attached Date" := CurrentDateTime();
+                DocAttach."Attached By" := UserSecurityId();
+                DocAttach.User := UserId();
 
-        Staging."File Content".CreateInStream(InStr);
-        DocAttach."Document Reference ID".ImportStream(
-            InStr,
-            Staging."File Name"
-        );
+                Staging."File Content".CreateInStream(InStr);
+                DocAttach."Document Reference ID".ImportStream(
+                    InStr,
+                    Staging."File Name"
+                );
 
-        DocAttach.Insert(true);
-
+                DocAttach.Insert(true);
+            until Item.Next() = 0;
+        end;
         Staging."Processed" := true;
         Staging.Modify();
     end;
