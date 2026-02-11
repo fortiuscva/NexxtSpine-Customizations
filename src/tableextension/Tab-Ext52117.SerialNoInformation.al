@@ -11,7 +11,21 @@ tableextension 52117 "NTS Serial No. Information" extends "Serial No. Informatio
             Caption = 'Serial No. Notes';
             Subtype = Memo;
         }
+        field(52102; "NTS Serial No. Notes Exists"; Boolean)
+        {
+            Caption = 'Serial No. Notes Exists';
+            Editable = false;
+        }
     }
+    trigger OnBeforeInsert()
+    begin
+        HasSerialNoNotes();
+    end;
+
+    trigger OnBeforeModify()
+    begin
+        HasSerialNoNotes();
+    end;
 
     procedure SetSerialNoNotes(NewNotes: Text)
     var
@@ -44,5 +58,14 @@ tableextension 52117 "NTS Serial No. Information" extends "Serial No. Informatio
                 rec.FieldName("NTS Serial No. Notes")
             )
         );
+    end;
+
+    procedure HasSerialNoNotes()
+    begin
+        rec.CalcFields("NTS Serial No. Notes");
+        if Rec."NTS Serial No. Notes".HasValue then
+            Rec."NTS Serial No. Notes Exists" := true
+        else
+            Rec."NTS Serial No. Notes Exists" := false;
     end;
 }
