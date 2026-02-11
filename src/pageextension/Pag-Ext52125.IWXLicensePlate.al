@@ -204,7 +204,8 @@ pageextension 52125 "NTS IWX License Plate" extends "IWX License Plate"
     begin
         clear(IsShipToVisible);
         clear(IsTransferFromandToVisible);
-        IsShipToVisible := (Rec."Source Document" = Rec."Source Document"::"Sales Order") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Sales Order");
+        IsShipToVisible := (Rec."Source Document" = Rec."Source Document"::"Sales Order") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Sales Order") or (Rec."Source Document" = Rec."Source Document"::"Outbound Transfer") or (Rec."Source Document" = Rec."Source Document"::"Inbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Outbound Transfer") or
+            (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Inbound Transfer");
 
         IsTransferFromandToVisible := (Rec."Source Document" = Rec."Source Document"::"Outbound Transfer") or (Rec."Source Document" = Rec."Source Document"::"Inbound Transfer") or (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Outbound Transfer") or
             (Rec."Shipped Source Document" = Rec."Shipped Source Document"::"Inbound Transfer");
