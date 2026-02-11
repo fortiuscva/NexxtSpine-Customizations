@@ -10,7 +10,7 @@ pageextension 52126 "Serial No. Information List" extends "Serial No. Informatio
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Set Type field.', Comment = '%';
             }
-            field("NTS Serial No. Notes"; SerialNoNotesExists)
+            field("NTS Serial No. Notes"; Rec."NTS Serial No. Notes Exists")
             {
                 ApplicationArea = All;
                 Caption = 'Serial No. Notes';
@@ -19,16 +19,14 @@ pageextension 52126 "Serial No. Information List" extends "Serial No. Informatio
 
         }
     }
-    trigger OnAfterGetRecord()
+    trigger OnOpenPage()
     begin
-        SerialNoNotes := '';
-        SerialNoNotesExists := false;
-        SerialNoNotes := Rec.GetSerialNoNotes();
-        if SerialNoNotes <> '' then
-            SerialNoNotesExists := true;
+        Rec.HasSerialNoNotes();
     end;
 
-    var
-        SerialNoNotes: Text;
-        SerialNoNotesExists: Boolean;
+    trigger OnAfterGetRecord()
+    begin
+        Rec.HasSerialNoNotes();
+    end;
+
 }
