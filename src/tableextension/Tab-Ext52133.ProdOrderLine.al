@@ -77,6 +77,45 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
             DataClassification = ToBeClassified;
             Caption = 'GTIN';
         }
+        field(50111; "NTS Serial No."; Code[50])
+        {
+            Caption = 'Serial No.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Reservation Entry"."Serial No." where("Source ID" = field("Prod. Order No."),
+                                                                 "Source Ref. No." = const(0),
+                                                                 "Source Type" = const(5406),
+                                                                 "Source Subtype" = field(Status),
+                                                                 "Source Batch Name" = const(''),
+                                                                 "Source Prod. Order Line" = field("Line No."),
+                                                                 "Reservation Status" = filter(Surplus)));
+            Editable = false;
+        }
+        field(50112; "NTS Lot No."; Code[50])
+        {
+            Caption = 'Lot No.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Reservation Entry"."Lot No." where("Source ID" = field("Prod. Order No."),
+                                                                 "Source Ref. No." = const(0),
+                                                                 "Source Type" = const(5406),
+                                                                 "Source Subtype" = field(Status),
+                                                                 "Source Batch Name" = const(''),
+                                                                 "Source Prod. Order Line" = field("Line No."),
+                                                                 "Reservation Status" = filter(Surplus)));
+            Editable = false;
+        }
+        field(50113; "NTS Expiration Date"; Date)
+        {
+            Caption = 'Expiration Date';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Reservation Entry"."Expiration Date" where("Source ID" = field("Prod. Order No."),
+                                                                 "Source Ref. No." = const(0),
+                                                                 "Source Type" = const(5406),
+                                                                 "Source Subtype" = field(Status),
+                                                                 "Source Batch Name" = const(''),
+                                                                 "Source Prod. Order Line" = field("Line No."),
+                                                                 "Reservation Status" = filter(Surplus)));
+            Editable = false;
+        }
         modify("Item No.")
         {
             trigger OnAfterValidate()
