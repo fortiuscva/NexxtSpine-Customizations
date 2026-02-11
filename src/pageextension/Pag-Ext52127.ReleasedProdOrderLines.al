@@ -86,7 +86,21 @@ pageextension 52127 "NTS Released Prod. Order Lines" extends "Released Prod. Ord
                         Rec.OpenItemTrackingLines();
                 end;
             }
-
+            field("NTS Lot No."; Rec."NTS Lot No.")
+            {
+                ApplicationArea = All;
+                Caption = 'Lot No.';
+            }
+            field("NTS Serial No."; Rec."NTS Serial No.")
+            {
+                ApplicationArea = All;
+                Caption = 'Serial No.';
+            }
+            field("NTS Expiration Date"; Rec."NTS Expiration Date")
+            {
+                ApplicationArea = All;
+                Caption = 'Expiration Date';
+            }
         }
     }
 }
