@@ -12,19 +12,4 @@ pageextension 52133 "NTS Lot No. Information List" extends "Lot No. Information 
             }
         }
     }
-
-
-    trigger OnOpenPage()
-    begin
-        Rec.HasLotNoNotes();
-    end;
-
-    trigger OnAfterGetRecord()
-    begin
-        Rec.HasLotNoNotes();
-    end;
-
-    var
-        LotNoNotes: Text;
-        LotNoNotesExists: Boolean;
 }
