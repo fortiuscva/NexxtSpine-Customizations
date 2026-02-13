@@ -299,6 +299,17 @@ codeunit 52101 "NTS Event Management"
                         LPHeader.Validate("NTS Transfer-to County", TransferHeader."Transfer-to County");
                         LPHeader.Validate("NTS Transfer-to Contact", TransferHeader."Transfer-to Contact");
 
+                        // Ship-to
+                        LPHeader.Validate("NTS Ship-to Name", TransferHeader."NTS Ship-to Name");
+                        LPHeader.Validate("NTS Ship-to Name 2", TransferHeader."NTS Ship-to Name 2");
+                        LPHeader.Validate("NTS Ship-to Address", TransferHeader."NTS Ship-to Address");
+                        LPHeader.Validate("NTS Ship-to Address 2", TransferHeader."NTS Ship-to Address 2");
+                        LPHeader.Validate("NTS Ship-to City", TransferHeader."NTS Ship-to City");
+                        LPHeader.Validate("NTS Ship-to Post Code", TransferHeader."NTS Ship-to Post Code");
+                        LPHeader.Validate("NTS Ship-to Country/Region Code", TransferHeader."NTS Ship-to Country/Region Code");
+                        LPHeader.Validate("NTS Ship-to County", TransferHeader."NTS Ship-to County");
+                        LPHeader.Validate("NTS Ship-to Contact", TransferHeader."NTS Ship-to Contact");
+                        LPHeader.Validate("NTS Ship-to Phone No.", TransferHeader."NTS Ship-to Phone No.");
                         LPHeader.Modify();
                     end;
                 end;
