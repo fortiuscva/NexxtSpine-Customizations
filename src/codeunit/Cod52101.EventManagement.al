@@ -309,6 +309,7 @@ codeunit 52101 "NTS Event Management"
                         LPHeader.Validate("NTS Ship-to Country/Region Code", TransferHeader."NTS Ship-to Country/Region Code");
                         LPHeader.Validate("NTS Ship-to County", TransferHeader."NTS Ship-to County");
                         LPHeader.Validate("NTS Ship-to Contact", TransferHeader."NTS Ship-to Contact");
+                        LPHeader.Validate("NTS Ship-to Phone No.", TransferHeader."NTS Ship-to Phone No.");
                         LPHeader.Modify();
                     end;
                 end;
