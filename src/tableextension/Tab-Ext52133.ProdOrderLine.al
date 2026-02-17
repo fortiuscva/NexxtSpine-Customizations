@@ -153,7 +153,6 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
             "NTS Lot No." := Reserv."Lot No.";
             "NTS Expiration Date" := Reserv."Expiration Date";
         end;
-        Modify(true);
     end;
 
 
