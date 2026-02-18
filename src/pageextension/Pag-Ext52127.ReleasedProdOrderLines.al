@@ -103,4 +103,8 @@ pageextension 52127 "NTS Released Prod. Order Lines" extends "Released Prod. Ord
             }
         }
     }
+    trigger OnAfterGetRecord()
+    begin
+        Rec.UpdateTrackingFields();
+    end;
 }

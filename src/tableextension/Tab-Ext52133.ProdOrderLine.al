@@ -80,40 +80,16 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
         field(50111; "NTS Serial No."; Code[50])
         {
             Caption = 'Serial No.';
-            FieldClass = FlowField;
-            CalcFormula = lookup("Reservation Entry"."Serial No." where("Source ID" = field("Prod. Order No."),
-                                                                 "Source Ref. No." = const(0),
-                                                                 "Source Type" = const(5406),
-                                                                 "Source Subtype" = field(Status),
-                                                                 "Source Batch Name" = const(''),
-                                                                 "Source Prod. Order Line" = field("Line No."),
-                                                                 "Reservation Status" = filter(Surplus)));
             Editable = false;
         }
         field(50112; "NTS Lot No."; Code[50])
         {
             Caption = 'Lot No.';
-            FieldClass = FlowField;
-            CalcFormula = lookup("Reservation Entry"."Lot No." where("Source ID" = field("Prod. Order No."),
-                                                                 "Source Ref. No." = const(0),
-                                                                 "Source Type" = const(5406),
-                                                                 "Source Subtype" = field(Status),
-                                                                 "Source Batch Name" = const(''),
-                                                                 "Source Prod. Order Line" = field("Line No."),
-                                                                 "Reservation Status" = filter(Surplus)));
             Editable = false;
         }
         field(50113; "NTS Expiration Date"; Date)
         {
             Caption = 'Expiration Date';
-            FieldClass = FlowField;
-            CalcFormula = lookup("Reservation Entry"."Expiration Date" where("Source ID" = field("Prod. Order No."),
-                                                                 "Source Ref. No." = const(0),
-                                                                 "Source Type" = const(5406),
-                                                                 "Source Subtype" = field(Status),
-                                                                 "Source Batch Name" = const(''),
-                                                                 "Source Prod. Order Line" = field("Line No."),
-                                                                 "Reservation Status" = filter(Surplus)));
             Editable = false;
         }
         modify("Item No.")
@@ -154,7 +130,35 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
         end;
     end;
 
+    procedure UpdateTrackingFields()
+    var
+        Reserv: Record "Reservation Entry";
+    begin
+        Clear("NTS Serial No.");
+        Clear("NTS Lot No.");
+        Clear("NTS Expiration Date");
+
+        Reserv.Reset();
+        Reserv.SetRange("Source Type", Database::"Prod. Order Line");
+        Reserv.SetRange("Source ID", "Prod. Order No.");
+        Reserv.SetRange("Source Ref. No.", 0);
+        Reserv.SetRange("Source Subtype", Status);
+        Reserv.SetRange("Source Batch Name", '');
+        Reserv.SetRange("Source Prod. Order Line", "Line No.");
+        Reserv.SetRange("Reservation Status", Reserv."Reservation Status"::Surplus);
+
+
+        if Reserv.FindFirst() then begin
+            "NTS Serial No." := Reserv."Serial No.";
+            "NTS Lot No." := Reserv."Lot No.";
+            "NTS Expiration Date" := Reserv."Expiration Date";
+        end;
+        Modify(true);
+    end;
+
+
     var
         ItemRec: Record Item;
+        IsUpdatingTracking: Boolean;
 
 }
