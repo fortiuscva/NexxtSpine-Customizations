@@ -358,6 +358,54 @@ codeunit 52101 "NTS Event Management"
             PurchLine.Validate("NTS Prod. Lot No.", LotInfo);
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines",
+     'OnAfterOnClosePage', '', false, false)]
+    local procedure OnAfterOnClosePage(
+     var TrackingSpecification: Record "Tracking Specification";
+     CurrentRunMode: Enum "Item Tracking Run Mode";
+     CurrentSourceType: Integer;
+     CurrentSourceRowID: Text[250];
+     SecondSourceRowID: Text[250])
+    var
+        Reserv: Record "Reservation Entry";
+        ProdOrderLine: Record "Prod. Order Line";
+        NewLot: Code[50];
+        NewSerial: Code[50];
+        NewExpDate: Date;
+    begin
+        if CurrentSourceType <> Database::"Prod. Order Line" then
+            exit;
+        if not ProdOrderLine.Get(
+            TrackingSpecification."Source Subtype",
+            TrackingSpecification."Source ID",
+            TrackingSpecification."Source Prod. Order Line")
+        then
+            exit;
+        Reserv.Reset();
+        Reserv.SetRange("Source Type", Database::"Prod. Order Line");
+        Reserv.SetRange("Source ID", ProdOrderLine."Prod. Order No.");
+        Reserv.SetRange("Source Prod. Order Line", ProdOrderLine."Line No.");
+
+        if Reserv.FindSet() then
+            repeat
+                if (Reserv."Lot No." <> '') or (Reserv."Serial No." <> '') then begin
+                    NewLot := Reserv."Lot No.";
+                    NewSerial := Reserv."Serial No.";
+                    NewExpDate := Reserv."Expiration Date";
+                    break;
+                end;
+            until Reserv.Next() = 0;
+
+        if (ProdOrderLine."NTS Lot No." <> NewLot) or
+           (ProdOrderLine."NTS Serial No." <> NewSerial) or
+           (ProdOrderLine."NTS Expiration Date" <> NewExpDate)
+        then begin
+            ProdOrderLine."NTS Lot No." := NewLot;
+            ProdOrderLine."NTS Serial No." := NewSerial;
+            ProdOrderLine."NTS Expiration Date" := NewExpDate;
+            ProdOrderLine.Modify();
+        end;
+    end;
 
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
