@@ -165,11 +165,13 @@ report 52113 "NTS Inventory Reclass Adjmts."
             if ItemTrackingVal = 2 then begin
                 ForReservEntry."Serial No." := ILE."Serial No.";
                 TrackingSpec."New Serial No." := ILE."Serial No.";
+                TrackingSpec."Expiration Date" := ILE."Expiration Date";
             end else begin
                 ForReservEntry."Lot No." := ILE."Lot No.";
                 ForReservEntry."Serial No." := ILE."Serial No.";
                 TrackingSpec."New Lot No." := ILE."Lot No.";
                 TrackingSpec."New Serial No." := ILE."Serial No.";
+                TrackingSpec."Expiration Date" := ILE."Expiration Date";
             end;
             CreateReservEntry.CreateReservEntryFor(
             Database::"Item Journal Line", 3,
