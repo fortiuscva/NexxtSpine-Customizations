@@ -16,6 +16,8 @@ report 52103 "NTS Purchase Order"
             column(No_PurchaseHeader; "No.")
             {
             }
+            column(Comment; CommentGblVar)
+            { }
             column(NTS_Reason_Code; "NTS Reason Code")
             { }
             column(CompanyInformation_Picture; CompanyInformation.Picture)
@@ -211,6 +213,8 @@ report 52103 "NTS Purchase Order"
                         column(AmountExclInvDisc; AmountExclInvDisc)
                         {
                         }
+                        column(Purchase_Line_Line_No; "Line No.")
+                        { }
                         column(ItemNumberToPrint; ItemNumberToPrint)
                         {
                         }
@@ -306,8 +310,8 @@ report 52103 "NTS Purchase Order"
                             DataItemLink = "No." = field("No.");
                             DataItemLinkReference = "Purchase Header";
                             DataItemTableView = where("Document Type" = const(Order));
-                            column(Comment; Comment)
-                            { }
+                            // column(Comment; Comment)
+                            // { }
                             column(Line_No_; "Purch. Comment Line"."Line No.")
                             { }
                             column(No_; "Purch. Comment Line"."No.")
@@ -508,6 +512,7 @@ report 52103 "NTS Purchase Order"
                 ItemNoVar: Code[20];
                 DescriptionLclVar: Text;
                 ItemRec: Record Item;
+                PurchCommentLine: Record "Purch. Comment Line";
             begin
                 /* if PrintCompany then
                     if RespCenter.Get("Responsibility Center") then begin
@@ -582,6 +587,16 @@ report 52103 "NTS Purchase Order"
 
                 if ReasonCode.Get("Purchase Header"."NTS Reason Code") then;
                 ReasonCodeDescVar := format(ReasonCode.Description, 250);
+                Clear(CommentGblVar);
+                PurchCommentLine.SetRange("Document Type", "Purchase Header"."Document Type");
+                PurchCommentLine.SetRange("No.", "Purchase Header"."No.");
+                PurchCommentLine.SetRange("Document Line No.", 0);
+                if PurchCommentLine.FindSet() then
+                    repeat
+                        if CommentGblVar <> '' then
+                            CommentGblVar += ',';
+                        CommentGblVar += PurchCommentLine.Comment;
+                    until PurchCommentLine.Next() = 0;
             end;
 
             trigger OnPreDataItem()
@@ -686,7 +701,7 @@ report 52103 "NTS Purchase Order"
         ShipperBoxesQty_Var: Decimal;
         MailerBoxesQty_Var: Decimal;
         SterilePkgInfo_Var: Text;
-        PrintDescription_Var: Text[100];
+        PrintDescription_Var: Text;
         UnitPriceToPrint: Decimal;
         AmountExclInvDisc: Decimal;
         ShipmentMethod: Record "Shipment Method";
@@ -767,5 +782,6 @@ report 52103 "NTS Purchase Order"
         ProdOrderRoutingLine: Record "Prod. Order Routing Line";
         ProdOrderLine: Record "Prod. Order Line";
         ReasonCodeDescVar: text[250];
+        CommentGblVar: Text;
 }
 

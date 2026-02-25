@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-02-20T16:40:36.1841479Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-02-25T12:19:51.5948903Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -35,7 +35,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.80219in</Height>
+                  <Height>0.92719in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -620,7 +620,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="ItemNumberToPrint">
+                                          <Textbox Name="ItemNumberToPrint2">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -656,7 +656,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="Textbox52">
+                                          <Textbox Name="Textbox56">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -691,7 +691,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="PurchaseLineDescription">
+                                          <Textbox Name="PurchaseLineDescription2">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -725,7 +725,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="PurchaseLineQuantity">
+                                          <Textbox Name="Textbox26">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -736,7 +736,6 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!Quantity_PurchaseLineFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -745,6 +744,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
+                                            <rd:DefaultName>Textbox26</rd:DefaultName>
                                             <Style>
                                               <Border>
                                                 <Style>Solid</Style>
@@ -762,7 +762,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="PurchaseLineUnitofMeasure">
+                                          <Textbox Name="PurchaseLineUnitofMeasure2">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -796,7 +796,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="UnitPriceToPrint">
+                                          <Textbox Name="Textbox28">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -807,7 +807,6 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!UnitPriceToPrintFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -816,6 +815,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
+                                            <rd:DefaultName>Textbox28</rd:DefaultName>
                                             <Style>
                                               <Border>
                                                 <Style>Solid</Style>
@@ -833,7 +833,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="AmountExclInvDiscControl53">
+                                          <Textbox Name="Textbox29">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -844,7 +844,6 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!AmountExclInvDiscFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -853,6 +852,7 @@ Cstr(fields!VendorInvoiceNo.Value)</Value>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
+                                            <rd:DefaultName>Textbox29</rd:DefaultName>
                                             <Style>
                                               <Border>
                                                 <Style>Solid</Style>
@@ -1151,37 +1151,31 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                                     <Group Name="Table1_Group1">
                                       <GroupExpressions>
                                         <GroupExpression>=Fields!No_PurchaseHeader.Value</GroupExpression>
-                                        <GroupExpression>=Fields!CopyNo.Value</GroupExpression>
                                       </GroupExpressions>
-                                      <PageBreak>
-                                        <BreakLocation>Start</BreakLocation>
-                                        <ResetPageNumber>true</ResetPageNumber>
-                                      </PageBreak>
                                     </Group>
                                     <TablixMembers>
                                       <TablixMember>
-                                        <KeepWithGroup>After</KeepWithGroup>
-                                        <RepeatOnNewPage>true</RepeatOnNewPage>
                                         <KeepTogether>true</KeepTogether>
                                       </TablixMember>
                                       <TablixMember>
-                                        <KeepWithGroup>After</KeepWithGroup>
-                                        <RepeatOnNewPage>true</RepeatOnNewPage>
                                         <KeepTogether>true</KeepTogether>
                                       </TablixMember>
                                       <TablixMember>
-                                        <Group Name="Table1_Details_Group">
-                                          <DataElementName>Detail</DataElementName>
+                                        <Group Name="ItemNumberToPrint">
+                                          <GroupExpressions>
+                                            <GroupExpression>=Fields!Purchase_Line_Line_No.Value</GroupExpression>
+                                          </GroupExpressions>
                                         </Group>
+                                        <SortExpressions>
+                                          <SortExpression>
+                                            <Value>=Fields!Purchase_Line_Line_No.Value</Value>
+                                          </SortExpression>
+                                        </SortExpressions>
                                         <TablixMembers>
                                           <TablixMember />
                                         </TablixMembers>
-                                        <DataElementName>Detail_Collection</DataElementName>
-                                        <DataElementOutput>Output</DataElementOutput>
-                                        <KeepTogether>true</KeepTogether>
                                       </TablixMember>
                                       <TablixMember>
-                                        <KeepWithGroup>Before</KeepWithGroup>
                                         <KeepTogether>true</KeepTogether>
                                       </TablixMember>
                                     </TablixMembers>
@@ -1297,7 +1291,7 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                                   </TablixMember>
                                 </TablixMembers>
                               </TablixRowHierarchy>
-                              <Top>0.47534in</Top>
+                              <Top>0.60034in</Top>
                               <Left>0.02581in</Left>
                               <Height>0.32685in</Height>
                               <Width>7.23004in</Width>
@@ -1338,12 +1332,15 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                       <GroupExpression>=Fields!No_PurchaseHeader.Value</GroupExpression>
                       <GroupExpression>=Fields!CopyNo.Value</GroupExpression>
                     </GroupExpressions>
+                    <PageBreak>
+                      <BreakLocation>Between</BreakLocation>
+                    </PageBreak>
                   </Group>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Height>0.80219in</Height>
+            <Height>0.92719in</Height>
             <Width>7.2622in</Width>
             <Style>
               <Border>
@@ -1351,24 +1348,68 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
               </Border>
             </Style>
           </Tablix>
-          <Textbox Name="Textbox6">
-            <CanGrow>true</CanGrow>
+          <Rectangle Name="Rectangle5">
+            <ReportItems>
+              <Textbox Name="Textbox12">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>="(" &amp; Fields!MailerBoxesQty_Var.Value &amp; ")" &amp; Fields!MailerBoxesCaption_Var.Value</Value>
+                        <Style />
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox11</rd:DefaultName>
+                <Top>0.26146in</Top>
+                <Height>0.2in</Height>
+                <Width>1.76331in</Width>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox11">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>="(" &amp; Fields!ShipperBoxesQty_Var.Value &amp; ")" &amp; Fields!ShipperBoxesCaption_Var.Value</Value>
+                        <Style />
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox11</rd:DefaultName>
+                <Top>0.04896in</Top>
+                <Height>0.2125in</Height>
+                <Width>1.7625in</Width>
+                <ZIndex>1</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+            </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value />
-                    <Style>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox6</rd:DefaultName>
-            <Top>0.81469in</Top>
+            <Top>0.92719in</Top>
             <Height>0.51042in</Height>
             <Width>7.25in</Width>
             <ZIndex>1</ZIndex>
@@ -1377,91 +1418,21 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                 <Style>Solid</Style>
               </Border>
               <TopBorder>
-                <Color>Black</Color>
                 <Style>Solid</Style>
-                <Width>1pt</Width>
               </TopBorder>
               <BottomBorder>
-                <Color>Black</Color>
                 <Style>Solid</Style>
-                <Width>1pt</Width>
               </BottomBorder>
               <LeftBorder>
-                <Color>Black</Color>
                 <Style>Solid</Style>
-                <Width>1pt</Width>
               </LeftBorder>
               <RightBorder>
-                <Color>Black</Color>
                 <Style>Solid</Style>
-                <Width>1pt</Width>
               </RightBorder>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
             </Style>
-          </Textbox>
-          <Textbox Name="Textbox11">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>="(" &amp; Fields!ShipperBoxesQty_Var.Value &amp; ")" &amp; Fields!ShipperBoxesCaption_Var.Value</Value>
-                    <Style />
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox11</rd:DefaultName>
-            <Top>0.83719in</Top>
-            <Height>0.2125in</Height>
-            <Width>1.7625in</Width>
-            <ZIndex>2</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox12">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>="(" &amp; Fields!MailerBoxesQty_Var.Value &amp; ")" &amp; Fields!MailerBoxesCaption_Var.Value</Value>
-                    <Style />
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox11</rd:DefaultName>
-            <Top>1.06261in</Top>
-            <Height>0.2in</Height>
-            <Width>1.7875in</Width>
-            <ZIndex>3</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
+          </Rectangle>
         </ReportItems>
-        <Height>1.32511in</Height>
+        <Height>2.45034in</Height>
         <Style />
       </Body>
       <Width>7.28107in</Width>
@@ -2813,11 +2784,7 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value EvaluationMode="Constant">Reference Quote 104066
-FedEx Acct 466691461
-
-UDI for I62-50-19 = 00889929041949
-No UDI for SP-0288 or SP-0289</Value>
+                          <Value>=Fields!Comment.Value</Value>
                           <Style>
                             <FontFamily>Segoe UI</FontFamily>
                             <FontSize>8pt</FontSize>
@@ -3103,6 +3070,9 @@ IoNIwatKlBkxECgFKguiDDxs2pZC3IOKAIdIwYhRrgQ01IMH8063P2rA2C0wKqkyUlUvg6iyZc+RFW7f
         <Field Name="No_PurchaseHeader">
           <DataField>No_PurchaseHeader</DataField>
         </Field>
+        <Field Name="Comment">
+          <DataField>Comment</DataField>
+        </Field>
         <Field Name="NTS_Reason_Code">
           <DataField>NTS_Reason_Code</DataField>
         </Field>
@@ -3307,6 +3277,9 @@ IoNIwatKlBkxECgFKguiDDxs2pZC3IOKAIdIwYhRrgQ01IMH8063P2rA2C0wKqkyUlUvg6iyZc+RFW7f
         <Field Name="AmountExclInvDiscFormat">
           <DataField>AmountExclInvDiscFormat</DataField>
         </Field>
+        <Field Name="Purchase_Line_Line_No">
+          <DataField>Purchase_Line_Line_No</DataField>
+        </Field>
         <Field Name="ItemNumberToPrint">
           <DataField>ItemNumberToPrint</DataField>
         </Field>
@@ -3423,9 +3396,6 @@ IoNIwatKlBkxECgFKguiDDxs2pZC3IOKAIdIwYhRrgQ01IMH8063P2rA2C0wKqkyUlUvg6iyZc+RFW7f
         </Field>
         <Field Name="TotalCaption">
           <DataField>TotalCaption</DataField>
-        </Field>
-        <Field Name="Comment">
-          <DataField>Comment</DataField>
         </Field>
         <Field Name="Line_No_">
           <DataField>Line_No_</DataField>
