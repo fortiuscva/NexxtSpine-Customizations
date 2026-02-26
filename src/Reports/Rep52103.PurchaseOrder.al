@@ -16,6 +16,8 @@ report 52103 "NTS Purchase Order"
             column(No_PurchaseHeader; "No.")
             {
             }
+            column(Comment; CommentGblVar)
+            { }
             column(NTS_Reason_Code; "NTS Reason Code")
             { }
             column(CompanyInformation_Picture; CompanyInformation.Picture)
@@ -138,7 +140,7 @@ report 52103 "NTS Purchase Order"
                     column(CompanyInformationPhoneNo; CompanyInformation."Phone No.")
                     {
                     }
-                    column(ReasonCode_Description; ReasonCode.Description)
+                    column(ReasonCode_Description; ReasonCodeDescVar)
                     { }
                     column(CopyNo; CopyNo)
                     {
@@ -211,6 +213,8 @@ report 52103 "NTS Purchase Order"
                         column(AmountExclInvDisc; AmountExclInvDisc)
                         {
                         }
+                        column(Purchase_Line_Line_No; "Line No.")
+                        { }
                         column(ItemNumberToPrint; ItemNumberToPrint)
                         {
                         }
@@ -306,8 +310,8 @@ report 52103 "NTS Purchase Order"
                             DataItemLink = "No." = field("No.");
                             DataItemLinkReference = "Purchase Header";
                             DataItemTableView = where("Document Type" = const(Order));
-                            column(Comment; Comment)
-                            { }
+                            // column(Comment; Comment)
+                            // { }
                             column(Line_No_; "Purch. Comment Line"."Line No.")
                             { }
                             column(No_; "Purch. Comment Line"."No.")
@@ -322,58 +326,62 @@ report 52103 "NTS Purchase Order"
                             AnyFound: Boolean;
                             QtyTxt: Text;
                             ItemRec: Record Item;
+                            RpoItem: Code[20];
+                            RpoNo: Code[20];
+                            RpoQty: Decimal;
+                            LotNo: Text;
+                            SerialNo: Text;
+                            LotNoText: Text;
+                            SerialNoText: Text;
                         begin
                             OnLineNumber := OnLineNumber + 1;
 
                             Clear(SterilePkgInfo_Var);
                             Clear(PrintDescription_Var);
 
-                            if not ("Purchase Line".Type = "Purchase Line".Type::Item) then exit;
-                            ItemRec.Get("Purchase Line"."No.");
-                            ItemNoVar := "Purchase Line"."No.";
-                            DescriptionLclVar := "Purchase Line".Description;
-                            if (ItemNoVar = 'STERILIZATION') then begin
-                                PrintDescription_Var := "Purchase Line".Description;
-                            end else if (ItemNoVar = 'STERILE PACKAGING') then begin
-                                DescriptionLclVar := "Purchase Line".Description;
-                                AnyFound := false;
-                                SterilePkgInfo_Var := '';
-
+                            if ProdOrderLine.Get(ProdOrderLine.Status::Released, "Purchase Line"."Prod. Order No.", "Purchase Line"."Prod. Order Line No.") then begin
+                                RpoItem := ProdOrderLine."Item No.";
+                                RpoNo := ProdOrderLine."Prod. Order No.";
+                                RpoQty := ProdOrderLine.Quantity;
+                            end;
+                            if ("Purchase Line"."Prod. Order No." <> '') or ("Purchase Line"."Prod. Order Line No." <> 0) or ("Purchase Line"."Work Center No." <> '') then begin
+                                SerialNo := '';
+                                if "Purchase Line"."NTS Prod. Lot No." <> '' then
+                                    LotNoText := 'Lot# ' + "Purchase Line"."NTS Prod. Lot No."
+                                else
+                                    LotNoText := '';
                                 ReservEntry.Reset();
-                                ReservEntry.SetRange("Source Type", DATABASE::"Purchase Line");
-                                ReservEntry.SetRange("Source Subtype", 0);
-                                ReservEntry.SetRange("Source ID", "Purchase Line"."Document No.");
-                                ReservEntry.SetRange("Source Ref. No.", "Purchase Line"."Line No.");
-                                ReservEntry.SetRange("Item No.", "Purchase Line"."No.");
-
+                                ReservEntry.SetCurrentKey("Lot No.");
+                                ReservEntry.SetRange("Source Type", DATABASE::"Prod. Order Line");
+                                ReservEntry.SetRange("Source ID", "Purchase Line"."Prod. Order No.");
+                                ReservEntry.SetRange("Source Ref. No.", 0);
+                                ReservEntry.SetRange("Source Batch Name", '');
+                                ReservEntry.SetRange("Source Prod. Order Line", "Purchase Line"."Prod. Order Line No.");
+                                ReservEntry.SetRange("Reservation Status", ReservEntry."Reservation Status"::Surplus);
+                                ReservEntry.SetFilter("Serial No.", '<>%1', '');
                                 if ReservEntry.FindSet() then
                                     repeat
-                                        if ReservEntry."Serial No." <> '' then begin
-                                            if ReservEntry."Lot No." <> '' then begin
-                                                QtyTxt := Format(ReservEntry.Quantity);
-                                                SterilePkgInfo_Var += StrSubstNo('Serial No.: %1,Lot No.: %2, Qty: %3', ReservEntry."Serial No.", ReservEntry."Lot No.", QtyTxt);
-                                                AnyFound := true;
-                                            end else begin
-                                                QtyTxt := Format(ReservEntry.Quantity);
-                                                SterilePkgInfo_Var += StrSubstNo('Serial No.: %1, Qty: %2', ReservEntry."Serial No.", QtyTxt);
-                                                AnyFound := true;
-                                            end;
-                                        end else
-                                            if ReservEntry."Lot No." <> '' then begin
-                                                QtyTxt := Format(ReservEntry.Quantity);
-                                                SterilePkgInfo_Var += StrSubstNo('Lot No.: %1, Qty: %2', ReservEntry."Lot No.", QtyTxt);
-                                                AnyFound := true;
-                                            end;
+                                        If SerialNo <> '' then
+                                            SerialNo := SerialNo + ',' + ReservEntry."Serial No."
+                                        else
+                                            SerialNo := ReservEntry."Serial No.";
                                     until ReservEntry.Next() = 0;
+                                if SerialNo <> '' then
+                                    SerialNoText := 'Serial#' + SerialNo
+                                else
+                                    SerialNoText := '';
+                                ProdOrderRoutingLine.Reset();
+                                ProdOrderRoutingLine.SetRange(Status, ProdOrderRoutingLine.Status::Released);
+                                ProdOrderRoutingLine.SetRange("Prod. Order No.", "Purchase Line"."Prod. Order No.");
+                                ProdOrderRoutingLine.SetRange("Routing Reference No.", "Purchase Line"."Prod. Order Line No.");
+                                ProdOrderRoutingLine.SetRange("Work Center No.", "Purchase Line"."Work Center No.");
+                                ProdOrderRoutingLine.SetRange("Operation No.", "Purchase Line"."Operation No.");
 
-                                if not AnyFound then
-                                    SterilePkgInfo_Var := StrSubstNo('Qty: %1 ', Format("Purchase Line".Quantity));
-
-                                if SterilePkgInfo_Var <> '' then
-                                    PrintDescription_Var := CopyStr(DescriptionLclVar + ' ' + SterilePkgInfo_Var, 1, MaxStrLen(DescriptionLclVar))
-                            end else begin
-                                PrintDescription_Var := DescriptionLclVar;
-                            end;
+                                if ProdOrderRoutingLine.FindFirst() then
+                                    DescriptionLclVar := ProdOrderRoutingLine.Description;
+                                PrintDescription_Var := ProdOrderRoutingLine.Description + ': ' + 'Part# ' + RpoItem + ', Trav# ' + RpoNo + ', Qty ' + Format(RpoQty) + ', ' + LotNoText + SerialNoText;
+                            end else
+                                PrintDescription_Var := "Purchase Line".Description;
 
                             if ("Purchase Header"."Tax Area Code" <> '') and not UseExternalTaxEngine then
                                 SalesTaxCalc.AddPurchLine("Purchase Line");
@@ -504,6 +512,7 @@ report 52103 "NTS Purchase Order"
                 ItemNoVar: Code[20];
                 DescriptionLclVar: Text;
                 ItemRec: Record Item;
+                PurchCommentLine: Record "Purch. Comment Line";
             begin
                 /* if PrintCompany then
                     if RespCenter.Get("Responsibility Center") then begin
@@ -513,7 +522,6 @@ report 52103 "NTS Purchase Order"
                     end; */
                 ShipperBoxesQty_Var := 0;
                 MailerBoxesQty_Var := 0;
-
 
                 // Iterate all lines of the current order
                 PurchaseLine.Reset();
@@ -525,7 +533,6 @@ report 52103 "NTS Purchase Order"
                         if PurchaseLine.Type = PurchaseLine.Type::Item then begin
                             ItemNoVar := PurchaseLine."No.";
                             DescriptionLclVar := PurchaseLine.Description;
-
                             if ItemNoVar = 'STERILIZATION' then begin
                                 if StrPos(DescriptionLclVar, 'Unboxing fee') > 0 then begin
                                     ShipperBoxesQty_Var += PurchaseLine.Quantity;
@@ -579,6 +586,17 @@ report 52103 "NTS Purchase Order"
                     UseDate := WorkDate();
 
                 if ReasonCode.Get("Purchase Header"."NTS Reason Code") then;
+                ReasonCodeDescVar := format(ReasonCode.Description, 250);
+                Clear(CommentGblVar);
+                PurchCommentLine.SetRange("Document Type", "Purchase Header"."Document Type");
+                PurchCommentLine.SetRange("No.", "Purchase Header"."No.");
+                PurchCommentLine.SetRange("Document Line No.", 0);
+                if PurchCommentLine.FindSet() then
+                    repeat
+                        if CommentGblVar <> '' then
+                            CommentGblVar += ',';
+                        CommentGblVar += PurchCommentLine.Comment;
+                    until PurchCommentLine.Next() = 0;
             end;
 
             trigger OnPreDataItem()
@@ -683,7 +701,7 @@ report 52103 "NTS Purchase Order"
         ShipperBoxesQty_Var: Decimal;
         MailerBoxesQty_Var: Decimal;
         SterilePkgInfo_Var: Text;
-        PrintDescription_Var: Text[100];
+        PrintDescription_Var: Text;
         UnitPriceToPrint: Decimal;
         AmountExclInvDisc: Decimal;
         ShipmentMethod: Record "Shipment Method";
@@ -761,6 +779,9 @@ report 52103 "NTS Purchase Order"
         VendorInvoiceNoLbl: Label 'Vendor Invoice No.';
         VendorItemNo: Code[50];
         ReasonCode: Record "NTS Purchase Reason Code";
-
+        ProdOrderRoutingLine: Record "Prod. Order Routing Line";
+        ProdOrderLine: Record "Prod. Order Line";
+        ReasonCodeDescVar: text[250];
+        CommentGblVar: Text;
 }
 
