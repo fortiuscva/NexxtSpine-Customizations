@@ -16,10 +16,16 @@ report 52103 "NTS Purchase Order"
             column(No_PurchaseHeader; "No.")
             {
             }
+            column(Comment; CommentGblVar)
+            { }
             column(NTS_Reason_Code; "NTS Reason Code")
             { }
             column(CompanyInformation_Picture; CompanyInformation.Picture)
             { }
+            column(ShipperBoxesCaption_Var; ShipperBoxesCaption_Var) { }
+            column(ShipperBoxesQty_Var; ShipperBoxesQty_Var) { }
+            column(MailerBoxesCaption_Var; MailerBoxesCaption_Var) { }
+            column(MailerBoxesQty_Var; MailerBoxesQty_Var) { }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = sorting(Number);
@@ -134,7 +140,7 @@ report 52103 "NTS Purchase Order"
                     column(CompanyInformationPhoneNo; CompanyInformation."Phone No.")
                     {
                     }
-                    column(ReasonCode_Description; ReasonCode.Description)
+                    column(ReasonCode_Description; ReasonCodeDescVar)
                     { }
                     column(CopyNo; CopyNo)
                     {
@@ -207,6 +213,8 @@ report 52103 "NTS Purchase Order"
                         column(AmountExclInvDisc; AmountExclInvDisc)
                         {
                         }
+                        column(Purchase_Line_Line_No; "Line No.")
+                        { }
                         column(ItemNumberToPrint; ItemNumberToPrint)
                         {
                         }
@@ -222,7 +230,7 @@ report 52103 "NTS Purchase Order"
                         {
                             DecimalPlaces = 2 : 5;
                         }
-                        column(Description_PurchaseLine; Description)
+                        column(Description_PurchaseLine; PrintDescription_Var)
                         {
                         }
                         column(PrintFooter; PrintFooter)
@@ -302,8 +310,8 @@ report 52103 "NTS Purchase Order"
                             DataItemLink = "No." = field("No.");
                             DataItemLinkReference = "Purchase Header";
                             DataItemTableView = where("Document Type" = const(Order));
-                            column(Comment; Comment)
-                            { }
+                            // column(Comment; Comment)
+                            // { }
                             column(Line_No_; "Purch. Comment Line"."Line No.")
                             { }
                             column(No_; "Purch. Comment Line"."No.")
@@ -311,8 +319,69 @@ report 52103 "NTS Purchase Order"
                         }
 
                         trigger OnAfterGetRecord()
+                        var
+                            ReservEntry: Record "Reservation Entry";
+                            ItemNoVar: Code[20];
+                            DescriptionLclVar: Text;
+                            AnyFound: Boolean;
+                            QtyTxt: Text;
+                            ItemRec: Record Item;
+                            RpoItem: Code[20];
+                            RpoNo: Code[20];
+                            RpoQty: Decimal;
+                            LotNo: Text;
+                            SerialNo: Text;
+                            LotNoText: Text;
+                            SerialNoText: Text;
                         begin
                             OnLineNumber := OnLineNumber + 1;
+
+                            Clear(SterilePkgInfo_Var);
+                            Clear(PrintDescription_Var);
+
+                            if ProdOrderLine.Get(ProdOrderLine.Status::Released, "Purchase Line"."Prod. Order No.", "Purchase Line"."Prod. Order Line No.") then begin
+                                RpoItem := ProdOrderLine."Item No.";
+                                RpoNo := ProdOrderLine."Prod. Order No.";
+                                RpoQty := ProdOrderLine.Quantity;
+                            end;
+                            if ("Purchase Line"."Prod. Order No." <> '') or ("Purchase Line"."Prod. Order Line No." <> 0) or ("Purchase Line"."Work Center No." <> '') then begin
+                                SerialNo := '';
+                                if "Purchase Line"."NTS Prod. Lot No." <> '' then
+                                    LotNoText := 'Lot# ' + "Purchase Line"."NTS Prod. Lot No."
+                                else
+                                    LotNoText := '';
+                                ReservEntry.Reset();
+                                ReservEntry.SetCurrentKey("Lot No.");
+                                ReservEntry.SetRange("Source Type", DATABASE::"Prod. Order Line");
+                                ReservEntry.SetRange("Source ID", "Purchase Line"."Prod. Order No.");
+                                ReservEntry.SetRange("Source Ref. No.", 0);
+                                ReservEntry.SetRange("Source Batch Name", '');
+                                ReservEntry.SetRange("Source Prod. Order Line", "Purchase Line"."Prod. Order Line No.");
+                                ReservEntry.SetRange("Reservation Status", ReservEntry."Reservation Status"::Surplus);
+                                ReservEntry.SetFilter("Serial No.", '<>%1', '');
+                                if ReservEntry.FindSet() then
+                                    repeat
+                                        If SerialNo <> '' then
+                                            SerialNo := SerialNo + ',' + ReservEntry."Serial No."
+                                        else
+                                            SerialNo := ReservEntry."Serial No.";
+                                    until ReservEntry.Next() = 0;
+                                if SerialNo <> '' then
+                                    SerialNoText := 'Serial#' + SerialNo
+                                else
+                                    SerialNoText := '';
+                                ProdOrderRoutingLine.Reset();
+                                ProdOrderRoutingLine.SetRange(Status, ProdOrderRoutingLine.Status::Released);
+                                ProdOrderRoutingLine.SetRange("Prod. Order No.", "Purchase Line"."Prod. Order No.");
+                                ProdOrderRoutingLine.SetRange("Routing Reference No.", "Purchase Line"."Prod. Order Line No.");
+                                ProdOrderRoutingLine.SetRange("Work Center No.", "Purchase Line"."Work Center No.");
+                                ProdOrderRoutingLine.SetRange("Operation No.", "Purchase Line"."Operation No.");
+
+                                if ProdOrderRoutingLine.FindFirst() then
+                                    DescriptionLclVar := ProdOrderRoutingLine.Description;
+                                PrintDescription_Var := ProdOrderRoutingLine.Description + ': ' + 'Part# ' + RpoItem + ', Trav# ' + RpoNo + ', Qty ' + Format(RpoQty) + ', ' + LotNoText + SerialNoText;
+                            end else
+                                PrintDescription_Var := "Purchase Line".Description;
 
                             if ("Purchase Header"."Tax Area Code" <> '') and not UseExternalTaxEngine then
                                 SalesTaxCalc.AddPurchLine("Purchase Line");
@@ -438,6 +507,12 @@ report 52103 "NTS Purchase Order"
             }
 
             trigger OnAfterGetRecord()
+            Var
+                PurchaseLine: Record "Purchase Line";
+                ItemNoVar: Code[20];
+                DescriptionLclVar: Text;
+                ItemRec: Record Item;
+                PurchCommentLine: Record "Purch. Comment Line";
             begin
                 /* if PrintCompany then
                     if RespCenter.Get("Responsibility Center") then begin
@@ -445,6 +520,32 @@ report 52103 "NTS Purchase Order"
                         CompanyInformation."Phone No." := RespCenter."Phone No.";
                         CompanyInformation."Fax No." := RespCenter."Fax No.";
                     end; */
+                ShipperBoxesQty_Var := 0;
+                MailerBoxesQty_Var := 0;
+
+                // Iterate all lines of the current order
+                PurchaseLine.Reset();
+                PurchaseLine.SetRange("Document Type", "Purchase Header"."Document Type");
+                PurchaseLine.SetRange("Document No.", "Purchase Header"."No.");
+
+                if PurchaseLine.FindSet() then
+                    repeat
+                        if PurchaseLine.Type = PurchaseLine.Type::Item then begin
+                            ItemNoVar := PurchaseLine."No.";
+                            DescriptionLclVar := PurchaseLine.Description;
+                            if ItemNoVar = 'STERILIZATION' then begin
+                                if StrPos(DescriptionLclVar, 'Unboxing fee') > 0 then begin
+                                    ShipperBoxesQty_Var += PurchaseLine.Quantity;
+                                    ShipperBoxesCaption_Var := 'Shipper Boxes';
+                                end else
+                                    if StrPos(DescriptionLclVar, 'Mailer Boxes') > 0 then begin
+                                        MailerBoxesQty_Var += PurchaseLine.Quantity;
+                                        MailerBoxesCaption_Var := 'Mailer Boxes';
+                                    end;
+                            end;
+                        end;
+                    until PurchaseLine.Next() = 0;
+
 
                 CurrReport.Language := LanguageGbl.GetLanguageIdOrDefault("Language Code");
                 CurrReport.FormatRegion := LanguageGbl.GetFormatRegionOrDefault("Format Region");
@@ -485,6 +586,17 @@ report 52103 "NTS Purchase Order"
                     UseDate := WorkDate();
 
                 if ReasonCode.Get("Purchase Header"."NTS Reason Code") then;
+                ReasonCodeDescVar := format(ReasonCode.Description, 250);
+                Clear(CommentGblVar);
+                PurchCommentLine.SetRange("Document Type", "Purchase Header"."Document Type");
+                PurchCommentLine.SetRange("No.", "Purchase Header"."No.");
+                PurchCommentLine.SetRange("Document Line No.", 0);
+                if PurchCommentLine.FindSet() then
+                    repeat
+                        if CommentGblVar <> '' then
+                            CommentGblVar += ',';
+                        CommentGblVar += PurchCommentLine.Comment;
+                    until PurchCommentLine.Next() = 0;
             end;
 
             trigger OnPreDataItem()
@@ -584,6 +696,12 @@ report 52103 "NTS Purchase Order"
     end;
 
     var
+        ShipperBoxesCaption_Var: Text;
+        MailerBoxesCaption_Var: Text;
+        ShipperBoxesQty_Var: Decimal;
+        MailerBoxesQty_Var: Decimal;
+        SterilePkgInfo_Var: Text;
+        PrintDescription_Var: Text;
         UnitPriceToPrint: Decimal;
         AmountExclInvDisc: Decimal;
         ShipmentMethod: Record "Shipment Method";
@@ -661,5 +779,9 @@ report 52103 "NTS Purchase Order"
         VendorInvoiceNoLbl: Label 'Vendor Invoice No.';
         VendorItemNo: Code[50];
         ReasonCode: Record "NTS Purchase Reason Code";
+        ProdOrderRoutingLine: Record "Prod. Order Routing Line";
+        ProdOrderLine: Record "Prod. Order Line";
+        ReasonCodeDescVar: text[250];
+        CommentGblVar: Text;
 }
 
