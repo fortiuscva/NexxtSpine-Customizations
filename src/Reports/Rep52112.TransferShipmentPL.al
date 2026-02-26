@@ -339,7 +339,7 @@ report 52112 "NTS Transfer Shipment PL"
                             DataItemLinkReference = TransferShptLine;
                             column(TempItemLedgEntry_ItemNo; TempItemLedgEntry."Item No.")
                             { }
-                            column(TempItemLedgEntry_LotNo; TempItemLedgEntry."Lot No.")
+                            column(TempItemLedgEntry_LotNo; LotOrSerialValue)
                             { }
                             column(Tracking_Number; Number)
                             { }
@@ -368,6 +368,13 @@ report 52112 "NTS Transfer Shipment PL"
                                     TempItemLedgEntry.FindSet()
                                 else
                                     TempItemLedgEntry.Next();
+
+                                if TempItemLedgEntry."Serial No." <> '' then
+                                    LotOrSerialValue := TempItemLedgEntry."Serial No."
+                                else
+                                    LotOrSerialValue := TempItemLedgEntry."Lot No.";
+
+
                             end;
 
                             trigger OnPreDataItem()
@@ -591,6 +598,7 @@ report 52112 "NTS Transfer Shipment PL"
         LineCount: Integer;
         SerialLotNo: Text;
         TempItemLedgEntry: Record "Item Ledger Entry" temporary;
+        LotOrSerialValue: Code[50];
 
     procedure InitLogInteraction()
     begin
