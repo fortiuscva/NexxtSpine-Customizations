@@ -105,4 +105,26 @@ pageextension 52122 "NTS Posted Transfer Shipment" extends "Posted Transfer Ship
             }
         }
     }
+    actions
+    {
+        addafter("&Print")
+        {
+            action("NTS Transfer Shipment PL")
+            {
+                ApplicationArea = all;
+                Caption = 'Packing List';
+                Image = Report;
+                Promoted = true;
+                PromotedIsBig = true;
+                PromotedCategory = Process;
+                trigger OnAction()
+                var
+                    TransferShipmentHeader: Record "Transfer Shipment Header";
+                begin
+                    CurrPage.SetSelectionFilter(TransferShipmentHeader);
+                    Report.RunModal(Report::"NTS Transfer Shipment PL", true, false, TransferShipmentHeader)
+                end;
+            }
+        }
+    }
 }
