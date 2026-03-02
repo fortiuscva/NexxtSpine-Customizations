@@ -111,6 +111,7 @@ codeunit 52101 "NTS Event Management"
         TransferShipmentLine."NTS Set Name" := TransferLine."NTS Set Name";
         TransferShipmentLine."NTS Set Lot No." := TransferLine."NTS Set Lot No.";
         TransferShipmentLine."NTS Set Serial No." := TransferLine."NTS Set Serial No.";
+        TransferShipmentLine."NTS Backorder" := false;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Transfer Receipt Line", OnAfterCopyFromTransferLine, '', false, false)]

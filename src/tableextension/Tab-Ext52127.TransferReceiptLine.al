@@ -66,5 +66,10 @@ tableextension 52127 "NTS Transfer Receipt Line" extends "Transfer Receipt Line"
             Caption = 'Set Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("NTS Set Name"));
         }
+        field(52133; "NTS Backorder"; Boolean)
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Backorder';
+        }
     }
 }
