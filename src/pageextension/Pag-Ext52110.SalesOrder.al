@@ -7,31 +7,39 @@ pageextension 52110 "NTS Sales Order" extends "Sales Order"
             group("NTS DORDetails")
             {
                 Caption = 'Deliver of Record';
-                Visible = false;
+                // Visible = false;
 
                 field("NTS DoR Number"; Rec."NTS DOR No.")
                 {
                     ApplicationArea = all;
                     Editable = false;
+                    Visible = false;
                     Caption = 'DOR No.';
                 }
                 field("NTS Surgeon"; Rec."NTS Surgeon")
                 {
                     ApplicationArea = All;
                     Caption = 'Surgeon';
-                    Editable = false;
+                    //   Editable = false;
                 }
                 field("NTS Distributor"; Rec."NTS Distributor")
                 {
                     ApplicationArea = all;
                     Caption = 'Distributor';
-                    Editable = false;
+                    // Editable = false;
                 }
                 field("NTS Reps"; Rec."NTS Reps.")
                 {
                     ApplicationArea = all;
                     Caption = 'Reps';
-                    Editable = false;
+                    // Editable = false;
+                }
+                field("NTS Reps. Name"; Rec."NTS Reps. Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Reps. Name field.', Comment = '%';
+                    Caption = 'Reps. Name';
+                    // Editable = false;
                 }
             }
             group("NTS Transfer Order Details")
