@@ -19,14 +19,4 @@ pageextension 52126 "Serial No. Information List" extends "Serial No. Informatio
 
         }
     }
-    trigger OnOpenPage()
-    begin
-        Rec.HasSerialNoNotes();
-    end;
-
-    trigger OnAfterGetRecord()
-    begin
-        Rec.HasSerialNoNotes();
-    end;
-
 }
