@@ -4,45 +4,59 @@ codeunit 52109 "NTS OneDrive PDF Import"
     procedure ImportPDFFromOneDrive()
     var
         OneDriveConfig: Record "NTS OneDrive Configuration";
-
-        Client: HttpClient;
-        Response: HttpResponseMessage;
-        Request: HttpRequestMessage;
-        Content: HttpContent;
-        Headers: HttpHeaders;
-
-        JsonTxt: Text;
-        RootObj: JsonObject;
-        Token: JsonToken;
-        FilesArray: JsonArray;
-        FileToken: JsonToken;
-
         AccessToken: Text;
+        Url: Text;
     begin
         OneDriveConfig.Get();
 
         AccessToken := GetAccessToken(OneDriveConfig);
 
-        Headers := Client.DefaultRequestHeaders();
-        Headers.Add('Authorization', StrSubstNo('Bearer %1', AccessToken));
+        Url :=
+          'https://graph.microsoft.com/v1.0/users/ldavis%40nexxtspine.com/drive/root:/Attachments:/children';
 
-        Request.SetRequestUri(
-    'https://graph.microsoft.com/v1.0/users/ldavis%40nexxtspine.com/drive/root:/Attachments:/children'
-);
+        ReadAllFiles(Url, AccessToken);
+    end;
 
+    local procedure ReadAllFiles(Url: Text; AccessToken: Text)
+    var
+        Client: HttpClient;
+        Response: HttpResponseMessage;
+        Headers: HttpHeaders;
+        JsonTxt: Text;
+        RootObj: JsonObject;
+        Token: JsonToken;
+        FilesArray: JsonArray;
+        FileToken: JsonToken;
+        NextLink: Text;
+    begin
+        repeat
+            Client.DefaultRequestHeaders().Clear();
+            Headers := Client.DefaultRequestHeaders();
+            Headers.Add('Authorization', StrSubstNo('Bearer %1', AccessToken));
 
-        Request.Method := 'GET';
+            Client.Get(Url, Response);
 
-        Client.Send(Request, Response);
+            if not Response.IsSuccessStatusCode() then
+                Error('Graph API Error: %1', Response.HttpStatusCode());
 
-        Response.Content().ReadAs(JsonTxt);
-        RootObj.ReadFrom(JsonTxt);
+            Response.Content().ReadAs(JsonTxt);
+            RootObj.ReadFrom(JsonTxt);
 
-        RootObj.Get('value', Token);
-        FilesArray := Token.AsArray();
+            if RootObj.Get('value', Token) then begin
+                FilesArray := Token.AsArray();
 
-        foreach FileToken in FilesArray do
-            ProcessSingleFile(FileToken, AccessToken);
+                foreach FileToken in FilesArray do
+                    ProcessSingleFile(FileToken, AccessToken);
+            end;
+
+            if RootObj.Get('@odata.nextLink', Token) then
+                NextLink := Token.AsValue().AsText()
+            else
+                NextLink := '';
+
+            Url := NextLink;
+
+        until Url = '';
     end;
 
     local procedure ProcessSingleFile(FileToken: JsonToken; AccessToken: Text)
