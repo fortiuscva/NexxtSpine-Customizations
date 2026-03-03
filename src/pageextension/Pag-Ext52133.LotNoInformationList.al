@@ -4,7 +4,7 @@ pageextension 52133 "NTS Lot No. Information List" extends "Lot No. Information 
     {
         addlast(Control1)
         {
-            field("NTS Lot No. Notes"; LotNoNotesExists)
+            field("NTS Lot No. Notes"; Rec."NTS Lot No. Notes Exists")
             {
                 ApplicationArea = All;
                 Caption = 'Lot No. Notes';
@@ -12,13 +12,16 @@ pageextension 52133 "NTS Lot No. Information List" extends "Lot No. Information 
             }
         }
     }
+
+
+    trigger OnOpenPage()
+    begin
+        Rec.HasLotNoNotes();
+    end;
+
     trigger OnAfterGetRecord()
     begin
-        LotNoNotes := '';
-        LotNoNotesExists := false;
-        LotNoNotes := Rec.GetLotNoNotes();
-        if LotNoNotes <> '' then
-            LotNoNotesExists := true;
+        Rec.HasLotNoNotes();
     end;
 
     var

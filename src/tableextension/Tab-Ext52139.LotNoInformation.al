@@ -7,7 +7,21 @@ tableextension 52139 "NTS Lot No. Information" extends "Lot No. Information"
             Caption = 'Lot No. Notes';
             Subtype = Memo;
         }
+        field(52102; "NTS Lot No. Notes Exists"; Boolean)
+        {
+            Caption = 'Lot No. Notes Exists';
+            Editable = false;
+        }
     }
+    trigger OnBeforeInsert()
+    begin
+        HasLotNoNotes();
+    end;
+
+    trigger OnBeforeModify()
+    begin
+        HasLotNoNotes();
+    end;
 
     procedure SetLotNoNotes(NewNotes: Text)
     var
@@ -40,5 +54,14 @@ tableextension 52139 "NTS Lot No. Information" extends "Lot No. Information"
                 rec.FieldName("NTS Lot No. Notes")
             )
         );
+    end;
+
+    procedure HasLotNoNotes()
+    begin
+        rec.CalcFields("NTS Lot No. Notes");
+        if Rec."NTS Lot No. Notes".HasValue then
+            Rec."NTS Lot No. Notes Exists" := true
+        else
+            Rec."NTS Lot No. Notes Exists" := false;
     end;
 }
