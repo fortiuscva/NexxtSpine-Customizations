@@ -10,13 +10,10 @@ report 52113 "NTS Inventory Reclass Adjmts."
         dataitem(ItemLedgerEntry; "Item Ledger Entry")
         {
             DataItemTableView = sorting("Item No.", "Location Code", Open, "Posting Date") where(Open = const(true), "Entry Type" = filter(<> "Negative Adjmt."));
-            RequestFilterFields = "Item No.", "Location Code", "Variant Code", "Posting Date";
+            RequestFilterFields = "Item No.", "Location Code", "Variant Code", "Posting Date", "Serial No.", "Lot No.";
             trigger OnPreDataItem()
             begin
                 ItemLedgerEntry.SetLoadFields("Entry No.", "Item No.", "Variant Code", "Location Code", "Unit of Measure Code", "Global Dimension 1 Code", "Global Dimension 2 Code", "Remaining Quantity", Open, "Entry Type", "Posting Date", "Serial No.", "Lot No.");
-
-                if LocationFilter <> '' then
-                    ItemLedgerEntry.SetFilter("Location Code", LocationFilter);
             end;
 
             trigger OnAfterGetRecord()
@@ -26,10 +23,15 @@ report 52113 "NTS Inventory Reclass Adjmts."
             begin
                 if ItemLedgerEntry."Remaining Quantity" = 0 then
                     exit;
-                If ItemRec.Get("Item No.") and ItemRec.Blocked then
+                If (ItemRec.Get("Item No.")) then begin
+                    if (ItemRec."Item Tracking Code" = '') then
+                        exit;
+                    if (ItemRec.Blocked) then
+                        exit;
+                end;
+                if (ItemLedgerEntry."Serial No." = '') and (ItemLedgerEntry."Lot No." = '') then
                     exit;
-                if (ItemLedgerEntry."Serial No." <> '') or (ItemLedgerEntry."Lot No." <> '') then
-                    CreateNegAdjLineForILE(ItemLedgerEntry);
+                CreateNegAdjLineForILE(ItemLedgerEntry);
             end;
         }
     }
@@ -139,7 +141,6 @@ report 52113 "NTS Inventory Reclass Adjmts."
     begin
         if ILE."Remaining Quantity" <= 0 then
             exit;
-
         ItemJournalLine.Init();
         ItemJournalLine.Validate("Journal Template Name", JournalTemplateName);
         ItemJournalLine.Validate("Journal Batch Name", JournalBatchName);
