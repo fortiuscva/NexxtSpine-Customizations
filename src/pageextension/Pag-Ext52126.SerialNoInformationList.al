@@ -10,6 +10,13 @@ pageextension 52126 "Serial No. Information List" extends "Serial No. Informatio
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Set Type field.', Comment = '%';
             }
+            field("NTS Serial No. Notes"; Rec."NTS Serial No. Notes Exists")
+            {
+                ApplicationArea = All;
+                Caption = 'Serial No. Notes';
+                ToolTip = 'Specifies the value of the Serial No. Notes field.', Comment = '%';
+            }
+
         }
     }
 }
