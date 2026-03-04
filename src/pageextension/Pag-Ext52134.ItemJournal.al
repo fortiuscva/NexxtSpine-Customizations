@@ -7,16 +7,17 @@ pageextension 52134 "NTS Item Journal" extends "Item Journal"
             action("NTS NXT Reclass Inventory")
             {
                 ApplicationArea = All;
-                Caption = 'Process Negative Adjmnts in Item Journals';
+                Caption = 'Process Negative Adj.';
                 Image = Process;
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedIsBig = true;
                 trigger OnAction()
                 var
-                    InvReclassAdjmts: Report "NTS Inventory Reclass Adjmts.";
+                    CreateNegativeAdj: Report "NTS Create Negative Adj.";
                 begin
-                    InvReclassAdjmts.Run();
+                    CreateNegativeAdj.SetInitialValues(Rec."Journal Template Name", Rec."Journal Batch Name");
+                    CreateNegativeAdj.Run();
                 end;
             }
         }
