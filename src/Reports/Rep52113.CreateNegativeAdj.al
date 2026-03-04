@@ -1,6 +1,6 @@
-report 52113 "NTS Inventory Reclass Adjmts."
+report 52113 "NTS Create Negative Adj."
 {
-    Caption = 'Create Negative Adjustments from Open ILE';
+    Caption = 'Create Negative Adjustments';
     UsageCategory = Tasks;
     ApplicationArea = All;
     ProcessingOnly = true;
@@ -9,20 +9,22 @@ report 52113 "NTS Inventory Reclass Adjmts."
     {
         dataitem(ItemLedgerEntry; "Item Ledger Entry")
         {
-            DataItemTableView = sorting("Item No.", "Location Code", Open, "Posting Date") where(Open = const(true), "Entry Type" = filter(<> "Negative Adjmt."));
-            RequestFilterFields = "Item No.", "Location Code", "Variant Code", "Posting Date", "Serial No.", "Lot No.";
-            trigger OnPreDataItem()
-            begin
-                ItemLedgerEntry.SetLoadFields("Entry No.", "Item No.", "Variant Code", "Location Code", "Unit of Measure Code", "Global Dimension 1 Code", "Global Dimension 2 Code", "Remaining Quantity", Open, "Entry Type", "Posting Date", "Serial No.", "Lot No.");
-            end;
+            DataItemTableView = sorting("Item No.", "Location Code", Open, "Posting Date") where(Open = const(true),
+                                            "Entry Type" = filter(<> "Negative Adjmt."),
+                                            "Remaining Quantity" = filter(> 0));
+            RequestFilterFields = "Item No.", "Location Code", "Variant Code", "Posting Date";
+            // trigger OnPreDataItem()
+            // begin
+            //     ItemLedgerEntry.SetLoadFields("Entry No.", "Item No.", "Variant Code", "Location Code", "Unit of Measure Code",
+            //                                     "Global Dimension 1 Code", "Global Dimension 2 Code", "Remaining Quantity",
+            //                                     Open, "Entry Type", "Posting Date", "Serial No.", "Lot No.");
+            // end;
 
             trigger OnAfterGetRecord()
             var
                 ItemRec: Record Item;
                 ItemLedgerEntryLclRec: Record "Item Ledger Entry";
             begin
-                if ItemLedgerEntry."Remaining Quantity" = 0 then
-                    exit;
                 If (ItemRec.Get("Item No.")) then begin
                     if (ItemRec."Item Tracking Code" = '') then
                         exit;
@@ -52,10 +54,8 @@ report 52113 "NTS Inventory Reclass Adjmts."
                         TableRelation = "Item Journal Template".Name;
                         trigger OnValidate()
                         begin
-                            if (JournalTemplateName = '') or (JournalTemplateName <> xJournalTemplateName) then
-                                JournalBatchName := '';
-
-                            xJournalTemplateName := JournalTemplateName;
+                            if JournalBatchName <> '' then
+                                Clear(JournalBatchName);
                         end;
                     }
                     field(JournalBatchName; JournalBatchName)
@@ -74,41 +74,14 @@ report 52113 "NTS Inventory Reclass Adjmts."
                         end;
                     }
                 }
-
-                group(Defaults)
-                {
-                    Caption = 'Defaults';
-                    field(PostingDate; PostingDate)
-                    {
-                        ApplicationArea = All;
-                        Caption = 'Posting Date';
-                    }
-                    field(DocumentNo; DocumentNo)
-                    {
-                        ApplicationArea = All;
-                        Caption = 'Document No.';
-                        ToolTip = 'If left blank, posting will assign the Document No. using the Posting No. Series on the Item Journal Batch.';
-                    }
-                }
             }
         }
 
-        trigger OnOpenPage()
-        begin
-            JournalTemplateName := '';
-            JournalBatchName := '';
-        end;
     }
 
     trigger OnPreReport()
     begin
         EnsureBatchExists();
-        NextLineNo := 10000;
-        ItemJnlLine.Reset();
-        ItemJnlLine.SetRange("Journal Template Name", JournalTemplateName);
-        ItemJnlLine.SetRange("Journal Batch Name", JournalBatchName);
-        if ItemJnlLine.FindLast() then
-            NextLineNo := ItemJnlLine."Line No." + 10000;
     end;
 
     trigger OnPostReport()
@@ -139,25 +112,32 @@ report 52113 "NTS Inventory Reclass Adjmts."
         ItemJournalLine: Record "Item Journal Line";
         Qty: Decimal;
     begin
-        if ILE."Remaining Quantity" <= 0 then
-            exit;
+
+        ItemJnlLine.Reset();
+        ItemJnlLine.SetRange("Journal Template Name", JournalTemplateName);
+        ItemJnlLine.SetRange("Journal Batch Name", JournalBatchName);
+        if ItemJnlLine.FindLast() then
+            NextLineNo := ItemJnlLine."Line No." + 10000
+        else
+            NextLineNo := 10000;
+
         ItemJournalLine.Init();
         ItemJournalLine.Validate("Journal Template Name", JournalTemplateName);
         ItemJournalLine.Validate("Journal Batch Name", JournalBatchName);
         ItemJournalLine."Line No." := NextLineNo;
-        NextLineNo += 10000;
         ItemJournalLine.Insert(true);
+
+
         ItemJournalLine.Validate("Entry Type", ItemJournalLine."Entry Type"::"Negative Adjmt.");
         ItemJournalLine.Validate("Item No.", ILE."Item No.");
         ItemJournalLine.Validate("Document No.", ILE."Document No.");
         ItemJournalLine.Validate("Variant Code", ILE."Variant Code");
         ItemJournalLine.Validate("Location Code", ILE."Location Code");
-        ItemJournalLine.Validate("Posting Date", ILE."Posting Date");
+        ItemJournalLine.Validate("Posting Date", Today);
         ItemJournalLine.Validate("Document No.", ILE."Document No.");
-        ItemJournalLine.Validate("Reason Code", ILE."Return Reason Code");
         ItemJournalLine.Validate(Description, ILE.Description);
-        Qty := -Abs(ILE."Remaining Quantity");
-        ItemJournalLine.Validate(Quantity, Qty);
+
+        ItemJournalLine.Validate(Quantity, ILE."Remaining Quantity");
         ItemJournalLine.Validate("Unit of Measure Code", ILE."Unit of Measure Code");
         ItemJournalLine.Validate("Shortcut Dimension 1 Code", ILE."Global Dimension 1 Code");
         ItemJournalLine.Validate("Shortcut Dimension 2 Code", ILE."Global Dimension 2 Code");
@@ -192,9 +172,15 @@ report 52113 "NTS Inventory Reclass Adjmts."
         CreatedCount += 1;
     end;
 
+    procedure SetInitialValues(JournalTemplateNamePar: Code[10]; JournalBatchNamePar: Code[10])
+    begin
+        JournalTemplateName := JournalTemplateNamePar;
+        JournalBatchName := JournalBatchNamePar;
+        PostingDate := Today;
+    end;
+
     var
         JournalTemplateName: Code[10];
-        xJournalTemplateName: Code[10];
         JournalBatchName: Code[10];
         PostingDate: Date;
         DocumentNo: Code[20];
