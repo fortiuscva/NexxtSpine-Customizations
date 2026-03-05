@@ -4,39 +4,8 @@ report 52113 "NTS Create Negative Adj."
     UsageCategory = Tasks;
     ApplicationArea = All;
     ProcessingOnly = true;
-    Permissions = tabledata "Item Journal Line" = rimd;
-    dataset
-    {
-        dataitem(ItemLedgerEntry; "Item Ledger Entry")
-        {
-            DataItemTableView = sorting("Item No.", "Location Code", Open, "Posting Date") where(Open = const(true),
-                                            "Entry Type" = filter(<> "Negative Adjmt."),
-                                            "Remaining Quantity" = filter(> 0));
-            RequestFilterFields = "Item No.", "Location Code", "Variant Code", "Posting Date";
-            // trigger OnPreDataItem()
-            // begin
-            //     ItemLedgerEntry.SetLoadFields("Entry No.", "Item No.", "Variant Code", "Location Code", "Unit of Measure Code",
-            //                                     "Global Dimension 1 Code", "Global Dimension 2 Code", "Remaining Quantity",
-            //                                     Open, "Entry Type", "Posting Date", "Serial No.", "Lot No.");
-            // end;
 
-            trigger OnAfterGetRecord()
-            var
-                ItemRec: Record Item;
-                ItemLedgerEntryLclRec: Record "Item Ledger Entry";
-            begin
-                If (ItemRec.Get("Item No.")) then begin
-                    if (ItemRec."Item Tracking Code" = '') then
-                        exit;
-                    if (ItemRec.Blocked) then
-                        exit;
-                end;
-                if (ItemLedgerEntry."Serial No." = '') and (ItemLedgerEntry."Lot No." = '') then
-                    exit;
-                CreateNegAdjLineForILE(ItemLedgerEntry);
-            end;
-        }
-    }
+    Permissions = tabledata "Item Journal Line" = rimd;
 
     requestpage
     {
@@ -46,29 +15,31 @@ report 52113 "NTS Create Negative Adj."
             {
                 group(TargetBatch)
                 {
-                    Caption = 'Item Journal';
                     field(JournalTemplateName; JournalTemplateName)
                     {
                         ApplicationArea = All;
                         Caption = 'Journal Template Name';
                         TableRelation = "Item Journal Template".Name;
+
                         trigger OnValidate()
                         begin
                             if JournalBatchName <> '' then
                                 Clear(JournalBatchName);
                         end;
                     }
+
                     field(JournalBatchName; JournalBatchName)
                     {
                         ApplicationArea = All;
                         Caption = 'Journal Batch Name';
                         Lookup = true;
+
                         trigger OnLookup(var Text: Text): Boolean
                         var
                             ItemJnlBatch: Record "Item Journal Batch";
-                            ItemJnlBatchPage: Page "Item Journal Batches";
                         begin
                             ItemJnlBatch.SetRange("Journal Template Name", JournalTemplateName);
+
                             if Page.RunModal(Page::"Item Journal Batches", ItemJnlBatch) = Action::LookupOK then
                                 JournalBatchName := ItemJnlBatch.Name;
                         end;
@@ -76,126 +47,189 @@ report 52113 "NTS Create Negative Adj."
                 }
             }
         }
-
     }
-
-    trigger OnPreReport()
-    begin
-        EnsureBatchExists();
-    end;
 
     trigger OnPostReport()
     var
-        Msg: Label '%1 journal line(s) created in %2/%3.%4', Comment = '%1=CreatedCount, %2=Template, %3=Batch, %4=Optional error suffix';
-        ErrText: Text[100];
+        ILEQuery: Query "NTS ILE Grouped";
     begin
-        if ErrorCount > 0 then
-            ErrText := StrSubstNo('%1', Format(ErrorCount) + ' line(s) skipped due to validation errors.');
+        EnsureBatchExists();
 
-        Message(Msg, CreatedCount, JournalTemplateName, JournalBatchName, ErrText);
+        DocumentNo := 'NA' + Format(Today, 0, '<Year4><Month,2><Day,2>');
+
+        ILEQuery.Open();
+
+        while ILEQuery.Read() do begin
+
+            if not TryCreateNegativeAdjustment(
+                ILEQuery.ItemNo,
+                ILEQuery.LocationCode,
+                ILEQuery.VariantCode,
+                ILEQuery.LotNo,
+                ILEQuery.SerialNo,
+                ILEQuery.RemainingQty,
+                ILEQuery.UOM,
+                ILEQuery.Dim1,
+                ILEQuery.Dim2,
+                ILEQuery.ExpirationDate)
+            then
+                ErrorCount += 1;
+
+        end;
+
+        ILEQuery.Close();
+
+        Message(
+            '%1 journal line(s) created. %2 line(s) skipped due to validation errors.',
+            CreatedCount,
+            ErrorCount);
     end;
 
-    local procedure EnsureBatchExists()
-    begin
-        if JournalTemplateName = '' then
-            Error('Journal Template Name must be specified.');
 
-        if JournalBatchName = '' then
-            Error('Journal Batch Name must be specified.');
-
-        if not ItemJnlBatch.Get(JournalTemplateName, JournalBatchName) then
-            Error('Item Journal Batch %1/%2 not found.', JournalTemplateName, JournalBatchName);
-    end;
-
-    local procedure CreateNegAdjLineForILE(var ILE: Record "Item Ledger Entry")
-    var
-        ItemJournalLine: Record "Item Journal Line";
+    [TryFunction]
+    local procedure TryCreateNegativeAdjustment(
+        ItemNo: Code[20];
+        LocationCode: Code[10];
+        VariantCode: Code[10];
+        LotNo: Code[50];
+        SerialNo: Code[50];
         Qty: Decimal;
+        UOM: Code[10];
+        Dim1: Code[20];
+        Dim2: Code[20];
+        ExpDate: Date)
+    var
+        QtyToPost: Decimal;
     begin
 
+        if SerialNo <> '' then
+            QtyToPost := 1
+        else
+            QtyToPost := Qty;
+
+        GetNextLineNo();
+
+        ItemJnlLine.Init();
+        ItemJnlLine.Validate("Journal Template Name", JournalTemplateName);
+        ItemJnlLine.Validate("Journal Batch Name", JournalBatchName);
+        ItemJnlLine."Line No." := NextLineNo;
+
+        ItemJnlLine.Insert(true);
+
+        ItemJnlLine.Validate("Entry Type", ItemJnlLine."Entry Type"::"Negative Adjmt.");
+        ItemJnlLine.Validate("Document No.", DocumentNo);
+        ItemJnlLine.Validate("Item No.", ItemNo);
+        ItemJnlLine.Validate("Variant Code", VariantCode);
+        ItemJnlLine.Validate("Location Code", LocationCode);
+        ItemJnlLine.Validate("Posting Date", Today);
+
+        ItemJnlLine.Validate(Quantity, QtyToPost);
+        ItemJnlLine.Validate("Unit of Measure Code", UOM);
+
+        ItemJnlLine.Validate("Shortcut Dimension 1 Code", Dim1);
+        ItemJnlLine.Validate("Shortcut Dimension 2 Code", Dim2);
+
+        ItemJnlLine.Modify(true);
+
+        CreateTracking(
+            ItemJnlLine,
+            LotNo,
+            SerialNo,
+            ExpDate);
+
+        CreatedCount += 1;
+    end;
+
+
+    local procedure CreateTracking(
+        ItemJnlLine: Record "Item Journal Line";
+        LotNo: Code[50];
+        SerialNo: Code[50];
+        ExpDate: Date)
+    begin
+
+        Clear(ForReservEntry);
+        Clear(TrackingSpec);
+
+        if SerialNo <> '' then begin
+            ForReservEntry."Serial No." := SerialNo;
+            TrackingSpec."New Serial No." := SerialNo;
+        end;
+
+        if LotNo <> '' then begin
+            ForReservEntry."Lot No." := LotNo;
+            TrackingSpec."New Lot No." := LotNo;
+        end;
+
+        TrackingSpec."Expiration Date" := ExpDate;
+
+        CreateReservEntry.CreateReservEntryFor(
+            Database::"Item Journal Line",
+            3,
+            ItemJnlLine."Journal Template Name",
+            ItemJnlLine."Journal Batch Name",
+            0,
+            ItemJnlLine."Line No.",
+            ItemJnlLine."Qty. per Unit of Measure",
+            ItemJnlLine.Quantity,
+            ItemJnlLine."Quantity (Base)",
+            ForReservEntry);
+
+        CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+
+        CreateReservEntry.CreateEntry(
+            ItemJnlLine."Item No.",
+            ItemJnlLine."Variant Code",
+            ItemJnlLine."Location Code",
+            ItemJnlLine.Description,
+            0D,
+            ItemJnlLine."Posting Date",
+            0,
+            ForReservEntry."Reservation Status"::Prospect);
+    end;
+
+
+    local procedure GetNextLineNo()
+    begin
         ItemJnlLine.Reset();
         ItemJnlLine.SetRange("Journal Template Name", JournalTemplateName);
         ItemJnlLine.SetRange("Journal Batch Name", JournalBatchName);
+
         if ItemJnlLine.FindLast() then
             NextLineNo := ItemJnlLine."Line No." + 10000
         else
             NextLineNo := 10000;
-
-        ItemJournalLine.Init();
-        ItemJournalLine.Validate("Journal Template Name", JournalTemplateName);
-        ItemJournalLine.Validate("Journal Batch Name", JournalBatchName);
-        ItemJournalLine."Line No." := NextLineNo;
-        ItemJournalLine.Insert(true);
-
-
-        ItemJournalLine.Validate("Entry Type", ItemJournalLine."Entry Type"::"Negative Adjmt.");
-        ItemJournalLine.Validate("Item No.", ILE."Item No.");
-        ItemJournalLine.Validate("Document No.", ILE."Document No.");
-        ItemJournalLine.Validate("Variant Code", ILE."Variant Code");
-        ItemJournalLine.Validate("Location Code", ILE."Location Code");
-        ItemJournalLine.Validate("Posting Date", Today);
-        ItemJournalLine.Validate("Document No.", ILE."Document No.");
-        ItemJournalLine.Validate(Description, ILE.Description);
-
-        ItemJournalLine.Validate(Quantity, ILE."Remaining Quantity");
-        ItemJournalLine.Validate("Unit of Measure Code", ILE."Unit of Measure Code");
-        ItemJournalLine.Validate("Shortcut Dimension 1 Code", ILE."Global Dimension 1 Code");
-        ItemJournalLine.Validate("Shortcut Dimension 2 Code", ILE."Global Dimension 2 Code");
-
-        ItemJournalLine.Modify(true);
-        ItemTrackingVal := NexxtSpineFunctionsCU.FindItemTrackingCode(ItemJournalLine."Item No.");
-        if (ItemTrackingVal <> 0) then begin
-            if ItemTrackingVal = 2 then begin
-                ForReservEntry."Serial No." := ILE."Serial No.";
-                TrackingSpec."New Serial No." := ILE."Serial No.";
-                TrackingSpec."Expiration Date" := ILE."Expiration Date";
-            end else begin
-                ForReservEntry."Lot No." := ILE."Lot No.";
-                ForReservEntry."Serial No." := ILE."Serial No.";
-                TrackingSpec."New Lot No." := ILE."Lot No.";
-                TrackingSpec."New Serial No." := ILE."Serial No.";
-                TrackingSpec."Expiration Date" := ILE."Expiration Date";
-            end;
-            CreateReservEntry.CreateReservEntryFor(
-            Database::"Item Journal Line", 3,
-            JournalTemplateName, JournalBatchName,
-            0, ItemJournalLine."Line No.",
-            ItemJournalLine."Qty. per Unit of Measure", ItemJournalLine.Quantity, ItemJournalLine."Quantity (Base)",
-            ForReservEntry);
-            CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
-            CreateReservEntry.CreateEntry(
-            ItemJournalLine."Item No.", ItemJournalLine."Variant Code",
-            ItemJournalLine."Location Code", ItemJournalLine.Description,
-            0D, ItemJournalLine."Posting Date",
-            0, ForReservEntry."Reservation Status"::Prospect);
-        end;
-        CreatedCount += 1;
     end;
+
+
+    local procedure EnsureBatchExists()
+    begin
+        if not ItemJnlBatch.Get(JournalTemplateName, JournalBatchName) then
+            Error('Item Journal Batch %1 / %2 not found.', JournalTemplateName, JournalBatchName);
+    end;
+
 
     procedure SetInitialValues(JournalTemplateNamePar: Code[10]; JournalBatchNamePar: Code[10])
     begin
         JournalTemplateName := JournalTemplateNamePar;
         JournalBatchName := JournalBatchNamePar;
-        PostingDate := Today;
     end;
+
 
     var
         JournalTemplateName: Code[10];
         JournalBatchName: Code[10];
-        PostingDate: Date;
         DocumentNo: Code[20];
-        ReasonCode: Code[10];
-        LocationFilter: Code[10];
-        DescriptionText: Text[100];
-        ClearExisting: Boolean;
+
         ItemJnlLine: Record "Item Journal Line";
         ItemJnlBatch: Record "Item Journal Batch";
+
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+
         NextLineNo: Integer;
         CreatedCount: Integer;
         ErrorCount: Integer;
-        CreateReservEntry: Codeunit "Create Reserv. Entry";
-        ForReservEntry: Record "Reservation Entry";
-        TrackingSpec: Record "Tracking Specification";
-        ItemTrackingVal: integer;
-        NexxtSpineFunctionsCU: Codeunit "NTS NexxtSpine Functions";
 }
