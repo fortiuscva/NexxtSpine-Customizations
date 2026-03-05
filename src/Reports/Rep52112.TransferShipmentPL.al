@@ -98,7 +98,7 @@ report 52112 "NTS Transfer Shipment PL"
                     column(CompanyInfo1Picture; CompanyInfo1.Picture)
                     {
                     }
-                    column(CompanyInfoPicture; CompanyInfo.Picture)
+                    column(CompanyInfoPicture; CompanyInformation.Picture)
                     {
                     }
                     column(CompanyAddress1; CompanyAddress[1])
