@@ -56,6 +56,7 @@ report 52113 "NTS Create Negative Adj."
         EnsureBatchExists();
 
         DocumentNo := 'NA' + Format(Today, 0, '<Year4><Month,2><Day,2>');
+        ILEQuery.SetRange(ItemNo, '10-0-5530');
 
         ILEQuery.Open();
         while ILEQuery.Read() do begin
