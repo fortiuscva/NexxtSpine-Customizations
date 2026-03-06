@@ -179,6 +179,18 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
         end;
     end;
 
+    procedure SetWorkDescription(WorkDescription: Text)
+    var
+        OutStream: OutStream;
+    begin
+
+        Clear(Rec."NTS Work Description");
+        rec."NTS Work Description".CreateOutStream(OutStream, TEXTENCODING::UTF8);
+        OutStream.WriteText(WorkDescription);
+
+        rec.Modify();
+    end;
+
     procedure GetWorkDescription() WorkDescription: Text
     var
         TypeHelper: Codeunit "Type Helper";
