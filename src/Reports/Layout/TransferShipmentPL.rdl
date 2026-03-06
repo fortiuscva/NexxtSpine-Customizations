@@ -2763,6 +2763,9 @@ Shared PictureData3 as Object
         <Field Name="SSH_LocationCode">
           <DataField>SSH_LocationCode</DataField>
         </Field>
+        <Field Name="Comment_SalesCommentLine">
+          <DataField>Comment_SalesCommentLine</DataField>
+        </Field>
         <Field Name="CompanyInfo2Picture">
           <DataField>CompanyInfo2Picture</DataField>
         </Field>
@@ -2936,9 +2939,6 @@ Shared PictureData3 as Object
         </Field>
         <Field Name="Date_InventoryCommentLine">
           <DataField>Date_InventoryCommentLine</DataField>
-        </Field>
-        <Field Name="Comment_SalesCommentLine">
-          <DataField>Comment_SalesCommentLine</DataField>
         </Field>
         <Field Name="SalesShptLineNumber">
           <DataField>SalesShptLineNumber</DataField>

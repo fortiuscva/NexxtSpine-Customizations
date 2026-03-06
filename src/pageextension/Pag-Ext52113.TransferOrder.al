@@ -101,6 +101,10 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
                 MultiLine = true;
                 Editable = IsEditable;
                 ToolTip = 'Specifies the value of the Work Description field.', Comment = '%';
+                trigger OnValidate()
+                begin
+                    Rec.SetWorkDescription(WorkDescription);
+                end;
             }
         }
     }

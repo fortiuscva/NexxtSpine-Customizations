@@ -92,6 +92,8 @@ report 52112 "NTS Transfer Shipment PL"
                 dataitem(PageLoop; "Integer")
                 {
                     DataItemTableView = SORTING(Number) WHERE(Number = CONST(1));
+                    column(Comment_SalesCommentLine; WorkDescriptionTxt)
+                    { }
                     column(CompanyInfo2Picture; CompanyInfo2.Picture)
                     {
                     }
@@ -270,8 +272,8 @@ report 52112 "NTS Transfer Shipment PL"
                         { }
                         column(Date_InventoryCommentLine; "Inventory Comment Line".Date)
                         { }
-                        column(Comment_SalesCommentLine; "Inventory Comment Line".Comment)
-                        { }
+                        // column(Comment_SalesCommentLine; "Inventory Comment Line".Comment)
+                        // { }
                     }
                     dataitem(TransferShptLine; "Integer")
                     {
@@ -412,6 +414,15 @@ report 52112 "NTS Transfer Shipment PL"
                             PrintFooter := false;
                         end;
                     }
+                    trigger OnAfterGetRecord()
+                    begin
+                        Clear(WorkDescriptionTxt);
+                        "Transfer Shipment Header".CalcFields("NTS Work Description");
+                        if "Transfer Shipment Header"."NTS Work Description".HasValue then begin
+                            "Transfer Shipment Header"."NTS Work Description".CreateInStream(WorkDescInStream);
+                            WorkDescInStream.ReadText(WorkDescriptionTxt);
+                        end;
+                    end;
                 }
 
                 trigger OnAfterGetRecord()
@@ -437,6 +448,12 @@ report 52112 "NTS Transfer Shipment PL"
 
                 if not ShipmentMethod.Get("Shipment Method Code") then
                     ShipmentMethod.Init();
+                // Clear(WorkDescriptionTxt);
+                // "Transfer Shipment Header".CalcFields("NTS Work Description");
+                // if "Transfer Shipment Header"."NTS Work Description".HasValue then begin
+                //     "Transfer Shipment Header"."NTS Work Description".CreateInStream(WorkDescInStream);
+                //     WorkDescInStream.ReadText(WorkDescriptionTxt);
+                // end;
             end;
         }
     }
@@ -599,6 +616,9 @@ report 52112 "NTS Transfer Shipment PL"
         SerialLotNo: Text;
         TempItemLedgEntry: Record "Item Ledger Entry" temporary;
         LotOrSerialValue: Code[50];
+        WorkDescInStream: InStream;
+
+        WorkDescriptionTxt: Text;
 
     procedure InitLogInteraction()
     begin
