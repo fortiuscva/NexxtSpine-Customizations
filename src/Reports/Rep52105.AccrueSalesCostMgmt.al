@@ -46,7 +46,7 @@ report 52105 "NTS Accrue Sales Cost Mgmt"
                         trigger OnValidate()
 
                         begin
-                            InputDate := CalcDate('<CM>', WorkDate());
+                            // InputDate := CalcDate('<CM>', WorkDate());
                         end;
                     }
 
