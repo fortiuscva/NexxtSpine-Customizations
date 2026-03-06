@@ -56,9 +56,9 @@ report 52113 "NTS Create Negative Adj."
         EnsureBatchExists();
 
         DocumentNo := 'NA' + Format(Today, 0, '<Year4><Month,2><Day,2>');
+        ILEQuery.SetRange(ItemNo, '10-0-5530');
 
         ILEQuery.Open();
-
         while ILEQuery.Read() do begin
 
             if not TryCreateNegativeAdjustment(
@@ -98,14 +98,8 @@ report 52113 "NTS Create Negative Adj."
         Dim1: Code[20];
         Dim2: Code[20];
         ExpDate: Date)
-    var
-        QtyToPost: Decimal;
     begin
 
-        if SerialNo <> '' then
-            QtyToPost := 1
-        else
-            QtyToPost := Qty;
 
         GetNextLineNo();
 
@@ -123,7 +117,7 @@ report 52113 "NTS Create Negative Adj."
         ItemJnlLine.Validate("Location Code", LocationCode);
         ItemJnlLine.Validate("Posting Date", Today);
 
-        ItemJnlLine.Validate(Quantity, QtyToPost);
+        ItemJnlLine.Validate(Quantity, Qty);
         ItemJnlLine.Validate("Unit of Measure Code", UOM);
 
         ItemJnlLine.Validate("Shortcut Dimension 1 Code", Dim1);
