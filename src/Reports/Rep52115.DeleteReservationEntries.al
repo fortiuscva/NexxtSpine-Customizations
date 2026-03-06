@@ -3,6 +3,8 @@ report 52115 "NTS Delete Reservation Entries"
     ApplicationArea = All;
     Caption = 'Delete Reservation Entries';
     UsageCategory = ReportsAndAnalysis;
+    ProcessingOnly = true;
+
     dataset
     {
         dataitem(ReservationEntry; "Reservation Entry")
