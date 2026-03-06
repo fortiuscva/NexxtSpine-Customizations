@@ -99,8 +99,12 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
             {
                 ApplicationArea = All;
                 MultiLine = true;
-                Editable = false;
+                Editable = IsEditable;
                 ToolTip = 'Specifies the value of the Work Description field.', Comment = '%';
+                trigger OnValidate()
+                begin
+                    Rec.SetWorkDescription(WorkDescription);
+                end;
             }
         }
     }
@@ -108,8 +112,19 @@ pageextension 52113 "NTS Transfer Order" extends "Transfer Order"
     trigger OnAfterGetRecord()
     begin
         WorkDescription := Rec.GetWorkDescription();
+        IsEditable := SetWorkDescEditable();
+    end;
+
+    procedure SetWorkDescEditable(): Boolean
+
+    begin
+        if Rec."NTS Sales Order No." = '' then
+            exit(true)
+        else
+            exit(false);
     end;
 
     var
         WorkDescription: Text;
+        IsEditable: Boolean;
 }
