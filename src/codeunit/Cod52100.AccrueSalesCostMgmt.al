@@ -28,7 +28,7 @@ codeunit 52100 "NTS Accrue Sales & Cost Mgmt."
         SalesLine.FindSet();
         repeat
             CreateAccuredSalesJournals(SalesLine, Format(Month), InputDate);
-        //CreateAccuredSalesReversalJournals(SalesLine, Format(Month), CalcDate('1D', InputDate));
+            CreateAccuredSalesReversalJournals(SalesLine, Format(Month), CalcDate('1D', InputDate));
         until SalesLine.Next() = 0;
     end;
 
@@ -56,7 +56,7 @@ codeunit 52100 "NTS Accrue Sales & Cost Mgmt."
                 if SalesLine.FindSet() then
                     repeat
                         CreateAccuredSalesCostJournals(SalesLine, Format(Month), InputDate);
-                    //CreateAccuredSalesCostReversalJournals(SalesLine, Format(Month), CalcDate('1D', InputDate));
+                        CreateAccuredSalesCostReversalJournals(SalesLine, Format(Month), CalcDate('1D', InputDate));
                     until SalesLine.Next() = 0;
             until SalesHeader.Next() = 0;
     end;
