@@ -44,6 +44,12 @@ report 52113 "NTS Create Negative Adj."
                                 JournalBatchName := ItemJnlBatch.Name;
                         end;
                     }
+                    field(LocationCode; LocationCode)
+                    {
+                        ApplicationArea = All;
+                        Caption = 'Location Code';
+                        TableRelation = Location.Code;
+                    }
                 }
             }
         }
@@ -56,8 +62,8 @@ report 52113 "NTS Create Negative Adj."
         EnsureBatchExists();
 
         DocumentNo := 'NA' + Format(Today, 0, '<Year4><Month,2><Day,2>');
-        ILEQuery.SetRange(ItemNo, '10-0-5530');
-
+        if LocationCode <> '' then
+            ILEQuery.SetRange(LocationCode, LocationCode);
         ILEQuery.Open();
         while ILEQuery.Read() do begin
 
@@ -226,4 +232,5 @@ report 52113 "NTS Create Negative Adj."
         NextLineNo: Integer;
         CreatedCount: Integer;
         ErrorCount: Integer;
+        LocationCode: Code[100];
 }
