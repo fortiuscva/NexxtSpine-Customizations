@@ -63,7 +63,7 @@ report 52113 "NTS Create Negative Adj."
 
         DocumentNo := 'NA' + Format(Today, 0, '<Year4><Month,2><Day,2>');
         if LocationCode <> '' then
-            ILEQuery.SetRange(LocationCode, LocationCode);
+            ILEQuery.SetFilter(LocationCode, LocationCode);
         ILEQuery.Open();
         while ILEQuery.Read() do begin
 
