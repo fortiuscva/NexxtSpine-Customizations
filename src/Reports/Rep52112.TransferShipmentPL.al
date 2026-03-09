@@ -417,11 +417,12 @@ report 52112 "NTS Transfer Shipment PL"
                     trigger OnAfterGetRecord()
                     begin
                         Clear(WorkDescriptionTxt);
-                        "Transfer Shipment Header".CalcFields("NTS Work Description");
+                        /*"Transfer Shipment Header".CalcFields("NTS Work Description");
                         if "Transfer Shipment Header"."NTS Work Description".HasValue then begin
                             "Transfer Shipment Header"."NTS Work Description".CreateInStream(WorkDescInStream);
                             WorkDescInStream.ReadText(WorkDescriptionTxt);
-                        end;
+                        end; */
+                        WorkDescriptionTxt := "Transfer Shipment Header".GetWorkDescription();
                     end;
                 }
 
