@@ -18,10 +18,10 @@ codeunit 52100 "NTS Accrue Sales & Cost Mgmt."
         Month: Integer;
     begin
         SalesSetup.Get();
-        GeneralJournalLine.SetRange("Journal Template Name", SalesSetup."NTS Acc. Sale Gen. Templ. Name");
-        GeneralJournalLine.SetRange("Journal Batch Name", SalesSetup."NTS Acc. Sale Gen. Batch Name");
-        if GeneralJournalLine.FindSet() then
-            GeneralJournalLine.DeleteAll();
+        // GeneralJournalLine.SetRange("Journal Template Name", SalesSetup."NTS Acc. Sale Gen. Templ. Name");
+        // GeneralJournalLine.SetRange("Journal Batch Name", SalesSetup."NTS Acc. Sale Gen. Batch Name");
+        // if GeneralJournalLine.FindSet() then
+        //     GeneralJournalLine.DeleteAll();
         Month := Date2DMY(InputDate, 2);
         SalesLine.SetFilter("Qty. to Ship", '<>%1', 0);
         SalesLine.SetFilter("Qty. to Invoice", '<>%1', 0);
@@ -35,23 +35,30 @@ codeunit 52100 "NTS Accrue Sales & Cost Mgmt."
     procedure AccrueSalesCOGSLines(InputDate: Date)
     var
         SalesLine: Record "Sales Line";
+        SalesHeader: Record "Sales Header";
         InventorSetup: Record "Inventory Setup";
         GeneralJournalLine: Record "Gen. Journal Line";
         Month: Integer;
     begin
         InventorSetup.Get();
-        GeneralJournalLine.SetRange("Journal Template Name", InventorSetup."NTS Acc. COST Gen. Templ. Name");
-        GeneralJournalLine.SetRange("Journal Batch Name", InventorSetup."NTS Acc. Cost Gen. Batch Name");
-        if GeneralJournalLine.FindSet() then
-            GeneralJournalLine.DeleteAll();
+        // GeneralJournalLine.SetRange("Journal Template Name", InventorSetup."NTS Acc. COST Gen. Templ. Name");
+        // GeneralJournalLine.SetRange("Journal Batch Name", InventorSetup."NTS Acc. Cost Gen. Batch Name");
+        // if GeneralJournalLine.FindSet() then
+        //     GeneralJournalLine.DeleteAll();
         Month := Date2DMY(InputDate, 2);
-        SalesLine.SetFilter("Qty. to Ship", '>%1', 0);
-        SalesLine.SetFilter("Qty. to Invoice", '>%1', 0);
-        SalesLine.FindSet();
-        repeat
-            CreateAccuredSalesCostJournals(SalesLine, Format(Month), InputDate);
-            CreateAccuredSalesCostReversalJournals(SalesLine, Format(Month), CalcDate('1D', InputDate));
-        until SalesLine.Next() = 0;
+        SalesHeader.SetFilter("Document Date", '<=%1', InputDate);
+        if SalesHeader.FindSet() then
+            repeat
+                SalesLine.SetRange("Document No.", SalesHeader."No.");
+                SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                SalesLine.SetFilter("Qty. to Ship", '>%1', 0);
+                SalesLine.SetFilter("Qty. to Invoice", '>%1', 0);
+                if SalesLine.FindSet() then
+                    repeat
+                        CreateAccuredSalesCostJournals(SalesLine, Format(Month), InputDate);
+                        CreateAccuredSalesCostReversalJournals(SalesLine, Format(Month), CalcDate('1D', InputDate));
+                    until SalesLine.Next() = 0;
+            until SalesHeader.Next() = 0;
     end;
 
 

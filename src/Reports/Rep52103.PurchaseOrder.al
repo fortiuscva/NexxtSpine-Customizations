@@ -379,7 +379,7 @@ report 52103 "NTS Purchase Order"
 
                                 if ProdOrderRoutingLine.FindFirst() then
                                     DescriptionLclVar := ProdOrderRoutingLine.Description;
-                                PrintDescription_Var := ProdOrderRoutingLine.Description + ': ' + 'Part# ' + RpoItem + ', Trav# ' + RpoNo + ', Qty ' + Format(RpoQty) + ', ' + LotNoText + SerialNoText;
+                                PrintDescription_Var := ProdOrderRoutingLine.Description + ': ' + ', Trav# ' + RpoNo + ', ' + LotNoText + SerialNoText;
                             end else
                                 PrintDescription_Var := "Purchase Line".Description;
 
@@ -391,7 +391,9 @@ report 52103 "NTS Purchase Order"
                             else
                                 ItemNumberToPrint := "No.";
 
-                            VendorItemNo := "Vendor Item No.";
+                            if ItemRec.Get("No.") then;
+
+                            VendorItemNo := ItemRec."IMP Rev Level";
                             ItemNumberToPrint := "No.";
 
                             if Type = Type::" " then begin

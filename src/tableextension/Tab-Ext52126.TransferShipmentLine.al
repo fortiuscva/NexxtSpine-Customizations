@@ -66,5 +66,10 @@ tableextension 52126 "NTS Transfer Shipment Line" extends "Transfer Shipment Lin
             Caption = 'Set Lot No.';
             TableRelation = "Lot No. Information"."Lot No." where("Item No." = field("NTS Set Name"));
         }
+        field(52133; "NTS Backorder"; Boolean)
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Backorder';
+        }
     }
 }

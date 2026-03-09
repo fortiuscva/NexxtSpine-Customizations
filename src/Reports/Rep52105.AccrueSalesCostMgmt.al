@@ -11,14 +11,25 @@ report 52105 "NTS Accrue Sales Cost Mgmt"
             DataItemTableView = SORTING(Number) ORDER(Ascending) WHERE(Number = CONST(1));
             MaxIteration = 1;
             trigger OnPreDataItem()
+            var
+                SalesSetup: Record "Sales & Receivables Setup";
+                GeneralJournalLine: Record "Gen. Journal Line";
             begin
                 if InputDate = 0D then
                     Error(BlankInputErr);
+
+                SalesSetup.Get();
+                GeneralJournalLine.SetRange("Journal Template Name", SalesSetup."NTS Acc. Sale Gen. Templ. Name");
+                GeneralJournalLine.SetRange("Journal Batch Name", SalesSetup."NTS Acc. Sale Gen. Batch Name");
+                if GeneralJournalLine.FindSet() then
+                    GeneralJournalLine.DeleteAll();
+
                 GLEntry.SetRange(GLEntry."NTS Accured Posting Year", Date2DMY(InputDate, 3));
                 GLEntry.SetRange(GLEntry."NTS Accured Posting Month", FORMAT(InputDate, 0, '<Month Text>'));
                 GLEntry.SetRange("NTS Revenue Reversal", false);
                 if not GLEntry.IsEmpty then
                     Error('Posting has alredy been done, please check G/L Entries');
+
                 AccureSalesCost.AccrueSalesCOGSLines(InputDate);
                 AccureSalesCost.AccrueSalesRevenueLines(InputDate);
             end;
@@ -46,7 +57,7 @@ report 52105 "NTS Accrue Sales Cost Mgmt"
                         trigger OnValidate()
 
                         begin
-                            InputDate := CalcDate('<CM>', WorkDate());
+                            // InputDate := CalcDate('<CM>', WorkDate());
                         end;
                     }
 
