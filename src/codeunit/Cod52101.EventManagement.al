@@ -327,6 +327,12 @@ codeunit 52101 "NTS Event Management"
 
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post Line", OnBeforeCheckSerialNo, '', false, false)]
+    local procedure "Item Jnl.-Post Line_OnBeforeCheckSerialNo"(ItemJournalLine: Record "Item Journal Line"; var IsHandled: Boolean)
+    begin
+        IsHandled := true;
+    end;
+
     local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin
         if PurchLine."Document Type" <> PurchLine."Document Type"::Order then
@@ -405,6 +411,13 @@ codeunit 52101 "NTS Event Management"
             ProdOrderLine."NTS Expiration Date" := NewExpDate;
             ProdOrderLine.Modify();
         end;
+    end;
+
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Reservation Management", OnBeforeCheckQuantityIsCompletelyReleased, '', false, false)]
+    local procedure "Reservation Management_OnBeforeCheckQuantityIsCompletelyReleased"(ItemTrackingHandling: Option; QtyToRelease: Decimal; DeleteAll: Boolean; CurrentItemTrackingSetup: Record "Item Tracking Setup" temporary; ReservEntry: Record "Reservation Entry"; var IsHandled: Boolean)
+    begin
+        IsHandled := true;
     end;
 
     var
