@@ -58,15 +58,16 @@ report 52113 "NTS Create Negative Adj."
     trigger OnPostReport()
     var
         ILEQuery: Query "NTS ILE Grouped";
+        Item: Record Item;
     begin
         EnsureBatchExists();
-
+        GetNextLineNo();
         DocumentNo := 'NA' + Format(Today, 0, '<Year4><Month,2><Day,2>');
         if LocationCode <> '' then
             ILEQuery.SetFilter(LocationCode, LocationCode);
         ILEQuery.Open();
         while ILEQuery.Read() do begin
-
+            Item.get(ILEQuery.ItemNo);
             if not TryCreateNegativeAdjustment(
                 ILEQuery.ItemNo,
                 ILEQuery.LocationCode,
@@ -74,9 +75,9 @@ report 52113 "NTS Create Negative Adj."
                 ILEQuery.LotNo,
                 ILEQuery.SerialNo,
                 ILEQuery.RemainingQty,
-                ILEQuery.UOM,
-                ILEQuery.Dim1,
-                ILEQuery.Dim2,
+                Item."Base Unit of Measure",
+                // ILEQuery.Dim1,
+                // ILEQuery.Dim2,
                 ILEQuery.ExpirationDate)
             then
                 ErrorCount += 1;
@@ -101,19 +102,17 @@ report 52113 "NTS Create Negative Adj."
         SerialNo: Code[50];
         Qty: Decimal;
         UOM: Code[10];
-        Dim1: Code[20];
-        Dim2: Code[20];
+        // Dim1: Code[20];
+        // Dim2: Code[20];
         ExpDate: Date)
     begin
 
-
-        GetNextLineNo();
+        NextLineNo += 10000;
 
         ItemJnlLine.Init();
         ItemJnlLine.Validate("Journal Template Name", JournalTemplateName);
         ItemJnlLine.Validate("Journal Batch Name", JournalBatchName);
         ItemJnlLine."Line No." := NextLineNo;
-
         ItemJnlLine.Insert(true);
 
         ItemJnlLine.Validate("Entry Type", ItemJnlLine."Entry Type"::"Negative Adjmt.");
@@ -122,12 +121,10 @@ report 52113 "NTS Create Negative Adj."
         ItemJnlLine.Validate("Variant Code", VariantCode);
         ItemJnlLine.Validate("Location Code", LocationCode);
         ItemJnlLine.Validate("Posting Date", Today);
-
         ItemJnlLine.Validate(Quantity, Qty);
         ItemJnlLine.Validate("Unit of Measure Code", UOM);
-
-        ItemJnlLine.Validate("Shortcut Dimension 1 Code", Dim1);
-        ItemJnlLine.Validate("Shortcut Dimension 2 Code", Dim2);
+        // ItemJnlLine.Validate("Shortcut Dimension 1 Code", Dim1);
+        // ItemJnlLine.Validate("Shortcut Dimension 2 Code", Dim2);
 
         ItemJnlLine.Modify(true);
 
@@ -191,14 +188,12 @@ report 52113 "NTS Create Negative Adj."
 
     local procedure GetNextLineNo()
     begin
+        NextLineNo := 0;
         ItemJnlLine.Reset();
         ItemJnlLine.SetRange("Journal Template Name", JournalTemplateName);
         ItemJnlLine.SetRange("Journal Batch Name", JournalBatchName);
-
         if ItemJnlLine.FindLast() then
-            NextLineNo := ItemJnlLine."Line No." + 10000
-        else
-            NextLineNo := 10000;
+            NextLineNo := ItemJnlLine."Line No.";
     end;
 
 
