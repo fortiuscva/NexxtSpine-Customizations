@@ -1,14 +1,10 @@
-pageextension 52103 "NTS Posted Sales Invoice Ext" extends "Posted Sales Invoice"
+pageextension 52135 "NTS Posted Sales Shipment" extends "Posted Sales Shipment"
 {
     layout
     {
-        addafter("Order No.")
+        addlast(General)
         {
-            field("NTS Requested Delivery Date"; Rec."NTS Requested Delivery Date")
-            {
-                ToolTip = 'Requested Delivery Date';
-                ApplicationArea = all;
-            }
+
             field("NTS Surgeon"; Rec."NTS Surgeon")
             {
                 ApplicationArea = All;

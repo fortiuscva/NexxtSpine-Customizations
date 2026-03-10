@@ -7,7 +7,7 @@ pageextension 52111 "NTS Sales Invoice" extends "Sales Invoice"
             group("NTS DORDetails")
             {
                 Caption = 'Deliver of Record';
-                Visible = false;
+                // Visible = false;
                 field("NTS Surgeon"; Rec."NTS Surgeon")
                 {
                     ApplicationArea = All;
@@ -27,6 +27,7 @@ pageextension 52111 "NTS Sales Invoice" extends "Sales Invoice"
                 {
                     ApplicationArea = all;
                     Caption = 'Sales Type';
+                    Visible = false;
                 }
             }
         }
