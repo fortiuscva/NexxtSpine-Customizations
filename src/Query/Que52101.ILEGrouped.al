@@ -16,18 +16,15 @@ query 52101 "NTS ILE Grouped"
             column(VariantCode; "Variant Code") { }
             column(LotNo; "Lot No.") { }
             column(SerialNo; "Serial No.") { }
-
+            column(ExpirationDate; "Expiration Date") { }
             column(RemainingQty; "Remaining Quantity")
             {
                 Method = Sum;
             }
+            // column(UOM; "Unit of Measure Code") { }
 
-            column(UOM; "Unit of Measure Code") { }
-
-            column(Dim1; "Global Dimension 1 Code") { }
-            column(Dim2; "Global Dimension 2 Code") { }
-
-            column(ExpirationDate; "Expiration Date") { }
+            // column(Dim1; "Global Dimension 1 Code") { }
+            // column(Dim2; "Global Dimension 2 Code") { }
         }
     }
 }
