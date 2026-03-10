@@ -171,6 +171,12 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     SalesHeader.Insert(true);
                     SalesHeader.Validate("Sell-to Customer No.", SelectedDoRHeaders."Customer No.");
                     SalesHeader.Validate("Location Code", SelectedDoRHeaders."Location Code");
+                    SalesHeader.Validate("NTS Surgeon", SelectedDoRHeaders.Surgeon);
+                    SalesHeader.Validate("Document Date", SelectedDoRHeaders."Surgery Date");
+                    SalesHeader.Validate("NTS Distributor", SelectedDoRHeaders.Distributor);
+                    SalesHeader.Validate("NTS Reps.", SelectedDoRHeaders."Reps.");
+                    SalesHeader.Validate("NTS Reps. Name", SelectedDoRHeaders."Reps. Name");
+
                     SalesHeader.Modify(true);
 
                     SalesOrderCreated := true;
