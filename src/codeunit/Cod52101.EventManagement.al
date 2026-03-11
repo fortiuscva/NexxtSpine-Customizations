@@ -334,18 +334,12 @@ codeunit 52101 "NTS Event Management"
         IsHandled := true;
     end;
 
-    [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnAfterAssignNewTrackingNo, '', false, false)]
-    local procedure "Item Tracking Lines_OnAfterAssignNewTrackingNo"(var TrkgSpec: Record "Tracking Specification"; xTrkgSpec: Record "Tracking Specification"; FieldID: Integer; var SourceTrackingSpecification: Record "Tracking Specification")
-    var
-        ItemRec: Record Item;
-        ItemTrackingCodeRec: Record "Item Tracking Code";
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnPostOnBeforePostedAssemblyHeaderInsert, '', false, false)]
+    local procedure "Assembly-Post_OnPostOnBeforePostedAssemblyHeaderInsert"(AssemblyHeader: Record "Assembly Header"; var PostedAssemblyHeader: Record "Posted Assembly Header")
     begin
-        ItemRec.Get(TrkgSpec."Item No.");
-        ItemTrackingCodeRec.Get(ItemRec."Item Tracking Code");
-        if ItemTrackingCodeRec."NTS Add Revision" and (ItemTrackingCodeRec.code = 'LOT') or (ItemTrackingCodeRec.Code = 'LOT-SP') then
-            TrkgSpec."Lot No." := TrkgSpec."Lot No." + ItemRec."IMP Rev Level";
+        AssemblyHeader.CalcFields("NTS Work Description");
+        PostedAssemblyHeader."NTS Work Description" := AssemblyHeader."NTS Work Description";
     end;
-
 
     local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin

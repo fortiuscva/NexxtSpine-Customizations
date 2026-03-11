@@ -14,6 +14,13 @@ pageextension 52124 "NTS Posted Assembly Order" extends "Posted Assembly Order"
                 DrillDown = true;
                 ToolTip = 'Indicates if comments exist. Click to view or add comments.';
             }
+            field("NTS Work Description"; Rec.GetWorkDescription())
+            {
+                ApplicationArea = All;
+                MultiLine = true;
+                Editable = false;
+                ToolTip = 'Specifies the value of the Work Description field.', Comment = '%';
+            }
         }
     }
 }
