@@ -334,6 +334,53 @@ codeunit 52101 "NTS Event Management"
         IsHandled := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnAfterPost, '', false, false)]
+    local procedure "Assembly-Post_OnAfterPost"(var AssemblyHeader: Record "Assembly Header"; var AssemblyLine: Record "Assembly Line"; PostedAssemblyHeader: Record "Posted Assembly Header"; var ItemJnlPostLine: Codeunit "Item Jnl.-Post Line"; var ResJnlPostLine: Codeunit "Res. Jnl.-Post Line"; var WhseJnlRegisterLine: Codeunit "Whse. Jnl.-Register Line")
+    begin
+        // AssemblyHeader.CalcFields("NTS Work Description");
+        // PostedAssemblyHeader."NTS Work Description" := AssemblyHeader."NTS Work Description";
+        // Error('A)%1', PostedAssemblyHeader."NTS Work Description");
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnPostOnBeforePostedAssemblyHeaderInsert, '', false, false)]
+    local procedure "Assembly-Post_OnPostOnBeforePostedAssemblyHeaderInsert"(AssemblyHeader: Record "Assembly Header"; var PostedAssemblyHeader: Record "Posted Assembly Header")
+    var
+
+        inS: InStream;
+        outS: OutStream;
+        WorkDescription: Text;
+        AssemblyHeaderRec: Record "Assembly Header";
+        TempBlob: Codeunit "Temp Blob";
+    begin
+        // AssemblyHeader.Get(AssemblyHeader."Document Type", AssemblyHeader."No.");
+        // if AssemblyHeader."NTS Work Description".HasValue then begin
+
+        //     //Read source blob
+        //     AssemblyHeader."NTS Work Description".CreateInStream(InS);
+
+        //     //Store in TempBlob
+        //     TempBlob.CreateOutStream(OutS);
+        //     CopyStream(OutS, InS);
+
+        //     //Write to destination blob
+        //     TempBlob.CreateInStream(InS);
+        //     PostedAssemblyHeader."NTS Work Description".CreateOutStream(OutS);
+        //     CopyStream(OutS, InS);
+        //     InS.ReadText(WorkDescription);
+        if AssemblyHeaderRec.Get(AssemblyHeader."Document Type", AssemblyHeader."No.") then begin
+
+            AssemblyHeaderRec.CalcFields("NTS Work Description");
+            if AssemblyHeaderRec."NTS Work Description".HasValue then begin
+                AssemblyHeaderRec."NTS Work Description".CreateInStream(InS);
+                PostedAssemblyHeader."NTS Work Description".CreateOutStream(OutS);
+                CopyStream(OutS, InS);
+                InS.ReadText(WorkDescription);
+            end;
+        end;
+        Message('WorkDescription:%1', WorkDescription);
+        Message('A)%1 B)%2', PostedAssemblyHeader."NTS Work Description", AssemblyHeader."NTS Work Description");
+    end;
+    // end;
     local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin
         if PurchLine."Document Type" <> PurchLine."Document Type"::Order then
