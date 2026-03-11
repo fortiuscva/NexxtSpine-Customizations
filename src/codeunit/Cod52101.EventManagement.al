@@ -377,9 +377,9 @@ codeunit 52101 "NTS Event Management"
     local procedure OnAfterOnClosePage(
      var TrackingSpecification: Record "Tracking Specification";
      CurrentRunMode: Enum "Item Tracking Run Mode";
-     CurrentSourceType: Integer;
-     CurrentSourceRowID: Text[250];
-     SecondSourceRowID: Text[250])
+                         CurrentSourceType: Integer;
+                         CurrentSourceRowID: Text[250];
+                         SecondSourceRowID: Text[250])
     var
         Reserv: Record "Reservation Entry";
         ProdOrderLine: Record "Prod. Order Line";

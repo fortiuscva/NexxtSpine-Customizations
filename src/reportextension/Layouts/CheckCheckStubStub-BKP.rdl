@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
   <am:AuthoringMetadata>
     <am:CreatedBy>
@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-03-10T15:06:56.8644299Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-02-13T13:24:59.9189658Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -24,6 +24,10 @@
   </DataSources>
   <DataSets>
     <DataSet Name="DataSet_Result">
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
       <Fields>
         <Field Name="GenJnlLine_Journal_Template_Name">
           <DataField>GenJnlLine_Journal_Template_Name</DataField>
@@ -608,10 +612,6 @@
           <DataField>NTSCheckAmountText</DataField>
         </Field>
       </Fields>
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
     </DataSet>
   </DataSets>
   <ReportSections>
@@ -1454,14 +1454,14 @@
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Right</TextAlign>
+                    <TextAlign>Left</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.85076in</Top>
-              <Left>5.61171in</Left>
+              <Top>0.90076in</Top>
+              <Left>4.27217in</Left>
               <Height>0.16654in</Height>
-              <Width>1.99473in</Width>
+              <Width>1.89509in</Width>
               <ZIndex>3</ZIndex>
               <DataElementOutput>NoOutput</DataElementOutput>
               <Style>
@@ -1488,7 +1488,7 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.18826in</Top>
+              <Top>1.23826in</Top>
               <Left>5.61171in</Left>
               <Height>0.16654in</Height>
               <Width>1.97374in</Width>
@@ -1544,8 +1544,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.36359in</Top>
-              <Left>0.90199in</Left>
+              <Top>2.11359in</Top>
+              <Left>0.65199in</Left>
               <Height>0.16654in</Height>
               <Width>6.77953in</Width>
               <ZIndex>6</ZIndex>
@@ -1571,10 +1571,10 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.07576in</Top>
-              <Left>0.86006in</Left>
+              <Top>1.22576in</Top>
+              <Left>0.61006in</Left>
               <Height>0.16654in</Height>
-              <Width>3.64698in</Width>
+              <Width>2.48031in</Width>
               <ZIndex>7</ZIndex>
               <Style />
             </Textbox>
@@ -1593,8 +1593,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.04233in</Top>
-              <Left>0.91006in</Left>
+              <Top>1.39233in</Top>
+              <Left>0.61006in</Left>
               <Height>0.16654in</Height>
               <Width>2.48031in</Width>
               <ZIndex>8</ZIndex>
@@ -1615,8 +1615,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.20887in</Top>
-              <Left>0.91006in</Left>
+              <Top>1.55887in</Top>
+              <Left>0.61006in</Left>
               <Height>0.16654in</Height>
               <Width>2.48031in</Width>
               <ZIndex>9</ZIndex>
@@ -1637,8 +1637,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.37543in</Top>
-              <Left>0.91006in</Left>
+              <Top>1.72543in</Top>
+              <Left>0.61006in</Left>
               <Height>0.16654in</Height>
               <Width>2.48031in</Width>
               <ZIndex>10</ZIndex>
@@ -1659,8 +1659,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.542in</Top>
-              <Left>0.91006in</Left>
+              <Top>1.892in</Top>
+              <Left>0.61006in</Left>
               <Height>0.16353in</Height>
               <Width>0.79895in</Width>
               <ZIndex>11</ZIndex>
@@ -1839,8 +1839,8 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.53013in</Top>
-              <Left>0.90306in</Left>
+              <Top>2.28013in</Top>
+              <Left>0.65306in</Left>
               <Height>0.16654in</Height>
               <Width>6.77953in</Width>
               <ZIndex>18</ZIndex>
@@ -2053,33 +2053,11 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.542in</Top>
-              <Left>1.70901in</Left>
+              <Top>1.892in</Top>
+              <Left>1.40901in</Left>
               <Height>0.16353in</Height>
               <Width>1.68864in</Width>
               <ZIndex>25</ZIndex>
-              <Style />
-            </Textbox>
-            <Textbox Name="textbox105">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Cstr(Choose(101,Split(Cstr(ReportItems!FooterInfo.Value), Chr(177))))</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Left</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>1.86597in</Top>
-              <Left>0.91284in</Left>
-              <Height>0.16654in</Height>
-              <Width>3.64698in</Width>
-              <ZIndex>26</ZIndex>
               <Style />
             </Textbox>
           </ReportItems>
@@ -3963,6 +3941,12 @@
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
