@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-03-05T12:45:00.0719106Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-03-10T15:47:06.1135345Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -22,6 +22,361 @@
       <rd:DataSourceID>53223861-a5ec-4453-be3b-5302f083f9d6</rd:DataSourceID>
     </DataSource>
   </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+      <Fields>
+        <Field Name="No_TransferShptHeader">
+          <DataField>No_TransferShptHeader</DataField>
+        </Field>
+        <Field Name="Lot_Serial_Caption">
+          <DataField>Lot_Serial_Caption</DataField>
+        </Field>
+        <Field Name="Invoice_Caption">
+          <DataField>Invoice_Caption</DataField>
+        </Field>
+        <Field Name="InvoiceNumberValue">
+          <DataField>InvoiceNumberValue</DataField>
+        </Field>
+        <Field Name="Terms_Caption">
+          <DataField>Terms_Caption</DataField>
+        </Field>
+        <Field Name="Payment_Terms_Code">
+          <DataField>Payment_Terms_Code</DataField>
+        </Field>
+        <Field Name="PTN_Caption">
+          <DataField>PTN_Caption</DataField>
+        </Field>
+        <Field Name="ExtDocNo_SalesShptHeader">
+          <DataField>ExtDocNo_SalesShptHeader</DataField>
+        </Field>
+        <Field Name="OrderDate_SalesShptHeader">
+          <DataField>OrderDate_SalesShptHeader</DataField>
+        </Field>
+        <Field Name="OrderNo_SalesShptHeader">
+          <DataField>OrderNo_SalesShptHeader</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="PTNValue">
+          <DataField>PTNValue</DataField>
+        </Field>
+        <Field Name="Tracking_Caption">
+          <DataField>Tracking_Caption</DataField>
+        </Field>
+        <Field Name="Package_Tracking_No_">
+          <DataField>Package_Tracking_No_</DataField>
+        </Field>
+        <Field Name="Sched_Date_Caption">
+          <DataField>Sched_Date_Caption</DataField>
+        </Field>
+        <Field Name="Shipment_Date">
+          <DataField>Shipment_Date</DataField>
+        </Field>
+        <Field Name="Completed_By_Caption">
+          <DataField>Completed_By_Caption</DataField>
+        </Field>
+        <Field Name="Checked_By_Caption">
+          <DataField>Checked_By_Caption</DataField>
+        </Field>
+        <Field Name="Print_Date_Caption">
+          <DataField>Print_Date_Caption</DataField>
+        </Field>
+        <Field Name="Verified_Caption">
+          <DataField>Verified_Caption</DataField>
+        </Field>
+        <Field Name="SSH_SellToContact">
+          <DataField>SSH_SellToContact</DataField>
+        </Field>
+        <Field Name="SSH_ReqDeliveryDate">
+          <DataField>SSH_ReqDeliveryDate</DataField>
+        </Field>
+        <Field Name="SSH_PostingDate">
+          <DataField>SSH_PostingDate</DataField>
+        </Field>
+        <Field Name="SSH_LocationCode">
+          <DataField>SSH_LocationCode</DataField>
+        </Field>
+        <Field Name="Comment_SalesCommentLine">
+          <DataField>Comment_SalesCommentLine</DataField>
+        </Field>
+        <Field Name="CompanyInfo2Picture">
+          <DataField>CompanyInfo2Picture</DataField>
+        </Field>
+        <Field Name="CompanyInfo1Picture">
+          <DataField>CompanyInfo1Picture</DataField>
+        </Field>
+        <Field Name="CompanyInfoPicture">
+          <DataField>CompanyInfoPicture</DataField>
+        </Field>
+        <Field Name="CompanyAddress1">
+          <DataField>CompanyAddress1</DataField>
+        </Field>
+        <Field Name="CompanyAddress2">
+          <DataField>CompanyAddress2</DataField>
+        </Field>
+        <Field Name="CompanyAddress3">
+          <DataField>CompanyAddress3</DataField>
+        </Field>
+        <Field Name="CompanyAddress4">
+          <DataField>CompanyAddress4</DataField>
+        </Field>
+        <Field Name="CompanyAddress5">
+          <DataField>CompanyAddress5</DataField>
+        </Field>
+        <Field Name="CompanyAddress6">
+          <DataField>CompanyAddress6</DataField>
+        </Field>
+        <Field Name="CompanyAddress7">
+          <DataField>CompanyAddress7</DataField>
+        </Field>
+        <Field Name="CompanyAddress8">
+          <DataField>CompanyAddress8</DataField>
+        </Field>
+        <Field Name="CopyTxt">
+          <DataField>CopyTxt</DataField>
+        </Field>
+        <Field Name="BillToAddress1">
+          <DataField>BillToAddress1</DataField>
+        </Field>
+        <Field Name="BillToAddress2">
+          <DataField>BillToAddress2</DataField>
+        </Field>
+        <Field Name="BillToAddress3">
+          <DataField>BillToAddress3</DataField>
+        </Field>
+        <Field Name="BillToAddress4">
+          <DataField>BillToAddress4</DataField>
+        </Field>
+        <Field Name="BillToAddress5">
+          <DataField>BillToAddress5</DataField>
+        </Field>
+        <Field Name="BillToAddress6">
+          <DataField>BillToAddress6</DataField>
+        </Field>
+        <Field Name="BillToAddress7">
+          <DataField>BillToAddress7</DataField>
+        </Field>
+        <Field Name="ShipToAddress1">
+          <DataField>ShipToAddress1</DataField>
+        </Field>
+        <Field Name="ShipToAddress2">
+          <DataField>ShipToAddress2</DataField>
+        </Field>
+        <Field Name="ShipToAddress3">
+          <DataField>ShipToAddress3</DataField>
+        </Field>
+        <Field Name="ShipToAddress4">
+          <DataField>ShipToAddress4</DataField>
+        </Field>
+        <Field Name="ShipToAddress5">
+          <DataField>ShipToAddress5</DataField>
+        </Field>
+        <Field Name="ShipToAddress6">
+          <DataField>ShipToAddress6</DataField>
+        </Field>
+        <Field Name="ShipToAddress7">
+          <DataField>ShipToAddress7</DataField>
+        </Field>
+        <Field Name="BillToAddress8">
+          <DataField>BillToAddress8</DataField>
+        </Field>
+        <Field Name="ShipToAddress8">
+          <DataField>ShipToAddress8</DataField>
+        </Field>
+        <Field Name="BilltoCustNo_SalesShptHeader">
+          <DataField>BilltoCustNo_SalesShptHeader</DataField>
+        </Field>
+        <Field Name="ExtDocNo_TransferShptHeader">
+          <DataField>ExtDocNo_TransferShptHeader</DataField>
+        </Field>
+        <Field Name="SalesPurchPersonName">
+          <DataField>SalesPurchPersonName</DataField>
+        </Field>
+        <Field Name="ShptDate_SalesShptHeader">
+          <DataField>ShptDate_SalesShptHeader</DataField>
+        </Field>
+        <Field Name="ShipmentMethodDesc">
+          <DataField>ShipmentMethodDesc</DataField>
+        </Field>
+        <Field Name="OrderDate_TransferShptHeader">
+          <DataField>OrderDate_TransferShptHeader</DataField>
+        </Field>
+        <Field Name="TransferOrderNo_TransferShptHeader">
+          <DataField>TransferOrderNo_TransferShptHeader</DataField>
+        </Field>
+        <Field Name="PackageTrackingNoText">
+          <DataField>PackageTrackingNoText</DataField>
+        </Field>
+        <Field Name="ShippingAgentCodeText">
+          <DataField>ShippingAgentCodeText</DataField>
+        </Field>
+        <Field Name="ShippingAgentCodeLabel">
+          <DataField>ShippingAgentCodeLabel</DataField>
+        </Field>
+        <Field Name="PackageTrackingNoLabel">
+          <DataField>PackageTrackingNoLabel</DataField>
+        </Field>
+        <Field Name="TaxRegNo">
+          <DataField>TaxRegNo</DataField>
+        </Field>
+        <Field Name="TaxRegLabel">
+          <DataField>TaxRegLabel</DataField>
+        </Field>
+        <Field Name="CopyNo">
+          <DataField>CopyNo</DataField>
+        </Field>
+        <Field Name="PageLoopNumber">
+          <DataField>PageLoopNumber</DataField>
+        </Field>
+        <Field Name="BillCaption">
+          <DataField>BillCaption</DataField>
+        </Field>
+        <Field Name="ToCaption">
+          <DataField>ToCaption</DataField>
+        </Field>
+        <Field Name="CustomerIDCaption">
+          <DataField>CustomerIDCaption</DataField>
+        </Field>
+        <Field Name="PONumberCaption">
+          <DataField>PONumberCaption</DataField>
+        </Field>
+        <Field Name="SalesPersonCaption">
+          <DataField>SalesPersonCaption</DataField>
+        </Field>
+        <Field Name="ShipCaption">
+          <DataField>ShipCaption</DataField>
+        </Field>
+        <Field Name="ShipmentCaption">
+          <DataField>ShipmentCaption</DataField>
+        </Field>
+        <Field Name="ShipmentNumberCaption">
+          <DataField>ShipmentNumberCaption</DataField>
+        </Field>
+        <Field Name="ShipmentDateCaption">
+          <DataField>ShipmentDateCaption</DataField>
+        </Field>
+        <Field Name="PageCaption">
+          <DataField>PageCaption</DataField>
+        </Field>
+        <Field Name="ShipViaCaption">
+          <DataField>ShipViaCaption</DataField>
+        </Field>
+        <Field Name="PODateCaption">
+          <DataField>PODateCaption</DataField>
+        </Field>
+        <Field Name="OurOrderNoCaption">
+          <DataField>OurOrderNoCaption</DataField>
+        </Field>
+        <Field Name="DocLine_SalesCommentLine">
+          <DataField>DocLine_SalesCommentLine</DataField>
+        </Field>
+        <Field Name="Date_InventoryCommentLine">
+          <DataField>Date_InventoryCommentLine</DataField>
+        </Field>
+        <Field Name="SalesShptLineNumber">
+          <DataField>SalesShptLineNumber</DataField>
+        </Field>
+        <Field Name="TempSalesShptLineNo">
+          <DataField>TempSalesShptLineNo</DataField>
+        </Field>
+        <Field Name="TempTransferShptLineNo">
+          <DataField>TempTransferShptLineNo</DataField>
+        </Field>
+        <Field Name="TempTransferShipmentLine_PackageTrackingNo">
+          <DataField>TempTransferShipmentLine_PackageTrackingNo</DataField>
+        </Field>
+        <Field Name="TempTransferShptLineUOM">
+          <DataField>TempTransferShptLineUOM</DataField>
+        </Field>
+        <Field Name="TempSalesShptLineQy">
+          <DataField>TempSalesShptLineQy</DataField>
+        </Field>
+        <Field Name="TempSalesShptLineQyFormat">
+          <DataField>TempSalesShptLineQyFormat</DataField>
+        </Field>
+        <Field Name="OrderedQuantity">
+          <DataField>OrderedQuantity</DataField>
+        </Field>
+        <Field Name="OrderedQuantityFormat">
+          <DataField>OrderedQuantityFormat</DataField>
+        </Field>
+        <Field Name="BackOrderedQuantity">
+          <DataField>BackOrderedQuantity</DataField>
+        </Field>
+        <Field Name="BackOrderedQuantityFormat">
+          <DataField>BackOrderedQuantityFormat</DataField>
+        </Field>
+        <Field Name="TempSalesShptLineDesc">
+          <DataField>TempSalesShptLineDesc</DataField>
+        </Field>
+        <Field Name="PackageTrackingText">
+          <DataField>PackageTrackingText</DataField>
+        </Field>
+        <Field Name="AsmHeaderExists">
+          <DataField>AsmHeaderExists</DataField>
+        </Field>
+        <Field Name="PrintFooter">
+          <DataField>PrintFooter</DataField>
+        </Field>
+        <Field Name="ItemNoCaption">
+          <DataField>ItemNoCaption</DataField>
+        </Field>
+        <Field Name="UnitCaption">
+          <DataField>UnitCaption</DataField>
+        </Field>
+        <Field Name="ShippedCaption">
+          <DataField>ShippedCaption</DataField>
+        </Field>
+        <Field Name="OrderedCaption">
+          <DataField>OrderedCaption</DataField>
+        </Field>
+        <Field Name="BackOrderedCaption">
+          <DataField>BackOrderedCaption</DataField>
+        </Field>
+        <Field Name="LineCount">
+          <DataField>LineCount</DataField>
+        </Field>
+        <Field Name="SerialLotNo">
+          <DataField>SerialLotNo</DataField>
+        </Field>
+        <Field Name="TempItemLedgEntry_ItemNo">
+          <DataField>TempItemLedgEntry_ItemNo</DataField>
+        </Field>
+        <Field Name="TempItemLedgEntry_LotNo">
+          <DataField>TempItemLedgEntry_LotNo</DataField>
+        </Field>
+        <Field Name="Tracking_Number">
+          <DataField>Tracking_Number</DataField>
+        </Field>
+        <Field Name="TempTrackingSpecBuffer_Qty">
+          <DataField>TempTrackingSpecBuffer_Qty</DataField>
+        </Field>
+        <Field Name="TempTrackingSpecBuffer_QtyFormat">
+          <DataField>TempTrackingSpecBuffer_QtyFormat</DataField>
+        </Field>
+        <Field Name="ExpirationDate">
+          <DataField>ExpirationDate</DataField>
+        </Field>
+        <Field Name="PostedAsmLineItemNo">
+          <DataField>PostedAsmLineItemNo</DataField>
+        </Field>
+        <Field Name="PostedAsmLineDescription">
+          <DataField>PostedAsmLineDescription</DataField>
+        </Field>
+        <Field Name="PostedAsmLineQuantity">
+          <DataField>PostedAsmLineQuantity</DataField>
+        </Field>
+        <Field Name="PostedAsmLineUOMCode">
+          <DataField>PostedAsmLineUOMCode</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -30,7 +385,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>17.9212cm</Width>
+                  <Width>18.30091cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -51,16 +406,16 @@
                                     <Width>2.36445cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.98371cm</Width>
-                                  </TablixColumn>
-                                  <TablixColumn>
                                     <Width>5.79417cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.5cm</Width>
+                                    <Width>1.98371cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.604cm</Width>
+                                    <Width>1.98371cm</Width>
+                                  </TablixColumn>
+                                  <TablixColumn>
+                                    <Width>2.5cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
                                     <Width>2.5cm</Width>
@@ -215,6 +570,35 @@ Cstr(Fields!SSH_PostingDate.Value)
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
+                                          <Textbox Name="Textbox14">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value />
+                                                    <Style>
+                                                      <FontFamily>Segoe UI</FontFamily>
+                                                      <FontSize>8pt</FontSize>
+                                                      <Color>#ff0000</Color>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style />
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>Textbox14</rd:DefaultName>
+                                            <Style>
+                                              <VerticalAlign>Bottom</VerticalAlign>
+                                              <PaddingLeft>5pt</PaddingLeft>
+                                              <PaddingRight>5pt</PaddingRight>
+                                            </Style>
+                                          </Textbox>
+                                        </CellContents>
+                                      </TablixCell>
+                                      <TablixCell>
+                                        <CellContents>
                                           <Textbox Name="Textbox9">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
@@ -296,42 +680,6 @@ Cstr(Fields!SSH_PostingDate.Value)
                                               <VerticalAlign>Bottom</VerticalAlign>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
-                                          <Textbox Name="Textbox99">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value />
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                      <FontWeight>Bold</FontWeight>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style>
-                                                  <TextAlign>Right</TextAlign>
-                                                </Style>
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>Textbox99</rd:DefaultName>
-                                            <Style>
-                                              <Border>
-                                                <Style>None</Style>
-                                              </Border>
-                                              <VerticalAlign>Bottom</VerticalAlign>
-                                              <PaddingLeft>2pt</PaddingLeft>
-                                              <PaddingRight>2pt</PaddingRight>
-                                              <PaddingTop>2pt</PaddingTop>
-                                              <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
                                         </CellContents>
@@ -445,42 +793,6 @@ Item</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="textbox39">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value>Qty Ordered</Value>
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                      <FontWeight>Bold</FontWeight>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style>
-                                                  <TextAlign>Right</TextAlign>
-                                                </Style>
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <ZIndex>18</ZIndex>
-                                            <Style>
-                                              <Border>
-                                                <Style>None</Style>
-                                              </Border>
-                                              <VerticalAlign>Bottom</VerticalAlign>
-                                              <PaddingLeft>2pt</PaddingLeft>
-                                              <PaddingRight>2pt</PaddingRight>
-                                              <PaddingTop>2pt</PaddingTop>
-                                              <PaddingBottom>2pt</PaddingBottom>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
                                           <Textbox Name="textbox34">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
@@ -517,14 +829,14 @@ Item</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="Textbox26">
+                                          <Textbox Name="textbox39">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!Lot_Serial_Caption.Value</Value>
+                                                    <Value>Qty Ordered</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -532,12 +844,17 @@ Item</Value>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
-                                                <Style />
+                                                <Style>
+                                                  <TextAlign>Right</TextAlign>
+                                                </Style>
                                               </Paragraph>
                                             </Paragraphs>
-                                            <rd:DefaultName>Textbox26</rd:DefaultName>
+                                            <ZIndex>18</ZIndex>
                                             <Style>
-                                              <Border />
+                                              <Border>
+                                                <Style>None</Style>
+                                              </Border>
+                                              <VerticalAlign>Bottom</VerticalAlign>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -575,6 +892,37 @@ Item</Value>
                                               </Border>
                                               <VerticalAlign>Bottom</VerticalAlign>
                                               <PaddingLeft>2pt</PaddingLeft>
+                                              <PaddingRight>2pt</PaddingRight>
+                                              <PaddingTop>2pt</PaddingTop>
+                                              <PaddingBottom>2pt</PaddingBottom>
+                                            </Style>
+                                          </Textbox>
+                                        </CellContents>
+                                      </TablixCell>
+                                      <TablixCell>
+                                        <CellContents>
+                                          <Textbox Name="Textbox26">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>=Fields!Lot_Serial_Caption.Value</Value>
+                                                    <Style>
+                                                      <FontFamily>Segoe UI</FontFamily>
+                                                      <FontSize>8pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style />
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>Textbox26</rd:DefaultName>
+                                            <Style>
+                                              <Border />
+                                              <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
                                               <PaddingBottom>2pt</PaddingBottom>
@@ -684,38 +1032,6 @@ Item</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="Textbox154">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value>=Fields!TempTrackingSpecBuffer_Qty.Value</Value>
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                    </Style>
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style>
-                                                  <TextAlign>Right</TextAlign>
-                                                </Style>
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>Textbox147</rd:DefaultName>
-                                            <Style>
-                                              <Border>
-                                                <Style>None</Style>
-                                              </Border>
-                                              <PaddingLeft>5pt</PaddingLeft>
-                                              <PaddingRight>15pt</PaddingRight>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
                                           <Textbox Name="Textbox25">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
@@ -746,30 +1062,32 @@ Item</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="Textbox59">
+                                          <Textbox Name="Textbox154">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!TempItemLedgEntry_LotNo.Value</Value>
+                                                    <Value>=Fields!TempTrackingSpecBuffer_Qty.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
-                                                <Style />
+                                                <Style>
+                                                  <TextAlign>Right</TextAlign>
+                                                </Style>
                                               </Paragraph>
                                             </Paragraphs>
-                                            <rd:DefaultName>Textbox55</rd:DefaultName>
+                                            <rd:DefaultName>Textbox147</rd:DefaultName>
                                             <Style>
-                                              <Border />
-                                              <PaddingLeft>2pt</PaddingLeft>
-                                              <PaddingRight>2pt</PaddingRight>
-                                              <PaddingTop>2pt</PaddingTop>
-                                              <PaddingBottom>2pt</PaddingBottom>
+                                              <Border>
+                                                <Style>None</Style>
+                                              </Border>
+                                              <PaddingLeft>5pt</PaddingLeft>
+                                              <PaddingRight>15pt</PaddingRight>
                                             </Style>
                                           </Textbox>
                                         </CellContents>
@@ -808,6 +1126,37 @@ Item</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
+                                          <Textbox Name="Textbox59">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>=Fields!TempItemLedgEntry_LotNo.Value</Value>
+                                                    <Style>
+                                                      <FontFamily>Segoe UI</FontFamily>
+                                                      <FontSize>8pt</FontSize>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style />
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>Textbox55</rd:DefaultName>
+                                            <Style>
+                                              <Border />
+                                              <PaddingLeft>5pt</PaddingLeft>
+                                              <PaddingRight>2pt</PaddingRight>
+                                              <PaddingTop>2pt</PaddingTop>
+                                              <PaddingBottom>2pt</PaddingBottom>
+                                            </Style>
+                                          </Textbox>
+                                          <rd:Selected>true</rd:Selected>
+                                        </CellContents>
+                                      </TablixCell>
+                                      <TablixCell>
+                                        <CellContents>
                                           <Textbox Name="Textbox279">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
@@ -837,7 +1186,6 @@ Item</Value>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
                                           </Textbox>
-                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                     </TablixCells>
@@ -1387,6 +1735,33 @@ Item</Value>
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
+                                          <Textbox Name="Textbox17">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value />
+                                                    <Style>
+                                                      <FontFamily>Segoe UI</FontFamily>
+                                                      <FontSize>8pt</FontSize>
+                                                      <Color>Red</Color>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style />
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>Textbox17</rd:DefaultName>
+                                            <Style>
+                                              <PaddingRight>5pt</PaddingRight>
+                                            </Style>
+                                          </Textbox>
+                                        </CellContents>
+                                      </TablixCell>
+                                      <TablixCell>
+                                        <CellContents>
                                           <Textbox Name="Textbox73">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
@@ -1462,35 +1837,6 @@ Item</Value>
                                             <rd:DefaultName>Textbox39</rd:DefaultName>
                                             <Style>
                                               <PaddingRight>5pt</PaddingRight>
-                                            </Style>
-                                          </Textbox>
-                                        </CellContents>
-                                      </TablixCell>
-                                      <TablixCell>
-                                        <CellContents>
-                                          <Textbox Name="Textbox165">
-                                            <CanGrow>true</CanGrow>
-                                            <KeepTogether>true</KeepTogether>
-                                            <Paragraphs>
-                                              <Paragraph>
-                                                <TextRuns>
-                                                  <TextRun>
-                                                    <Value />
-                                                    <Style />
-                                                  </TextRun>
-                                                </TextRuns>
-                                                <Style />
-                                              </Paragraph>
-                                            </Paragraphs>
-                                            <rd:DefaultName>Textbox165</rd:DefaultName>
-                                            <Style>
-                                              <Border>
-                                                <Style>None</Style>
-                                              </Border>
-                                              <PaddingLeft>2pt</PaddingLeft>
-                                              <PaddingRight>2pt</PaddingRight>
-                                              <PaddingTop>2pt</PaddingTop>
-                                              <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
                                         </CellContents>
@@ -1606,7 +1952,7 @@ Item</Value>
                               <Top>0.02645cm</Top>
                               <Left>0cm</Left>
                               <Height>6.06972cm</Height>
-                              <Width>17.9212cm</Width>
+                              <Width>18.30091cm</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -1653,7 +1999,7 @@ Item</Value>
             <Top>0.12506cm</Top>
             <Left>0.10266cm</Left>
             <Height>6.09617cm</Height>
-            <Width>17.9212cm</Width>
+            <Width>18.30091cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1664,10 +2010,10 @@ Item</Value>
         <Height>6.22123cm</Height>
         <Style />
       </Body>
-      <Width>18.02386cm</Width>
+      <Width>18.40357cm</Width>
       <Page>
         <PageHeader>
-          <Height>9.55552cm</Height>
+          <Height>8.34902cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1977,7 +2323,7 @@ Item</Value>
                 </Textbox>
               </ReportItems>
               <KeepTogether>true</KeepTogether>
-              <Top>5.89245cm</Top>
+              <Top>4.9717cm</Top>
               <Left>0.04192cm</Left>
               <Height>3.1365cm</Height>
               <Width>7.07951cm</Width>
@@ -2207,7 +2553,7 @@ Item</Value>
                 </Textbox>
               </ReportItems>
               <KeepTogether>true</KeepTogether>
-              <Top>5.86938cm</Top>
+              <Top>4.94863cm</Top>
               <Left>11.13485cm</Left>
               <Height>3.06897cm</Height>
               <Width>6.80476cm</Width>
@@ -2565,6 +2911,12 @@ Item</Value>
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -2688,359 +3040,4 @@ Shared PictureData3 as Object
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>f6106c11-0fa0-4b0c-a5eb-124a038a0398</rd:ReportID>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Fields>
-        <Field Name="No_TransferShptHeader">
-          <DataField>No_TransferShptHeader</DataField>
-        </Field>
-        <Field Name="Lot_Serial_Caption">
-          <DataField>Lot_Serial_Caption</DataField>
-        </Field>
-        <Field Name="Invoice_Caption">
-          <DataField>Invoice_Caption</DataField>
-        </Field>
-        <Field Name="InvoiceNumberValue">
-          <DataField>InvoiceNumberValue</DataField>
-        </Field>
-        <Field Name="Terms_Caption">
-          <DataField>Terms_Caption</DataField>
-        </Field>
-        <Field Name="Payment_Terms_Code">
-          <DataField>Payment_Terms_Code</DataField>
-        </Field>
-        <Field Name="PTN_Caption">
-          <DataField>PTN_Caption</DataField>
-        </Field>
-        <Field Name="ExtDocNo_SalesShptHeader">
-          <DataField>ExtDocNo_SalesShptHeader</DataField>
-        </Field>
-        <Field Name="OrderDate_SalesShptHeader">
-          <DataField>OrderDate_SalesShptHeader</DataField>
-        </Field>
-        <Field Name="OrderNo_SalesShptHeader">
-          <DataField>OrderNo_SalesShptHeader</DataField>
-        </Field>
-        <Field Name="DescriptionCaption">
-          <DataField>DescriptionCaption</DataField>
-        </Field>
-        <Field Name="PTNValue">
-          <DataField>PTNValue</DataField>
-        </Field>
-        <Field Name="Tracking_Caption">
-          <DataField>Tracking_Caption</DataField>
-        </Field>
-        <Field Name="Package_Tracking_No_">
-          <DataField>Package_Tracking_No_</DataField>
-        </Field>
-        <Field Name="Sched_Date_Caption">
-          <DataField>Sched_Date_Caption</DataField>
-        </Field>
-        <Field Name="Shipment_Date">
-          <DataField>Shipment_Date</DataField>
-        </Field>
-        <Field Name="Completed_By_Caption">
-          <DataField>Completed_By_Caption</DataField>
-        </Field>
-        <Field Name="Checked_By_Caption">
-          <DataField>Checked_By_Caption</DataField>
-        </Field>
-        <Field Name="Print_Date_Caption">
-          <DataField>Print_Date_Caption</DataField>
-        </Field>
-        <Field Name="Verified_Caption">
-          <DataField>Verified_Caption</DataField>
-        </Field>
-        <Field Name="SSH_SellToContact">
-          <DataField>SSH_SellToContact</DataField>
-        </Field>
-        <Field Name="SSH_ReqDeliveryDate">
-          <DataField>SSH_ReqDeliveryDate</DataField>
-        </Field>
-        <Field Name="SSH_PostingDate">
-          <DataField>SSH_PostingDate</DataField>
-        </Field>
-        <Field Name="SSH_LocationCode">
-          <DataField>SSH_LocationCode</DataField>
-        </Field>
-        <Field Name="Comment_SalesCommentLine">
-          <DataField>Comment_SalesCommentLine</DataField>
-        </Field>
-        <Field Name="CompanyInfo2Picture">
-          <DataField>CompanyInfo2Picture</DataField>
-        </Field>
-        <Field Name="CompanyInfo1Picture">
-          <DataField>CompanyInfo1Picture</DataField>
-        </Field>
-        <Field Name="CompanyInfoPicture">
-          <DataField>CompanyInfoPicture</DataField>
-        </Field>
-        <Field Name="CompanyAddress1">
-          <DataField>CompanyAddress1</DataField>
-        </Field>
-        <Field Name="CompanyAddress2">
-          <DataField>CompanyAddress2</DataField>
-        </Field>
-        <Field Name="CompanyAddress3">
-          <DataField>CompanyAddress3</DataField>
-        </Field>
-        <Field Name="CompanyAddress4">
-          <DataField>CompanyAddress4</DataField>
-        </Field>
-        <Field Name="CompanyAddress5">
-          <DataField>CompanyAddress5</DataField>
-        </Field>
-        <Field Name="CompanyAddress6">
-          <DataField>CompanyAddress6</DataField>
-        </Field>
-        <Field Name="CompanyAddress7">
-          <DataField>CompanyAddress7</DataField>
-        </Field>
-        <Field Name="CompanyAddress8">
-          <DataField>CompanyAddress8</DataField>
-        </Field>
-        <Field Name="CopyTxt">
-          <DataField>CopyTxt</DataField>
-        </Field>
-        <Field Name="BillToAddress1">
-          <DataField>BillToAddress1</DataField>
-        </Field>
-        <Field Name="BillToAddress2">
-          <DataField>BillToAddress2</DataField>
-        </Field>
-        <Field Name="BillToAddress3">
-          <DataField>BillToAddress3</DataField>
-        </Field>
-        <Field Name="BillToAddress4">
-          <DataField>BillToAddress4</DataField>
-        </Field>
-        <Field Name="BillToAddress5">
-          <DataField>BillToAddress5</DataField>
-        </Field>
-        <Field Name="BillToAddress6">
-          <DataField>BillToAddress6</DataField>
-        </Field>
-        <Field Name="BillToAddress7">
-          <DataField>BillToAddress7</DataField>
-        </Field>
-        <Field Name="ShipToAddress1">
-          <DataField>ShipToAddress1</DataField>
-        </Field>
-        <Field Name="ShipToAddress2">
-          <DataField>ShipToAddress2</DataField>
-        </Field>
-        <Field Name="ShipToAddress3">
-          <DataField>ShipToAddress3</DataField>
-        </Field>
-        <Field Name="ShipToAddress4">
-          <DataField>ShipToAddress4</DataField>
-        </Field>
-        <Field Name="ShipToAddress5">
-          <DataField>ShipToAddress5</DataField>
-        </Field>
-        <Field Name="ShipToAddress6">
-          <DataField>ShipToAddress6</DataField>
-        </Field>
-        <Field Name="ShipToAddress7">
-          <DataField>ShipToAddress7</DataField>
-        </Field>
-        <Field Name="BillToAddress8">
-          <DataField>BillToAddress8</DataField>
-        </Field>
-        <Field Name="ShipToAddress8">
-          <DataField>ShipToAddress8</DataField>
-        </Field>
-        <Field Name="BilltoCustNo_SalesShptHeader">
-          <DataField>BilltoCustNo_SalesShptHeader</DataField>
-        </Field>
-        <Field Name="ExtDocNo_TransferShptHeader">
-          <DataField>ExtDocNo_TransferShptHeader</DataField>
-        </Field>
-        <Field Name="SalesPurchPersonName">
-          <DataField>SalesPurchPersonName</DataField>
-        </Field>
-        <Field Name="ShptDate_SalesShptHeader">
-          <DataField>ShptDate_SalesShptHeader</DataField>
-        </Field>
-        <Field Name="ShipmentMethodDesc">
-          <DataField>ShipmentMethodDesc</DataField>
-        </Field>
-        <Field Name="OrderDate_TransferShptHeader">
-          <DataField>OrderDate_TransferShptHeader</DataField>
-        </Field>
-        <Field Name="TransferOrderNo_TransferShptHeader">
-          <DataField>TransferOrderNo_TransferShptHeader</DataField>
-        </Field>
-        <Field Name="PackageTrackingNoText">
-          <DataField>PackageTrackingNoText</DataField>
-        </Field>
-        <Field Name="ShippingAgentCodeText">
-          <DataField>ShippingAgentCodeText</DataField>
-        </Field>
-        <Field Name="ShippingAgentCodeLabel">
-          <DataField>ShippingAgentCodeLabel</DataField>
-        </Field>
-        <Field Name="PackageTrackingNoLabel">
-          <DataField>PackageTrackingNoLabel</DataField>
-        </Field>
-        <Field Name="TaxRegNo">
-          <DataField>TaxRegNo</DataField>
-        </Field>
-        <Field Name="TaxRegLabel">
-          <DataField>TaxRegLabel</DataField>
-        </Field>
-        <Field Name="CopyNo">
-          <DataField>CopyNo</DataField>
-        </Field>
-        <Field Name="PageLoopNumber">
-          <DataField>PageLoopNumber</DataField>
-        </Field>
-        <Field Name="BillCaption">
-          <DataField>BillCaption</DataField>
-        </Field>
-        <Field Name="ToCaption">
-          <DataField>ToCaption</DataField>
-        </Field>
-        <Field Name="CustomerIDCaption">
-          <DataField>CustomerIDCaption</DataField>
-        </Field>
-        <Field Name="PONumberCaption">
-          <DataField>PONumberCaption</DataField>
-        </Field>
-        <Field Name="SalesPersonCaption">
-          <DataField>SalesPersonCaption</DataField>
-        </Field>
-        <Field Name="ShipCaption">
-          <DataField>ShipCaption</DataField>
-        </Field>
-        <Field Name="ShipmentCaption">
-          <DataField>ShipmentCaption</DataField>
-        </Field>
-        <Field Name="ShipmentNumberCaption">
-          <DataField>ShipmentNumberCaption</DataField>
-        </Field>
-        <Field Name="ShipmentDateCaption">
-          <DataField>ShipmentDateCaption</DataField>
-        </Field>
-        <Field Name="PageCaption">
-          <DataField>PageCaption</DataField>
-        </Field>
-        <Field Name="ShipViaCaption">
-          <DataField>ShipViaCaption</DataField>
-        </Field>
-        <Field Name="PODateCaption">
-          <DataField>PODateCaption</DataField>
-        </Field>
-        <Field Name="OurOrderNoCaption">
-          <DataField>OurOrderNoCaption</DataField>
-        </Field>
-        <Field Name="DocLine_SalesCommentLine">
-          <DataField>DocLine_SalesCommentLine</DataField>
-        </Field>
-        <Field Name="Date_InventoryCommentLine">
-          <DataField>Date_InventoryCommentLine</DataField>
-        </Field>
-        <Field Name="SalesShptLineNumber">
-          <DataField>SalesShptLineNumber</DataField>
-        </Field>
-        <Field Name="TempSalesShptLineNo">
-          <DataField>TempSalesShptLineNo</DataField>
-        </Field>
-        <Field Name="TempTransferShptLineNo">
-          <DataField>TempTransferShptLineNo</DataField>
-        </Field>
-        <Field Name="TempTransferShipmentLine_PackageTrackingNo">
-          <DataField>TempTransferShipmentLine_PackageTrackingNo</DataField>
-        </Field>
-        <Field Name="TempTransferShptLineUOM">
-          <DataField>TempTransferShptLineUOM</DataField>
-        </Field>
-        <Field Name="TempSalesShptLineQy">
-          <DataField>TempSalesShptLineQy</DataField>
-        </Field>
-        <Field Name="TempSalesShptLineQyFormat">
-          <DataField>TempSalesShptLineQyFormat</DataField>
-        </Field>
-        <Field Name="OrderedQuantity">
-          <DataField>OrderedQuantity</DataField>
-        </Field>
-        <Field Name="OrderedQuantityFormat">
-          <DataField>OrderedQuantityFormat</DataField>
-        </Field>
-        <Field Name="BackOrderedQuantity">
-          <DataField>BackOrderedQuantity</DataField>
-        </Field>
-        <Field Name="BackOrderedQuantityFormat">
-          <DataField>BackOrderedQuantityFormat</DataField>
-        </Field>
-        <Field Name="TempSalesShptLineDesc">
-          <DataField>TempSalesShptLineDesc</DataField>
-        </Field>
-        <Field Name="PackageTrackingText">
-          <DataField>PackageTrackingText</DataField>
-        </Field>
-        <Field Name="AsmHeaderExists">
-          <DataField>AsmHeaderExists</DataField>
-        </Field>
-        <Field Name="PrintFooter">
-          <DataField>PrintFooter</DataField>
-        </Field>
-        <Field Name="ItemNoCaption">
-          <DataField>ItemNoCaption</DataField>
-        </Field>
-        <Field Name="UnitCaption">
-          <DataField>UnitCaption</DataField>
-        </Field>
-        <Field Name="ShippedCaption">
-          <DataField>ShippedCaption</DataField>
-        </Field>
-        <Field Name="OrderedCaption">
-          <DataField>OrderedCaption</DataField>
-        </Field>
-        <Field Name="BackOrderedCaption">
-          <DataField>BackOrderedCaption</DataField>
-        </Field>
-        <Field Name="LineCount">
-          <DataField>LineCount</DataField>
-        </Field>
-        <Field Name="SerialLotNo">
-          <DataField>SerialLotNo</DataField>
-        </Field>
-        <Field Name="TempItemLedgEntry_ItemNo">
-          <DataField>TempItemLedgEntry_ItemNo</DataField>
-        </Field>
-        <Field Name="TempItemLedgEntry_LotNo">
-          <DataField>TempItemLedgEntry_LotNo</DataField>
-        </Field>
-        <Field Name="Tracking_Number">
-          <DataField>Tracking_Number</DataField>
-        </Field>
-        <Field Name="TempTrackingSpecBuffer_Qty">
-          <DataField>TempTrackingSpecBuffer_Qty</DataField>
-        </Field>
-        <Field Name="TempTrackingSpecBuffer_QtyFormat">
-          <DataField>TempTrackingSpecBuffer_QtyFormat</DataField>
-        </Field>
-        <Field Name="ExpirationDate">
-          <DataField>ExpirationDate</DataField>
-        </Field>
-        <Field Name="PostedAsmLineItemNo">
-          <DataField>PostedAsmLineItemNo</DataField>
-        </Field>
-        <Field Name="PostedAsmLineDescription">
-          <DataField>PostedAsmLineDescription</DataField>
-        </Field>
-        <Field Name="PostedAsmLineQuantity">
-          <DataField>PostedAsmLineQuantity</DataField>
-        </Field>
-        <Field Name="PostedAsmLineUOMCode">
-          <DataField>PostedAsmLineUOMCode</DataField>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-    </DataSet>
-  </DataSets>
 </Report>
