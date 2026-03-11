@@ -334,6 +334,19 @@ codeunit 52101 "NTS Event Management"
         IsHandled := true;
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnAfterAssignNewTrackingNo, '', false, false)]
+    local procedure "Item Tracking Lines_OnAfterAssignNewTrackingNo"(var TrkgSpec: Record "Tracking Specification"; xTrkgSpec: Record "Tracking Specification"; FieldID: Integer; var SourceTrackingSpecification: Record "Tracking Specification")
+    var
+        ItemRec: Record Item;
+        ItemTrackingCodeRec: Record "Item Tracking Code";
+    begin
+        ItemRec.Get(TrkgSpec."Item No.");
+        ItemTrackingCodeRec.Get(ItemRec."Item Tracking Code");
+        if ItemTrackingCodeRec."NTS Add Revision" and (ItemTrackingCodeRec.code = 'LOT') or (ItemTrackingCodeRec.Code = 'LOT-SP') then
+            TrkgSpec."Lot No." := TrkgSpec."Lot No." + ItemRec."IMP Rev Level";
+    end;
+
+
     local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin
         if PurchLine."Document Type" <> PurchLine."Document Type"::Order then
@@ -370,9 +383,9 @@ codeunit 52101 "NTS Event Management"
     local procedure OnAfterOnClosePage(
      var TrackingSpecification: Record "Tracking Specification";
      CurrentRunMode: Enum "Item Tracking Run Mode";
-     CurrentSourceType: Integer;
-     CurrentSourceRowID: Text[250];
-     SecondSourceRowID: Text[250])
+                         CurrentSourceType: Integer;
+                         CurrentSourceRowID: Text[250];
+                         SecondSourceRowID: Text[250])
     var
         Reserv: Record "Reservation Entry";
         ProdOrderLine: Record "Prod. Order Line";
