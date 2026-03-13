@@ -13,10 +13,20 @@ pageextension 52111 "NTS Sales Invoice" extends "Sales Invoice"
                     ApplicationArea = All;
                     Caption = 'Surgeon';
                 }
+                field("NTS Surgeon Name"; Rec."NTS Surgeon Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Surgeon Name field.', Comment = '%';
+                }
                 field("NTS Distributor"; Rec."NTS Distributor")
                 {
                     ApplicationArea = all;
                     Caption = 'Distributor';
+                }
+                field("NTS Distributor Name"; Rec."NTS Distributor Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Distributor Name field.', Comment = '%';
                 }
                 field("NTS Rep"; Rec."NTS Reps.")
                 {
