@@ -8,12 +8,32 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             caption = 'Surgeon';
             DataClassification = ToBeClassified;
             TableRelation = "NTS Surgeon".Code;
+            trigger OnValidate()
+            var
+                SurgeonRec: Record "NTS Surgeon";
+            begin
+                if Rec."NTS Surgeon" <> '' then begin
+                    SurgeonRec.Get(Rec."NTS Surgeon");
+                    Validate(Rec."NTS Surgeon Name", SurgeonRec.Name);
+                end else
+                    Validate(Rec."NTS Surgeon Name", '');
+            end;
         }
         field(52102; "NTS Distributor"; Code[20])
         {
             Caption = 'Distributor';
             DataClassification = ToBeClassified;
             TableRelation = Customer."No." where("NTS Distributor" = const(true));
+            trigger OnValidate()
+            var
+                CustomerRec: Record Customer;
+            begin
+                if "NTS Distributor" <> '' then begin
+                    CustomerRec.Get("NTS Distributor");
+                    Rec.Validate(Rec."NTS Distributor Name", CustomerRec.Name);
+                end else
+                    Rec.Validate(Rec."NTS Distributor Name", '');
+            end;
         }
         field(52103; "NTS Reps."; Code[20])
         {
@@ -70,8 +90,8 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             Caption = 'Reps. Name';
             DataClassification = CustomerContent;
             Editable = false;
-            //  TableRelation = Contact.Name where("No." = field("NTS Reps."));
-            //ValidateTableRelation = false;
+            TableRelation = Contact.Name where("No." = field("NTS Reps."));
+            ValidateTableRelation = false;
         }
         modify("Document Date")
         {
@@ -94,6 +114,20 @@ tableextension 52105 "NTS Sales Header" extends "Sales Header"
             FieldClass = FlowField;
             CalcFormula = Count("Transfer Shipment Header" where("NTS Sales Order No." = field("No.")));
             Editable = false;
+        }
+        field(52111; "NTS Surgeon Name"; Text[100])
+        {
+            Caption = 'Surgeon Name';
+            Editable = false;
+            TableRelation = "NTS Surgeon".Name where(Code = field("NTS Surgeon"));
+            ValidateTableRelation = false;
+        }
+        field(52112; "NTS Distributor Name"; Text[100])
+        {
+            Caption = 'Distributor Name';
+            Editable = false;
+            TableRelation = Customer.Name where("No." = field("NTS Distributor"));
+            ValidateTableRelation = false;
         }
     }
 
