@@ -1,7 +1,7 @@
 page 52119 "NTS DOR"
 {
     ApplicationArea = All;
-    Caption = 'Delivery of Record';
+    Caption = 'Delivery Order Record';
     PageType = Document;
     SourceTable = "NTS DOR Header";
     UsageCategory = None;
