@@ -333,6 +333,13 @@ codeunit 52101 "NTS Event Management"
         IsHandled := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnPostOnBeforePostedAssemblyHeaderInsert, '', false, false)]
+    local procedure "Assembly-Post_OnPostOnBeforePostedAssemblyHeaderInsert"(AssemblyHeader: Record "Assembly Header"; var PostedAssemblyHeader: Record "Posted Assembly Header")
+    begin
+        AssemblyHeader.CalcFields("NTS Work Description");
+        PostedAssemblyHeader."NTS Work Description" := AssemblyHeader."NTS Work Description";
+    end;
+
     local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin
         if PurchLine."Document Type" <> PurchLine."Document Type"::Order then

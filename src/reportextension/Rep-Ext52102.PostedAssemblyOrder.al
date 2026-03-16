@@ -7,6 +7,8 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
         {
             column(NTSTracking_PostedAssemblyHeader; GetAssmHeaderSerial("Posted Assembly Header"."No.", "Posted Assembly Header"."Item No."))
             { }
+            column(NTSWorkDescription; WorkDescription)
+            { }
         }
         add("Posted Assembly Line")
         {
@@ -14,12 +16,21 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
             {
             }
         }
+        modify("Posted Assembly Header")
+        {
+            trigger OnAfterAfterGetRecord()
+            begin
+                Clear(WorkDescription);
+                WorkDescription := "Posted Assembly Header".GetWorkDescription();
+            end;
+        }
     }
     labels
     {
         BOMCaption = 'BOM';
         LotOrSerialCaption = 'LOT/SERIAL#';
         SerialCaption = 'SERIAL#';
+        WorkDescriptionCaption = 'Work Description';
 
     }
     local procedure GetAssmLineLotOrSerial(): Text
@@ -96,4 +107,7 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
             exit(LotNo);
     end;
 
+    var
+        WorkDescription: Text;
 }
+

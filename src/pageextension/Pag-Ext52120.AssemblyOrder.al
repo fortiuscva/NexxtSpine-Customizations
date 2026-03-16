@@ -34,7 +34,24 @@ pageextension 52120 "NTS Assembly Order" extends "Assembly Order"
                 DrillDown = true;
                 ToolTip = 'Indicates if comments exist. Click to view or add comments.';
             }
+            field("NTS Work Description"; WorkDescription)
+            {
+                ApplicationArea = All;
+                Importance = Additional;
+                MultiLine = true;
+                trigger OnValidate()
+                begin
+                    Rec.SetWorkDescription(WorkDescription);
+                end;
+            }
 
         }
     }
+    trigger OnAfterGetRecord()
+    begin
+        WorkDescription := Rec.GetWorkDescription();
+    end;
+
+    var
+        WorkDescription: Text;
 }
