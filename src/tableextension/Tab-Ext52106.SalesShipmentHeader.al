@@ -73,5 +73,20 @@ tableextension 52106 "NTS Sales Shipment Header" extends "Sales Shipment Header"
             DataClassification = CustomerContent;
             Editable = false;
         }
+        field(52111; "NTS Surgeon Name"; Text[100])
+        {
+            Caption = 'Surgeon Name';
+            Editable = false;
+            DataClassification = CustomerContent;
+            TableRelation = "NTS Surgeon".Name where(Code = field("NTS Surgeon"));
+            ValidateTableRelation = false;
+        }
+        field(52112; "NTS Distributor Name"; Text[100])
+        {
+            Caption = 'Distributor Name';
+            Editable = false;
+            TableRelation = Customer.Name where("No." = field("NTS Distributor"));
+            ValidateTableRelation = false;
+        }
     }
 }

@@ -86,8 +86,14 @@ table 52111 "NTS DOR Header"
             Caption = 'Surgeon';
             TableRelation = "NTS Surgeon".Code;
             trigger OnValidate()
+            var
+                SurgeonRec: Record "NTS Surgeon";
             begin
-
+                if Surgeon <> '' then begin
+                    SurgeonRec.Get(Surgeon);
+                    Validate(Rec."Surgeon Name", SurgeonRec.Name);
+                end else
+                    Validate(Rec."Surgeon Name", '');
             end;
         }
         field(8; Distributor; Code[20])
@@ -108,9 +114,11 @@ table 52111 "NTS DOR Header"
                         else
                             Rec.Validate("Location Code", '');
                         Rec.Validate("Reps.", '');
+                        Rec.Validate("Distributor Name", Customer.Name);
                     end else begin
                         Rec.Validate("Location Code", '');
                         Rec.Validate("Reps.", '');
+                        Rec.Validate("Distributor Name", '');
                     end;
                 end;
             end;
@@ -216,6 +224,20 @@ table 52111 "NTS DOR Header"
             Caption = 'Reps. Name';
             Editable = false;
             TableRelation = Contact.Name where("No." = field("Reps."));
+            ValidateTableRelation = false;
+        }
+        field(95; "Surgeon Name"; Text[100])
+        {
+            Caption = 'Surgeon Name';
+            Editable = false;
+            TableRelation = "NTS Surgeon".Name where(Code = field(Surgeon));
+            ValidateTableRelation = false;
+        }
+        field(100; "Distributor Name"; Text[100])
+        {
+            Caption = 'Distributor Name';
+            Editable = false;
+            TableRelation = Customer.Name where("No." = field(Distributor));
             ValidateTableRelation = false;
         }
     }
