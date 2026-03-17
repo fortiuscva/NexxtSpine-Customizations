@@ -36,7 +36,7 @@ tableextension 52142 "NTS Tracking Specification" extends "Tracking Specificatio
         if not TransLine.Get(Rec."Source ID", Rec."Source Ref. No.") then
             exit;
 
-        if "Expiration Date" < TransHeader."Posting Date" then
+        if "Expiration Date" < Today then
             Error(LotNoExpiredErrorLbl);
     end;
 
