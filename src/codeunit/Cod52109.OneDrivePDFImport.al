@@ -112,53 +112,65 @@ codeunit 52109 "NTS OneDrive PDF Import"
         CopyStream(OutStr, InStr);
         Staging.Insert(true);
 
-        AttachToItem(Staging);
+        AttachLinkToItem(Staging, DownloadUrl);
     end;
 
-    local procedure AttachToItem(var Staging: Record "NTS OneDrive File Staging")
+    local procedure AttachLinkToItem(var Staging: Record "NTS OneDrive File Staging"; DownloadUrl: Text)
     var
         Item: Record Item;
-        DocAttach: Record "Document Attachment";
-        InStr: InStream;
+        RecLink: Record "Record Link";
         ItemNo: Code[20];
+        RecId: RecordId;
     begin
         ItemNo := GetItemNoFromFileName(Staging."File Name");
 
-        Item.Reset();
-        Item.SetRange("IMP Drawing Number", ItemNo);
-        if not Item.FindFirst() then begin
-            Staging."Error Message" := 'Item not found';
+        if StrLen(ItemNo) > MaxStrLen(Item."No.") then begin
+            Staging."Error Message" := StrSubstNo(
+                'Skipped: Item No too long (%1 chars): %2',
+                StrLen(ItemNo),
+                ItemNo
+            );
+            Staging.Modify();
+            exit;
+        end;
+
+        if ItemNo = '' then begin
+            Staging."Error Message" := 'Skipped: Unable to extract Item No';
             Staging.Modify();
             exit;
         end;
 
         Item.Reset();
         Item.SetRange("IMP Drawing Number", ItemNo);
-        if Item.FindFirst() then begin
-            repeat
-                DocAttach.Init();
-                DocAttach."Table ID" := Database::Item;
-                DocAttach."No." := Item."No.";
-                DocAttach."Line No." := 0;
 
-                DocAttach."File Name" := Staging."File Name";
-                DocAttach."File Extension" := 'pdf';
-                DocAttach."File Type" :=
-                    DocAttach."File Type"::PDF;
-
-                DocAttach."Attached Date" := CurrentDateTime();
-                DocAttach."Attached By" := UserSecurityId();
-                DocAttach.User := UserId();
-
-                Staging."File Content".CreateInStream(InStr);
-                DocAttach."Document Reference ID".ImportStream(
-                    InStr,
-                    Staging."File Name"
-                );
-
-                DocAttach.Insert(true);
-            until Item.Next() = 0;
+        if not Item.FindFirst() then begin
+            Staging."Error Message" := 'Item not found';
+            Staging.Modify();
+            exit;
         end;
+
+        repeat
+            RecId := Item.RecordId();
+
+            RecLink.Reset();
+            RecLink.SetRange("Record ID", RecId);
+            RecLink.SetRange(URL1, DownloadUrl);
+            if RecLink.FindSet() then
+                RecLink.DeleteAll();
+
+            Clear(RecLink);
+
+            RecLink.Init();
+            RecLink."Record ID" := RecId;
+            RecLink.Description := CopyStr(Staging."File Name", 1, 100);
+            RecLink.URL1 := DownloadUrl;
+            RecLink.Created := CurrentDateTime();
+            RecLink."User ID" := UserId();
+            RecLink.Company := CompanyName;
+            RecLink.Insert(true);
+
+        until Item.Next() = 0;
+
         Staging."Processed" := true;
         Staging.Modify();
     end;
@@ -166,12 +178,16 @@ codeunit 52109 "NTS OneDrive PDF Import"
     local procedure GetItemNoFromFileName(FileName: Text): Code[20]
     var
         Pos: Integer;
+        ResultTxt: Text;
     begin
         Pos := StrPos(FileName, ' ');
-        if Pos = 0 then
-            exit('');
 
-        exit(CopyStr(FileName, 1, Pos - 1));
+        if Pos = 0 then
+            ResultTxt := FileName
+        else
+            ResultTxt := CopyStr(FileName, 1, Pos - 1);
+
+        exit(CopyStr(ResultTxt, 1, 20));
     end;
 
     local procedure IsAlreadyStaged(ItemId: Text): Boolean
