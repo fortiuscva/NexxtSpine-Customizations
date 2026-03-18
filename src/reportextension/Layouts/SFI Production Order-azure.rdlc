@@ -543,6 +543,7 @@
                               </Style>
                             </Textbox>
                             <Textbox Name="textbox11">
+                              <CanGrow>true</CanGrow>
                               <KeepTogether>true</KeepTogether>
                               <Paragraphs>
                                 <Paragraph>
