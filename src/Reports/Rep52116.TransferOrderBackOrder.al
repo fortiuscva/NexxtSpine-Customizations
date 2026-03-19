@@ -9,6 +9,7 @@ report 52116 "NTS Transfer Order BackOrder"
     {
         dataitem(TransferLine; "Transfer Line")
         {
+            RequestFilterFields = "Item No.", "Document No.";
             DataItemTableView = sorting("Item No.") order(ascending)
              where("Outstanding Quantity" = filter(> 0), "NTS Backorder" = const(true));
             column(Item_No_; "Item No.")
