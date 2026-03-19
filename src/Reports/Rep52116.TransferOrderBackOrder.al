@@ -14,6 +14,8 @@ report 52116 "NTS Transfer Order BackOrder"
              where("Outstanding Quantity" = filter(> 0), "NTS Backorder" = const(true));
             column(Item_No_; "Item No.")
             { }
+            column(CompanyName; CompanyInfo.Picture)
+            { }
             column(Document_No_; "Document No.")
             { }
             column(Shipment_Date; "Shipment Date")
@@ -39,11 +41,10 @@ report 52116 "NTS Transfer Order BackOrder"
                 Clear(TransferFromName);
                 Clear(TransferToName);
 
-                if ("Transfer-from Code" <> '') and LocationRec.Get("Transfer-from Code") then
-                    TransferFromName := LocationRec.Name;
-
-                if ("Transfer-to Code" <> '') and LocationRec.Get("Transfer-to Code") then
-                    TransferToName := LocationRec.Name;
+                LocationRec.Get("Transfer-from Code");
+                TransferFromName := LocationRec.Name;
+                LocationRec.Get("Transfer-to Code");
+                TransferToName := LocationRec.Name;
             end;
         }
     }
@@ -57,13 +58,20 @@ report 52116 "NTS Transfer Order BackOrder"
         FromNameLbl = 'From Name';
         ToCodeLbl = 'To Code';
         ToNameLbl = 'To Name';
-        QtyLbl = 'Qty.';
-        QtyOutstdLbl = 'Qty. Outstd.';
+        QtyLbl = 'Quantity';
+        QtyOutstdLbl = 'Qty. Outstanding';
         ItemTotalLbl = 'Item %1 Total';
         ReportTitleLbl = 'Transfer Order Backorder Report';
     }
 
+    trigger OnPreReport()
+    begin
+        CompanyInfo.Get();
+        CompanyInfo.CalcFields(Picture);
+    end;
+
     var
         TransferFromName: Text[100];
         TransferToName: Text[100];
+        CompanyInfo: Record "Company Information";
 }
