@@ -103,6 +103,11 @@ pageextension 52116 "NTS Transfer Order Subform" extends "Transfer Order Subform
                 Visible = false;
                 ToolTip = 'Specifies the value of the Sales Order Line No. field.', Comment = '%';
             }
+            field("NTS Backorder"; Rec."NTS Backorder")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Backorder field.', Comment = '%';
+            }
         }
     }
 }
