@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-03-18T06:47:55.7760998Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-03-20T20:05:47.0163928Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -131,7 +131,7 @@ Cstr(Fields!TaxIdentTypeCaption.Value) + Chr(177) +
 CStr(Fields!VendorOrderNo_Lbl.Value) + Chr(177) +
 CStr(Fields!VendorInvoiceNo_Lbl.Value) + Chr(177) +
 CStr(Fields!VendorOrderNo.Value) + Chr(177) +
-Cstr(fields!VendorInvoiceNo.Value)</Value>
+Cstr(fields!VendorInvoiceNo.Value) + Chr(177) + Cstr(Fields!NTS_FOB.Value)</Value>
                                                     <Style>
                                                       <Color>Red</Color>
                                                     </Style>
@@ -1811,7 +1811,7 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value EvaluationMode="Constant" />
+                      <Value>=Code.GetData(55,1)</Value>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -3066,6 +3066,9 @@ IoNIwatKlBkxECgFKguiDDxs2pZC3IOKAIdIwYhRrgQ01IMH8063P2rA2C0wKqkyUlUvg6iyZc+RFW7f
       <Fields>
         <Field Name="No_PurchaseHeader">
           <DataField>No_PurchaseHeader</DataField>
+        </Field>
+        <Field Name="NTS_FOB">
+          <DataField>NTS_FOB</DataField>
         </Field>
         <Field Name="Comment">
           <DataField>Comment</DataField>
