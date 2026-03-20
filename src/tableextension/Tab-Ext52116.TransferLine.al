@@ -77,6 +77,11 @@ tableextension 52116 "NTS Transfer Line" extends "Transfer Line"
                                                                   "Source Subtype" = filter('1'),
                                                                   "Reservation Status" = filter(Surplus)));
         }
+        field(52133; "NTS Backorder"; Boolean)
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Backorder';
+        }
 
         modify("Item No.")
         {
