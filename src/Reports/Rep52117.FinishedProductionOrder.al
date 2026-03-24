@@ -1,6 +1,5 @@
 report 52117 "NTS Finished Production Order"
 {
-    ApplicationArea = All;
     Caption = 'Finished Production Order';
     UsageCategory = ReportsAndAnalysis;
     DefaultLayout = RDLC;
@@ -9,13 +8,23 @@ report 52117 "NTS Finished Production Order"
     {
         dataitem("Production Order"; "Production Order")
         {
-            DataItemTableView = SORTING(Status, "No.") ORDER(Ascending);
+            DataItemTableView = SORTING(Status, "No.") ORDER(Ascending) where(Status = const(Finished));
             RequestFilterFields = Status, "No.";
             dataitem("Prod. Order Line"; "Prod. Order Line")
             {
                 DataItemLink = Status = FIELD(Status), "Prod. Order No." = FIELD("No.");
                 DataItemLinkReference = "Production Order";
                 RequestFilterFields = "Line No.";
+                column(NTSDrawingNo; GetDrawingNo("Item No."))
+                {
+                }
+                column(NTSRevisionLevel; GetRevisionLevel("Item No."))
+                {
+                }
+
+                column(NTSLotOrSerial; GetLotOrSerial("Prod. Order No.", "Line No."))
+                {
+                }
                 column(fldProdOrderNo; "Production Order"."No.")
                 {
                 }
@@ -49,16 +58,13 @@ report 52117 "NTS Finished Production Order"
                 column(Prod_Order_Description2; "Description 2")
                 {
                 }
-                column(fldBarcode; trecRoutingBarcode.Blob)
-                {
-                }
                 column(Production_Order_Status; Status)
                 {
                 }
                 column(Prod_Order_Line_Line_No; "Line No.")
                 {
                 }
-                column(Prod_Order_Line_Item_No; "Prod. Order Line"."Item No.") //<IW author="r.santos" date="07/26/2021" version="" issue="2957" />
+                column(Prod_Order_Line_Item_No; "Prod. Order Line"."Item No.")
                 {
                 }
                 dataitem("Prod. Order Comment Line"; "Prod. Order Comment Line")
@@ -167,9 +173,14 @@ report 52117 "NTS Finished Production Order"
                         ItemLedgerEntry.SetRange("Order Line No.", "Prod. Order Component"."Prod. Order Line No.");
                         ItemLedgerEntry.SetRange("Prod. Order Comp. Line No.", "Prod. Order Component"."Line No.");
                         if ItemLedgerEntry.FindFirst() then begin
-                            ItemRec.Get(ItemLedgerEntry."Item No.");
-                            ItemTrackingCode := ItemRec."Item Category Code";
-                            QtyConsumed := Abs(ItemLedgerEntry.Quantity);
+                            if (ItemLedgerEntry."Serial No." <> '') then
+                                if ItemLedgerEntry."Lot No." <> '' then
+                                    ItemTrackingCode := ItemLedgerEntry."Serial No." + ',' + ItemLedgerEntry."Lot No."
+                                else
+                                    ItemTrackingCode := ItemLedgerEntry."Serial No."
+                            else
+                                ItemTrackingCode := ItemLedgerEntry."Lot No.";
+                            QtyConsumed := ItemLedgerEntry.Quantity;
                         end;
                     end;
 
@@ -198,18 +209,6 @@ report 52117 "NTS Finished Production Order"
                     column(Prod_Routing_Est_Time; "Setup Time" + ("Run Time" * "Production Order".Quantity) + ("Wait Time" * "Production Order".Quantity))
                     {
                     }
-                    column(Prod_Routing_BarcodeText; sOperBarcode)
-                    {
-                    }
-                    column(Prod_Routing_SetupBarcodeText; sSetupBarcode)
-                    {
-                    }
-                    column(Prod_Routing_BarcodeBlob; trecRoutingBarcode.Blob)
-                    {
-                    }
-                    column(Prod_Routing_SetupBarcodeBlob; trecRoutingSetupBarcode.Blob)
-                    {
-                    }
                     column(Prod__Order_Routing_Line_Status; Status)
                     {
                     }
@@ -222,13 +221,13 @@ report 52117 "NTS Finished Production Order"
                     column(Prod__Order_Routing_Line_Routing_No_; "Routing No.")
                     {
                     }
-                    column(SFI_Total_Posted_Setup_Time; "SFI Total Posted Setup Time")
+                    column(SFI_Total_Posted_Setup_Time; "Prod. Order Routing Line"."SFI Total Posted Setup Time")
                     { }
-                    column(SFI_Total_Posted_Run_Time; "SFI Total Posted Run Time")
+                    column(SFI_Total_Posted_Run_Time; "Prod. Order Routing Line"."SFI Total Posted Run Time")
                     { }
-                    column(Posted_Output_Quantity; "Posted Output Quantity")
+                    column(Posted_Output_Quantity; "Prod. Order Routing Line"."Posted Output Quantity")
                     { }
-                    column(Posted_Scrap_Quantity; "Posted Scrap Quantity")
+                    column(Posted_Scrap_Quantity; "Prod. Order Routing Line"."Posted Scrap Quantity")
                     { }
                     dataitem("Integer"; "Integer")
                     {
@@ -330,6 +329,7 @@ report 52117 "NTS Finished Production Order"
                     begin
                         iSection := 4;
                         "Prod. Order Routing Line".CalcFields("SFI Total Posted Setup Time", "SFI Total Posted Run Time", "Posted Output Quantity", "Posted Scrap Quantity");
+                        // TotalPostedSetupTime := "Prod. Order Routing Line"."SFI Total Posted Setup Time";
                         recTools.Reset();
                         recPersonnel.Reset();
                         recQualityMeasures.Reset();
@@ -372,43 +372,19 @@ report 52117 "NTS Finished Production Order"
                 recItem.SetRange("No.", "Source No.");
                 if not recItem.FIND('-') then
                     recItem.INIT(); //<IW author="MH" date="6/10/2014" issue="TFS1368" />
-
-                CLEAR(trecRoutingBarcode);
             end;
 
             trigger OnPreDataItem()
             begin
                 iSection := 1;
-                SetRange(Status, Status::Finished);//<IW author="R.Dmytuk" date="2/21/2014" version="DMS14.02" issue="1121"/>
             end;
         }
     }
 
-    requestpage
-    {
-
-        layout
-        {
-        }
-
-        actions
-        {
-        }
-    }
-
-    labels
-    {
-    }
 
     trigger OnInitReport()
     begin
-        bIsAzureBarcode := true;
-        //<IW author="ws" date="05/17/2019" issue="TFS4558">
-        //values picked to be as close to 30pt 3of9 font as possible.
-        //but size effected by rdlc too.
-        iBarcodeWidth := 170;
-        iBarcodeHeight := 20;
-        //</IW>
+
     end;
 
     var
@@ -416,17 +392,7 @@ report 52117 "NTS Finished Production Order"
         recTools: Record "Prod. Order Routing Tool";
         recPersonnel: Record "Prod. Order Routing Personnel";
         recQualityMeasures: Record "Prod. Order Rtng Qlty Meas.";
-        trecRoutingBarcode: Record "SFI TempBlob" temporary;
-        trecRoutingSetupBarcode: Record "SFI TempBlob" temporary;
-#if ISV13ANDOLDER
-        cuBarcodeManager: Codeunit "SFI v13 IWX Barcode Gen";
-#else
-        cuBarcodeManager: Codeunit "IWX Barcode Generation";
-#endif        
-        cuBarcodeMgmt: Codeunit "SFI Barcode Mgmt";
         iSection: Integer;
-        sOperBarcode: Text;
-        sSetupBarcode: Text;
         codToolNo: Code[20];
         sToolDescription: Text;
         codPersonNo: Code[20];
@@ -436,11 +402,9 @@ report 52117 "NTS Finished Production Order"
         sQualityText: Text;
         iIndex: Integer;
         tcQualityTextTok: Label '%1 / %2 / %3', Comment = '%1=min,%2=max, %3=tolerance.';
-        iBarcodeWidth: Integer;
-        iBarcodeHeight: Integer;
-        bIsAzureBarcode: Boolean;
         QtyConsumed: Decimal;
-        ItemTrackingCode: Code[20];
+        ItemTrackingCode: Text;
+        TotalPostedSetupTime: Decimal;
 
     local procedure getShelfNo(pcodItemNo: Code[20]): Code[40]
     var
@@ -450,6 +414,41 @@ report 52117 "NTS Finished Production Order"
         if lrecItem.GET(pcodItemNo) then
             exit(lrecItem."Shelf No.");
 
+        exit('');
+    end;
+
+    local procedure GetDrawingNo(ItemNo: Code[20]): Code[20]
+    var
+        ItemRec: Record Item;
+    begin
+        if ItemRec.Get(ItemNo) then
+            exit(ItemRec."IMP Drawing Number");
+        exit('');
+    end;
+
+    local procedure GetRevisionLevel(ItemNo: Code[20]): Code[20]
+    var
+        ItemRec: Record Item;
+    begin
+        if ItemRec.Get(ItemNo) then
+            exit(ItemRec."IMP Rev Level");
+        exit('');
+    end;
+
+    local procedure GetLotOrSerial(ProdOrderNo: Code[20]; LineNo: Integer): Code[50]
+    var
+        ReservationEntryRec: Record "Reservation Entry";
+    begin
+        ReservationEntryRec.Reset();
+        ReservationEntryRec.SetRange("Source Type", DATABASE::"Prod. Order Line");
+        ReservationEntryRec.SetRange("Source ID", ProdOrderNo);
+        ReservationEntryRec.SetRange("Source Prod. Order Line", LineNo);
+        if ReservationEntryRec.FindFirst() then begin
+            if ReservationEntryRec."Lot No." <> '' then
+                exit(ReservationEntryRec."Lot No.");
+            if ReservationEntryRec."Serial No." <> '' then
+                exit(ReservationEntryRec."Serial No.");
+        end;
         exit('');
     end;
 
