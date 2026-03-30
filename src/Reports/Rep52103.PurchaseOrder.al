@@ -16,6 +16,8 @@ report 52103 "NTS Purchase Order"
             column(No_PurchaseHeader; "No.")
             {
             }
+            column(NTS_FOB; "NTS FOB")
+            { }
             column(Comment; CommentGblVar)
             { }
             column(NTS_Reason_Code; "NTS Reason Code")
