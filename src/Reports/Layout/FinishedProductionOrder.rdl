@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-03-20T19:23:29.8374465Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-04-07T13:02:35.6841172Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -78,7 +78,7 @@
                                       <Value>Finished Production Order</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
-                                        <FontSize>18pt</FontSize>
+                                        <FontSize>14pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
@@ -123,7 +123,7 @@
                               <rd:DefaultName>textbox2</rd:DefaultName>
                               <Left>5.125in</Left>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.05in</Width>
                               <ZIndex>2</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -150,7 +150,7 @@
                               <rd:DefaultName>textbox3</rd:DefaultName>
                               <Left>6.125in</Left>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.05in</Width>
                               <ZIndex>3</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -163,7 +163,6 @@
                           <DataElementOutput>ContentsOnly</DataElementOutput>
                           <Style />
                         </Rectangle>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -192,7 +191,7 @@
                               </Paragraphs>
                               <rd:DefaultName>textbox4</rd:DefaultName>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.225in</Width>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
                                 <PaddingRight>2pt</PaddingRight>
@@ -218,7 +217,7 @@
                               <rd:DefaultName>textbox5</rd:DefaultName>
                               <Top>0.25in</Top>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.225in</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -233,7 +232,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Shelf No.</Value>
+                                      <Value EvaluationMode="Constant">Drawing#</Value>
                                       <Style>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
@@ -245,7 +244,7 @@
                               <rd:DefaultName>textbox6</rd:DefaultName>
                               <Top>0.5in</Top>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.225in</Width>
                               <ZIndex>2</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -267,12 +266,12 @@
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox7</rd:DefaultName>
-                              <Left>5.125in</Left>
+                              <Left>4.625in</Left>
                               <Height>0.25in</Height>
                               <Width>1.25in</Width>
                               <ZIndex>3</ZIndex>
@@ -299,13 +298,13 @@
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox8</rd:DefaultName>
                               <Top>0.5in</Top>
-                              <Left>5.125in</Left>
+                              <Left>4.625in</Left>
                               <Height>0.25in</Height>
                               <Width>1.25in</Width>
                               <ZIndex>4</ZIndex>
@@ -329,13 +328,13 @@
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox9</rd:DefaultName>
                               <Top>0.75in</Top>
-                              <Left>5.125in</Left>
+                              <Left>4.625in</Left>
                               <Height>0.25in</Height>
                               <Width>1.25in</Width>
                               <ZIndex>5</ZIndex>
@@ -352,20 +351,20 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Est. Weight</Value>
+                                      <Value EvaluationMode="Constant">Lot or Serial #</Value>
                                       <Style>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
                                   <Style>
-                                    <TextAlign>Right</TextAlign>
+                                    <TextAlign>Left</TextAlign>
                                   </Style>
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>textbox10</rd:DefaultName>
                               <Top>0.25in</Top>
-                              <Left>5.125in</Left>
+                              <Left>4.625in</Left>
                               <Height>0.25in</Height>
                               <Width>1.25in</Width>
                               <ZIndex>6</ZIndex>
@@ -382,7 +381,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Prod_Order_Quantity.Value</Value>
+                                      <Value>=Code. BlankZero(Fields!Prod_Order_Quantity.Value)</Value>
                                       <Style>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
@@ -394,9 +393,9 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Quantity</rd:DefaultName>
-                              <Left>6.375in</Left>
+                              <Left>5.9125in</Left>
                               <Height>0.25in</Height>
-                              <Width>0.75in</Width>
+                              <Width>1.2875in</Width>
                               <ZIndex>7</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -411,7 +410,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Prod_Order_Est_Weight.Value</Value>
+                                      <Value>=Fields!NTSLotOrSerial.Value</Value>
                                       <Style />
                                     </TextRun>
                                   </TextRuns>
@@ -422,9 +421,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Est_Weight</rd:DefaultName>
                               <Top>0.25in</Top>
-                              <Left>6.375in</Left>
+                              <Left>5.9125in</Left>
                               <Height>0.25in</Height>
-                              <Width>0.75in</Width>
+                              <Width>1.2875in</Width>
                               <ZIndex>8</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -450,9 +449,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Start_Date</rd:DefaultName>
                               <Top>0.5in</Top>
-                              <Left>6.375in</Left>
+                              <Left>5.9125in</Left>
                               <Height>0.25in</Height>
-                              <Width>0.75in</Width>
+                              <Width>1.2875in</Width>
                               <ZIndex>9</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -478,9 +477,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_End_Date</rd:DefaultName>
                               <Top>0.75in</Top>
-                              <Left>6.375in</Left>
+                              <Left>5.9125in</Left>
                               <Height>0.25in</Height>
-                              <Width>0.75in</Width>
+                              <Width>1.2875in</Width>
                               <ZIndex>10</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -505,7 +504,7 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Source_No</rd:DefaultName>
-                              <Left>1in</Left>
+                              <Left>1.25in</Left>
                               <Height>0.25in</Height>
                               <Width>2.625in</Width>
                               <ZIndex>11</ZIndex>
@@ -519,24 +518,24 @@
                                 <PaddingBottom>2pt</PaddingBottom>
                               </Style>
                             </Textbox>
-                            <Textbox Name="Prod_Order_Shelf_No">
+                            <Textbox Name="NTSDrawingNo">
                               <KeepTogether>true</KeepTogether>
                               <Paragraphs>
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Prod_Order_Shelf_No.Value</Value>
+                                      <Value>=Fields!NTSDrawingNo.Value</Value>
                                       <Style />
                                     </TextRun>
                                   </TextRuns>
                                   <Style />
                                 </Paragraph>
                               </Paragraphs>
-                              <rd:DefaultName>Prod_Order_Shelf_No</rd:DefaultName>
+                              <rd:DefaultName>NTSDrawingNo</rd:DefaultName>
                               <Top>0.5in</Top>
-                              <Left>1in</Left>
+                              <Left>1.25in</Left>
                               <Height>0.25in</Height>
-                              <Width>3.5in</Width>
+                              <Width>2.625in</Width>
                               <ZIndex>12</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -563,9 +562,9 @@
                               </Paragraphs>
                               <rd:DefaultName>textbox11</rd:DefaultName>
                               <Top>0.25in</Top>
-                              <Left>1in</Left>
+                              <Left>1.25in</Left>
                               <Height>0.25in</Height>
-                              <Width>3.5in</Width>
+                              <Width>2.625in</Width>
                               <ZIndex>13</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -580,7 +579,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Prod_Order_Line_Line_No.Value</Value>
+                                      <Value>=Fields!NTSRevisionLevel.Value</Value>
                                       <Style />
                                     </TextRun>
                                   </TextRuns>
@@ -591,9 +590,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Prod_Order_Shelf_No</rd:DefaultName>
                               <Top>0.75in</Top>
-                              <Left>1in</Left>
+                              <Left>1.25in</Left>
                               <Height>0.25in</Height>
-                              <Width>3.5in</Width>
+                              <Width>2.625in</Width>
                               <ZIndex>14</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -608,7 +607,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Line No.</Value>
+                                      <Value EvaluationMode="Constant">Revision Level</Value>
                                       <Style>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
@@ -620,7 +619,7 @@
                               <rd:DefaultName>textbox6</rd:DefaultName>
                               <Top>0.75in</Top>
                               <Height>0.25in</Height>
-                              <Width>1in</Width>
+                              <Width>1.225in</Width>
                               <ZIndex>15</ZIndex>
                               <Style>
                                 <PaddingLeft>2pt</PaddingLeft>
@@ -652,13 +651,13 @@
                                 <Width>2.67879cm</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>7.54485cm</Width>
+                                <Width>7.05802cm</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>3.25131cm</Width>
+                                <Width>2.99038cm</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>3.56198cm</Width>
+                                <Width>4.30974cm</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
@@ -703,7 +702,7 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>Consumed</Value>
+                                                <Value EvaluationMode="Constant">Components Consumed</Value>
                                                 <Style>
                                                   <FontSize>14pt</FontSize>
                                                   <FontWeight>Bold</FontWeight>
@@ -943,6 +942,7 @@
                                   <TablixCell>
                                     <CellContents>
                                       <Textbox Name="Prod_Comp_Description">
+                                        <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -1484,6 +1484,7 @@
                                   <TablixCell>
                                     <CellContents>
                                       <Textbox Name="Prod_Routing_Description">
+                                        <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
@@ -1515,7 +1516,7 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>=Fields!SFI_Total_Posted_Run_Time.Value</Value>
+                                                <Value>=Code.BlankZero(Fields!SFI_Total_Posted_Run_Time.Value)</Value>
                                                 <Style />
                                               </TextRun>
                                             </TextRuns>
@@ -1543,7 +1544,7 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>=Fields!Posted_Output_Quantity.Value</Value>
+                                                <Value>=Code.BlankZero(Fields!Posted_Output_Quantity.Value)</Value>
                                                 <Style />
                                               </TextRun>
                                             </TextRuns>
@@ -1573,12 +1574,12 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!Posted_Scrap_Quantity.Value</Value>
+                                                    <Value>=Code.BlankZero(Fields!Posted_Scrap_Quantity.Value)</Value>
                                                     <Style />
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style>
-                                                  <TextAlign>Right</TextAlign>
+                                                  <TextAlign>Left</TextAlign>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
@@ -1902,7 +1903,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Fields!SFI_Total_Posted_Setup_Time.Value</Value>
+                    <Value>=Code.BlankZero(Fields!SFI_Total_Posted_Setup_Time.Value)</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>
@@ -1999,6 +2000,15 @@ End Function</Code>
   <DataSets>
     <DataSet Name="DataSet_Result">
       <Fields>
+        <Field Name="NTSDrawingNo">
+          <DataField>NTSDrawingNo</DataField>
+        </Field>
+        <Field Name="NTSRevisionLevel">
+          <DataField>NTSRevisionLevel</DataField>
+        </Field>
+        <Field Name="NTSLotOrSerial">
+          <DataField>NTSLotOrSerial</DataField>
+        </Field>
         <Field Name="fldProdOrderNo">
           <DataField>fldProdOrderNo</DataField>
         </Field>
@@ -2037,9 +2047,6 @@ End Function</Code>
         </Field>
         <Field Name="Prod_Order_Description2">
           <DataField>Prod_Order_Description2</DataField>
-        </Field>
-        <Field Name="fldBarcode">
-          <DataField>fldBarcode</DataField>
         </Field>
         <Field Name="Production_Order_Status">
           <DataField>Production_Order_Status</DataField>
@@ -2133,18 +2140,6 @@ End Function</Code>
         </Field>
         <Field Name="Prod_Routing_Est_TimeFormat">
           <DataField>Prod_Routing_Est_TimeFormat</DataField>
-        </Field>
-        <Field Name="Prod_Routing_BarcodeText">
-          <DataField>Prod_Routing_BarcodeText</DataField>
-        </Field>
-        <Field Name="Prod_Routing_SetupBarcodeText">
-          <DataField>Prod_Routing_SetupBarcodeText</DataField>
-        </Field>
-        <Field Name="Prod_Routing_BarcodeBlob">
-          <DataField>Prod_Routing_BarcodeBlob</DataField>
-        </Field>
-        <Field Name="Prod_Routing_SetupBarcodeBlob">
-          <DataField>Prod_Routing_SetupBarcodeBlob</DataField>
         </Field>
         <Field Name="Prod__Order_Routing_Line_Status">
           <DataField>Prod__Order_Routing_Line_Status</DataField>
