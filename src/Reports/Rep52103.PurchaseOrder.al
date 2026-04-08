@@ -538,11 +538,11 @@ report 52103 "NTS Purchase Order"
                             ItemNoVar := PurchaseLine."No.";
                             DescriptionLclVar := PurchaseLine.Description;
                             if ItemNoVar = 'STERILIZATION' then begin
-                                if StrPos(DescriptionLclVar, 'Unboxing fee') > 0 then begin
+                                if StrPos(Lowercase(DescriptionLclVar), 'unboxing fee') > 0 then begin
                                     ShipperBoxesQty_Var += PurchaseLine.Quantity;
                                     ShipperBoxesCaption_Var := 'Shipper Boxes';
                                 end else
-                                    if StrPos(DescriptionLclVar, 'Mailer Boxes') > 0 then begin
+                                    if StrPos(Lowercase(DescriptionLclVar), 'mailer boxes') > 0 then begin
                                         MailerBoxesQty_Var += PurchaseLine.Quantity;
                                         MailerBoxesCaption_Var := 'Mailer Boxes';
                                     end;
