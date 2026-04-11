@@ -166,6 +166,7 @@ report 52117 "NTS Finished Production Order"
                         ItemRec: Record Item;
                     begin
                         iSection := 3;
+                        Clear(QtyConsumed);
                         ItemLedgerEntry.Reset();
                         ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Consumption);
                         ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
@@ -174,14 +175,21 @@ report 52117 "NTS Finished Production Order"
                         ItemLedgerEntry.SetRange("Prod. Order Comp. Line No.", "Prod. Order Component"."Line No.");
                         if ItemLedgerEntry.FindFirst() then begin
                             if (ItemLedgerEntry."Serial No." <> '') then
-                                if ItemLedgerEntry."Lot No." <> '' then
-                                    ItemTrackingCode := ItemLedgerEntry."Serial No." + ',' + ItemLedgerEntry."Lot No."
-                                else
-                                    ItemTrackingCode := ItemLedgerEntry."Serial No."
-                            else
+                                if ItemLedgerEntry."Lot No." <> '' then begin
+                                    ItemTrackingCode := ItemLedgerEntry."Serial No." + ',' + ItemLedgerEntry."Lot No.";
+                                    QtyConsumed := ItemLedgerEntry.Quantity;
+                                end
+                                else begin
+                                    ItemTrackingCode := ItemLedgerEntry."Serial No.";
+                                    QtyConsumed := ItemLedgerEntry.Quantity;
+                                end
+                            else begin
                                 ItemTrackingCode := ItemLedgerEntry."Lot No.";
-                            QtyConsumed := ItemLedgerEntry.Quantity;
-                        end;
+                                QtyConsumed := ItemLedgerEntry.Quantity;
+                            end;
+                        end
+                        else
+                            ItemTrackingCode := '';
                     end;
 
                     trigger OnPreDataItem()
@@ -437,19 +445,23 @@ report 52117 "NTS Finished Production Order"
 
     local procedure GetLotOrSerial(ProdOrderNo: Code[20]; LineNo: Integer): Code[50]
     var
-        ReservationEntryRec: Record "Reservation Entry";
+        ItemLedgerEntry: Record "Item Ledger Entry";
+        LotorSerialNo: Text;
     begin
-        ReservationEntryRec.Reset();
-        ReservationEntryRec.SetRange("Source Type", DATABASE::"Prod. Order Line");
-        ReservationEntryRec.SetRange("Source ID", ProdOrderNo);
-        ReservationEntryRec.SetRange("Source Prod. Order Line", LineNo);
-        if ReservationEntryRec.FindFirst() then begin
-            if ReservationEntryRec."Lot No." <> '' then
-                exit(ReservationEntryRec."Lot No.");
-            if ReservationEntryRec."Serial No." <> '' then
-                exit(ReservationEntryRec."Serial No.");
+        ItemLedgerEntry.Reset();
+        ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Output);
+        ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
+        ItemLedgerEntry.SetRange("Order No.", ProdOrderNo);
+        ItemLedgerEntry.SetRange("Order Line No.", LineNo);
+        if ItemLedgerEntry.FindFirst() then begin
+            if (ItemLedgerEntry."Serial No." <> '') then
+                if ItemLedgerEntry."Lot No." <> '' then
+                    LotorSerialNo := ItemLedgerEntry."Serial No." + ',' + ItemLedgerEntry."Lot No."
+                else
+                    LotorSerialNo := ItemLedgerEntry."Serial No."
+            else
+                LotorSerialNo := ItemLedgerEntry."Lot No.";
         end;
-        exit('');
+        exit(LotorSerialNo);
     end;
-
 }
