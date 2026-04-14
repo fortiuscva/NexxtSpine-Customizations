@@ -155,10 +155,56 @@ report 52117 "NTS Finished Production Order"
                     column(Prod__Order_Component_Line_No_; "Line No.")
                     {
                     }
-                    column(QtyConsumed; QtyConsumed)
-                    { }
-                    column(ItemTrackingCode; ItemTrackingCode)
-                    { }
+                    // column(QtyConsumed; QtyConsumed)
+                    // { }
+                    // column(ItemTrackingCode; ItemTrackingCode)
+                    // { }
+                    dataitem(ILE; Integer)
+                    {
+                        DataItemTableView = sorting(Number);
+
+                        column(QtyConsumed; TempQty)
+                        { }
+                        column(ILENumber; Number)
+                        { }
+                        column(ItemTrackingLot; TempLotNo)
+                        { }
+                        column(ItemTrackingSerial; TempSerialNo)
+                        { }
+                        // column(EntryNo; "Entry No.")
+                        // { }
+
+                        trigger OnPreDataItem()
+                        begin
+                            // TempIndex := 0;
+                            TempCount := 0;
+
+                            ItemLedgerEntry.Reset();
+                            ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
+                            ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Consumption);
+                            ItemLedgerEntry.SetRange("Order No.", "Prod. Order Component"."Prod. Order No.");
+                            ItemLedgerEntry.SetRange("Order Line No.", "Prod. Order Component"."Prod. Order Line No.");
+                            ItemLedgerEntry.SetRange("Item No.", "Prod. Order Component"."Item No.");
+
+                            if ItemLedgerEntry.FindSet() then
+                                repeat
+                                    TempCount += 1;
+                                    LotArray[TempCount] := ItemLedgerEntry."Lot No.";
+                                    SerialArray[TempCount] := ItemLedgerEntry."Serial No.";
+                                    QtyArray[TempCount] := ItemLedgerEntry.Quantity;
+                                until ItemLedgerEntry.Next() = 0;
+
+                            SetRange(Number, 1, TempCount);
+                        end;
+
+                        trigger OnAfterGetRecord()
+                        begin
+                            TempLotNo := LotArray[Number];
+                            TempQty := QtyArray[Number];
+                            TempSerialNo := SerialArray[Number];
+                        end;
+                    }
+
 
                     trigger OnAfterGetRecord()
                     var
@@ -166,30 +212,30 @@ report 52117 "NTS Finished Production Order"
                         ItemRec: Record Item;
                     begin
                         iSection := 3;
-                        Clear(QtyConsumed);
-                        ItemLedgerEntry.Reset();
-                        ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Consumption);
-                        ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
-                        ItemLedgerEntry.SetRange("Order No.", "Prod. Order Component"."Prod. Order No.");
-                        ItemLedgerEntry.SetRange("Order Line No.", "Prod. Order Component"."Prod. Order Line No.");
-                        ItemLedgerEntry.SetRange("Prod. Order Comp. Line No.", "Prod. Order Component"."Line No.");
-                        if ItemLedgerEntry.FindFirst() then begin
-                            if (ItemLedgerEntry."Serial No." <> '') then
-                                if ItemLedgerEntry."Lot No." <> '' then begin
-                                    ItemTrackingCode := ItemLedgerEntry."Serial No." + ',' + ItemLedgerEntry."Lot No.";
-                                    QtyConsumed := ItemLedgerEntry.Quantity;
-                                end
-                                else begin
-                                    ItemTrackingCode := ItemLedgerEntry."Serial No.";
-                                    QtyConsumed := ItemLedgerEntry.Quantity;
-                                end
-                            else begin
-                                ItemTrackingCode := ItemLedgerEntry."Lot No.";
-                                QtyConsumed := ItemLedgerEntry.Quantity;
-                            end;
-                        end
-                        else
-                            ItemTrackingCode := '';
+
+                        // ItemLedgerEntry.Reset();
+                        // ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Consumption);
+                        // ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
+                        // ItemLedgerEntry.SetRange("Order No.", "Prod. Order Component"."Prod. Order No.");
+                        // ItemLedgerEntry.SetRange("Order Line No.", "Prod. Order Component"."Prod. Order Line No.");
+                        // ItemLedgerEntry.SetRange("Prod. Order Comp. Line No.", "Prod. Order Component"."Line No.");
+                        // if ItemLedgerEntry.FindFirst() then begin
+                        //     if (ItemLedgerEntry."Serial No." <> '') then
+                        //         if ItemLedgerEntry."Lot No." <> '' then begin
+                        //             ItemTrackingCode := ItemLedgerEntry."Serial No." + ',' + ItemLedgerEntry."Lot No.";
+                        //             QtyConsumed := ItemLedgerEntry.Quantity;
+                        //         end
+                        //         else begin
+                        //             ItemTrackingCode := ItemLedgerEntry."Serial No.";
+                        //             QtyConsumed := ItemLedgerEntry.Quantity;
+                        //         end
+                        //     else begin
+                        //         ItemTrackingCode := ItemLedgerEntry."Lot No.";
+                        //         QtyConsumed := ItemLedgerEntry.Quantity;
+                        //     end;
+                        // end
+                        // else
+                        //     ItemTrackingCode := '';
                     end;
 
                     trigger OnPreDataItem()
@@ -396,6 +442,14 @@ report 52117 "NTS Finished Production Order"
     end;
 
     var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+        LotArray: array[100] of Code[50];
+        SerialArray: array[100] of Code[50];
+        QtyArray: array[100] of Decimal;
+        TempLotNo: Code[50];
+        TempSerialNo: Code[50];
+        TempQty: Decimal;
+        TempCount: Integer;
         recItem: Record Item;
         recTools: Record "Prod. Order Routing Tool";
         recPersonnel: Record "Prod. Order Routing Personnel";
