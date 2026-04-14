@@ -52,7 +52,7 @@ reportextension 52100 "NTS SFI Production Order" extends "SFI Production Order"
         exit('');
     end;
 
-    local procedure GetDrawingNo(ItemNo: Code[20]): Code[20]
+    local procedure GetDrawingNo(ItemNo: Code[20]): Code[100]
     var
         ItemRec: Record Item;
     begin

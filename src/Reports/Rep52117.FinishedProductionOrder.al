@@ -479,7 +479,7 @@ report 52117 "NTS Finished Production Order"
         exit('');
     end;
 
-    local procedure GetDrawingNo(ItemNo: Code[20]): Code[20]
+    local procedure GetDrawingNo(ItemNo: Code[20]): Code[100]
     var
         ItemRec: Record Item;
     begin
