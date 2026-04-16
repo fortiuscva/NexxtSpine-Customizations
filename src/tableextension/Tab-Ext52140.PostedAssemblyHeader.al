@@ -7,6 +7,12 @@ tableextension 52140 "NTS Posted Assembly Header" extends "Posted Assembly Heade
             Caption = 'Work Description';
             DataClassification = CustomerContent;
         }
+        field(52134; "NTS Disassembly Component Only"; Boolean)
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Disassembly Components Only';
+            Editable = false;
+        }
     }
     procedure GetWorkDescription() WorkDescription: Text
     var
