@@ -353,6 +353,13 @@ codeunit 52101 "NTS Event Management"
             TrkgSpec."Lot No." := TrkgSpec."Lot No." + ItemRec."IMP Rev Level";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnBeforePostItemOutputProcedure, '', false, false)]
+    local procedure OnBeforePostItemOutputProcedure(AssemblyHeader: Record "Assembly Header"; PostingNoSeries: Code[20]; QtyToOutput: Decimal; QtyToOutputBase: Decimal; var ItemJnlPostLine: Codeunit "Item Jnl.-Post Line"; var WhseJnlRegisterLine: Codeunit "Whse. Jnl.-Register Line"; DocumentNo: Code[20]; IsCorrection: Boolean; ApplyToEntryNo: Integer; var Result: Integer; var IsHandled: Boolean)
+    begin
+        if AssemblyHeader."NTS Disassembly Component Only" then
+            IsHandled := true;
+    end;
+
     local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin
         if PurchLine."Document Type" <> PurchLine."Document Type"::Order then

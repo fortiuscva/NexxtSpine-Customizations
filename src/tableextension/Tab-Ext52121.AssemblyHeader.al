@@ -20,6 +20,11 @@ tableextension 52121 "NTS Assembly Header" extends "Assembly Header"
             Subtype = Memo;
             Caption = 'Work Description';
         }
+        field(52134; "NTS Disassembly Component Only"; Boolean)
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Disassembly Components Only';
+        }
 
     }
     procedure SetWorkDescription(NewWorkDescription: Text)
