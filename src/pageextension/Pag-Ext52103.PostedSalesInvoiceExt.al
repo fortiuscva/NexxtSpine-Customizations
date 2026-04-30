@@ -40,5 +40,13 @@ pageextension 52103 "NTS Posted Sales Invoice Ext" extends "Posted Sales Invoice
                 ToolTip = 'Specifies the value of the Reps. Name field.', Comment = '%';
             }
         }
+        addafter("Posting Date")
+        {
+            field("NTS Order Date"; Rec."Order Date")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Order Date field.', Comment = '%';
+            }
+        }
     }
 }
