@@ -49,7 +49,7 @@ report 52117 "NTS Finished Production Order"
                 column(Prod_Order_Start_Date; FORMAT("Starting Date"))
                 {
                 }
-                column(Prod_Order_End_Date; FORMAT("Ending Date"))
+                column(Prod_Order_End_Date; FORMAT("Production Order"."Last Date Modified"))
                 {
                 }
                 column(Prod_Order_Description; Description)
@@ -283,6 +283,14 @@ report 52117 "NTS Finished Production Order"
                     { }
                     column(Posted_Scrap_Quantity; "Prod. Order Routing Line"."Posted Scrap Quantity")
                     { }
+                    column(Prod_Order_RoutinLine_Setup_Time; "Prod. Order Routing Line"."SFI Total Posted Setup Time")
+                    { }
+                    column(Prod_Order_RoutinLine_Run_Time; "Prod. Order Routing Line"."Run Time")
+                    { }
+                    column(Prod_Order_RoutingLine_Date; "Prod. Order Routing Line"."Ending Date")
+                    { }
+                    column(Prod_Order_RoutingLine_Employee; "Prod. Order Routing Line"."SFI Employee No.")
+                    { }
                     dataitem("Integer"; "Integer")
                     {
                         DataItemTableView = SORTING(Number) ORDER(Ascending);
@@ -382,7 +390,9 @@ report 52117 "NTS Finished Production Order"
                     var
                     begin
                         iSection := 4;
-                        "Prod. Order Routing Line".CalcFields("SFI Total Posted Setup Time", "SFI Total Posted Run Time", "Posted Output Quantity", "Posted Scrap Quantity");
+                        "Prod. Order Routing Line".CalcFields("SFI Total Posted Setup Time", "SFI Total Posted Run Time",
+                                                                "SFI Total Posted Setup Time", "Posted Output Quantity",
+                                                                "Posted Scrap Quantity");
                         // TotalPostedSetupTime := "Prod. Order Routing Line"."SFI Total Posted Setup Time";
                         recTools.Reset();
                         recPersonnel.Reset();
