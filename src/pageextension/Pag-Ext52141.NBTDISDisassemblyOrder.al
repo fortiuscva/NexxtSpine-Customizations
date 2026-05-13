@@ -8,6 +8,10 @@ pageextension 52141 "NTS NBT_DIS Disassembly Order" extends "NBT_DIS Disassembly
             {
                 ApplicationArea = All;
             }
+            field("Serial No."; Rec."NTS Serial No.")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 }

@@ -1203,6 +1203,81 @@ codeunit 52103 "NTS NexxtSpine Functions"
         exit(not RecLinkLcl.IsEmpty);
     end;
 
+    procedure BuildInquiry(ParentItemNo: Code[20]; SerialNo: Code[50]; var TempBuffer: Record "NTS Serial BOM Inquiry Buffer" temporary)
+    var
+        OutputILE: Record "Item Ledger Entry";
+        ComponentILE: Record "Item Ledger Entry";
+        PostedAsmHeader: Record "Posted Assembly Header";
+        OriginalAssemblyOrderNo: Code[20];
+        EntryNo: Integer;
+    begin
+        if ParentItemNo = '' then
+            Error('Parent Item No. is required.');
+
+        if SerialNo = '' then
+            Error('Serial No. is required.');
+
+        //Posted Assembly Orders
+        OutputILE.Reset();
+        OutputILE.SetRange("Item No.", ParentItemNo);
+        OutputILE.SetRange("Serial No.", SerialNo);
+        OutputILE.SetRange(Positive, true);
+        OutputILE.SetRange("Entry Type", OutputILE."Entry Type"::"Assembly Output");
+        if not OutputILE.FindFirst() then
+            Error('No assembly output found for Item %1 / Serial %2.', ParentItemNo, SerialNo);
+
+        OriginalAssemblyOrderNo := OutputILE."Document No.";
+
+        ComponentILE.Reset();
+        ComponentILE.SetRange("Document No.", OriginalAssemblyOrderNo);
+        ComponentILE.SetRange("Entry Type", ComponentILE."Entry Type"::"Assembly Consumption");
+        ComponentILE.SetFilter(Quantity, '<0');
+        if ComponentILE.FindSet() then
+            repeat
+                EntryNo += 1;
+                TempBuffer.Init();
+                TempBuffer."Entry No." := EntryNo;
+                TempBuffer."Document Type" := TempBuffer."Document Type"::"Assembly Consumption";
+                TempBuffer."Item No." := ComponentILE."Item No.";
+                TempBuffer.Description := ComponentILE.Description;
+                TempBuffer.Quantity := ComponentILE.Quantity;
+                TempBuffer."Unit of Measure" := ComponentILE."Unit of Measure Code";
+                TempBuffer."Posting Date" := ComponentILE."Posting Date";
+                TempBuffer."Document No." := ComponentILE."Document No.";
+                TempBuffer."Parent Item No." := ParentItemNo;
+                TempBuffer."Serial No." := SerialNo;
+                TempBuffer.Insert();
+            until ComponentILE.Next() = 0;
+
+        //Posted Disassembly Order
+        PostedAsmHeader.Reset();
+        PostedAsmHeader.SetRange("Item No.", ParentItemNo);
+        PostedAsmHeader.SetRange("NTS Serial No.", SerialNo);
+        PostedAsmHeader.SetRange("NTS Disassembly Component Only", true);
+        if PostedAsmHeader.FindSet() then
+            repeat
+                ComponentILE.Reset();
+                ComponentILE.SetRange("Document No.", PostedAsmHeader."No.");
+                ComponentILE.SetFilter(Quantity, '>0');
+                if ComponentILE.FindSet() then
+                    repeat
+                        EntryNo += 1;
+                        TempBuffer.Init();
+                        TempBuffer."Entry No." := EntryNo;
+                        TempBuffer."Document Type" := TempBuffer."Document Type"::"Disassembly Order";
+                        TempBuffer."Item No." := ComponentILE."Item No.";
+                        TempBuffer.Description := ComponentILE.Description;
+                        TempBuffer.Quantity := ComponentILE.Quantity;
+                        TempBuffer."Unit of Measure" := ComponentILE."Unit of Measure Code";
+                        TempBuffer."Posting Date" := ComponentILE."Posting Date";
+                        TempBuffer."Document No." := ComponentILE."Document No.";
+                        TempBuffer."Parent Item No." := ParentItemNo;
+                        TempBuffer."Serial No." := SerialNo;
+                        TempBuffer.Insert();
+                    until ComponentILE.Next() = 0;
+            until PostedAsmHeader.Next() = 0;
+    end;
+
     var
         TempExcelBufferRecGbl: Record "Excel Buffer" temporary;
         FileNameVarLcl: Text[100];

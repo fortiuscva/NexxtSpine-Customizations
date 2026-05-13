@@ -353,6 +353,20 @@ codeunit 52101 "NTS Event Management"
             TrkgSpec."Lot No." := TrkgSpec."Lot No." + ItemRec."IMP Rev Level";
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"NBT_DIS Disassembly Order", OnBeforeActionEvent, "P&ost", false, false)]
+    local procedure NBT_DISDisassemblyOrder_Post_OnBeforeActionEvent(var Rec: Record "Assembly Header")
+    begin
+        if Rec."NTS Disassembly Component Only" then
+            Rec.TestField("NTS Serial No.");
+    end;
+
+    [EventSubscriber(ObjectType::Page, Page::"NBT_DIS Disassembly Order", OnBeforeActionEvent, PreviewPosting, false, false)]
+    local procedure NBT_DISDisassemblyOrder_PreviewPosting_OnBeforeActionEvent(var Rec: Record "Assembly Header")
+    begin
+        if Rec."NTS Disassembly Component Only" then
+            Rec.TestField("NTS Serial No.");
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnBeforePostItemOutputProcedure, '', false, false)]
     local procedure OnBeforePostItemOutputProcedure(AssemblyHeader: Record "Assembly Header"; PostingNoSeries: Code[20]; QtyToOutput: Decimal; QtyToOutputBase: Decimal; var ItemJnlPostLine: Codeunit "Item Jnl.-Post Line"; var WhseJnlRegisterLine: Codeunit "Whse. Jnl.-Register Line"; DocumentNo: Code[20]; IsCorrection: Boolean; ApplyToEntryNo: Integer; var Result: Integer; var IsHandled: Boolean)
     begin
