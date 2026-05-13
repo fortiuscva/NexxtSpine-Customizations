@@ -25,7 +25,47 @@ tableextension 52121 "NTS Assembly Header" extends "Assembly Header"
             DataClassification = CustomerContent;
             Caption = 'Disassembly Components Only';
         }
+        field(52135; "NTS Serial No."; Code[50])
+        {
+            Caption = 'Serial No.';
+            DataClassification = CustomerContent;
 
+            trigger OnLookup()
+            var
+                TempILE: Record "Item Ledger Entry" temporary;
+                SerialLookupPage: Page "NTS Serial No Lookup";
+                SerialQuery: Query "NTS Available Serial Nos.";
+                EntryNo: Integer;
+            begin
+                Rec.TestField("Item No.");
+
+                SerialQuery.SetRange(ItemNoFilter, Rec."Item No.");
+                SerialQuery.SetFilter(RemQtyFilter, '>0');
+                SerialQuery.SetFilter(SerialFilter, '<>%1', '');
+                SerialQuery.SetRange(OpenFilter, true);
+
+                SerialQuery.Open();
+
+                while SerialQuery.Read() do begin
+                    EntryNo += 1;
+                    TempILE.Init();
+                    TempILE."Entry No." := EntryNo;
+                    TempILE."Item No." := SerialQuery.Item_No_;
+                    TempILE."Serial No." := SerialQuery.Serial_No_;
+                    TempILE.Open := SerialQuery.Open;
+                    TempILE."Remaining Quantity" := SerialQuery.Remaining_Quantity;
+                    TempILE.Insert();
+                end;
+                SerialQuery.Close();
+
+                SerialLookupPage.LoadTempData(TempILE);
+                SerialLookupPage.LookupMode(true);
+                if SerialLookupPage.RunModal() = Action::LookupOK then begin
+                    SerialLookupPage.GetRecord(TempILE);
+                    Rec."NTS Serial No." := TempILE."Serial No.";
+                end;
+            end;
+        }
     }
     procedure SetWorkDescription(NewWorkDescription: Text)
     var

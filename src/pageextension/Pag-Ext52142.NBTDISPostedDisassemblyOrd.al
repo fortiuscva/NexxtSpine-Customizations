@@ -8,6 +8,10 @@ pageextension 52142 "NBT_DIS Posted Disassembly Ord" extends "NBT_DIS Posted Dis
             {
                 ApplicationArea = All;
             }
+            field("NTS Serial No."; Rec."NTS Serial No.")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 }

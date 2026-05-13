@@ -13,6 +13,12 @@ tableextension 52140 "NTS Posted Assembly Header" extends "Posted Assembly Heade
             Caption = 'Disassembly Components Only';
             Editable = false;
         }
+        field(52135; "NTS Serial No."; Code[50])
+        {
+            Caption = 'Serial No.';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
     }
     procedure GetWorkDescription() WorkDescription: Text
     var
