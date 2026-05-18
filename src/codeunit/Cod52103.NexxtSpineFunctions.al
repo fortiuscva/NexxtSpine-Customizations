@@ -1278,6 +1278,75 @@ codeunit 52103 "NTS NexxtSpine Functions"
             until PostedAsmHeader.Next() = 0;
     end;
 
+    procedure ExportPositivePay(BankAccountNo: Code[20]; StartDate: Date; EndDate: Date)
+    var
+        CheckLedgEntry: Record "Check Ledger Entry";
+        Vendor: Record Vendor;
+        Employee: Record Employee;
+        BankAccount: Record "Bank Account";
+        TempBlob: Codeunit "Temp Blob";
+        OutStr: OutStream;
+        InStr: InStream;
+        CsvLine: Text;
+        FileName: Text;
+        PayeeName: Text[100];
+        AmountText: Text[30];
+        DateText: Text[10];
+    begin
+        if not BankAccount.Get(BankAccountNo) then
+            Error('Bank Account %1 does not exist.', BankAccountNo);
+
+        TempBlob.CreateOutStream(OutStr, TextEncoding::UTF8);
+
+        CsvLine := 'Acct#,Amount,Check#,Date,Payee Name,Issue Type';
+
+        OutStr.WriteText(CsvLine);
+        OutStr.WriteText();
+
+        CheckLedgEntry.Reset();
+        CheckLedgEntry.SetRange("Bank Account No.", BankAccountNo);
+        CheckLedgEntry.SetRange("Statement Status", CheckLedgEntry."Statement Status"::Open);
+        CheckLedgEntry.SetRange("Check Date", StartDate, EndDate);
+        CheckLedgEntry.SetRange(Open, true);
+        if CheckLedgEntry.FindSet() then begin
+            repeat
+                Clear(PayeeName);
+
+                case CheckLedgEntry."Bal. Account Type" of
+                    CheckLedgEntry."Bal. Account Type"::Vendor:
+                        begin
+                            if Vendor.Get(CheckLedgEntry."Bal. Account No.") then
+                                PayeeName := Vendor.Name;
+                        end;
+
+                    CheckLedgEntry."Bal. Account Type"::Employee:
+                        begin
+                            if Employee.Get(CheckLedgEntry."Bal. Account No.") then
+                                PayeeName := Employee.FullName();
+                        end;
+                end;
+
+                if StrPos(PayeeName, ',') > 0 then
+                    PayeeName := '"' + PayeeName + '"';
+
+                PayeeName := CopyStr(PayeeName, 1, 40);
+                AmountText := Format(Abs(CheckLedgEntry.Amount), 0, '<Integer><Decimals,2>');
+                DateText := Format(CheckLedgEntry."Check Date", 0, '<Month,2><Day,2><Year,2>');
+                CsvLine := StrSubstNo('%1,%2,%3,%4,%5,%6', BankAccount."Bank Account No.", AmountText, CheckLedgEntry."Check No.", DateText, PayeeName,
+                                        'IS');
+                OutStr.WriteText(CsvLine);
+                OutStr.WriteText();
+
+            until CheckLedgEntry.Next() = 0;
+        end;
+
+        TempBlob.CreateInStream(InStr);
+        FileName := StrSubstNo('PositivePay_%1_%2.csv', BankAccountNo,
+                                    Format(Today, 0, '<Year4><Month,2><Day,2>'));
+
+        DownloadFromStream(InStr, '', '', '', FileName);
+    end;
+
     var
         TempExcelBufferRecGbl: Record "Excel Buffer" temporary;
         FileNameVarLcl: Text[100];
