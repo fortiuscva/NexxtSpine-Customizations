@@ -441,6 +441,16 @@ codeunit 52101 "NTS Event Management"
         IsHandled := true;
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Prod. Order Routing Line", OnBeforeValidateEvent, "Routing Status", false, false)]
+    local procedure OnBeforeValidateEvent(var Rec: Record "Prod. Order Routing Line"; var xRec: Record "Prod. Order Routing Line"; CurrFieldNo: Integer)
+    begin
+        if Rec.Status <> Rec.Status::Released then
+            exit;
+
+        if (xRec."Routing Status" = xRec."Routing Status"::Finished) and (xRec."Routing Status" <> Rec."Routing Status") then
+            xRec."Routing Status" := Rec."Routing Status";
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
