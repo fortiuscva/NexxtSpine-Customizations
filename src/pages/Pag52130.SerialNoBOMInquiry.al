@@ -116,6 +116,14 @@ page 52130 "NTS Serial No. BOM Inquiry"
                 {
                     Caption = 'Document No.';
                 }
+                field("Serial No."; Rec."Serial No.")
+                {
+                    Caption = 'Serial No.';
+                }
+                field("Lot No."; Rec."Lot No.")
+                {
+                    Caption = 'Lot No.';
+                }
             }
         }
     }
@@ -134,6 +142,24 @@ page 52130 "NTS Serial No. BOM Inquiry"
                     LoadInquiry();
                 end;
             }
+            action(PrintReport)
+            {
+                Caption = 'Print Report';
+                ApplicationArea = All;
+                Image = Print;
+
+                trigger OnAction()
+                var
+                    TempBuffer: Record "NTS Serial BOM Inquiry Buffer" temporary;
+                    SerialBOMINquireyReport: Report "NTS Serial BOM Inquiry Report";
+                begin
+                    TempBuffer.Copy(Rec, true);
+                    SerialBOMINquireyReport.SetTableView(TempBuffer);
+                    SerialBOMINquireyReport.SetIntialValues(FilterItemNo, FilterSerialNo);
+                    SerialBOMINquireyReport.RunModal();
+                end;
+            }
+
         }
     }
 
