@@ -1245,7 +1245,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 TempBuffer."Posting Date" := ComponentILE."Posting Date";
                 TempBuffer."Document No." := ComponentILE."Document No.";
                 TempBuffer."Parent Item No." := ParentItemNo;
-                TempBuffer."Serial No." := SerialNo;
+                TempBuffer."Serial No." := ComponentILE."Serial No.";
+                TempBuffer."Lot No." := ComponentILE."Lot No.";
                 TempBuffer.Insert();
             until ComponentILE.Next() = 0;
 
@@ -1272,7 +1273,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         TempBuffer."Posting Date" := ComponentILE."Posting Date";
                         TempBuffer."Document No." := ComponentILE."Document No.";
                         TempBuffer."Parent Item No." := ParentItemNo;
-                        TempBuffer."Serial No." := SerialNo;
+                        TempBuffer."Serial No." := ComponentILE."Serial No.";
+                        TempBuffer."Lot No." := ComponentILE."Lot No.";
                         TempBuffer.Insert();
                     until ComponentILE.Next() = 0;
             until PostedAsmHeader.Next() = 0;

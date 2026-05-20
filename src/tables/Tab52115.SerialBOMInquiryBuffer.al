@@ -26,6 +26,8 @@ table 52115 "NTS Serial BOM Inquiry Buffer"
         { }
         field(10; "Serial No."; Code[50])
         { }
+        field(11; "Lot No."; Code[50])
+        { }
     }
 
     keys
