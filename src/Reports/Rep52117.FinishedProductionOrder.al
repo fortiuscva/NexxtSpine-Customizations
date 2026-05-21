@@ -171,8 +171,8 @@ report 52117 "NTS Finished Production Order"
                         { }
                         column(ItemTrackingSerial; TempSerialNo)
                         { }
-                        // column(EntryNo; "Entry No.")
-                        // { }
+                        column(ItemTrackingNo; ItemTrackingNo)
+                        { }
 
                         trigger OnPreDataItem()
                         begin
@@ -202,6 +202,14 @@ report 52117 "NTS Finished Production Order"
                             TempLotNo := LotArray[Number];
                             TempQty := QtyArray[Number];
                             TempSerialNo := SerialArray[Number];
+                            Clear(ItemTrackingNo);
+                            if (TempSerialNo <> '') and (TempLotNo <> '') then
+                                ItemTrackingNo := TempSerialNo + ' / ' + TempLotNo
+                            else
+                                if TempSerialNo <> '' then
+                                    ItemTrackingNo := TempSerialNo
+                                else
+                                    ItemTrackingNo := TempLotNo;
                         end;
                     }
 
@@ -444,13 +452,6 @@ report 52117 "NTS Finished Production Order"
             end;
         }
     }
-
-
-    trigger OnInitReport()
-    begin
-
-    end;
-
     var
         ItemLedgerEntry: Record "Item Ledger Entry";
         LotArray: array[100] of Code[50];
@@ -477,6 +478,7 @@ report 52117 "NTS Finished Production Order"
         QtyConsumed: Decimal;
         ItemTrackingCode: Text;
         TotalPostedSetupTime: Decimal;
+        ItemTrackingNo: Text;
 
     local procedure getShelfNo(pcodItemNo: Code[20]): Code[40]
     var
