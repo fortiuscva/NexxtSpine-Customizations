@@ -471,6 +471,43 @@ codeunit 52101 "NTS Event Management"
             xRec."Routing Status" := Rec."Routing Status";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly Line Management", OnAfterTransferBOMComponent, '', false, false)]
+    local procedure Assembly_Line_Mgt_OnAfterTransferBOMComponent(var AssemblyLine: Record "Assembly Line"; BOMComponent: Record "BOM Component"; AssemblyHeader: Record "Assembly Header")
+    var
+        PostedAsmHeader: Record "Posted Assembly Header";
+        ItemLedgEntry: Record "Item Ledger Entry";
+        QtyReversed: Decimal;
+        OriginalQty: Decimal;
+    begin
+        if not AssemblyHeader."NTS Disassembly Component Only" then
+            exit;
+        if AssemblyHeader."NTS Serial No." = '' then
+            exit;
+        if AssemblyLine.Type <> AssemblyLine.Type::Item then
+            exit;
+
+        QtyReversed := 0;
+
+        PostedAsmHeader.Reset();
+        PostedAsmHeader.SetRange("Item No.", AssemblyHeader."Item No.");
+        PostedAsmHeader.SetRange("NTS Serial No.", AssemblyHeader."NTS Serial No.");
+        PostedAsmHeader.SetRange("NTS Disassembly Component Only", true);
+        if PostedAsmHeader.FindSet() then
+            repeat
+                ItemLedgEntry.Reset();
+                ItemLedgEntry.SetRange("Document No.", PostedAsmHeader."No.");
+                ItemLedgEntry.SetRange("Item No.", AssemblyLine."No.");
+                ItemLedgEntry.SetFilter(Quantity, '>0');
+                if ItemLedgEntry.FindSet() then
+                    repeat
+                        QtyReversed += ItemLedgEntry.Quantity;
+                    until ItemLedgEntry.Next() = 0;
+            until PostedAsmHeader.Next() = 0;
+
+        AssemblyLine."NTS Qty Reversed" := QtyReversed;
+        AssemblyLine.Validate("Remaining Quantity", (AssemblyLine.Quantity - QtyReversed));
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
