@@ -81,7 +81,7 @@ codeunit 52109 "NTS OneDrive PDF Import"
         if IsAlreadyStaged(ItemId) then
             exit;
 
-        if FileObj.Get('@microsoft.graph.downloadUrl', Token) then
+        if FileObj.Get('webUrl', Token) then
             DownloadUrl := Token.AsValue().AsText();
 
         DownloadAndProcessFile(FileName, ItemId, DownloadUrl, AccessToken);
