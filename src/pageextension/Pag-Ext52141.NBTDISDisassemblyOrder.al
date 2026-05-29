@@ -32,4 +32,32 @@ pageextension 52141 "NTS NBT_DIS Disassembly Order" extends "NBT_DIS Disassembly
             }
         }
     }
+    actions
+    {
+        addafter("Refresh Lines")
+        {
+            action("NTS Refresh Disassembly Lines")
+            {
+                ApplicationArea = All;
+                Caption = 'Refresh Disassembly Lines';
+                Image = Refresh;
+
+                trigger OnAction()
+                var
+                    NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+                begin
+                    Rec.TestField("NTS Disassembly Component Only", true);
+                    Rec.TestField("NTS Serial No.");
+                    NexxtSpineFunctions.RefreshDisassemblyLines(Rec);
+                    CurrPage.Update(false);
+                end;
+            }
+        }
+        addafter("Refresh Lines_Promoted")
+        {
+            actionref("NTS Refresh Disassembly Lines_Promoted"; "NTS Refresh Disassembly Lines")
+            {
+            }
+        }
+    }
 }

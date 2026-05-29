@@ -505,7 +505,8 @@ codeunit 52101 "NTS Event Management"
             until PostedAsmHeader.Next() = 0;
 
         AssemblyLine."NTS Qty Reversed" := QtyReversed;
-        AssemblyLine.Validate("Remaining Quantity", (AssemblyLine.Quantity - QtyReversed));
+        AssemblyLine.Validate(Quantity, (AssemblyLine.Quantity - QtyReversed));
+        //AssemblyLine.Validate("Remaining Quantity", (AssemblyLine.Quantity - QtyReversed));
     end;
 
     var

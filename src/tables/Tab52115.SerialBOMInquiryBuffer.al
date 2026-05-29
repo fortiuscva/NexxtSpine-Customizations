@@ -28,6 +28,19 @@ table 52115 "NTS Serial BOM Inquiry Buffer"
         { }
         field(11; "Lot No."; Code[50])
         { }
+        field(12; "Qty Reversed"; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
+        field(13; "Remaining Qty"; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
+        field(14; "Variant Code"; Code[10])
+        { }
+
+        field(15; "Location Code"; Code[10])
+        { }
     }
 
     keys
