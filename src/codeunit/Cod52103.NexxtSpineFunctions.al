@@ -475,7 +475,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
             ForReservEntry);
             CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
             CreateReservEntry.CreateEntry(
-            AssemblyHeader."No.", AssemblyHeader."Variant Code",
+            AssemblyHeader."Item No.", AssemblyHeader."Variant Code",
             AssemblyHeader."Location Code", AssemblyHeader.Description,
             0D, AssemblyHeader."Due Date",
             0, ForReservEntry."Reservation Status"::Surplus);
