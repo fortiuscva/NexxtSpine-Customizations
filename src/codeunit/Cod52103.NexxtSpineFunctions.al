@@ -1208,6 +1208,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         OutputILE: Record "Item Ledger Entry";
         ComponentILE: Record "Item Ledger Entry";
         PostedAsmHeader: Record "Posted Assembly Header";
+        TempCompBuffer: Record "NTS Serial BOM Inquiry Buffer" temporary;
         OriginalAssemblyOrderNo: Code[20];
         EntryNo: Integer;
     begin
@@ -1217,40 +1218,49 @@ codeunit 52103 "NTS NexxtSpine Functions"
         if SerialNo = '' then
             Error('Serial No. is required.');
 
-        //Posted Assembly Orders
         OutputILE.Reset();
         OutputILE.SetRange("Item No.", ParentItemNo);
         OutputILE.SetRange("Serial No.", SerialNo);
         OutputILE.SetRange(Positive, true);
         OutputILE.SetRange("Entry Type", OutputILE."Entry Type"::"Assembly Output");
-        if not OutputILE.FindFirst() then
-            Error('No assembly output found for Item %1 / Serial %2.', ParentItemNo, SerialNo);
-
-        OriginalAssemblyOrderNo := OutputILE."Document No.";
-
-        ComponentILE.Reset();
-        ComponentILE.SetRange("Document No.", OriginalAssemblyOrderNo);
-        ComponentILE.SetRange("Entry Type", ComponentILE."Entry Type"::"Assembly Consumption");
-        ComponentILE.SetFilter(Quantity, '<0');
-        if ComponentILE.FindSet() then
+        if OutputILE.FindSet() then
             repeat
-                EntryNo += 1;
-                TempBuffer.Init();
-                TempBuffer."Entry No." := EntryNo;
-                TempBuffer."Document Type" := TempBuffer."Document Type"::"Assembly Consumption";
-                TempBuffer."Item No." := ComponentILE."Item No.";
-                TempBuffer.Description := ComponentILE.Description;
-                TempBuffer.Quantity := ComponentILE.Quantity;
-                TempBuffer."Unit of Measure" := ComponentILE."Unit of Measure Code";
-                TempBuffer."Posting Date" := ComponentILE."Posting Date";
-                TempBuffer."Document No." := ComponentILE."Document No.";
-                TempBuffer."Parent Item No." := ParentItemNo;
-                TempBuffer."Serial No." := ComponentILE."Serial No.";
-                TempBuffer."Lot No." := ComponentILE."Lot No.";
-                TempBuffer.Insert();
-            until ComponentILE.Next() = 0;
-
-        //Posted Disassembly Order
+                //OriginalAssemblyOrderNo := OutputILE."Document No.";
+                ComponentILE.Reset();
+                ComponentILE.SetRange("Document No.", OutputILE."Document No.");
+                ComponentILE.SetRange("Entry Type", ComponentILE."Entry Type"::"Assembly Consumption");
+                ComponentILE.SetFilter(Quantity, '<0');
+                if ComponentILE.FindSet() then
+                    repeat
+                        TempCompBuffer.Reset();
+                        TempCompBuffer.SetRange("Document Type", TempCompBuffer."Document Type"::"Assembly Consumption");
+                        TempCompBuffer.SetRange("Document No.", ComponentILE."Document No.");
+                        TempCompBuffer.SetRange("Item No.", ComponentILE."Item No.");
+                        TempCompBuffer.SetRange("Lot No.", ComponentILE."Lot No.");
+                        TempCompBuffer.SetRange("Serial No.", ComponentILE."Serial No.");
+                        TempCompBuffer.SetRange("Location Code", ComponentILE."Location Code");
+                        if TempCompBuffer.FindFirst() then begin
+                            TempCompBuffer.Quantity += ComponentILE.Quantity;
+                            TempCompBuffer.Modify();
+                        end else begin
+                            EntryNo += 1;
+                            TempCompBuffer.Init();
+                            TempCompBuffer."Entry No." := EntryNo;
+                            TempCompBuffer."Document Type" := TempCompBuffer."Document Type"::"Assembly Consumption";
+                            TempCompBuffer."Item No." := ComponentILE."Item No.";
+                            TempCompBuffer.Description := ComponentILE.Description;
+                            TempCompBuffer.Quantity := ComponentILE.Quantity;
+                            TempCompBuffer."Unit of Measure" := ComponentILE."Unit of Measure Code";
+                            TempCompBuffer."Posting Date" := ComponentILE."Posting Date";
+                            TempCompBuffer."Document No." := ComponentILE."Document No.";
+                            TempCompBuffer."Parent Item No." := ParentItemNo;
+                            TempCompBuffer."Serial No." := ComponentILE."Serial No.";
+                            TempCompBuffer."Lot No." := ComponentILE."Lot No.";
+                            TempCompBuffer."Location Code" := ComponentILE."Location Code";
+                            TempCompBuffer.Insert();
+                        end;
+                    until ComponentILE.Next() = 0;
+            until OutputILE.Next() = 0;
         PostedAsmHeader.Reset();
         PostedAsmHeader.SetRange("Item No.", ParentItemNo);
         PostedAsmHeader.SetRange("NTS Serial No.", SerialNo);
@@ -1275,9 +1285,69 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         TempBuffer."Parent Item No." := ParentItemNo;
                         TempBuffer."Serial No." := ComponentILE."Serial No.";
                         TempBuffer."Lot No." := ComponentILE."Lot No.";
+                        TempBuffer."Location Code" := ComponentILE."Location Code";
                         TempBuffer.Insert();
                     until ComponentILE.Next() = 0;
             until PostedAsmHeader.Next() = 0;
+
+        TempCompBuffer.Reset();
+        if TempCompBuffer.FindSet() then
+            repeat
+                TempBuffer.Init();
+                TempBuffer := TempCompBuffer;
+                TempBuffer.Insert();
+            until TempCompBuffer.Next() = 0;
+    end;
+
+    local procedure GetNetNegativeComponents(ParentItemNo: Code[20]; SerialNo: Code[50]; var TempNetBuffer: Record "NTS Serial BOM Inquiry Buffer" temporary)
+    var
+        TempInquiryBuffer: Record "NTS Serial BOM Inquiry Buffer" temporary;
+    begin
+        BuildInquiry(ParentItemNo, SerialNo, TempInquiryBuffer);
+
+        TempInquiryBuffer.Reset();
+        if TempInquiryBuffer.FindSet() then
+            repeat
+                if TempInquiryBuffer.Quantity < 0 then begin
+                    TempNetBuffer.Init();
+                    TempNetBuffer := TempInquiryBuffer;
+                    TempNetBuffer.Quantity := Abs(TempInquiryBuffer.Quantity);
+                    TempNetBuffer.Insert();
+                end;
+            until TempInquiryBuffer.Next() = 0;
+    end;
+
+    procedure RefreshDisassemblyLines(var AssemblyHeader: Record "Assembly Header")
+    var
+        TempNetBuffer: Record "NTS Serial BOM Inquiry Buffer" temporary;
+        AssemblyLine: Record "Assembly Line";
+        DeleteAssemblyLine: Record "Assembly Line";
+        LineExists, LineDeleted : Boolean;
+    begin
+        LineDeleted := false;
+        GetNetNegativeComponents(AssemblyHeader."Item No.", AssemblyHeader."NTS Serial No.", TempNetBuffer);
+
+        AssemblyLine.Reset();
+        AssemblyLine.SetRange("Document Type", AssemblyHeader."Document Type");
+        AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
+        AssemblyLine.SetRange(Type, AssemblyLine.Type::Item);
+        if AssemblyLine.FindSet() then
+            repeat
+                LineExists := false;
+                TempNetBuffer.Reset();
+                TempNetBuffer.SetRange("Item No.", AssemblyLine."No.");
+                if TempNetBuffer.FindFirst() then
+                    LineExists := true;
+
+                if not LineExists then begin
+                    DeleteAssemblyLine.Reset();
+                    if DeleteAssemblyLine.Get(AssemblyLine."Document Type", AssemblyLine."Document No.", AssemblyLine."Line No.") then
+                        if DeleteAssemblyLine.Delete(true) then
+                            LineDeleted := true;
+                end;
+            until AssemblyLine.Next() = 0;
+        if LineDeleted then
+            Message('Disassembly lines refreshed successfully.');
     end;
 
     procedure ExportPositivePay(BankAccountNo: Code[20]; StartDate: Date; EndDate: Date)

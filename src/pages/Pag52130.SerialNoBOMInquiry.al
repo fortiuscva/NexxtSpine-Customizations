@@ -124,6 +124,10 @@ page 52130 "NTS Serial No. BOM Inquiry"
                 {
                     Caption = 'Lot No.';
                 }
+                field("Location Code"; Rec."Location Code")
+                {
+                    Caption = 'Location Code';
+                }
             }
         }
     }
