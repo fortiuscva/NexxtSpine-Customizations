@@ -7,5 +7,12 @@ tableextension 52137 "NTS Purch.Cr.Memo Line" extends "Purch. Cr. Memo Line"
             Caption = 'Production Lot No.';
             DataClassification = CustomerContent;
         }
+        field(52101; "NTS GTIN"; Code[14])
+        {
+            Caption = 'GTIN';
+            Numeric = true;
+            ExtendedDatatype = Barcode;
+            Editable = false;
+        }
     }
 }

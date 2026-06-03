@@ -509,6 +509,12 @@ codeunit 52101 "NTS Event Management"
         //AssemblyLine.Validate("Remaining Quantity", (AssemblyLine.Quantity - QtyReversed));
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Purchase Line", OnAfterAssignItemValues, '', false, false)]
+    local procedure PurchaseLine_OnAfterAssignItemValues(var PurchLine: Record "Purchase Line"; Item: Record Item; CurrentFieldNo: Integer; PurchHeader: Record "Purchase Header")
+    begin
+        PurchLine."NTS GTIN" := Item.GTIN;
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
