@@ -1174,6 +1174,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
         CheckLedgEntry.Reset();
         CheckLedgEntry.SetRange("Bank Account No.", BankAccountNo);
+        CheckLedgEntry.SetRange("Entry Status", CheckLedgEntry."Entry Status"::Printed);
         CheckLedgEntry.SetRange("Statement Status", CheckLedgEntry."Statement Status"::Open);
         CheckLedgEntry.SetRange("Check Date", StartDate, EndDate);
         CheckLedgEntry.SetRange(Open, true);
