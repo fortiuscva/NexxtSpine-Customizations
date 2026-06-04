@@ -1339,6 +1339,9 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 if TempNetBuffer.FindFirst() then
                     LineExists := true;
 
+                if AssemblyLine.Quantity = 0 then
+                    LineExists := false;
+
                 if not LineExists then begin
                     DeleteAssemblyLine.Reset();
                     if DeleteAssemblyLine.Get(AssemblyLine."Document Type", AssemblyLine."Document No.", AssemblyLine."Line No.") then
