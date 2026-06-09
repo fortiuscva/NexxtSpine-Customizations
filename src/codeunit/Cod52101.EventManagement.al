@@ -478,6 +478,7 @@ codeunit 52101 "NTS Event Management"
         ItemLedgEntry: Record "Item Ledger Entry";
         QtyReversed: Decimal;
         OriginalQty: Decimal;
+        ComponentILE, OutputILE : Record "Item Ledger Entry";
     begin
         if not AssemblyHeader."NTS Disassembly Component Only" then
             exit;
@@ -487,6 +488,24 @@ codeunit 52101 "NTS Event Management"
             exit;
 
         QtyReversed := 0;
+
+        OutputILE.Reset();
+        OutputILE.SetRange("Item No.", AssemblyHeader."Item No.");
+        OutputILE.SetRange("Serial No.", AssemblyHeader."NTS Serial No.");
+        OutputILE.SetRange(Positive, true);
+        OutputILE.SetRange("Entry Type", OutputILE."Entry Type"::"Assembly Output");
+        if OutputILE.FindSet() then
+            repeat
+                ComponentILE.Reset();
+                ComponentILE.SetRange("Document No.", OutputILE."Document No.");
+                ComponentILE.SetRange("Entry Type", ComponentILE."Entry Type"::"Assembly Consumption");
+                ComponentILE.SetFilter(Quantity, '<0');
+                ComponentILE.SetRange("Item No.", AssemblyLine."No.");
+                if ComponentILE.FindSet() then
+                    repeat
+                        QtyReversed += ComponentILE.Quantity;
+                    until ComponentILE.Next() = 0;
+            until OutputILE.Next() = 0;
 
         PostedAsmHeader.Reset();
         PostedAsmHeader.SetRange("Item No.", AssemblyHeader."Item No.");
@@ -505,8 +524,13 @@ codeunit 52101 "NTS Event Management"
             until PostedAsmHeader.Next() = 0;
 
         AssemblyLine."NTS Qty Reversed" := QtyReversed;
-        AssemblyLine.Validate(Quantity, (AssemblyLine.Quantity - QtyReversed));
-        //AssemblyLine.Validate("Remaining Quantity", (AssemblyLine.Quantity - QtyReversed));
+
+        if QtyReversed = 0 then
+            AssemblyLine.Validate(Quantity, 0)
+        else if QtyReversed > 0 then
+            AssemblyLine.Validate(Quantity, (AssemblyLine.Quantity - QtyReversed))
+        else
+            AssemblyLine.Validate(Quantity, Abs(QtyReversed))
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Purchase Line", OnAfterAssignItemValues, '', false, false)]
