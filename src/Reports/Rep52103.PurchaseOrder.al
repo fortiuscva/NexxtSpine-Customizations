@@ -133,7 +133,7 @@ report 52103 "NTS Purchase Order"
                     column(ShipToAddress8; ShipToAddress[8])
                     {
                     }
-                    column(ShipmentMethodDescription; ShipmentMethod.Description)
+                    column(ShipmentMethodDescription; "Purchase Header"."Your Reference")
                     {
                     }
                     column(PaymentTermsDescription; PaymentTerms.Description)
@@ -598,7 +598,7 @@ report 52103 "NTS Purchase Order"
                 if PurchCommentLine.FindSet() then
                     repeat
                         if CommentGblVar <> '' then
-                            CommentGblVar += ',';
+                            CommentGblVar += '/';
                         CommentGblVar += PurchCommentLine.Comment;
                     until PurchCommentLine.Next() = 0;
             end;
