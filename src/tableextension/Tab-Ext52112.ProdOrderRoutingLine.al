@@ -107,6 +107,7 @@ tableextension 52112 "NTS Prod. Order Routing Line" extends "Prod. Order Routing
             else
                 NewFileName := Rec."Prod. Order No." + '-' +
                                Format(Rec."Routing Reference No.") + '-' +
+                               ReferenceIRCode."Operation No." + '-' +
                                IRCode."IR Number";
 
             OneDriveIntegrationCULcl.ConnectOneDriveFile(NewFileName, IRCode."File Name", ReferenceIRCode."Sharepoint Link");
