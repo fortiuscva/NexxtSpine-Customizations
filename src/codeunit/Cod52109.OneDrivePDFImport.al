@@ -64,8 +64,8 @@ codeunit 52109 "NTS OneDrive PDF Import"
         if FileObj.Get('id', Token) then
             ItemId := Token.AsValue().AsText();
 
-        if IsAlreadyStaged(ItemId) then
-            exit;
+        // if IsAlreadyStaged(ItemId) then
+        //     exit;
 
         if FileObj.Get('webUrl', Token) then
             DownloadUrl := Token.AsValue().AsText();
@@ -88,15 +88,30 @@ codeunit 52109 "NTS OneDrive PDF Import"
         Client.Get(DownloadUrl, Response);
         Response.Content().ReadAs(InStr);
 
-        Staging.Init();
-        Staging."File Name" := FileName;
-        Staging."File Extension" := 'PDF';
-        Staging."OneDrive Item Id" := ItemId;
-        Staging."Created At" := CurrentDateTime();
+        if Staging.FindFirst() then begin
 
-        Staging."File Content".CreateOutStream(OutStr);
-        CopyStream(OutStr, InStr);
-        Staging.Insert(true);
+            Staging."File Name" := FileName;
+            Staging."Created At" := CurrentDateTime();
+
+            Clear(Staging."File Content");
+            Staging."File Content".CreateOutStream(OutStr);
+            CopyStream(OutStr, InStr);
+
+            Staging.Modify(true);
+
+        end else begin
+
+            Staging.Init();
+            Staging."File Name" := FileName;
+            Staging."File Extension" := 'PDF';
+            Staging."OneDrive Item Id" := ItemId;
+            Staging."Created At" := CurrentDateTime();
+
+            Staging."File Content".CreateOutStream(OutStr);
+            CopyStream(OutStr, InStr);
+
+            Staging.Insert(true);
+        end;
 
         AttachLinkToItem(Staging, DownloadUrl);
     end;
@@ -138,10 +153,15 @@ codeunit 52109 "NTS OneDrive PDF Import"
         repeat
             RecId := Item.RecordId();
 
+            // RecLink.Reset();
+            // RecLink.SetRange("Record ID", RecId);
+            // RecLink.SetRange(URL1, DownloadUrl);
+            // if RecLink.FindSet() then
+            //     RecLink.DeleteAll();
             RecLink.Reset();
             RecLink.SetRange("Record ID", RecId);
-            RecLink.SetRange(URL1, DownloadUrl);
-            if RecLink.FindSet() then
+
+            if not RecLink.IsEmpty() then
                 RecLink.DeleteAll();
 
             Clear(RecLink);
