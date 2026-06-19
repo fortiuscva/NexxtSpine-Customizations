@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-01T13:50:02.7879845Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-06-19T13:01:21.8576767Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -2423,7 +2423,7 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
           <Style />
         </PageHeader>
         <PageFooter>
-          <Height>6.53324cm</Height>
+          <Height>4.3319cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -2723,8 +2723,8 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                     </Paragraph>
                   </Paragraphs>
                   <rd:DefaultName>Textbox20</rd:DefaultName>
-                  <Top>1.93317in</Top>
-                  <Left>4.65186in</Left>
+                  <Top>1.55817in</Top>
+                  <Left>4.52686in</Left>
                   <Height>0.13897in</Height>
                   <Width>0.41199in</Width>
                   <ZIndex>8</ZIndex>
@@ -2757,8 +2757,8 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                       <Style />
                     </Paragraph>
                   </Paragraphs>
-                  <Top>1.85202in</Top>
-                  <Left>4.65186in</Left>
+                  <Top>1.47702in</Top>
+                  <Left>4.52686in</Left>
                   <Height>0.05586in</Height>
                   <Width>0.29858in</Width>
                   <ZIndex>9</ZIndex>
@@ -2828,7 +2828,7 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                   </Paragraphs>
                   <rd:DefaultName>Textbox88</rd:DefaultName>
                   <Top>0.79696in</Top>
-                  <Height>1.77518in</Height>
+                  <Height>0.90018in</Height>
                   <Width>4.54421in</Width>
                   <ZIndex>11</ZIndex>
                   <Style>
@@ -2841,55 +2841,6 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                     <PaddingBottom>2pt</PaddingBottom>
                   </Style>
                 </Textbox>
-                <Textbox Name="Textbox89">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value EvaluationMode="Constant">Authorized Purchasing Agent:</Value>
-                          <Style>
-                            <FontFamily>Segoe UI</FontFamily>
-                            <FontSize>8pt</FontSize>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style />
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>Textbox89</rd:DefaultName>
-                  <Top>1.53705in</Top>
-                  <Left>4.5581in</Left>
-                  <Height>0.2125in</Height>
-                  <Width>2.69775in</Width>
-                  <ZIndex>12</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Image Name="Image1">
-                  <Source>Embedded</Source>
-                  <Value>Signature</Value>
-                  <Sizing>FitProportional</Sizing>
-                  <Top>1.75094in</Top>
-                  <Left>5.14907in</Left>
-                  <Height>0.5in</Height>
-                  <Width>2.11244in</Width>
-                  <ZIndex>13</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>10pt</PaddingLeft>
-                  </Style>
-                </Image>
                 <Textbox Name="Textbox90">
                   <CanGrow>true</CanGrow>
                   <KeepTogether>true</KeepTogether>
@@ -2910,11 +2861,11 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                     </Paragraph>
                   </Paragraphs>
                   <rd:DefaultName>Textbox90</rd:DefaultName>
-                  <Top>2.24714in</Top>
-                  <Left>4.89825in</Left>
+                  <Top>1.49714in</Top>
+                  <Left>4.99825in</Left>
                   <Height>0.2in</Height>
-                  <Width>2.37715in</Width>
-                  <ZIndex>14</ZIndex>
+                  <Width>2.25215in</Width>
+                  <ZIndex>12</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -2927,8 +2878,7 @@ First(Fields!LineAmtTaxAmtInvDiscountAmtFormat.Value)</Value>
                 </Textbox>
               </ReportItems>
               <KeepTogether>true</KeepTogether>
-              <Top>0in</Top>
-              <Height>2.57214in</Height>
+              <Height>1.69714in</Height>
               <Width>7.28106in</Width>
               <Visibility>
                 <Hidden>=NOT(Code.EndDocument())</Hidden>
