@@ -2,6 +2,12 @@ tableextension 52140 "NTS Posted Assembly Header" extends "Posted Assembly Heade
 {
     fields
     {
+        field(52100; "NTS DOR No."; Code[20])
+        {
+            Caption = 'DOR No.';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
         field(52133; "NTS Work Description"; Blob)
         {
             Caption = 'Work Description';

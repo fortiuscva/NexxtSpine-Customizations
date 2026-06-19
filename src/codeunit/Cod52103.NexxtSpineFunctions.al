@@ -361,6 +361,90 @@ codeunit 52103 "NTS NexxtSpine Functions"
             until DoRLine.Next() = 0;
     end;
 
+    procedure DisassembleOrderFromDOR(DoRHeader: Record "NTS DoR Header")
+    var
+        DoRLine: Record "NTS DoR Line";
+        Customer: Record Customer;
+        LocationCode: Code[10];
+        SetLotNo: Code[50];
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+        ItemTrackingVal: integer;
+        AssemblyHeader: Record "Assembly Header";
+        AssemblyLine: Record "Assembly Line";
+        DisassemblyOrderCreated, Result : Boolean;
+        AssemblyPost: Codeunit "Assembly-Post";
+    begin
+        NextLineNo := 0;
+
+        if Customer.Get(DoRHeader."Distributor") then
+            LocationCode := Customer."Location Code";
+
+        AssemblyHeader.Init();
+        AssemblyHeader."Document Type" := AssemblyHeader."Document Type"::Order;
+        AssemblyHeader."No." := '';
+        AssemblyHeader.Insert(true);
+        AssemblyHeader.Validate("Item No.", DoRHeader."Set Name");
+        AssemblyHeader.Validate("Posting Date", DoRHeader."Posting Date");
+        AssemblyHeader.Validate("Due Date", DoRHeader."Posting Date");
+        AssemblyHeader.Validate("Starting Date", DoRHeader."Posting Date");
+        AssemblyHeader.Validate("Ending Date", DoRHeader."Posting Date");
+        AssemblyHeader.Validate("Location Code", LocationCode);
+        AssemblyHeader."NTS DOR No." := DoRHeader."No.";
+        AssemblyHeader.Validate(Quantity, DORHeader.Quantity);
+        AssemblyHeader."NTS Disassembly Component Only" := true;
+        AssemblyHeader."NTS Serial No." := DoRHeader."Serial No.";
+        AssemblyHeader."NBT_DIS Disassembly" := true;
+        if AssemblyHeader.Modify(true) then
+            DisassemblyOrderCreated := true;
+
+        AssemblyLine.Reset();
+        AssemblyLine.SetRange("Document Type", AssemblyHeader."Document Type");
+        AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
+        if AssemblyLine.FindSet() then
+            AssemblyLine.DeleteAll(true);
+
+        DoRLine.Reset();
+        DoRLine.SetRange("Document No.", DoRHeader."No.");
+        DoRLine.SetRange(Consumed, true);
+        if DoRLine.FindSet() then
+            repeat
+                NextLineNo += 10000;
+                AssemblyLine.Init();
+                AssemblyLine."Document Type" := AssemblyLine."Document Type"::Order;
+                AssemblyLine."Document No." := AssemblyHeader."No.";
+                AssemblyLine."Line No." := NextLineNo;
+                AssemblyLine.Validate(Type, AssemblyLine.Type::Item);
+                AssemblyLine.Validate("No.", DoRLine."Item No.");
+                AssemblyLine.Validate("Quantity per", DoRLine.Quantity);
+                AssemblyLine.Validate("Location Code", LocationCode);
+                AssemblyLine.Validate("NTS DOR No.", DoRLine."Document No.");
+                AssemblyLine.Validate("NTS DOR Line No.", DoRLine."Line No.");
+                AssemblyLine.Insert(True);
+
+                ItemTrackingVal := FindItemTrackingCode(AssemblyLine."No.");
+                if (ItemTrackingVal <> 0) then begin
+                    ForReservEntry."Lot No." := DoRLine."Lot No.";
+                    TrackingSpec."New Lot No." := DoRLine."Lot No.";
+
+                    CreateReservEntry.CreateReservEntryFor(Database::"Assembly Line", 1, AssemblyLine."Document No.", '',
+                    0, AssemblyLine."Line No.", AssemblyLine."Qty. per Unit of Measure",
+                    AssemblyLine.Quantity, AssemblyLine."Quantity (Base)", ForReservEntry);
+                    CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                    CreateReservEntry.CreateEntry(AssemblyLine."No.", AssemblyLine."Variant Code",
+                    AssemblyLine."Location Code", AssemblyLine.Description, 0D, AssemblyLine."Due Date",
+                    0, ForReservEntry."Reservation Status"::Surplus);
+                end;
+            until DoRLine.Next() = 0;
+
+        Clear(AssemblyPost);
+        if DisassemblyOrderCreated then begin
+            AssemblyPost.Run(AssemblyHeader);
+            Message('Disassembly Order created and posted, Disassembly Order No.:%1', AssemblyHeader."No.");
+        end;
+    end;
+
     procedure CreatePositiveAdjustment(SalesHeader: Record "Sales Header")
     var
         SalesLine: Record "Sales Line";
@@ -749,7 +833,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
             if NTSDORHeader.FindFirst() then begin
                 NTSDORHeader.TestField("Customer No.");
                 NTSDORHeader.TestField(Status, NTSDORHeader.Status::Released);
-                DisassembleSet(NTSDORHeader);
+                //DisassembleSet(NTSDORHeader);
+                DisassembleOrderFromDOR(NTSDORHeader);
                 NTSDORHeader.Posted := true;
                 NTSDORHeader.Modify();
             end;
