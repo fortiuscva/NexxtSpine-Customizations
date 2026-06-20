@@ -88,6 +88,8 @@ codeunit 52109 "NTS OneDrive PDF Import"
         Client.Get(DownloadUrl, Response);
         Response.Content().ReadAs(InStr);
 
+        Staging.Reset();
+        Staging.SetRange("OneDrive Item Id", ItemId);
         if Staging.FindFirst() then begin
 
             Staging."File Name" := FileName;
