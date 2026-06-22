@@ -40,6 +40,12 @@ pageextension 52127 "NTS Released Prod. Order Lines" extends "Released Prod. Ord
                 ToolTip = 'Specifies the value of the System Name field.', Comment = '%';
                 Editable = false;
             }
+            field("NTS System Description"; Rec."NTS System Description")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the System Description field.', Comment = '%';
+                Editable = false;
+            }
             field("NTS Height/Depth"; Rec."NTS Height/Depth")
             {
                 ApplicationArea = All;

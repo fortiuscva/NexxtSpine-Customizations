@@ -44,6 +44,11 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
             DataClassification = ToBeClassified;
             Caption = 'System Name';
             TableRelation = "IMP System Name";
+
+            trigger OnValidate()
+            begin
+                Rec.CalcFields("NTS System Description");
+            end;
         }
 
         field(50107; "NTS Sterile Product"; Code[20])
@@ -90,6 +95,13 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
         field(50113; "NTS Expiration Date"; Date)
         {
             Caption = 'Expiration Date';
+            Editable = false;
+        }
+        field(50114; "NTS System Description"; Text[50])
+        {
+            Caption = 'System Description';
+            FieldClass = FlowField;
+            CalcFormula = lookup("IMP System Name"."IMP Description" where("IMP Code" = field("NTS System Name")));
             Editable = false;
         }
         modify("Item No.")
