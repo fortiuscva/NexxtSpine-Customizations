@@ -8,6 +8,7 @@ pageextension 52118 "NTS Sales Order List" extends "Sales Order List"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the DoR Number field.', Comment = '%';
+                Visible = false;
             }
         }
     }
