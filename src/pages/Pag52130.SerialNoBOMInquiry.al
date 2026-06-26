@@ -182,4 +182,19 @@ page 52130 "NTS Serial No. BOM Inquiry"
 
         CurrPage.Update(false);
     end;
+
+    procedure SetParameters(ItemNo: Code[20]; SerialNo: Code[50])
+    begin
+        FilterItemNo := ItemNo;
+        FilterSerialNo := SerialNo;
+
+        LoadInquiry();
+    end;
+
+    procedure GetSelection(var TempBuffer: Record "NTS Serial BOM Inquiry Buffer")
+    begin
+        CurrPage.SetSelectionFilter(Rec);
+
+        TempBuffer := Rec;
+    end;
 }

@@ -21,25 +21,23 @@ table 52112 "NTS DOR Line"
             trigger OnLookup()
             var
                 DORHeader: Record "NTS DOR Header";
-                AssemblyHeader: Record "Assembly Header";
-                BOMComponent: Record "BOM Component";
-                ItemRec: Record Item;
-                TempItem: Record Item temporary;
+                InquiryPage: Page "NTS Serial No. BOM Inquiry";
+                InquiryBuffer: Record "NTS Serial BOM Inquiry Buffer";
             begin
                 DORHeader.Get("Document No.");
-                BOMComponent.SetRange("Parent Item No.", DORHeader."Set Name");
-                if Page.RunModal(0, BOMComponent) = Action::LookupOK then
-                    "Item No." := BOMComponent."No.";
-                ValidateItemNo();
-                // if BOMComponent.FindSet() then
-                //     repeat
-                //         ItemRec.Get(BOMComponent."No.");
-                //         TempItem := ItemRec;
-                //         TempItem.Insert();
-                //     until BOMComponent.Next() = 0;
 
-                // if PAGE.RunModal(0, TempItem) = ACTION::LookupOK then
-                //     "Item No." := TempItem."No.";
+                DORHeader.TestField("Set Name");
+                DORHeader.TestField("Serial No.");
+
+                InquiryPage.SetParameters(DORHeader."Set Name", DORHeader."Serial No.");
+                InquiryPage.LookupMode(true);
+                if InquiryPage.RunModal() = Action::LookupOK then begin
+                    InquiryPage.GetSelection(InquiryBuffer);
+                    Validate("Item No.", InquiryBuffer."Item No.");
+                    Validate("Lot No.", InquiryBuffer."Lot No.");
+                    Validate(Quantity, Abs(InquiryBuffer."Quantity"));
+                    ValidateItemNo();
+                end;
             end;
 
             trigger OnValidate()
