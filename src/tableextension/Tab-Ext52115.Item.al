@@ -68,6 +68,24 @@ tableextension 52115 "NTS Item" extends Item
             DataClassification = ToBeClassified;
             Caption = 'Purchase To Production';
         }
-
+        field(52111; "NTS Drawing Desc."; Text[100])
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Drawing Description';
+        }
+        modify("IMP Drawing Number")
+        {
+            trigger OnAfterValidate()
+            var
+                DrawingRec: Record "IMP Drawing Number";
+            begin
+                Clear("NTS Drawing Desc.");
+                if (xRec."IMP Drawing Number" <> Rec."IMP Drawing Number") and (Rec."IMP Drawing Number" <> '') then begin
+                    DrawingRec.SetRange("IMP Code", Rec."IMP Drawing Number");
+                    if DrawingRec.FindFirst() then
+                        Rec."NTS Drawing Desc." := DrawingRec."IMP Description";
+                end;
+            end;
+        }
     }
 }

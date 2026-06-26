@@ -136,20 +136,20 @@ codeunit 52109 "NTS OneDrive PDF Import"
     var
         Item: Record Item;
         RecLink: Record "Record Link";
-        ItemNo: Code[20];
+        ItemNo: Text;
         RecId: RecordId;
     begin
         ItemNo := GetItemNoFromFileName(Staging."File Name");
 
-        if StrLen(ItemNo) > MaxStrLen(Item."No.") then begin
-            Staging."Error Message" := StrSubstNo(
-                'Skipped: Item No too long (%1 chars): %2',
-                StrLen(ItemNo),
-                ItemNo
-            );
-            Staging.Modify();
-            exit;
-        end;
+        // if StrLen(ItemNo) > MaxStrLen(Item."No.") then begin
+        //     Staging."Error Message" := StrSubstNo(
+        //         'Skipped: Item No too long (%1 chars): %2',
+        //         StrLen(ItemNo),
+        //         ItemNo
+        //     );
+        //     Staging.Modify();
+        //     exit;
+        // end;
 
         if ItemNo = '' then begin
             Staging."Error Message" := 'Skipped: Unable to extract Item No';
@@ -158,12 +158,15 @@ codeunit 52109 "NTS OneDrive PDF Import"
         end;
 
         Item.Reset();
-        Item.SetRange("IMP Drawing Number", ItemNo);
+        Item.SetRange("NTS Drawing Desc.", ItemNo);
 
         if not Item.FindFirst() then begin
             Staging."Error Message" := 'Item not found';
             Staging.Modify();
             exit;
+        end else begin
+            Staging."Error Message" := '';
+            Staging.Modify();
         end;
 
         repeat
@@ -197,19 +200,20 @@ codeunit 52109 "NTS OneDrive PDF Import"
         Staging.Modify();
     end;
 
-    local procedure GetItemNoFromFileName(FileName: Text): Code[20]
+    local procedure GetItemNoFromFileName(FileName: Text): Text
     var
         Pos: Integer;
         ResultTxt: Text;
     begin
         Pos := StrPos(FileName, ' ');
 
-        if Pos = 0 then
-            ResultTxt := FileName
-        else
-            ResultTxt := CopyStr(FileName, 1, Pos - 1);
-
-        exit(CopyStr(ResultTxt, 1, 20));
+        // if Pos = 0 then
+        //     ResultTxt := FileName
+        // else
+        //     ResultTxt := CopyStr(FileName, 1, Pos - 1);
+        ResultTxt := FileName;
+        // exit(CopyStr(ResultTxt, 1, 20));
+        exit(ResultTxt);
     end;
 
     local procedure IsAlreadyStaged(ItemId: Text): Boolean
