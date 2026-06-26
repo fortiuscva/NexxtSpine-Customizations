@@ -539,6 +539,29 @@ codeunit 52101 "NTS Event Management"
         PurchLine."NTS GTIN" := Item.GTIN;
     end;
 
+    [EventSubscriber(ObjectType::Report, Report::"Refresh Production Order", OnAfterOnInit, '', false, false)]
+    local procedure OnAfterOnInit(var Direction: Option; var CalcLines: Boolean; var CalcRoutings: Boolean; var CalcComponents: Boolean; var CreateInbRqst: Boolean; var HideValidationDialog: Boolean)
+    begin
+        CalcRoutings := false;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Prod. Order Line", OnDeleteRelationsOnBeforeProdOrderRoutingLineDelete, '', false, false)]
+    local procedure OnDeleteRelationsOnBeforeProdOrderRoutingLineDelete(var ProdOrderRoutingLine: Record "Prod. Order Routing Line"; var IsHandled: Boolean)
+    var
+        SingleInstance: Codeunit "NTS Single Instance";
+    begin
+        if not SingleInstance.GetCalcRoutingsFromRefreshProdOrder() then
+            IsHandled := true;
+    end;
+
+    [EventSubscriber(ObjectType::Report, Report::"Refresh Production Order", OnBeforeCalcProdOrderLines, '', false, false)]
+    local procedure OnBeforeCalcProdOrderLines(var ProductionOrder: Record "Production Order"; Direction: Option Forward,Backward; CalcLines: Boolean; CalcRoutings: Boolean; CalcComponents: Boolean; var IsHandled: Boolean; var ErrorOccured: Boolean)
+    var
+        SingleInstance: Codeunit "NTS Single Instance";
+    begin
+        SingleInstance.SetCalcRoutingsFromRefreshProdOrder(CalcRoutings);
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
