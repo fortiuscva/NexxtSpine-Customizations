@@ -80,7 +80,7 @@ tableextension 52115 "NTS Item" extends Item
                 DrawingRec: Record "IMP Drawing Number";
             begin
                 Clear("NTS Drawing Desc.");
-                if (xRec."IMP Drawing Number" <> Rec."IMP Drawing Number") and (Rec."IMP Drawing Number" <> '') then begin
+                if (Rec."IMP Drawing Number" <> '') then begin
                     DrawingRec.SetRange("IMP Code", Rec."IMP Drawing Number");
                     if DrawingRec.FindFirst() then
                         Rec."NTS Drawing Desc." := DrawingRec."IMP Description";
