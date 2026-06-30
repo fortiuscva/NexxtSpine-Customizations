@@ -82,6 +82,7 @@ pageextension 52104 "NTS Item Card" extends "Item Card"
             field("NTS Drawing Desc."; Rec."NTS Drawing Desc.")
             {
                 ApplicationArea = All;
+                Editable = false;
                 ToolTip = 'Specifies the value of the Drawing Description field.', Comment = '%';
             }
         }
