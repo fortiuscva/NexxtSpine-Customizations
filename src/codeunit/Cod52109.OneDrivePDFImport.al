@@ -61,6 +61,8 @@ codeunit 52109 "NTS OneDrive PDF Import"
         if not (FileName.EndsWith('.PDF') or FileName.EndsWith('.pdf')) then
             exit;
 
+        FileName := DELCHR(FileName, '=', '.pdf');
+
         if FileObj.Get('id', Token) then
             ItemId := Token.AsValue().AsText();
 
