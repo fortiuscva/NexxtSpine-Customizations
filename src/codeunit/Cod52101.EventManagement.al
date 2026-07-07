@@ -374,6 +374,13 @@ codeunit 52101 "NTS Event Management"
             IsHandled := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnBeforeOnRun, '', false, false)]
+    local procedure OnBeforeOnRun(var AssemblyHeader: Record "Assembly Header"; SuppressCommit: Boolean)
+    begin
+        if AssemblyHeader."NTS Disassembly Component Only" then
+            AssemblyHeader.TestField("NTS Serial No.");
+    end;
+
     local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin
         if PurchLine."Document Type" <> PurchLine."Document Type"::Order then
@@ -481,6 +488,8 @@ codeunit 52101 "NTS Event Management"
         ComponentILE, OutputILE : Record "Item Ledger Entry";
     begin
         if not AssemblyHeader."NTS Disassembly Component Only" then
+            exit;
+        if not AssemblyHeader."NBT_DIS Disassembly" then
             exit;
         if AssemblyHeader."NTS Serial No." = '' then
             exit;
