@@ -48,6 +48,8 @@ report 52120 "NTS Serial BOM Inquiry Report"
             { }
             column(DocumentNo; "Document No.")
             { }
+            column(Location_Code; "Location Code")
+            { }
         }
     }
 

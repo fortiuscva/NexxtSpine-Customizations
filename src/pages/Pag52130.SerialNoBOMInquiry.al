@@ -22,6 +22,7 @@ page 52130 "NTS Serial No. BOM Inquiry"
                     Caption = 'Parent Item No.';
                     ApplicationArea = All;
                     TableRelation = Item;
+                    Editable = not LockFilters;
 
                     trigger OnValidate()
                     begin
@@ -38,6 +39,7 @@ page 52130 "NTS Serial No. BOM Inquiry"
                 {
                     Caption = 'Serial No.';
                     ApplicationArea = All;
+                    Editable = not LockFilters;
 
                     trigger OnLookup(var Text: Text): Boolean
                     var
@@ -91,6 +93,7 @@ page 52130 "NTS Serial No. BOM Inquiry"
                 field(Section; Rec."Document Type")
                 {
                     Caption = 'Document Type';
+                    Visible = false;
                 }
                 field("Item No."; Rec."Item No.")
                 {
@@ -111,10 +114,12 @@ page 52130 "NTS Serial No. BOM Inquiry"
                 field("Posting Date"; Rec."Posting Date")
                 {
                     Caption = 'Posting Date';
+                    Visible = false;
                 }
                 field("Document No."; Rec."Document No.")
                 {
                     Caption = 'Document No.';
+                    Visible = false;
                 }
                 field("Serial No."; Rec."Serial No.")
                 {
@@ -146,6 +151,22 @@ page 52130 "NTS Serial No. BOM Inquiry"
                     LoadInquiry();
                 end;
             }
+            action(ShowDetails)
+            {
+                ApplicationArea = All;
+                Caption = 'Show Details';
+                Image = ViewDetails;
+                Promoted = true;
+                PromotedCategory = Process;
+
+                trigger OnAction()
+                var
+                    DetailPage: Page "NTS Serial BOM Inquiry Details";
+                begin
+                    DetailPage.SetParameters(FilterItemNo, FilterSerialNo);
+                    DetailPage.RunModal();
+                end;
+            }
             action(PrintReport)
             {
                 Caption = 'Print Report';
@@ -170,10 +191,10 @@ page 52130 "NTS Serial No. BOM Inquiry"
     var
         FilterItemNo: Code[20];
         FilterSerialNo: Code[50];
+        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
+        LockFilters: Boolean;
 
     local procedure LoadInquiry()
-    var
-        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
     begin
         Rec.Reset();
         Rec.DeleteAll();
@@ -187,7 +208,7 @@ page 52130 "NTS Serial No. BOM Inquiry"
     begin
         FilterItemNo := ItemNo;
         FilterSerialNo := SerialNo;
-
+        LockFilters := true;
         LoadInquiry();
     end;
 
