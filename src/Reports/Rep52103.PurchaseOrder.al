@@ -590,7 +590,7 @@ report 52103 "NTS Purchase Order"
                     UseDate := WorkDate();
 
                 if ReasonCode.Get("Purchase Header"."NTS Reason Code") then;
-                ReasonCodeDescVar := format(ReasonCode.Description, 250);
+                ReasonCodeDescVar := ReasonCode.Description;
                 Clear(CommentGblVar);
                 PurchCommentLine.SetRange("Document Type", "Purchase Header"."Document Type");
                 PurchCommentLine.SetRange("No.", "Purchase Header"."No.");
@@ -785,7 +785,7 @@ report 52103 "NTS Purchase Order"
         ReasonCode: Record "NTS Purchase Reason Code";
         ProdOrderRoutingLine: Record "Prod. Order Routing Line";
         ProdOrderLine: Record "Prod. Order Line";
-        ReasonCodeDescVar: text[250];
+        ReasonCodeDescVar: text[1024];
         CommentGblVar: Text;
 }
 
