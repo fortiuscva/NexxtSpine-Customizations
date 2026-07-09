@@ -97,7 +97,7 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
             Caption = 'Expiration Date';
             Editable = false;
         }
-        field(50114; "NTS System Description"; Text[50])
+        field(50114; "NTS System Description"; Text[100])
         {
             Caption = 'System Description';
             FieldClass = FlowField;
