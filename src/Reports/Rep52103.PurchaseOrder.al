@@ -598,7 +598,7 @@ report 52103 "NTS Purchase Order"
                 if PurchCommentLine.FindSet() then
                     repeat
                         if CommentGblVar <> '' then
-                            CommentGblVar += '/';
+                            CommentGblVar += ' ';
                         CommentGblVar += PurchCommentLine.Comment;
                     until PurchCommentLine.Next() = 0;
             end;
