@@ -1445,7 +1445,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TempBuffer.Reset();
         if TempBuffer.FindSet() then
             repeat
-                if TempBuffer.Quantity = 0 then begin
+                if TempBuffer.Quantity >= 0 then begin
                     TempBuffer.Delete();
                 end else begin
                     TempBuffer."Remaining Qty" := Abs(TempBuffer.Quantity);
