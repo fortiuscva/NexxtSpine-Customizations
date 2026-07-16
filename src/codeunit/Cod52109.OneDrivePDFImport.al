@@ -12,7 +12,7 @@ codeunit 52109 "NTS OneDrive PDF Import"
         AccessToken := GetAccessToken(OneDriveConfig);
 
         Url :=
-          'https://graph.microsoft.com/v1.0/users/ldavis%40nexxtspine.com/drive/root:/Attachments:/children';
+        'https://graph.microsoft.com/v1.0/users/bcadmin@nexxtspine.com/drive/root:/BCOneDrive/Attachments:/children';
 
         ReadAllFiles(Url, AccessToken);
     end;
