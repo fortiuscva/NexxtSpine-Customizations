@@ -75,13 +75,10 @@ codeunit 52109 "NTS OneDrive PDF Import"
         if not (FileName.EndsWith('.PDF') or FileName.EndsWith('.pdf')) then
             exit;
 
-        FileName := DELCHR(FileName, '=', '.pdf');
+        FileName := DelStr(FileName, StrLen(FileName) - 3, 4);
 
         if FileObj.Get('id', Token) then
             ItemId := Token.AsValue().AsText();
-
-        // if IsAlreadyStaged(ItemId) then
-        //     exit;
 
         if FileObj.Get('webUrl', Token) then
             DownloadUrl := Token.AsValue().AsText();
@@ -143,16 +140,6 @@ codeunit 52109 "NTS OneDrive PDF Import"
     begin
         ItemNo := GetItemNoFromFileName(Staging."File Name");
 
-        // if StrLen(ItemNo) > MaxStrLen(Item."No.") then begin
-        //     Staging."Error Message" := StrSubstNo(
-        //         'Skipped: Item No too long (%1 chars): %2',
-        //         StrLen(ItemNo),
-        //         ItemNo
-        //     );
-        //     Staging.Modify();
-        //     exit;
-        // end;
-
         if ItemNo = '' then begin
             Staging."Error Message" := 'Skipped: Unable to extract Item No';
             Staging.Modify();
@@ -174,11 +161,6 @@ codeunit 52109 "NTS OneDrive PDF Import"
         repeat
             RecId := Item.RecordId();
 
-            // RecLink.Reset();
-            // RecLink.SetRange("Record ID", RecId);
-            // RecLink.SetRange(URL1, DownloadUrl);
-            // if RecLink.FindSet() then
-            //     RecLink.DeleteAll();
             RecLink.Reset();
             RecLink.SetRange("Record ID", RecId);
 
@@ -207,14 +189,7 @@ codeunit 52109 "NTS OneDrive PDF Import"
         Pos: Integer;
         ResultTxt: Text;
     begin
-        Pos := StrPos(FileName, ' ');
-
-        // if Pos = 0 then
-        //     ResultTxt := FileName
-        // else
-        //     ResultTxt := CopyStr(FileName, 1, Pos - 1);
         ResultTxt := FileName;
-        // exit(CopyStr(ResultTxt, 1, 20));
         exit(ResultTxt);
     end;
 
