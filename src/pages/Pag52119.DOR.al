@@ -179,11 +179,11 @@ page 52119 "NTS DOR"
                         DORLine: Record "NTS DOR Line";
                     begin
                         NTSFunctions.GetAndValidateLOTSerialCombo(Rec."Set Name", Rec."Lot No.", Rec."Serial No.");
-                        DORLine.Reset();
+                        /* DORLine.Reset();
                         DORLine.SetRange("Document No.", Rec."No.");
                         DORLine.SetRange(Consumed, false);
                         if not DORLine.FindFirst() then
-                            NTSFunctions.InsertNonConsumedItems(Rec);
+                            NTSFunctions.InsertNonConsumedItems(Rec); */
 
                         DORLine.Reset();
                         DORLine.SetRange("Document No.", Rec."No.");
