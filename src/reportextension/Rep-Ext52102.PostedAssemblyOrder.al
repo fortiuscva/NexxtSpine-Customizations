@@ -31,6 +31,8 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
         LotOrSerialCaption = 'LOT/SERIAL#';
         SerialCaption = 'SERIAL#';
         WorkDescriptionCaption = 'Work Description';
+        PostedDisAssemblyReportCaption = 'Posted Disassembly Order';
+        ExpirationDateCapiton = 'Expiration Date';
 
     }
     local procedure GetAssmLineLotOrSerial(): Text
