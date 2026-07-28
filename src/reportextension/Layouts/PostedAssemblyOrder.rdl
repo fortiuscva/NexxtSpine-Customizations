@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-07-23T18:35:41.8777906Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-07-27T21:11:45.3107131Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -3086,7 +3086,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Parameters!PostedDisAssemblyReportCaption.Value</Value>
+                      <Value>=IIF(Fields!NTSIsDisAssembly.Value,Parameters!PostedDisAssemblyReportCaption.Value,Parameters!PostedAssemblyOrderCaption.Value)</Value>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>14pt</FontSize>
@@ -3856,6 +3856,9 @@ End Function
         </Field>
         <Field Name="NTSWorkDescription">
           <DataField>NTSWorkDescription</DataField>
+        </Field>
+        <Field Name="NTSIsDisAssembly">
+          <DataField>NTSIsDisAssembly</DataField>
         </Field>
         <Field Name="NTSTracking_PostedAssemblyLine">
           <DataField>NTSTracking_PostedAssemblyLine</DataField>
