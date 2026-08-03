@@ -353,6 +353,33 @@ codeunit 52101 "NTS Event Management"
             TrkgSpec."Lot No." := TrkgSpec."Lot No." + ItemRec."IMP Rev Level";
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"NBT_DIS Disassembly Order", OnBeforeActionEvent, "P&ost", false, false)]
+    local procedure NBT_DISDisassemblyOrder_Post_OnBeforeActionEvent(var Rec: Record "Assembly Header")
+    begin
+        if Rec."NTS Disassembly Component Only" then
+            Rec.TestField("NTS Serial No.");
+    end;
+
+    [EventSubscriber(ObjectType::Page, Page::"NBT_DIS Disassembly Order", OnBeforeActionEvent, PreviewPosting, false, false)]
+    local procedure NBT_DISDisassemblyOrder_PreviewPosting_OnBeforeActionEvent(var Rec: Record "Assembly Header")
+    begin
+        if Rec."NTS Disassembly Component Only" then
+            Rec.TestField("NTS Serial No.");
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnBeforePostItemOutputProcedure, '', false, false)]
+    local procedure OnBeforePostItemOutputProcedure(AssemblyHeader: Record "Assembly Header"; PostingNoSeries: Code[20]; QtyToOutput: Decimal; QtyToOutputBase: Decimal; var ItemJnlPostLine: Codeunit "Item Jnl.-Post Line"; var WhseJnlRegisterLine: Codeunit "Whse. Jnl.-Register Line"; DocumentNo: Code[20]; IsCorrection: Boolean; ApplyToEntryNo: Integer; var Result: Integer; var IsHandled: Boolean)
+    begin
+        if AssemblyHeader."NTS Disassembly Component Only" then
+            IsHandled := true;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnBeforeOnRun, '', false, false)]
+    local procedure OnBeforeOnRun(var AssemblyHeader: Record "Assembly Header"; SuppressCommit: Boolean)
+    begin
+        if AssemblyHeader."NTS Disassembly Component Only" then
+            AssemblyHeader.TestField("NTS Serial No.");
+    end;
 
     local procedure CopyLotInformatonFromProdOrderToSubconPO(var PurchLine: Record "Purchase Line")
     begin
@@ -449,6 +476,70 @@ codeunit 52101 "NTS Event Management"
 
         if (xRec."Routing Status" = xRec."Routing Status"::Finished) and (xRec."Routing Status" <> Rec."Routing Status") then
             xRec."Routing Status" := Rec."Routing Status";
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly Line Management", OnAfterTransferBOMComponent, '', false, false)]
+    local procedure Assembly_Line_Mgt_OnAfterTransferBOMComponent(var AssemblyLine: Record "Assembly Line"; BOMComponent: Record "BOM Component"; AssemblyHeader: Record "Assembly Header")
+    var
+        PostedAsmHeader: Record "Posted Assembly Header";
+        ItemLedgEntry: Record "Item Ledger Entry";
+        QtyReversed: Decimal;
+        OriginalQty: Decimal;
+        ComponentILE, OutputILE : Record "Item Ledger Entry";
+    begin
+        if not AssemblyHeader."NTS Disassembly Component Only" then
+            exit;
+        if not AssemblyHeader."NBT_DIS Disassembly" then
+            exit;
+        if AssemblyHeader."NTS Serial No." = '' then
+            exit;
+        if AssemblyLine.Type <> AssemblyLine.Type::Item then
+            exit;
+
+        QtyReversed := 0;
+
+        OutputILE.Reset();
+        OutputILE.SetRange("Item No.", AssemblyHeader."Item No.");
+        OutputILE.SetRange("Serial No.", AssemblyHeader."NTS Serial No.");
+        OutputILE.SetRange(Positive, true);
+        OutputILE.SetRange("Entry Type", OutputILE."Entry Type"::"Assembly Output");
+        if OutputILE.FindSet() then
+            repeat
+                ComponentILE.Reset();
+                ComponentILE.SetRange("Document No.", OutputILE."Document No.");
+                ComponentILE.SetRange("Entry Type", ComponentILE."Entry Type"::"Assembly Consumption");
+                ComponentILE.SetFilter(Quantity, '<0');
+                ComponentILE.SetRange("Item No.", AssemblyLine."No.");
+                if ComponentILE.FindSet() then
+                    repeat
+                        QtyReversed += ComponentILE.Quantity;
+                    until ComponentILE.Next() = 0;
+            until OutputILE.Next() = 0;
+
+        PostedAsmHeader.Reset();
+        PostedAsmHeader.SetRange("Item No.", AssemblyHeader."Item No.");
+        PostedAsmHeader.SetRange("NTS Serial No.", AssemblyHeader."NTS Serial No.");
+        PostedAsmHeader.SetRange("NTS Disassembly Component Only", true);
+        if PostedAsmHeader.FindSet() then
+            repeat
+                ItemLedgEntry.Reset();
+                ItemLedgEntry.SetRange("Document No.", PostedAsmHeader."No.");
+                ItemLedgEntry.SetRange("Item No.", AssemblyLine."No.");
+                ItemLedgEntry.SetFilter(Quantity, '>0');
+                if ItemLedgEntry.FindSet() then
+                    repeat
+                        QtyReversed += ItemLedgEntry.Quantity;
+                    until ItemLedgEntry.Next() = 0;
+            until PostedAsmHeader.Next() = 0;
+
+        AssemblyLine."NTS Qty Reversed" := QtyReversed;
+
+        if QtyReversed = 0 then
+            AssemblyLine.Validate(Quantity, 0)
+        else if QtyReversed > 0 then
+            AssemblyLine.Validate(Quantity, (AssemblyLine.Quantity - QtyReversed))
+        else
+            AssemblyLine.Validate(Quantity, Abs(QtyReversed))
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Purchase Line", OnAfterAssignItemValues, '', false, false)]

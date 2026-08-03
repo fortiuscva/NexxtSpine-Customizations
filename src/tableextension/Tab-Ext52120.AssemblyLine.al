@@ -19,5 +19,12 @@ tableextension 52120 "NTS Assembly Line" extends "Assembly Line"
             FieldClass = FlowField;
             CalcFormula = exist("Reservation Entry" where("Source ID" = field("Document No."), "Source Ref. No." = field("Line No."), "Source Type" = const(901), "Source Subtype" = field("Document Type"), "Reservation Status" = filter(Surplus)));
         }
+        field(52134; "NTS Qty Reversed"; Decimal)
+        {
+            Caption = 'Qty. Reversed';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            DataClassification = CustomerContent;
+        }
     }
 }
