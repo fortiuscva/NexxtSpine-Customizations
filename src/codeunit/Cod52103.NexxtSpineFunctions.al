@@ -151,13 +151,15 @@ codeunit 52103 "NTS NexxtSpine Functions"
         SalesOrderCreated: Boolean;
     begin
         SalesOrderCreated := false;
-        // if SelectedDoRHeaders.FindSet() then
-        //     repeat
-        //         SelectedDoRHeaders.TestField("Customer No.");
-        //         SelectedDoRHeaders.TestField(Status, SelectedDoRHeaders.Status::Released);
-        //     if PostDisAssemblyPar then
-        //         DisassembleSet(SelectedDoRHeaders);
-        // until SelectedDoRHeaders.Next() = 0;
+        if SelectedDoRHeaders.FindSet() then
+            repeat
+                SelectedDoRHeaders.TestField("Customer No.");
+                SelectedDoRHeaders.TestField(Status, SelectedDoRHeaders.Status::Released);
+                if PostDisAssemblyPar then begin
+                    //DisassembleSet(SelectedDoRHeaders);
+                    DisassembleOrderFromDOR(SelectedDoRHeaders);
+                end;
+            until SelectedDoRHeaders.Next() = 0;
 
         PrevCustNo := '';
         PrevLocation := '';
@@ -232,8 +234,8 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         end;
                     until DoRLine.Next() = 0;
 
-                // SelectedDoRHeaders.Posted := true;
-                // SelectedDoRHeaders.Modify();
+                SelectedDoRHeaders.Posted := true;
+                SelectedDoRHeaders.Modify();
 
                 PrevCustNo := SelectedDoRHeaders."Customer No.";
                 PrevLocation := SelectedDoRHeaders."Location Code";
@@ -824,7 +826,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         Location.SetRange("NTS Is Finished Goods Location", true);
         Location.FindFirst();
 
-        GroupSalesLinesByDORNo.SetRange(DocumentType, SalesHeader."Document Type");
+        /* GroupSalesLinesByDORNo.SetRange(DocumentType, SalesHeader."Document Type");
         GroupSalesLinesByDORNo.SetRange(DocumentNo, SalesHeader."No.");
         GroupSalesLinesByDORNo.Open();
         while GroupSalesLinesByDORNo.Read() do begin
@@ -838,7 +840,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 NTSDORHeader.Posted := true;
                 NTSDORHeader.Modify();
             end;
-        end;
+        end; */
 
         SalesLine.Reset();
         SalesLine.SetCurrentKey("NTS DOR No.", "NTS DOR Line No.", "NTS Set Name");
