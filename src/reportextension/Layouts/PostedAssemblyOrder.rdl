@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-08-03T18:58:45.9046382Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-08-05T15:09:07.4305028Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -744,6 +744,7 @@
                                                                   <Style>
                                                                     <FontFamily>Segoe UI</FontFamily>
                                                                     <FontSize>8pt</FontSize>
+                                                                    <Format>d</Format>
                                                                   </Style>
                                                                 </TextRun>
                                                               </TextRuns>
