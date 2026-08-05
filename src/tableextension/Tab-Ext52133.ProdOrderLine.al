@@ -46,8 +46,14 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
             TableRelation = "IMP System Name";
 
             trigger OnValidate()
+            var
+                SystemNameRec: Record "IMP System Name";
             begin
-                Rec.CalcFields("NTS System Description");
+                if Rec."NTS System Name" <> '' then begin
+                    SystemNameRec.SetRange("IMP Code", Rec."NTS System Name");
+                    if SystemNameRec.FindFirst() then
+                        Rec.Validate("NTS System Description", SystemNameRec."IMP Description");
+                end;
             end;
         }
 
@@ -100,8 +106,6 @@ tableextension 52133 "NTS Prod. Order Line" extends "Prod. Order Line"
         field(50114; "NTS System Description"; Text[100])
         {
             Caption = 'System Description';
-            FieldClass = FlowField;
-            CalcFormula = lookup("IMP System Name"."IMP Description" where("IMP Code" = field("NTS System Name")));
             Editable = false;
         }
         modify("Item No.")
