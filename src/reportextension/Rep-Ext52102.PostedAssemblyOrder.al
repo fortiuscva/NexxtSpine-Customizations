@@ -15,8 +15,9 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
         add("Posted Assembly Line")
         {
             column(NTSTracking_PostedAssemblyLine; GetAssmLineLotOrSerial())
-            {
-            }
+            { }
+            column(NTSExpirationDate; GetAssmLineExpirationDate())
+            { }
         }
         modify("Posted Assembly Header")
         {
@@ -35,7 +36,6 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
         WorkDescriptionCaption = 'Work Description';
         PostedDisAssemblyReportCaption = 'Posted Disassembly Order';
         ExpirationDateCapiton = 'Expiration Date';
-
     }
     local procedure GetAssmLineLotOrSerial(): Text
     var
@@ -114,6 +114,24 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
             exit(SerialNo)
         else
             exit(LotNo);
+    end;
+
+    local procedure GetAssmLineExpirationDate(): Date
+    var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+        ExpirationDate: Date;
+
+    begin
+        Clear(ExpirationDate);
+        ItemLedgerEntry.Reset();
+        ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Posted Assembly");
+        ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::"Assembly Consumption");
+        ItemLedgerEntry.SetRange("Document No.", "Posted Assembly Line"."Document No.");
+        ItemLedgerEntry.SetRange("Document Line No.", "Posted Assembly Line"."Line No.");
+        ItemLedgerEntry.SetRange("Item No.", "Posted Assembly Line"."No.");
+        If ItemLedgerEntry.FindFirst() then
+            ExpirationDate := ItemLedgerEntry."Expiration Date";
+        exit(ExpirationDate);
     end;
 
     var
