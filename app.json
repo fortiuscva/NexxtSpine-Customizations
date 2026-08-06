@@ -40,6 +40,12 @@
       "name": "Dynamic Ship: Integrated Shipping",
       "version": "2.8.9188.2",
       "publisher": "Insight Works" 
+    },
+    {
+      "id": "c17040eb-7ddc-4acf-9846-34dd81ab869b",
+      "name": "Disassembly Order",
+      "version": "25.0.0.1",
+      "publisher": "NuBeTech SpA" 
     }
   ],
   "screenshots": [],
