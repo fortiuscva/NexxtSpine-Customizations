@@ -1597,12 +1597,23 @@ codeunit 52103 "NTS NexxtSpine Functions"
     var
         TempNetBuffer: Record "NTS Serial BOM Inquiry Buffer" temporary;
         AssemblyLine: Record "Assembly Line";
+        NewAssemblyLine: Record "Assembly Line";
         DeleteAssemblyLine: Record "Assembly Line";
-        LineExists, LineDeleted : Boolean;
+        LineExists: Boolean;
+        LineDeleted: Boolean;
+        NextLineNo: Integer;
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ForReservEntry: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
+        ItemTrackingVal: integer;
     begin
         LineDeleted := false;
+
         GetNetNegativeComponents(AssemblyHeader."Item No.", AssemblyHeader."NTS Serial No.", TempNetBuffer);
 
+        //-----------------------------------------
+        // Update existing lines / Delete removed lines
+        //-----------------------------------------
         AssemblyLine.Reset();
         AssemblyLine.SetRange("Document Type", AssemblyHeader."Document Type");
         AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
@@ -1619,17 +1630,80 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     LineExists := false;
 
                 if not LineExists then begin
-                    DeleteAssemblyLine.Reset();
-                    if DeleteAssemblyLine.Get(AssemblyLine."Document Type", AssemblyLine."Document No.", AssemblyLine."Line No.") then
-                        if DeleteAssemblyLine.Delete(true) then
-                            LineDeleted := true;
+                    DeleteAssemblyLine.Get(AssemblyLine."Document Type", AssemblyLine."Document No.", AssemblyLine."Line No.");
+                    if DeleteAssemblyLine.Delete(true) then
+                        LineDeleted := true;
                 end;
             until AssemblyLine.Next() = 0;
+
+        NextLineNo := 0;
+
+        AssemblyLine.Reset();
+        AssemblyLine.SetRange("Document Type", AssemblyHeader."Document Type");
+        AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
+        if AssemblyLine.FindLast() then
+            NextLineNo := AssemblyLine."Line No.";
+
+        // Add Manual Components
+        TempNetBuffer.Reset();
+        if TempNetBuffer.FindSet() then
+            repeat
+                AssemblyLine.Reset();
+                AssemblyLine.SetRange("Document Type", AssemblyHeader."Document Type");
+                AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
+                AssemblyLine.SetRange(Type, AssemblyLine.Type::Item);
+                AssemblyLine.SetRange("No.", TempNetBuffer."Item No.");
+                if not AssemblyLine.FindFirst() then begin
+
+                    NextLineNo += 10000;
+
+                    NewAssemblyLine.Init();
+                    NewAssemblyLine."Document Type" := AssemblyHeader."Document Type";
+                    NewAssemblyLine."Document No." := AssemblyHeader."No.";
+                    NewAssemblyLine."Line No." := NextLineNo;
+
+                    NewAssemblyLine.Insert(true);
+
+                    NewAssemblyLine.Validate(Type, NewAssemblyLine.Type::Item);
+                    NewAssemblyLine.Validate("No.", TempNetBuffer."Item No.");
+                    NewAssemblyLine.Validate("Location Code", AssemblyHeader."Location Code");
+                    NewAssemblyLine.Validate("Unit of Measure Code", TempNetBuffer."Unit of Measure");
+                    NewAssemblyLine.Validate("Quantity per", TempNetBuffer.Quantity);
+                    NewAssemblyLine.Validate(Quantity, TempNetBuffer.Quantity);
+                    NewAssemblyLine.Validate("Quantity to Consume", TempNetBuffer.Quantity);
+                    NewAssemblyLine."NTS Qty Reversed" := 0;
+                    NewAssemblyLine.Modify(true);
+
+                    ItemTrackingVal := FindItemTrackingCode(NewAssemblyLine."No.");
+                    if (ItemTrackingVal <> 0) then begin
+                        if ItemTrackingVal = 2 then begin
+                            ForReservEntry."Serial No." := TempNetBuffer."Serial No.";
+                            TrackingSpec."New Serial No." := TempNetBuffer."Serial No.";
+                        end else begin
+                            ForReservEntry."Lot No." := TempNetBuffer."Lot No.";
+                            TrackingSpec."New Lot No." := TempNetBuffer."Lot No.";
+                            ForReservEntry."Serial No." := TempNetBuffer."Serial No.";
+                            TrackingSpec."New Serial No." := TempNetBuffer."Serial No.";
+                        end;
+                        CreateReservEntry.CreateReservEntryFor(Database::"Assembly Line", 1, NewAssemblyLine."Document No.", '',
+                        0, NewAssemblyLine."Line No.", NewAssemblyLine."Qty. per Unit of Measure",
+                        NewAssemblyLine.Quantity, NewAssemblyLine."Quantity (Base)", ForReservEntry);
+                        CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                        CreateReservEntry.CreateEntry(NewAssemblyLine."No.", NewAssemblyLine."Variant Code",
+                        NewAssemblyLine."Location Code", NewAssemblyLine.Description, 0D, NewAssemblyLine."Due Date",
+                        0, ForReservEntry."Reservation Status"::Surplus);
+                    end;
+                end;
+
+            until TempNetBuffer.Next() = 0;
+
         if LineDeleted then
             Message('Disassembly lines refreshed successfully.');
     end;
 
-    procedure ExportPositivePay(BankAccountNo: Code[20]; StartDate: Date; EndDate: Date)
+    procedure ExportPositivePay(BankAccountNo: Code[20];
+        StartDate: Date;
+        EndDate: Date)
     var
         CheckLedgEntry: Record "Check Ledger Entry";
         Vendor: Record Vendor;

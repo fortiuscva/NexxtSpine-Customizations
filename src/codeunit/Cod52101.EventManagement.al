@@ -542,6 +542,46 @@ codeunit 52101 "NTS Event Management"
             AssemblyLine.Validate(Quantity, Abs(QtyReversed))
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly Line Management", OnBeforeCreateAndSendNotification, '', false, false)]
+    local procedure OnBeforeCreateAndSendNotification(var AssemblyHeader: Record "Assembly Header"; var AssemblyLine: Record "Assembly Line"; var IsHandled: Boolean; var Rollback: Boolean)
+    var
+        DummyAssemblyHeader: Record "Assembly Header" temporary;
+        NotificationLifecycleMgt: Codeunit "Notification Lifecycle Mgt.";
+        AssemblyAvailability2: Page "Assembly Availability Check";
+        AssemblyAvailCheckNotification: Notification;
+        DetailsTxt: Label 'Show details';
+        DontShowAgainTxt: Label 'Don''t show again';
+        DisAssembleAvailabilityNotificationMsg: Label 'The inventory is not sufficient to cover request to disassemble requested quantity of Item %1.', Comment = '%1=Item No.';
+    begin
+        if not AssemblyHeader."NTS Disassembly Component Only" then
+            exit;
+
+        //remove initial notifications for assembly if exists
+        if AssemblyHeader."No." <> '' then begin
+            DummyAssemblyHeader := AssemblyHeader;
+            DummyAssemblyHeader."No." := '';
+            NotificationLifecycleMgt.RecallNotificationsForRecordWithAdditionalContext(DummyAssemblyHeader.RecordId, GetDisAssemblyAvailabilityNotificationId(), true);
+        end;
+
+        NotificationLifecycleMgt.RecallNotificationsForRecordWithAdditionalContext(AssemblyHeader.RecordId, GetDisAssemblyAvailabilityNotificationId(), true);
+
+        AssemblyAvailCheckNotification.Id(CreateGuid());
+        AssemblyAvailCheckNotification.Message(StrSubstNo(DisAssembleAvailabilityNotificationMsg, AssemblyHeader."Item No."));
+        AssemblyAvailCheckNotification.Scope(NotificationScope::LocalScope);
+        AssemblyAvailCheckNotification.AddAction(DetailsTxt, Codeunit::"Assembly Line Management", 'ShowNotificationDetails');
+        AssemblyAvailCheckNotification.AddAction(DontShowAgainTxt, Codeunit::"Assembly Line Management", 'DeactivateNotification');
+        AssemblyAvailability2.PopulateDataOnNotification(AssemblyAvailCheckNotification, AssemblyHeader);
+        NotificationLifecycleMgt.SendNotificationWithAdditionalContext(
+          AssemblyAvailCheckNotification, AssemblyHeader.RecordId, GetDisAssemblyAvailabilityNotificationId());
+        IsHandled := true;
+        Rollback := false;
+    end;
+
+    local procedure GetDisAssemblyAvailabilityNotificationId(): Guid
+    begin
+        exit('93d00a70-333d-4940-87e9-5eaad2bc3587');
+    end;
+
     [EventSubscriber(ObjectType::Table, Database::"Purchase Line", OnAfterAssignItemValues, '', false, false)]
     local procedure PurchaseLine_OnAfterAssignItemValues(var PurchLine: Record "Purchase Line"; Item: Record Item; CurrentFieldNo: Integer; PurchHeader: Record "Purchase Header")
     begin
