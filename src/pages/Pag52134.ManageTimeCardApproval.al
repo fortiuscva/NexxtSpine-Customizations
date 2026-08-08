@@ -5,7 +5,6 @@ page 52134 "NTS Manage Time Card Approval"
     PageType = List;
     SourceTable = "SFI Employee Approval Mapping";
     UsageCategory = Lists;
-
     layout
     {
         area(Content)
@@ -41,4 +40,14 @@ page 52134 "NTS Manage Time Card Approval"
             }
         }
     }
+    trigger OnOpenPage()
+    var
+        UserSetup: Record "User Setup";
+        SFIEmployeeRec: Record "SFI Employee";
+    begin
+        UserSetup.Get(UserId());
+        SFIEmployeeRec.SetRange("User ID", UserSetup."User ID");
+        if SFIEmployeeRec.FindFirst() then
+            Rec.SetRange("Employee No.", SFIEmployeeRec."No.");
+    end;
 }
