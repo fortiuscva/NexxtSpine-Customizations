@@ -9,8 +9,6 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
             { }
             column(NTSWorkDescription; WorkDescription)
             { }
-            column(NTSIsDisAssembly; "Posted Assembly Header"."NBT_DIS Disassembly")
-            { }
         }
         add("Posted Assembly Line")
         {
@@ -33,8 +31,6 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
         LotOrSerialCaption = 'LOT/SERIAL#';
         SerialCaption = 'SERIAL#';
         WorkDescriptionCaption = 'Work Description';
-        PostedDisAssemblyReportCaption = 'Posted Disassembly Order';
-        ExpirationDateCapiton = 'Expiration Date';
 
     }
     local procedure GetAssmLineLotOrSerial(): Text
@@ -84,32 +80,27 @@ reportextension 52102 "NTS Posted Assembly Order" extends "Posted Assembly Order
         Clear(SerialNo);
         Clear(LotNo);
 
-        if "Posted Assembly Header"."NBT_DIS Disassembly" then begin
-            if "Posted Assembly Header"."NTS Serial No." <> '' then
-                if SerialNo = '' then
-                    SerialNo := "Posted Assembly Header"."NTS Serial No.";
-        end else begin
-            ItemLedgerEntry.Reset();
-            ItemLedgerEntry.SetRange("Document No.", DocumentNo);
-            ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Posted Assembly");
-            ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::"Assembly Output");
-            ItemLedgerEntry.SetRange("Item No.", ItemNo);
+        ItemLedgerEntry.Reset();
+        ItemLedgerEntry.SetRange("Document No.", DocumentNo);
+        ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Posted Assembly");
+        ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::"Assembly Output");
+        ItemLedgerEntry.SetRange("Item No.", ItemNo);
 
-            if ItemLedgerEntry.FindSet() then
-                repeat
-                    if ItemLedgerEntry."Serial No." <> '' then begin
-                        if SerialNo = '' then
-                            SerialNo := ItemLedgerEntry."Serial No."
-                        else
-                            SerialNo += ',' + ItemLedgerEntry."Serial No.";
-                    end else begin
-                        if LotNo = '' then
-                            LotNo := ItemLedgerEntry."Lot No."
-                        else
-                            LotNo += ',' + ItemLedgerEntry."Lot No.";
-                    end;
-                until ItemLedgerEntry.Next() = 0;
-        end;
+        if ItemLedgerEntry.FindSet() then
+            repeat
+                if ItemLedgerEntry."Serial No." <> '' then begin
+                    if SerialNo = '' then
+                        SerialNo := ItemLedgerEntry."Serial No."
+                    else
+                        SerialNo += ',' + ItemLedgerEntry."Serial No.";
+                end else begin
+                    if LotNo = '' then
+                        LotNo := ItemLedgerEntry."Lot No."
+                    else
+                        LotNo += ',' + ItemLedgerEntry."Lot No.";
+                end;
+            until ItemLedgerEntry.Next() = 0;
+
         if SerialNo <> '' then
             exit(SerialNo)
         else
