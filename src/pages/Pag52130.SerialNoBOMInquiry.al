@@ -193,6 +193,7 @@ page 52130 "NTS Serial No. BOM Inquiry"
         FilterSerialNo: Code[50];
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         LockFilters: Boolean;
+        FilterComponentItemNo: Code[20];
 
     local procedure LoadInquiry()
     begin
@@ -201,10 +202,15 @@ page 52130 "NTS Serial No. BOM Inquiry"
 
         NexxtSpineFunctions.BuildInquiry(FilterItemNo, FilterSerialNo, Rec);
 
+        if FilterComponentItemNo <> '' then begin
+            Rec.SetRange("Item No.", FilterComponentItemNo);
+            Rec.SetFilter("Remaining Qty", '>0');
+        end;
+
         CurrPage.Update(false);
     end;
 
-    procedure SetParameters(ItemNo: Code[20]; SerialNo: Code[50])
+    /* procedure SetParameters(ItemNo: Code[20]; SerialNo: Code[50])
     begin
         FilterItemNo := ItemNo;
         FilterSerialNo := SerialNo;
@@ -217,5 +223,23 @@ page 52130 "NTS Serial No. BOM Inquiry"
         CurrPage.SetSelectionFilter(Rec);
 
         TempBuffer := Rec;
+    end; */
+
+    procedure SetParameters(ParentItemNo: Code[20]; SerialNo: Code[50])
+    begin
+        FilterItemNo := ParentItemNo;
+        FilterSerialNo := SerialNo;
+        LockFilters := true;
+        LoadInquiry();
+    end;
+
+    procedure GetSelection(var SelectedBuffer: Record "NTS Serial BOM Inquiry Buffer" temporary)
+    begin
+        SelectedBuffer := Rec;
+    end;
+
+    procedure SetComponentFilter(ItemNo: Code[20])
+    begin
+        FilterComponentItemNo := ItemNo;
     end;
 }

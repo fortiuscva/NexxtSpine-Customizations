@@ -611,6 +611,14 @@ codeunit 52101 "NTS Event Management"
         SingleInstance.SetCalcRoutingsFromRefreshProdOrder(CalcRoutings);
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"NBT_DIS DisassemblyOrdSubform", OnBeforeActionEvent, "Item Tracking Lines", false, false)]
+    local procedure OnBeforeActionEvent(var Rec: Record "Assembly Line")
+    var
+        SingleInstance: Codeunit "NTS Single Instance";
+    begin
+        SingleInstance.SetAssemblyLineContext(Rec."Document Type", Rec."Document No.", Rec."Line No.");
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
