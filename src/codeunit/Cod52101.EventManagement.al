@@ -619,6 +619,33 @@ codeunit 52101 "NTS Event Management"
         SingleInstance.SetAssemblyLineContext(Rec."Document Type", Rec."Document No.", Rec."Line No.");
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnQueryClosePageOnBeforeConfirmClosePage, '', false, false)]
+    local procedure OnQueryClosePageOnBeforeConfirmClosePage(var TrackingSpecification: Record "Tracking Specification"; var IsHandled: Boolean; CurrentRunMode: Enum "Item Tracking Run Mode"; var Result: Boolean)
+    var
+        CurrTrackingSpec: Record "Tracking Specification" temporary;
+        SingleInstanceCu: Codeunit "NTS Single instance";
+        DocumentType: Enum "Assembly Document Type";
+        DocumentNo: Code[20];
+        LineNo: Integer;
+        AssemblyHeader: Record "Assembly Header";
+    begin
+        if SingleInstanceCu.GetAssemblyLine(DocumentType, DocumentNo, LineNo) then begin
+            if not AssemblyHeader.Get(DocumentType, DocumentNo) then
+                exit;
+
+            CurrTrackingSpec.Copy(TrackingSpecification, true);
+
+            if CurrTrackingSpec.findset() then
+                repeat
+                    if (CurrTrackingSpec."Expiration Date" < Today) and (CurrTrackingSpec."Expiration Date" <> 0D) then
+                        Error('%1 %2 should not be less than %3', CurrTrackingSpec.FieldCaption("Expiration Date"), CurrTrackingSpec."Expiration Date", Today);
+                until CurrTrackingSpec.Next() = 0;
+
+            IsHandled := true;
+            Result := true;
+        end;
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';

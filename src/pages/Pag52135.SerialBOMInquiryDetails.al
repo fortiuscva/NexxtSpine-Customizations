@@ -46,7 +46,10 @@ page 52135 "NTS Serial BOM Inquiry Details"
                 {
                     ApplicationArea = All;
                 }
-
+                field("Expiration Date"; Rec."Expiration Date")
+                {
+                    ApplicationArea = All;
+                }
                 field("Location Code"; Rec."Location Code")
                 {
                     ApplicationArea = All;

@@ -21,11 +21,46 @@ page 52130 "NTS Serial No. BOM Inquiry"
                 {
                     Caption = 'Parent Item No.';
                     ApplicationArea = All;
-                    TableRelation = Item;
                     Editable = not LockFilters;
 
-                    trigger OnValidate()
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        Item: Record Item;
                     begin
+                        Item.Reset();
+                        if Page.RunModal(Page::"Item List", Item) = Action::LookupOK then begin
+                            FilterItemNo := Item."No.";
+                            Text := FilterItemNo;
+
+                            Clear(FilterSerialNo);
+
+                            Rec.Reset();
+                            Rec.DeleteAll();
+
+                            CurrPage.Update(false);
+                            exit(true);
+                        end;
+                        exit(false);
+                    end;
+
+                    trigger OnValidate()
+                    var
+                        Item: Record Item;
+                    begin
+                        if FilterItemNo = '' then begin
+                            Clear(FilterSerialNo);
+                            Rec.Reset();
+                            Rec.DeleteAll();
+                            CurrPage.Update(false);
+                            exit;
+                        end;
+
+                        Item.Reset();
+                        if not Item.Get(FilterItemNo) then
+                            Error('Item %1 does not exist.', FilterItemNo);
+
+                        FilterItemNo := Item."No.";
+
                         Clear(FilterSerialNo);
 
                         Rec.Reset();

@@ -41,6 +41,8 @@ table 52115 "NTS Serial BOM Inquiry Buffer"
 
         field(15; "Location Code"; Code[10])
         { }
+        field(16; "Expiration Date"; Date)
+        { }
     }
 
     keys
