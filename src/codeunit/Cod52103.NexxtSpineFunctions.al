@@ -1503,6 +1503,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         TempBuffer."Serial No." := ComponentILE."Serial No.";
                         TempBuffer."Lot No." := ComponentILE."Lot No.";
                         TempBuffer."Location Code" := ComponentILE."Location Code";
+                        TempBuffer."Expiration Date" := ComponentILE."Expiration Date";
                         TempBuffer.Insert();
                     until ComponentILE.Next() = 0;
             until OutputILE.Next() = 0;
@@ -1535,6 +1536,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                         TempBuffer."Serial No." := ComponentILE."Serial No.";
                         TempBuffer."Lot No." := ComponentILE."Lot No.";
                         TempBuffer."Location Code" := ComponentILE."Location Code";
+                        TempBuffer."Expiration Date" := ComponentILE."Expiration Date";
                         TempBuffer.Insert();
                     until ComponentILE.Next() = 0;
             until PostedAsmHeader.Next() = 0;
@@ -1545,7 +1547,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         TempBuffer.Reset();
         TempBuffer.SetRange("Item No.", ItemLedgEntry."Item No.");
         TempBuffer.SetRange("Lot No.", ItemLedgEntry."Lot No.");
-        TempBuffer.SetRange("Location Code", ItemLedgEntry."Location Code");
+        //TempBuffer.SetRange("Location Code", ItemLedgEntry."Location Code");
         if TempBuffer.FindFirst() then begin
             TempBuffer.Quantity += ItemLedgEntry.Quantity;
 
