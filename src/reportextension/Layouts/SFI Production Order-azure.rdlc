@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-04-14T18:16:24.9959995Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-09-11T14:50:34.1167121Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -761,7 +761,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Prod_Order_Description.Value &amp; Fields!Prod_Order_Description2.Value</Value>
+                                      <Value>=Fields!Prod_Order_Description.Value</Value>
                                       <Style>
                                         <FontSize>8pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
