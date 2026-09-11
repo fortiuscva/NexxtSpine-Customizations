@@ -377,7 +377,13 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyLine: Record "Assembly Line";
         DisassemblyOrderCreated, Result : Boolean;
         AssemblyPost: Codeunit "Assembly-Post";
+        NoSeries: Codeunit "No. Series";
+        AssemblySetup: Record "Assembly Setup";
     begin
+        AssemblySetup.Get();
+        AssemblySetup.TestField("NBT_DIS Post. Disass. Ord Nos.");
+        AssemblySetup.TestField("NBT_DIS Disassembly Order Nos.");
+
         NextLineNo := 0;
 
         if Customer.Get(DoRHeader."Distributor") then
@@ -385,7 +391,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
         AssemblyHeader.Init();
         AssemblyHeader."Document Type" := AssemblyHeader."Document Type"::Order;
-        AssemblyHeader."No." := '';
+        AssemblyHeader."No." := NoSeries.GetNextNo(AssemblySetup."NBT_DIS Disassembly Order Nos.", DoRHeader."Posting Date");
         AssemblyHeader.Insert(true);
         AssemblyHeader.Validate("Item No.", DoRHeader."Set Name");
         AssemblyHeader.Validate("Posting Date", DoRHeader."Posting Date");
@@ -398,6 +404,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader."NTS Disassembly Component Only" := true;
         AssemblyHeader."NTS Serial No." := DoRHeader."Serial No.";
         AssemblyHeader."NBT_DIS Disassembly" := true;
+        AssemblyHeader."Posting No. Series" := AssemblySetup."NBT_DIS Post. Disass. Ord Nos.";
         if AssemblyHeader.Modify(true) then
             DisassemblyOrderCreated := true;
 
@@ -549,9 +556,18 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader.Modify(true);
         //Creating tracking for Assembly Item
         ItemTrackingVal := FindItemTrackingCode(AssemblyHeader."Item No.");
-        if (ItemTrackingVal <> 0) then begin
-            ForReservEntry."Lot No." := DORHeader."Serial No.";
-            TrackingSpec."New Lot No." := DORHeader."Serial No.";
+        if (ItemTrackingVal <> 0) then begin //adsk
+            if ItemTrackingVal = 2 then begin
+                ForReservEntry."Serial No." := DORHeader."Serial No.";
+                TrackingSpec."New Serial No." := DORHeader."Serial No.";
+            end else begin
+                ForReservEntry."Lot No." := DORHeader."Lot No.";
+                TrackingSpec."New Lot No." := DORHeader."Lot No.";
+                ForReservEntry."Serial No." := DORHeader."Serial No.";
+                TrackingSpec."New Serial No." := DORHeader."Serial No.";
+            end;
+            //ForReservEntry."Lot No." := DORHeader."Serial No.";
+            //TrackingSpec."New Lot No." := DORHeader."Serial No.";
 
             CreateReservEntry.CreateReservEntryFor(
             Database::"Assembly Header", 1,
@@ -1512,7 +1528,6 @@ codeunit 52103 "NTS NexxtSpine Functions"
         PostedAsmHeader.SetRange("Item No.", ParentItemNo);
         PostedAsmHeader.SetRange("NTS Serial No.", SerialNo);
         PostedAsmHeader.SetRange("NTS Disassembly Component Only", true);
-
         if PostedAsmHeader.FindSet() then
             repeat
                 ComponentILE.Reset();
@@ -1524,7 +1539,10 @@ codeunit 52103 "NTS NexxtSpine Functions"
 
                         TempBuffer.Init();
                         TempBuffer."Entry No." := EntryNo;
-                        TempBuffer."Document Type" := TempBuffer."Document Type"::"Disassembly Order";
+                        if PostedAsmHeader."NBT_DIS Disassembly" then
+                            TempBuffer."Document Type" := TempBuffer."Document Type"::"Disassembly Order"
+                        else
+                            TempBuffer."Document Type" := TempBuffer."Document Type"::"Assembly Consumption";
                         TempBuffer."Item No." := ComponentILE."Item No.";
                         TempBuffer.Description := ComponentILE.Description;
                         TempBuffer.Quantity := ComponentILE.Quantity;
