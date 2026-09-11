@@ -25,6 +25,7 @@ codeunit 52108 "NTS Single Instance"
 
     procedure SetAssemblyLineContext(DocumentType: Enum "Assembly Document Type"; DocumentNo: Code[20]; LineNo: Integer)
     begin
+        ClearContext();
         AssemblyDocumentType := DocumentType;
         AssemblyDocumentNo := DocumentNo;
         AssemblyLineNo := LineNo;

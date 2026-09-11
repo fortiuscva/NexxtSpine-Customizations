@@ -180,4 +180,17 @@ pageextension 52132 "NTS Item Tracking Lines" extends "Item Tracking Lines"
            LotNoInfo.Get(Rec."Item No.", Rec."Variant Code", Rec."Lot No.") then
             LotNoNotesTxt := LotNoInfo.GetLotNoNotes();
     end;
+
+    trigger OnQueryClosePage(CloseAction: Action): Boolean
+    var
+        CurrTrackingSpec: Record "Tracking Specification" temporary;
+    begin
+        CurrTrackingSpec.Copy(Rec, true);
+
+        if CurrTrackingSpec.findset() then
+            repeat
+                if (CurrTrackingSpec."Expiration Date" < Today) and (CurrTrackingSpec."Expiration Date" <> 0D) then
+                    Error('%1 %2 should not be less than %3', CurrTrackingSpec.FieldCaption("Expiration Date"), CurrTrackingSpec."Expiration Date", Today);
+            until CurrTrackingSpec.Next() = 0;
+    end;
 }

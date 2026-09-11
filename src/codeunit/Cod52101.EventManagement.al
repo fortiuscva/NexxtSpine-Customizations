@@ -619,6 +619,14 @@ codeunit 52101 "NTS Event Management"
         SingleInstance.SetAssemblyLineContext(Rec."Document Type", Rec."Document No.", Rec."Line No.");
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"Assembly Order Subform", OnBeforeActionEvent, "Item Tracking Lines", false, false)]
+    local procedure AssemblyOrderSubform_OnBeforeActionEvent(var Rec: Record "Assembly Line")
+    var
+        SingleInstance: Codeunit "NTS Single Instance";
+    begin
+        SingleInstance.SetAssemblyLineContext(Rec."Document Type", Rec."Document No.", Rec."Line No.");
+    end;
+
     [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnQueryClosePageOnBeforeConfirmClosePage, '', false, false)]
     local procedure OnQueryClosePageOnBeforeConfirmClosePage(var TrackingSpecification: Record "Tracking Specification"; var IsHandled: Boolean; CurrentRunMode: Enum "Item Tracking Run Mode"; var Result: Boolean)
     var
