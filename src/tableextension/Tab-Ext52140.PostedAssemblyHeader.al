@@ -2,10 +2,28 @@ tableextension 52140 "NTS Posted Assembly Header" extends "Posted Assembly Heade
 {
     fields
     {
+        field(52100; "NTS DOR No."; Code[20])
+        {
+            Caption = 'DOR No.';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
         field(52133; "NTS Work Description"; Blob)
         {
             Caption = 'Work Description';
             DataClassification = CustomerContent;
+        }
+        field(52134; "NTS Disassembly Component Only"; Boolean)
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Disassembly Components Only';
+            Editable = false;
+        }
+        field(52135; "NTS Serial No."; Code[50])
+        {
+            Caption = 'Serial No.';
+            DataClassification = CustomerContent;
+            Editable = false;
         }
     }
     procedure GetWorkDescription() WorkDescription: Text
