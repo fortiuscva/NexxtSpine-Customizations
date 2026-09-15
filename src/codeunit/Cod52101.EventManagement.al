@@ -480,6 +480,181 @@ codeunit 52101 "NTS Event Management"
         SingleInstance.SetCalcRoutingsFromRefreshProdOrder(CalcRoutings);
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"NBT_DIS Disassembly Order", OnBeforeActionEvent, "P&ost", false, false)]
+    local procedure NBT_DISDisassemblyOrder_Post_OnBeforeActionEvent(var Rec: Record "Assembly Header")
+    begin
+        if Rec."NTS Disassembly Component Only" then
+            Rec.TestField("NTS Serial No.");
+    end;
+
+    [EventSubscriber(ObjectType::Page, Page::"NBT_DIS Disassembly Order", OnBeforeActionEvent, PreviewPosting, false, false)]
+    local procedure NBT_DISDisassemblyOrder_PreviewPosting_OnBeforeActionEvent(var Rec: Record "Assembly Header")
+    begin
+        if Rec."NTS Disassembly Component Only" then
+            Rec.TestField("NTS Serial No.");
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnBeforePostItemOutputProcedure, '', false, false)]
+    local procedure OnBeforePostItemOutputProcedure(AssemblyHeader: Record "Assembly Header"; PostingNoSeries: Code[20]; QtyToOutput: Decimal; QtyToOutputBase: Decimal; var ItemJnlPostLine: Codeunit "Item Jnl.-Post Line"; var WhseJnlRegisterLine: Codeunit "Whse. Jnl.-Register Line"; DocumentNo: Code[20]; IsCorrection: Boolean; ApplyToEntryNo: Integer; var Result: Integer; var IsHandled: Boolean)
+    begin
+        if AssemblyHeader."NTS Disassembly Component Only" then
+            IsHandled := true;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnBeforeOnRun, '', false, false)]
+    local procedure OnBeforeOnRun(var AssemblyHeader: Record "Assembly Header"; SuppressCommit: Boolean)
+    begin
+        if AssemblyHeader."NTS Disassembly Component Only" then
+            AssemblyHeader.TestField("NTS Serial No.");
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly Line Management", OnAfterTransferBOMComponent, '', false, false)]
+    local procedure Assembly_Line_Mgt_OnAfterTransferBOMComponent(var AssemblyLine: Record "Assembly Line"; BOMComponent: Record "BOM Component"; AssemblyHeader: Record "Assembly Header")
+    var
+        PostedAsmHeader: Record "Posted Assembly Header";
+        ItemLedgEntry: Record "Item Ledger Entry";
+        QtyReversed: Decimal;
+        OriginalQty: Decimal;
+        ComponentILE, OutputILE : Record "Item Ledger Entry";
+    begin
+        if not AssemblyHeader."NTS Disassembly Component Only" then
+            exit;
+        if not AssemblyHeader."NBT_DIS Disassembly" then
+            exit;
+        if AssemblyHeader."NTS Serial No." = '' then
+            exit;
+        if AssemblyLine.Type <> AssemblyLine.Type::Item then
+            exit;
+
+        QtyReversed := 0;
+
+        OutputILE.Reset();
+        OutputILE.SetRange("Item No.", AssemblyHeader."Item No.");
+        OutputILE.SetRange("Serial No.", AssemblyHeader."NTS Serial No.");
+        OutputILE.SetRange(Positive, true);
+        OutputILE.SetRange("Entry Type", OutputILE."Entry Type"::"Assembly Output");
+        if OutputILE.FindSet() then
+            repeat
+                ComponentILE.Reset();
+                ComponentILE.SetRange("Document No.", OutputILE."Document No.");
+                ComponentILE.SetRange("Entry Type", ComponentILE."Entry Type"::"Assembly Consumption");
+                ComponentILE.SetFilter(Quantity, '<0');
+                ComponentILE.SetRange("Item No.", AssemblyLine."No.");
+                if ComponentILE.FindSet() then
+                    repeat
+                        QtyReversed += ComponentILE.Quantity;
+                    until ComponentILE.Next() = 0;
+            until OutputILE.Next() = 0;
+
+        PostedAsmHeader.Reset();
+        PostedAsmHeader.SetRange("Item No.", AssemblyHeader."Item No.");
+        PostedAsmHeader.SetRange("NTS Serial No.", AssemblyHeader."NTS Serial No.");
+        PostedAsmHeader.SetRange("NTS Disassembly Component Only", true);
+        if PostedAsmHeader.FindSet() then
+            repeat
+                ItemLedgEntry.Reset();
+                ItemLedgEntry.SetRange("Document No.", PostedAsmHeader."No.");
+                ItemLedgEntry.SetRange("Item No.", AssemblyLine."No.");
+                ItemLedgEntry.SetFilter(Quantity, '>0');
+                if ItemLedgEntry.FindSet() then
+                    repeat
+                        QtyReversed += ItemLedgEntry.Quantity;
+                    until ItemLedgEntry.Next() = 0;
+            until PostedAsmHeader.Next() = 0;
+
+        AssemblyLine."NTS Qty Reversed" := QtyReversed;
+
+        if QtyReversed = 0 then
+            AssemblyLine.Validate(Quantity, 0)
+        else if QtyReversed > 0 then
+            AssemblyLine.Validate(Quantity, (AssemblyLine.Quantity - QtyReversed))
+        else
+            AssemblyLine.Validate(Quantity, Abs(QtyReversed))
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly Line Management", OnBeforeCreateAndSendNotification, '', false, false)]
+    local procedure OnBeforeCreateAndSendNotification(var AssemblyHeader: Record "Assembly Header"; var AssemblyLine: Record "Assembly Line"; var IsHandled: Boolean; var Rollback: Boolean)
+    var
+        DummyAssemblyHeader: Record "Assembly Header" temporary;
+        NotificationLifecycleMgt: Codeunit "Notification Lifecycle Mgt.";
+        AssemblyAvailability2: Page "Assembly Availability Check";
+        AssemblyAvailCheckNotification: Notification;
+        DetailsTxt: Label 'Show details';
+        DontShowAgainTxt: Label 'Don''t show again';
+        DisAssembleAvailabilityNotificationMsg: Label 'The inventory is not sufficient to cover request to disassemble requested quantity of Item %1.', Comment = '%1=Item No.';
+    begin
+        if not AssemblyHeader."NTS Disassembly Component Only" then
+            exit;
+
+        //remove initial notifications for assembly if exists
+        if AssemblyHeader."No." <> '' then begin
+            DummyAssemblyHeader := AssemblyHeader;
+            DummyAssemblyHeader."No." := '';
+            NotificationLifecycleMgt.RecallNotificationsForRecordWithAdditionalContext(DummyAssemblyHeader.RecordId, GetDisAssemblyAvailabilityNotificationId(), true);
+        end;
+
+        NotificationLifecycleMgt.RecallNotificationsForRecordWithAdditionalContext(AssemblyHeader.RecordId, GetDisAssemblyAvailabilityNotificationId(), true);
+
+        AssemblyAvailCheckNotification.Id(CreateGuid());
+        AssemblyAvailCheckNotification.Message(StrSubstNo(DisAssembleAvailabilityNotificationMsg, AssemblyHeader."Item No."));
+        AssemblyAvailCheckNotification.Scope(NotificationScope::LocalScope);
+        AssemblyAvailCheckNotification.AddAction(DetailsTxt, Codeunit::"Assembly Line Management", 'ShowNotificationDetails');
+        AssemblyAvailCheckNotification.AddAction(DontShowAgainTxt, Codeunit::"Assembly Line Management", 'DeactivateNotification');
+        AssemblyAvailability2.PopulateDataOnNotification(AssemblyAvailCheckNotification, AssemblyHeader);
+        NotificationLifecycleMgt.SendNotificationWithAdditionalContext(
+          AssemblyAvailCheckNotification, AssemblyHeader.RecordId, GetDisAssemblyAvailabilityNotificationId());
+        IsHandled := true;
+        Rollback := false;
+    end;
+
+    local procedure GetDisAssemblyAvailabilityNotificationId(): Guid
+    begin
+        exit('93d00a70-333d-4940-87e9-5eaad2bc3587');
+    end;
+
+    [EventSubscriber(ObjectType::Page, Page::"NBT_DIS DisassemblyOrdSubform", OnBeforeActionEvent, "Item Tracking Lines", false, false)]
+    local procedure OnBeforeActionEvent(var Rec: Record "Assembly Line")
+    var
+        SingleInstance: Codeunit "NTS Single Instance";
+    begin
+        SingleInstance.SetAssemblyLineContext(Rec."Document Type", Rec."Document No.", Rec."Line No.");
+    end;
+
+    [EventSubscriber(ObjectType::Page, Page::"Assembly Order Subform", OnBeforeActionEvent, "Item Tracking Lines", false, false)]
+    local procedure AssemblyOrderSubform_OnBeforeActionEvent(var Rec: Record "Assembly Line")
+    var
+        SingleInstance: Codeunit "NTS Single Instance";
+    begin
+        SingleInstance.SetAssemblyLineContext(Rec."Document Type", Rec."Document No.", Rec."Line No.");
+    end;
+
+    [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnQueryClosePageOnBeforeConfirmClosePage, '', false, false)]
+    local procedure OnQueryClosePageOnBeforeConfirmClosePage(var TrackingSpecification: Record "Tracking Specification"; var IsHandled: Boolean; CurrentRunMode: Enum "Item Tracking Run Mode"; var Result: Boolean)
+    var
+        CurrTrackingSpec: Record "Tracking Specification" temporary;
+        SingleInstanceCu: Codeunit "NTS Single instance";
+        DocumentType: Enum "Assembly Document Type";
+        DocumentNo: Code[20];
+        LineNo: Integer;
+        AssemblyHeader: Record "Assembly Header";
+    begin
+        if SingleInstanceCu.GetAssemblyLine(DocumentType, DocumentNo, LineNo) then begin
+            if not AssemblyHeader.Get(DocumentType, DocumentNo) then
+                exit;
+
+            CurrTrackingSpec.Copy(TrackingSpecification, true);
+
+            if CurrTrackingSpec.findset() then
+                repeat
+                    if (CurrTrackingSpec."Expiration Date" < Today) and (CurrTrackingSpec."Expiration Date" <> 0D) then
+                        Error('%1 %2 should not be less than %3', CurrTrackingSpec.FieldCaption("Expiration Date"), CurrTrackingSpec."Expiration Date", Today);
+                until CurrTrackingSpec.Next() = 0;
+
+            IsHandled := true;
+            Result := true;
+        end;
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';

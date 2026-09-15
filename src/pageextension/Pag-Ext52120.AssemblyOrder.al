@@ -44,6 +44,15 @@ pageextension 52120 "NTS Assembly Order" extends "Assembly Order"
                     Rec.SetWorkDescription(WorkDescription);
                 end;
             }
+            field("NTS Disassembly Component Only"; Rec."NTS Disassembly Component Only")
+            {
+                ApplicationArea = All;
+                Caption = 'Assembly Components Only';
+            }
+            field("NTS Serial No."; Rec."NTS Serial No.")
+            {
+                ApplicationArea = All;
+            }
 
         }
     }
