@@ -215,6 +215,8 @@ report 52103 "NTS Purchase Order"
                         column(AmountExclInvDisc; AmountExclInvDisc)
                         {
                         }
+                        column(SubTotalAmount; SubTotalAmount)
+                        { }
                         column(Purchase_Line_Line_No; "Line No.")
                         { }
                         column(ItemNumberToPrint; ItemNumberToPrint)
@@ -244,7 +246,10 @@ report 52103 "NTS Purchase Order"
                         column(TaxAmount; TaxAmount)
                         {
                         }
-                        column(LineAmtTaxAmtInvDiscountAmt; "Line Amount" + TaxAmount - "Inv. Discount Amount")
+                        /* column(LineAmtTaxAmtInvDiscountAmt; "Line Amount" + TaxAmount - "Inv. Discount Amount")
+                        {
+                        } */
+                        column(LineAmtTaxAmtInvDiscountAmt; SubTotalAmount + TaxAmount - "Inv. Discount Amount")
                         {
                         }
                         column(TotalTaxLabel; TotalTaxLabel)
@@ -407,7 +412,7 @@ report 52103 "NTS Purchase Order"
                             end;
 
                             AmountExclInvDisc := "Line Amount";
-
+                            SubTotalAmount += "Line Amount";
                             if Quantity = 0 then
                                 UnitPriceToPrint := 0 // so it won't print
                             else
@@ -483,6 +488,7 @@ report 52103 "NTS Purchase Order"
                     else
                         CopyTxt := Text000;
                     TaxAmount := 0;
+                    clear(SubTotalAmount);
 
                     Clear(BreakdownTitle);
                     Clear(BreakdownLabel);
@@ -787,5 +793,6 @@ report 52103 "NTS Purchase Order"
         ProdOrderLine: Record "Prod. Order Line";
         ReasonCodeDescVar: text[1024];
         CommentGblVar: Text;
+        SubTotalAmount: Decimal;
 }
 
