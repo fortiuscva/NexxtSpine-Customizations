@@ -655,6 +655,37 @@ codeunit 52101 "NTS Event Management"
         end;
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Prod. Order Routing Line", OnMachineCtrTransferFieldsOnAfterWorkCenterTransferFields, '', false, false)]
+    local procedure "Prod. Order Routing Line_OnMachineCtrTransferFieldsOnAfterWorkCenterTransferFields"(var ProdOrderRoutingLine: Record "Prod. Order Routing Line"; WorkCenter: Record "Work Center"; MachineCenter: Record "Machine Center"; var SkipUpdateDescription: Boolean; xProdOrderRoutingLine: Record "Prod. Order Routing Line"; var IsHandled: Boolean)
+    begin
+        IsHandled := true;
+        if not SkipUpdateDescription then begin
+            ProdOrderRoutingLine.Description := MachineCenter.Name;
+            ProdOrderRoutingLine."Description 2" := MachineCenter."Name 2";
+        end;
+        ProdOrderRoutingLine."Wait Time" := MachineCenter."Wait Time";
+        ProdOrderRoutingLine."Move Time" := MachineCenter."Move Time";
+        ProdOrderRoutingLine."Fixed Scrap Quantity" := MachineCenter."Fixed Scrap Quantity";
+        ProdOrderRoutingLine."Scrap Factor %" := MachineCenter."Scrap %";
+        ProdOrderRoutingLine."Minimum Process Time" := MachineCenter."Minimum Process Time";
+        ProdOrderRoutingLine."Maximum Process Time" := MachineCenter."Maximum Process Time";
+        ProdOrderRoutingLine."Concurrent Capacities" := MachineCenter."Concurrent Capacities";
+        if ProdOrderRoutingLine."Concurrent Capacities" = 0 then
+            ProdOrderRoutingLine."Concurrent Capacities" := 1;
+        ProdOrderRoutingLine."Send-Ahead Quantity" := MachineCenter."Send-Ahead Quantity";
+        ProdOrderRoutingLine."Setup Time Unit of Meas. Code" := MachineCenter."Setup Time Unit of Meas. Code";
+        ProdOrderRoutingLine."Wait Time Unit of Meas. Code" := MachineCenter."Wait Time Unit of Meas. Code";
+        ProdOrderRoutingLine."Move Time Unit of Meas. Code" := MachineCenter."Move Time Unit of Meas. Code";
+        ProdOrderRoutingLine."Flushing Method" := MachineCenter."Flushing Method";
+        ProdOrderRoutingLine."Unit Cost per" := MachineCenter."Unit Cost";
+        ProdOrderRoutingLine."Direct Unit Cost" := MachineCenter."Direct Unit Cost";
+        ProdOrderRoutingLine."Indirect Cost %" := MachineCenter."Indirect Cost %";
+        ProdOrderRoutingLine."Overhead Rate" := MachineCenter."Overhead Rate";
+        ProdOrderRoutingLine."Unit Cost Calculation" := ProdOrderRoutingLine."Unit Cost Calculation"::Time;
+        ProdOrderRoutingLine.FillDefaultLocationAndBins();
+
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
