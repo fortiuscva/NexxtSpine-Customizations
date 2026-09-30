@@ -553,34 +553,38 @@ codeunit 52103 "NTS NexxtSpine Functions"
         AssemblyHeader.Validate("NTS DOR No.", TransferHeader."NTS DOR No.");
         DORHeader.Get(AssemblyHeader."NTS DOR No.");
         AssemblyHeader.Validate(Quantity, DORHeader.Quantity);
+        AssemblyHeader."NTS Disassembly Component Only" := true;
+        AssemblyHeader."NTS Serial No." := DoRHeader."Serial No.";
         AssemblyHeader.Modify(true);
         //Creating tracking for Assembly Item
-        ItemTrackingVal := FindItemTrackingCode(AssemblyHeader."Item No.");
-        if (ItemTrackingVal <> 0) then begin //adsk
-            if ItemTrackingVal = 2 then begin
-                ForReservEntry."Serial No." := DORHeader."Serial No.";
-                TrackingSpec."New Serial No." := DORHeader."Serial No.";
-            end else begin
-                ForReservEntry."Lot No." := DORHeader."Lot No.";
-                TrackingSpec."New Lot No." := DORHeader."Lot No.";
-                ForReservEntry."Serial No." := DORHeader."Serial No.";
-                TrackingSpec."New Serial No." := DORHeader."Serial No.";
-            end;
-            //ForReservEntry."Lot No." := DORHeader."Serial No.";
-            //TrackingSpec."New Lot No." := DORHeader."Serial No.";
+        if TransferHeader."NTS DOR No." = '' then begin
+            ItemTrackingVal := FindItemTrackingCode(AssemblyHeader."Item No.");
+            if (ItemTrackingVal <> 0) then begin //adsk
+                if ItemTrackingVal = 2 then begin
+                    ForReservEntry."Serial No." := DORHeader."Serial No.";
+                    TrackingSpec."New Serial No." := DORHeader."Serial No.";
+                end else begin
+                    ForReservEntry."Lot No." := DORHeader."Lot No.";
+                    TrackingSpec."New Lot No." := DORHeader."Lot No.";
+                    ForReservEntry."Serial No." := DORHeader."Serial No.";
+                    TrackingSpec."New Serial No." := DORHeader."Serial No.";
+                end;
+                //ForReservEntry."Lot No." := DORHeader."Serial No.";
+                //TrackingSpec."New Lot No." := DORHeader."Serial No.";
 
-            CreateReservEntry.CreateReservEntryFor(
-            Database::"Assembly Header", 1,
-            AssemblyHeader."No.", '',
-            0, 0,
-            AssemblyHeader."Qty. per Unit of Measure", AssemblyHeader.Quantity, AssemblyHeader."Quantity (Base)",
-            ForReservEntry);
-            CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
-            CreateReservEntry.CreateEntry(
-            AssemblyHeader."Item No.", AssemblyHeader."Variant Code",
-            AssemblyHeader."Location Code", AssemblyHeader.Description,
-            0D, AssemblyHeader."Due Date",
-            0, ForReservEntry."Reservation Status"::Surplus);
+                CreateReservEntry.CreateReservEntryFor(
+                Database::"Assembly Header", 1,
+                AssemblyHeader."No.", '',
+                0, 0,
+                AssemblyHeader."Qty. per Unit of Measure", AssemblyHeader.Quantity, AssemblyHeader."Quantity (Base)",
+                ForReservEntry);
+                CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TrackingSpec);
+                CreateReservEntry.CreateEntry(
+                AssemblyHeader."Item No.", AssemblyHeader."Variant Code",
+                AssemblyHeader."Location Code", AssemblyHeader.Description,
+                0D, AssemblyHeader."Due Date",
+                0, ForReservEntry."Reservation Status"::Surplus);
+            end;
         end;
 
         AssemblyLine.Reset();
