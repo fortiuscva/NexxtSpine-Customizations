@@ -180,7 +180,7 @@ report 52104 "NTS Sales - Invoice"
                     column(DueDate_SalesInvHeader; "Sales Invoice Header"."Due Date")
                     {
                     }
-                    column(SalesHeader_RequestedDelDate; "Sales Invoice Header"."NTS Requested Delivery Date")
+                    column(SalesHeader_RequestedDelDate; "Sales Invoice Header"."Document Date")
                     { }
                     column(PaymentTermsDescription; PaymentTerms.Description)
                     {
