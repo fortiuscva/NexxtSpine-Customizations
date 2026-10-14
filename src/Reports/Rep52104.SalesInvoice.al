@@ -221,7 +221,7 @@ report 52104 "NTS Sales - Invoice"
                     column(SalesPurchPersonName; SalesPurchPerson.Name)
                     {
                     }
-                    column(DocumentDate_SalesInvHeader; "Sales Invoice Header"."Document Date")
+                    column(DocumentDate_SalesInvHeader; "Sales Invoice Header"."Posting Date")
                     {
                     }
                     column(CompanyAddress7; CompanyAddress[7])
