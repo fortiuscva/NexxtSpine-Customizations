@@ -184,9 +184,12 @@ pageextension 52132 "NTS Item Tracking Lines" extends "Item Tracking Lines"
     trigger OnQueryClosePage(CloseAction: Action): Boolean
     var
         CurrTrackingSpec: Record "Tracking Specification" temporary;
+        UserSetup: Record "User Setup";
     begin
         CurrTrackingSpec.Copy(Rec, true);
-
+        if UserSetup.Get(UserId()) then
+            if UserSetup."NTS Allow To Valid. Exp. Date" then
+                exit;
         if CurrTrackingSpec.findset() then
             repeat
                 if (CurrTrackingSpec."Expiration Date" < Today) and (CurrTrackingSpec."Expiration Date" <> 0D) then
