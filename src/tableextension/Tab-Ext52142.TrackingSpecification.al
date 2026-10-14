@@ -33,17 +33,17 @@ tableextension 52142 "NTS Tracking Specification" extends "Tracking Specificatio
         TransHeader: Record "Transfer Header";
         IsSourceTypeTransfer: Boolean;
     begin
-        IsSourceTypeTransfer := ("Source Type" = DATABASE::"Transfer Line");
-        if not IsSourceTypeTransfer then
-            exit;
+        // IsSourceTypeTransfer := ("Source Type" = DATABASE::"Transfer Line");
+        // if not IsSourceTypeTransfer then
+        //     exit;
 
         if (Rec."Lot No." = '') and (Rec."Serial No." = '') and (Rec."Expiration Date" = 0D) then
             exit;
-        if not TransHeader.Get(Rec."Source ID") then
-            exit;
+        // if not TransHeader.Get(Rec."Source ID") then
+        //     exit;
 
-        if not TransLine.Get(Rec."Source ID", Rec."Source Ref. No.") then
-            exit;
+        // if not TransLine.Get(Rec."Source ID", Rec."Source Ref. No.") then
+        //     exit;
 
         if (Rec."Expiration Date" < Today) and (Rec."Expiration Date" <> 0D) then begin
             if (Rec."Lot No." <> '') and (Rec."Serial No." <> '') then
