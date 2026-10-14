@@ -32,10 +32,15 @@ tableextension 52142 "NTS Tracking Specification" extends "Tracking Specificatio
         TransLine: Record "Transfer Line";
         TransHeader: Record "Transfer Header";
         IsSourceTypeTransfer: Boolean;
+        UserSetup: Record "User Setup";
     begin
         IsSourceTypeTransfer := ("Source Type" = DATABASE::"Transfer Line");
         if not IsSourceTypeTransfer then
             exit;
+
+        if UserSetup.Get(UserId()) then
+            if UserSetup."NTS Allow To Valid. Exp. Date" then
+                exit;
 
         if (Rec."Lot No." = '') and (Rec."Serial No." = '') and (Rec."Expiration Date" = 0D) then
             exit;
