@@ -83,18 +83,35 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
         field(52134; "NTS Ship-to Name"; Text[100])
         {
             Caption = 'Ship-to Name';
+            trigger OnValidate()
+            begin
+                Rec.Validate("Transfer-to Name", Rec."NTS Ship-to Name");
+            end;
+
         }
         field(52135; "NTS Ship-to Name 2"; Text[50])
         {
             Caption = 'Ship-to Name 2';
+            trigger OnValidate()
+            begin
+                Rec.Validate("Transfer-to Name 2", Rec."NTS Ship-to Name 2");
+            end;
         }
         field(52136; "NTS Ship-to Address"; Text[100])
         {
             Caption = 'Ship-to Address';
+            trigger OnValidate()
+            begin
+                Rec.Validate("Transfer-to Address", Rec."NTS Ship-to Address");
+            end;
         }
         field(52137; "NTS Ship-to Address 2"; Text[50])
         {
             Caption = 'Ship-to Address 2';
+            trigger OnValidate()
+            begin
+                Rec.Validate("Transfer-to Address 2", Rec."NTS Ship-to Address 2");
+            end;
         }
         field(52138; "NTS Ship-to City"; Text[30])
         {
@@ -103,19 +120,36 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             else
             if ("NTS Ship-to Country/Region Code" = filter(<> '')) "Post Code".City where("Country/Region Code" = field("NTS Ship-to Country/Region Code"));
             ValidateTableRelation = false;
+            trigger OnValidate()
+            begin
+                Rec.Validate("Transfer-to City", Rec."NTS Ship-to City");
+            end;
         }
         field(52139; "NTS Ship-to Contact"; Text[100])
         {
             Caption = 'Ship-to Contact';
+            trigger OnValidate()
+            begin
+                Rec.Validate("Transfer-to Contact", Rec."NTS Ship-to Contact");
+            end;
         }
         field(52140; "NTS Ship-to County"; Text[30])
         {
             Caption = 'Ship-to County';
+            trigger OnValidate()
+            begin
+                Rec.Validate("Transfer-to County", Rec."NTS Ship-to County");
+            end;
         }
         field(52141; "NTS Ship-to Country/Region Code"; Code[10])
         {
             Caption = 'Ship-to Country/Region Code';
             TableRelation = "Country/Region";
+            trigger OnValidate()
+            begin
+                Rec.Validate("Trsf.-to Country/Region Code",
+                    Rec."NTS Ship-to Country/Region Code");
+            end;
         }
 
         field(52142; "NTS Ship-to Phone No."; Text[30])
@@ -131,6 +165,10 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             else
             if ("NTS Ship-to Country/Region Code" = filter(<> '')) "Post Code" where("Country/Region Code" = field("NTS Ship-to Country/Region Code"));
             ValidateTableRelation = false;
+            trigger OnValidate()
+            begin
+                Rec.Validate("Transfer-to Post Code", Rec."NTS Ship-to Post Code");
+            end;
         }
         field(52144; "NTS Work Description"; Blob)
         {
@@ -156,6 +194,16 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Rec."NTS Ship-to County" := ShipToAddress.County;
             Rec."NTS Ship-to Contact" := ShipToAddress.Contact;
             Rec."NTS Ship-to Phone No." := ShipToAddress."Phone No.";
+            // update Transfer-to fields 
+            Rec.Validate("Transfer-to Name", ShipToAddress.Name);
+            Rec.Validate("Transfer-to Address", ShipToAddress.Address);
+            Rec.Validate("Transfer-to Address 2", ShipToAddress."Address 2");
+            Rec.Validate("Transfer-to City", ShipToAddress.City);
+            Rec.Validate("Transfer-to Post Code", ShipToAddress."Post Code");
+            Rec.Validate("Transfer-to County", ShipToAddress.County);
+            Rec.Validate("Trsf.-to Country/Region Code", ShipToAddress."Country/Region Code");
+            Rec.Validate("Transfer-to Contact", ShipToAddress.Contact);
+
         end else if CustomerNo <> '' then begin
             CustomerRec.Get(CustomerNo);
             Rec."NTS Ship-to Address" := CustomerRec.Address;
@@ -166,6 +214,16 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Rec."NTS Ship-to County" := CustomerRec.County;
             Rec."NTS Ship-to Contact" := CustomerRec.Contact;
             Rec."NTS Ship-to Phone No." := CustomerRec."Phone No.";
+
+            // Update standard Transfer-to fields
+            Rec.Validate("Transfer-to Name", CustomerRec.Name);
+            Rec.Validate("Transfer-to Address", CustomerRec.Address);
+            Rec.Validate("Transfer-to Address 2", CustomerRec."Address 2");
+            Rec.Validate("Transfer-to City", CustomerRec.City);
+            Rec.Validate("Transfer-to Post Code", CustomerRec."Post Code");
+            Rec.Validate("Transfer-to County", CustomerRec.County);
+            Rec.Validate("Trsf.-to Country/Region Code", CustomerRec."Country/Region Code");
+            Rec.Validate("Transfer-to Contact", CustomerRec.Contact);
         end else begin
             Rec."NTS Ship-to Name" := '';
             Rec."NTS Ship-to Address" := '';
@@ -176,6 +234,16 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Rec."NTS Ship-to County" := '';
             Rec."NTS Ship-to Contact" := '';
             Rec."NTS Ship-to Phone No." := '';
+
+            // Clear standard Transfer-to fields
+            Rec.Validate("Transfer-to Name", '');
+            Rec.Validate("Transfer-to Address", '');
+            Rec.Validate("Transfer-to Address 2", '');
+            Rec.Validate("Transfer-to City", '');
+            Rec.Validate("Transfer-to Post Code", '');
+            Rec.Validate("Transfer-to County", '');
+            Rec.Validate("Trsf.-to Country/Region Code", '');
+            Rec.Validate("Transfer-to Contact", '');
         end;
     end;
 
