@@ -110,7 +110,7 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Caption = 'Ship-to Address 2';
             trigger OnValidate()
             begin
-                Rec.Validate("Transfer-to Address 2", Rec."Transfer-to Address 2");
+                Rec.Validate("Transfer-to Address 2", Rec."NTS Ship-to Address 2");
             end;
         }
         field(52138; "NTS Ship-to City"; Text[30])
