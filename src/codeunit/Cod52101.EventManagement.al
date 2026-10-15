@@ -686,6 +686,19 @@ codeunit 52101 "NTS Event Management"
 
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Header", 'OnBeforeCheckTransferFromAndToCodesNotTheSame', '', false, false)]
+    local procedure OnBeforeCheckTransferFromAndToCodesNotTheSame(TransferHeader: Record "Transfer Header"; var IsHandled: Boolean)
+    begin
+        IsHandled := true;
+    end;
+
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Transfer Document", 'OnBeforeCheckTransferCode', '', false, false)]
+    local procedure SkipSameLocationCheckOnRelease(var TransferHeader: Record "Transfer Header"; var IsHandled: Boolean)
+    begin
+        IsHandled := true;
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
