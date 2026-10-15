@@ -196,6 +196,7 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
             Rec."NTS Ship-to Phone No." := ShipToAddress."Phone No.";
             // update Transfer-to fields 
             Rec.Validate("Transfer-to Name", ShipToAddress.Name);
+            Rec.Validate("Transfer-to Name 2", ShipToAddress."Name 2");
             Rec.Validate("Transfer-to Address", ShipToAddress.Address);
             Rec.Validate("Transfer-to Address 2", ShipToAddress."Address 2");
             Rec.Validate("Transfer-to City", ShipToAddress.City);
@@ -217,6 +218,7 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
 
             // Update standard Transfer-to fields
             Rec.Validate("Transfer-to Name", CustomerRec.Name);
+            Rec.Validate("Transfer-to Name 2", CustomerRec."Name 2");
             Rec.Validate("Transfer-to Address", CustomerRec.Address);
             Rec.Validate("Transfer-to Address 2", CustomerRec."Address 2");
             Rec.Validate("Transfer-to City", CustomerRec.City);
@@ -237,6 +239,7 @@ tableextension 52118 "NTS Transfer Header" extends "Transfer Header"
 
             // Clear standard Transfer-to fields
             Rec.Validate("Transfer-to Name", '');
+            Rec.Validate("Transfer-to Name 2", '');
             Rec.Validate("Transfer-to Address", '');
             Rec.Validate("Transfer-to Address 2", '');
             Rec.Validate("Transfer-to City", '');
