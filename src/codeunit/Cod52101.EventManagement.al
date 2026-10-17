@@ -331,7 +331,7 @@ codeunit 52101 "NTS Event Management"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post Line", OnBeforeCheckSerialNo, '', false, false)]
     local procedure "Item Jnl.-Post Line_OnBeforeCheckSerialNo"(ItemJournalLine: Record "Item Journal Line"; var IsHandled: Boolean)
     begin
-        IsHandled := true;
+        //  IsHandled := true;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Assembly-Post", OnPostOnBeforePostedAssemblyHeaderInsert, '', false, false)]
