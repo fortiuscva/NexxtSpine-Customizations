@@ -2,19 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Dev",
+            "name": "Sandbox101226",
             "request": "launch",
             "type": "al",
             "tenant": "d2d6e7c4-f146-4110-9f5d-619e5c984289",
             "environmentType": "Sandbox",
-            "environmentName": "Dev",
+            "environmentName": "Sandbox101226",
             "startupObjectId": 22,
             "startupObjectType": "Page",
             "breakOnError": "All",
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,
             "enableSqlInformationDebugger": true,
-            "schemaUpdateMode": "ForceSync"
+            "schemaUpdateMode": "Synchronize"
         },
         {
             "name": "QCTEST",
