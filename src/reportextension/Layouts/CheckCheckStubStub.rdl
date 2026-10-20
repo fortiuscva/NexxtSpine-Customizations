@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-03-10T15:06:56.8644299Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-10-19T17:28:12.4143669Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -24,6 +24,10 @@
   </DataSources>
   <DataSets>
     <DataSet Name="DataSet_Result">
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
       <Fields>
         <Field Name="GenJnlLine_Journal_Template_Name">
           <DataField>GenJnlLine_Journal_Template_Name</DataField>
@@ -607,11 +611,13 @@
         <Field Name="NTSCheckAmountText">
           <DataField>NTSCheckAmountText</DataField>
         </Field>
+        <Field Name="NTSPostedPurchaseInvoiceNo">
+          <DataField>NTSPostedPurchaseInvoiceNo</DataField>
+        </Field>
+        <Field Name="NTSVendorInvoiceNo">
+          <DataField>NTSVendorInvoiceNo</DataField>
+        </Field>
       </Fields>
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
     </DataSet>
   </DataSets>
   <ReportSections>
@@ -863,7 +869,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DocNo.Value</Value>
+                                  <Value>=Fields!NTSPostedPurchaseInvoiceNo.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -871,6 +877,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
                             <BackgroundColor>White</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -915,7 +924,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!PostingDesc.Value</Value>
+                                  <Value>=Fields!NTSVendorInvoiceNo.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -923,6 +932,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
                             <BackgroundColor>White</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>0.04134in</PaddingLeft>
@@ -930,6 +942,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -3963,6 +3976,12 @@
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
