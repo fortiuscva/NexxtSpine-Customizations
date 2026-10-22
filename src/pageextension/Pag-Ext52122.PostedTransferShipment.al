@@ -125,6 +125,26 @@ pageextension 52122 "NTS Posted Transfer Shipment" extends "Posted Transfer Ship
                     Report.RunModal(Report::"NTS Transfer Shipment PL", true, false, TransferShipmentHeader)
                 end;
             }
+            action("NTS HighridgePackingSlip")
+            {
+                Caption = 'Highridge Packing Slip';
+                ApplicationArea = All;
+                Image = Print;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                ToolTip = 'Print the Highridge Packing Slip for the selected posted transfer shipment.';
+
+                trigger OnAction()
+                var
+                    TransferShipmentHeader: Record "Transfer Shipment Header";
+                begin
+                    TransferShipmentHeader := Rec;
+                    TransferShipmentHeader.SetRecFilter();
+
+                    Report.RunModal(Report::"NTS Highridge Packing Slip", true, false, TransferShipmentHeader);
+                end;
+            }
         }
     }
 }
