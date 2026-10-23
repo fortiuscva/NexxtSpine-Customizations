@@ -163,7 +163,7 @@ report 52124 "NTS Highridge Packing Slip"
         TransferToCaption = 'Transfer To Name';
         TransferOrderNoCaption = 'Transfer Order No.';
         PostingDateCaption = 'Posting Date';
-        PackListCaption = 'Pack List:';
+        PackListCaption = 'Pack List No.:';
         DateCaption = 'Date:';
         NTSDescriptionCaption = 'NTS Description Value';
         POCaption = 'PO#:';
