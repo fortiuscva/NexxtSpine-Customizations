@@ -1780,7 +1780,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
                     PayeeName := '"' + PayeeName + '"';
 
                 PayeeName := CopyStr(PayeeName, 1, 40);
-                AmountText := Format(Abs(CheckLedgEntry.Amount), 0, '<Integer><Decimals,2>');
+                AmountText := Format(Round(Abs(CheckLedgEntry.Amount), 0.01, '='), 0, '<Precision,2:2><Standard Format,2>');
                 DateText := Format(CheckLedgEntry."Check Date", 0, '<Month,2><Day,2><Year,2>');
                 CsvLine := StrSubstNo('%1,%2,%3,%4,%5,%6', BankAccount."Bank Account No.", AmountText, CheckLedgEntry."Check No.", DateText, PayeeName,
                                         'IS');
