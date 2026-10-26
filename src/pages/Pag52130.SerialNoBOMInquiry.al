@@ -119,6 +119,12 @@ page 52130 "NTS Serial No. BOM Inquiry"
                             LoadInquiry();
                     end;
                 }
+                field(CurrentLocationCode; CurrentLocationCode)
+                {
+                    Caption = 'Current Location Code';
+                    ApplicationArea = All;
+                    Editable = false;
+                }
             }
 
             repeater(Lines)
@@ -228,7 +234,7 @@ page 52130 "NTS Serial No. BOM Inquiry"
         FilterSerialNo: Code[50];
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         LockFilters: Boolean;
-        FilterComponentItemNo: Code[20];
+        FilterComponentItemNo, CurrentLocationCode : Code[20];
 
     local procedure LoadInquiry()
     begin
@@ -237,12 +243,27 @@ page 52130 "NTS Serial No. BOM Inquiry"
 
         NexxtSpineFunctions.BuildInquiry(FilterItemNo, FilterSerialNo, Rec);
 
+        Clear(CurrentLocationCode);
+        UpdateCurrentLocationCode();
+
         if FilterComponentItemNo <> '' then begin
             Rec.SetRange("Item No.", FilterComponentItemNo);
             Rec.SetFilter("Remaining Qty", '>0');
         end;
 
         CurrPage.Update(false);
+    end;
+
+    local procedure UpdateCurrentLocationCode()
+    var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+    begin
+        ItemLedgerEntry.Reset();
+        ItemLedgerEntry.SetRange("Item No.", FilterItemNo);
+        ItemLedgerEntry.SetRange("Serial No.", FilterSerialNo);
+        ItemLedgerEntry.SetFilter("Remaining Quantity", '>%1', 0);
+        if ItemLedgerEntry.FindFirst() then
+            CurrentLocationCode := ItemLedgerEntry."Location Code";
     end;
 
     /* procedure SetParameters(ItemNo: Code[20]; SerialNo: Code[50])
