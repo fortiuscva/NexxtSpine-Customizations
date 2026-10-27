@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-10-16T21:11:22.2761828Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-10-23T09:59:16.6457350Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -1425,7 +1425,6 @@ Item</Value>
                       </Style>
                     </Paragraph>
                   </Paragraphs>
-                  <Top>0in</Top>
                   <Left>1.28323in</Left>
                   <Height>15.8pt</Height>
                   <Width>2.34971in</Width>
@@ -1890,9 +1889,9 @@ Item</Value>
                     </Paragraph>
                   </Paragraphs>
                   <Top>0.22023in</Top>
-                  <Left>1.28005in</Left>
+                  <Left>1.26755in</Left>
                   <Height>16.86808pt</Height>
-                  <Width>1.29482in</Width>
+                  <Width>1.30732in</Width>
                   <Style>
                     <Border>
                       <Style>None</Style>
@@ -1937,6 +1936,9 @@ Item</Value>
                       <Style>Solid</Style>
                       <Width>1pt</Width>
                     </BottomBorder>
+                    <RightBorder>
+                      <Style>Solid</Style>
+                    </RightBorder>
                     <VerticalAlign>Middle</VerticalAlign>
                   </Style>
                 </Textbox>
@@ -1959,8 +1961,8 @@ Item</Value>
                       </Style>
                     </Paragraph>
                   </Paragraphs>
-                  <Top>0.05495in</Top>
-                  <Height>11pt</Height>
+                  <Top>0.01745in</Top>
+                  <Height>13.7pt</Height>
                   <Width>1.26338in</Width>
                   <ZIndex>2</ZIndex>
                   <Style>
@@ -1972,6 +1974,9 @@ Item</Value>
                       <Style>Solid</Style>
                       <Width>1pt</Width>
                     </BottomBorder>
+                    <RightBorder>
+                      <Style>Solid</Style>
+                    </RightBorder>
                     <VerticalAlign>Middle</VerticalAlign>
                   </Style>
                 </Textbox>
@@ -1993,10 +1998,10 @@ Item</Value>
                       </Style>
                     </Paragraph>
                   </Paragraphs>
-                  <Top>0.05495in</Top>
-                  <Left>1.28005in</Left>
-                  <Height>11pt</Height>
-                  <Width>1.29482in</Width>
+                  <Top>0.01745in</Top>
+                  <Left>1.26755in</Left>
+                  <Height>13.7pt</Height>
+                  <Width>1.30732in</Width>
                   <ZIndex>3</ZIndex>
                   <Style>
                     <Border>
@@ -2007,23 +2012,16 @@ Item</Value>
                       <Style>Solid</Style>
                       <Width>1pt</Width>
                     </BottomBorder>
+                    <LeftBorder>
+                      <Color>Black</Color>
+                      <Style>Solid</Style>
+                      <Width>1pt</Width>
+                    </LeftBorder>
                     <VerticalAlign>Middle</VerticalAlign>
                   </Style>
                 </Textbox>
-                <Line Name="Line1">
-                  <Top>0.00394cm</Top>
-                  <Left>3.21826cm</Left>
-                  <Height>2.0558cm</Height>
-                  <Width>0cm</Width>
-                  <ZIndex>4</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>Solid</Style>
-                      <Width>2pt</Width>
-                    </Border>
-                  </Style>
-                </Line>
                 <Textbox Name="NTSDescriptionValue">
+                  <CanGrow>true</CanGrow>
                   <KeepTogether>true</KeepTogether>
                   <Paragraphs>
                     <Paragraph>
@@ -2043,13 +2041,23 @@ Item</Value>
                     </Paragraph>
                   </Paragraphs>
                   <Top>0.4615in</Top>
-                  <Height>19.61808pt</Height>
+                  <Height>24.11808pt</Height>
                   <Width>1.26338in</Width>
-                  <ZIndex>5</ZIndex>
+                  <ZIndex>4</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
                     </Border>
+                    <BottomBorder>
+                      <Color>Black</Color>
+                      <Style>None</Style>
+                      <Width>1pt</Width>
+                    </BottomBorder>
+                    <RightBorder>
+                      <Color>Black</Color>
+                      <Style>None</Style>
+                      <Width>1pt</Width>
+                    </RightBorder>
                     <VerticalAlign>Middle</VerticalAlign>
                   </Style>
                 </Textbox>
@@ -2073,20 +2081,30 @@ Item</Value>
                     </Paragraph>
                   </Paragraphs>
                   <Top>0.46011in</Top>
-                  <Left>1.28218in</Left>
-                  <Height>20.46808pt</Height>
-                  <Width>1.29482in</Width>
-                  <ZIndex>6</ZIndex>
+                  <Left>1.25718in</Left>
+                  <Height>24.96808pt</Height>
+                  <Width>1.31982in</Width>
+                  <ZIndex>5</ZIndex>
                   <Style>
                     <Border>
                       <Style>None</Style>
                     </Border>
+                    <BottomBorder>
+                      <Color>Black</Color>
+                      <Style>Solid</Style>
+                      <Width>1pt</Width>
+                    </BottomBorder>
+                    <LeftBorder>
+                      <Color>Black</Color>
+                      <Style>Solid</Style>
+                      <Width>1pt</Width>
+                    </LeftBorder>
                     <VerticalAlign>Middle</VerticalAlign>
                   </Style>
                 </Textbox>
               </ReportItems>
               <KeepTogether>true</KeepTogether>
-              <Top>4.91413cm</Top>
+              <Top>3.54888cm</Top>
               <Left>11.13485cm</Left>
               <Height>2.05974cm</Height>
               <Width>6.58276cm</Width>
@@ -2094,8 +2112,27 @@ Item</Value>
               <Style>
                 <Border>
                   <Style>Solid</Style>
-                  <Width>2pt</Width>
                 </Border>
+                <TopBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </TopBorder>
+                <BottomBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </BottomBorder>
+                <LeftBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </LeftBorder>
+                <RightBorder>
+                  <Color>Black</Color>
+                  <Style>Solid</Style>
+                  <Width>1pt</Width>
+                </RightBorder>
               </Style>
             </Rectangle>
           </ReportItems>
