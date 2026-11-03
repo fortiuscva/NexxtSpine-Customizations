@@ -1797,6 +1797,95 @@ codeunit 52103 "NTS NexxtSpine Functions"
         DownloadFromStream(InStr, '', '', '', FileName);
     end;
 
+    procedure CreateOutputTracking(ItemJnlLine: Record "Item Journal Line")
+    var
+        ProdOrderLine: Record "Prod. Order Line";
+        SourceReservEntry: Record "Reservation Entry";
+        NewReservEntry: Record "Reservation Entry";
+        ItemJnlLineReserve: Codeunit "Item Jnl. Line-Reserve";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        TrackingQty: Decimal;
+        QtyPerUOM: Decimal;
+    begin
+        if ItemJnlLine."Entry Type" <> ItemJnlLine."Entry Type"::Output then
+            exit;
+
+        if (ItemJnlLine."Order No." = '') or
+           (ItemJnlLine."Order Line No." = 0) or
+           (ItemJnlLine."Line No." = 0) or
+           (ItemJnlLine."Item No." = '') then
+            exit;
+
+        if not ProdOrderLine.Get(
+            ProdOrderLine.Status::Released,
+            ItemJnlLine."Order No.",
+            ItemJnlLine."Order Line No.")
+        then
+            exit;
+
+        if ProdOrderLine."Item No." <> ItemJnlLine."Item No." then
+            exit;
+
+        if ItemJnlLineReserve.ReservEntryExist(ItemJnlLine) then
+            exit;
+
+
+        SourceReservEntry.Reset();
+        SourceReservEntry.SetRange("Source Type", Database::"Prod. Order Line");
+        SourceReservEntry.SetRange("Source Subtype", 3);
+        SourceReservEntry.SetRange("Source ID", ItemJnlLine."Order No.");
+        SourceReservEntry.SetRange("Source Prod. Order Line", ItemJnlLine."Order Line No.");
+
+        if not SourceReservEntry.FindSet() then
+            exit;
+
+        QtyPerUOM := ItemJnlLine."Qty. per Unit of Measure";
+
+        repeat
+            if (SourceReservEntry."Lot No." <> '') or
+               (SourceReservEntry."Serial No." <> '') then begin
+
+                TrackingQty := Abs(SourceReservEntry.Quantity);
+
+                if TrackingQty > 0 then begin
+                    Clear(NewReservEntry);
+                    NewReservEntry.Init();
+
+                    NewReservEntry."Lot No." := SourceReservEntry."Lot No.";
+                    NewReservEntry."Serial No." := SourceReservEntry."Serial No.";
+                    NewReservEntry."Package No." := SourceReservEntry."Package No.";
+                    NewReservEntry."Expiration Date" := SourceReservEntry."Expiration Date";
+                    NewReservEntry."Warranty Date" := SourceReservEntry."Warranty Date";
+
+                    CreateReservEntry.SetDates(SourceReservEntry."Warranty Date", SourceReservEntry."Expiration Date");
+
+
+                    CreateReservEntry.CreateReservEntryFor(
+                        Database::"Item Journal Line",
+                        ItemJnlLine."Entry Type".AsInteger(),
+                        ItemJnlLine."Journal Template Name",
+                        ItemJnlLine."Journal Batch Name",
+                        0,
+                        ItemJnlLine."Line No.",
+                        QtyPerUOM,
+                        TrackingQty,
+                        TrackingQty * QtyPerUOM,
+                        NewReservEntry);
+
+                    CreateReservEntry.CreateEntry(
+                        ItemJnlLine."Item No.",
+                        ItemJnlLine."Variant Code",
+                        ItemJnlLine."Location Code",
+                        ItemJnlLine.Description,
+                        0D,
+                        0D,
+                        0,
+                        NewReservEntry."Reservation Status"::Surplus);
+                end;
+            end;
+        until SourceReservEntry.Next() = 0;
+    end;
+
     var
         TempExcelBufferRecGbl: Record "Excel Buffer" temporary;
         FileNameVarLcl: Text[100];
