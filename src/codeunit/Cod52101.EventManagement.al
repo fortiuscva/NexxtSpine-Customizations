@@ -699,6 +699,25 @@ codeunit 52101 "NTS Event Management"
         IsHandled := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Low-Level Code", OnBeforeSetRecursiveLevelsOnItem, '', false, false)]
+    local procedure "Calculate Low-Level Code_OnBeforeSetRecursiveLevelsOnItem"(var CompItem: Record Item; LowLevelCode: Integer; IgnoreMissingItemsOrBOMs: Boolean; var IsHandled: Boolean)
+    begin
+        If CompItem."NTS Purchase To Production" then
+            Ishandled := true;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnAfterInsertEvent', '', false, false)]
+    local procedure ItemJournalLineOnAfterInsert(var Rec: Record "Item Journal Line"; RunTrigger: Boolean)
+    begin
+        if Rec."Entry Type" <> Rec."Entry Type"::Output then
+            exit;
+
+        if Rec."Line No." = 0 then
+            exit;
+
+        NexxtSpineFunctions.CreateOutputTracking(Rec);
+    end;
+
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
         SalesPostErrorMsg: Label 'You Cannot post shipment for Sales Order %1.%2 is not posted.';
