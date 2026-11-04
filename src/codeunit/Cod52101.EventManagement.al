@@ -706,17 +706,17 @@ codeunit 52101 "NTS Event Management"
             Ishandled := true;
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnAfterInsertEvent', '', false, false)]
-    local procedure ItemJournalLineOnAfterInsert(var Rec: Record "Item Journal Line"; RunTrigger: Boolean)
-    begin
-        if Rec."Entry Type" <> Rec."Entry Type"::Output then
-            exit;
+    // [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnAfterInsertEvent', '', false, false)]
+    // local procedure ItemJournalLineOnAfterInsert(var Rec: Record "Item Journal Line"; RunTrigger: Boolean)
+    // begin
+    //     if Rec."Entry Type" <> Rec."Entry Type"::Output then
+    //         exit;
 
-        if Rec."Line No." = 0 then
-            exit;
+    //     if Rec."Line No." = 0 then
+    //         exit;
 
-        NexxtSpineFunctions.CreateOutputTracking(Rec);
-    end;
+    //     NexxtSpineFunctions.CreateOutputTracking(Rec);
+    // end;
 
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
