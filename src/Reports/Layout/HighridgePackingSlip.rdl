@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-10-23T09:59:16.6457350Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-11-05T08:50:27.7360572Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -745,10 +745,11 @@ Item</Value>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Code.BlankZero(Fields!QuantityShipped.Value)</Value>
+                                                    <Value>=Code.BlankZero(Fields!TrackingQuantity.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <Format>=Fields!TrackingQuantityFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
