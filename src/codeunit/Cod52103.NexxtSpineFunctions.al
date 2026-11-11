@@ -1742,6 +1742,7 @@ codeunit 52103 "NTS NexxtSpine Functions"
         NewReservEntry: Record "Reservation Entry";
         ItemJnlLineReserve: Codeunit "Item Jnl. Line-Reserve";
         CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ProdOrderRoutingLine: Record "Prod. Order Routing Line";
         TrackingQty: Decimal;
         QtyPerUOM: Decimal;
     begin
@@ -1754,16 +1755,19 @@ codeunit 52103 "NTS NexxtSpine Functions"
            (ItemJnlLine."Item No." = '') then
             exit;
 
-        if not ProdOrderLine.Get(
-            ProdOrderLine.Status::Released,
-            ItemJnlLine."Order No.",
-            ItemJnlLine."Order Line No.")
+        if not ProdOrderLine.Get(ProdOrderLine.Status::Released, ItemJnlLine."Order No.", ItemJnlLine."Order Line No.")
         then
             exit;
 
         if ProdOrderLine."Item No." <> ItemJnlLine."Item No." then
             exit;
-
+        ProdOrderRoutingLine.Reset();
+        ProdOrderRoutingLine.SetRange(Status, ProdOrderLine.Status::Released);
+        ProdOrderRoutingLine.SetRange("Prod. Order No.", ProdOrderLine."Prod. Order No.");
+        ProdOrderRoutingLine.SetRange("Routing Reference No.", ProdOrderLine."Routing Reference No.");
+        if ProdOrderRoutingLine.FindLast() then
+            if ProdOrderRoutingLine."Operation No." <> ItemJnlLine."Operation No." then
+                exit;
         if ItemJnlLineReserve.ReservEntryExist(ItemJnlLine) then
             exit;
 
@@ -1822,6 +1826,31 @@ codeunit 52103 "NTS NexxtSpine Functions"
                 end;
             end;
         until SourceReservEntry.Next() = 0;
+    end;
+
+    procedure UpdateLastOperationNo(var ItemJournalLine: Record "Item Journal Line")
+    var
+        ProdOrderRoutingLine: Record "Prod. Order Routing Line";
+    begin
+        if (ItemJournalLine."Entry Type" <> ItemJournalLine."Entry Type"::Output) or
+       (ItemJournalLine."Order Type" <> ItemJournalLine."Order Type"::Production) or
+       (ItemJournalLine."Order No." = '') or
+       (ItemJournalLine."Order Line No." = 0) or
+       (ItemJournalLine."Operation No." = '')
+    then
+            exit;
+
+        ItemJournalLine."NTS Is Last Operation" := false;
+
+        ProdOrderRoutingLine.Reset();
+        ProdOrderRoutingLine.SetRange(Status, ProdOrderRoutingLine.Status::Released);
+        ProdOrderRoutingLine.SetRange("Prod. Order No.", ItemJournalLine."Order No.");
+        ProdOrderRoutingLine.SetRange("Routing Reference No.", ItemJournalLine."Routing Reference No.");
+
+        if ProdOrderRoutingLine.FindLast() then begin
+            if ProdOrderRoutingLine."Operation No." = ItemJournalLine."Operation No." then
+                ItemJournalLine."NTS Is Last Operation" := true;
+        end;
     end;
 
     var
