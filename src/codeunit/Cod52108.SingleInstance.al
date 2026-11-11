@@ -47,6 +47,16 @@ codeunit 52108 "NTS Single Instance"
         Clear(AssemblyLineNo);
     end;
 
+    procedure SetHideDeleteItemTrackingConfirm(SuppressVar: Boolean)
+    begin
+        HideDeleteItemTrackingConfirm := SuppressVar;
+    end;
+
+    procedure GetHideDeleteItemTrackingConfirm(): Boolean
+    begin
+        exit(HideDeleteItemTrackingConfirm);
+    end;
+
     var
         AutoPostItemJnlGbl: Boolean;
         SetFromProdRoutingLinePage: Boolean;
@@ -54,4 +64,5 @@ codeunit 52108 "NTS Single Instance"
         AssemblyDocumentType: Enum "Assembly Document Type";
         AssemblyDocumentNo: Code[20];
         AssemblyLineNo: Integer;
+        HideDeleteItemTrackingConfirm: Boolean;
 }

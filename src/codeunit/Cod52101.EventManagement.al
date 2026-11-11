@@ -465,7 +465,8 @@ codeunit 52101 "NTS Event Management"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Reservation Management", OnBeforeCheckQuantityIsCompletelyReleased, '', false, false)]
     local procedure "Reservation Management_OnBeforeCheckQuantityIsCompletelyReleased"(ItemTrackingHandling: Option; QtyToRelease: Decimal; DeleteAll: Boolean; CurrentItemTrackingSetup: Record "Item Tracking Setup" temporary; ReservEntry: Record "Reservation Entry"; var IsHandled: Boolean)
     begin
-        IsHandled := true;
+        if NexxtSingleInstance.GetHideDeleteItemTrackingConfirm() then
+            IsHandled := true;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Prod. Order Routing Line", OnBeforeValidateEvent, "Routing Status", false, false)]
@@ -735,6 +736,23 @@ codeunit 52101 "NTS Event Management"
     begin
         NexxtSpineFunctions.UpdateLastOperationNo(Rec);
     end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Reservation Management", OnBeforeDeleteItemTrackingConfirm, '', false, false)]
+    local procedure "Reservation Management_OnBeforeDeleteItemTrackingConfirm"(var Sender: Codeunit "Reservation Management"; var CalcReservEntry2: Record "Reservation Entry"; var IsHandled: Boolean; var Result: Boolean)
+    begin
+        if NexxtSingleInstance.GetHideDeleteItemTrackingConfirm() then begin
+            IsHandled := true;
+            Result := true;
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl. Line-Reserve", OnBeforeDeleteLine, '', false, false)]
+    local procedure "Item Jnl. Line-Reserve_OnBeforeDeleteLine"(var ItemJournalLine: Record "Item Journal Line"; var DeleteItemTracking: Boolean)
+    begin
+        if NexxtSingleInstance.GetHideDeleteItemTrackingConfirm() then
+            DeleteItemTracking := true;
+    end;
+
 
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
