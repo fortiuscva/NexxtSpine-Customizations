@@ -706,17 +706,36 @@ codeunit 52101 "NTS Event Management"
             Ishandled := true;
     end;
 
-    // [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnAfterInsertEvent', '', false, false)]
-    // local procedure ItemJournalLineOnAfterInsert(var Rec: Record "Item Journal Line"; RunTrigger: Boolean)
-    // begin
-    //     if Rec."Entry Type" <> Rec."Entry Type"::Output then
-    //         exit;
+    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnAfterInsertEvent', '', false, false)]
+    local procedure ItemJournalLineOnAfterInsert(var Rec: Record "Item Journal Line"; RunTrigger: Boolean)
+    begin
+        NexxtSpineFunctions.CreateOutputTracking(Rec);
+    end;
 
-    //     if Rec."Line No." = 0 then
-    //         exit;
+    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnAfterModifyEvent', '', false, false)]
+    local procedure ItemJournalLineOnAfterModify(var Rec: Record "Item Journal Line"; var xRec: Record "Item Journal Line"; RunTrigger: Boolean)
+    begin
+        if Rec."NTS Is Last Operation" then
+            NexxtSpineFunctions.CreateOutputTracking(Rec);
+    end;
 
-    //     NexxtSpineFunctions.CreateOutputTracking(Rec);
-    // end;
+    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnBeforeInsertEvent', '', false, false)]
+    local procedure ItemJournalLineOnBeforeInsert(var Rec: Record "Item Journal Line"; RunTrigger: Boolean)
+    begin
+        NexxtSpineFunctions.UpdateLastOperationNo(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnBeforeModifyEvent', '', false, false)]
+    local procedure ItemJournalLineOnBeforeModify(var Rec: Record "Item Journal Line"; var xRec: Record "Item Journal Line"; RunTrigger: Boolean)
+    begin
+        NexxtSpineFunctions.UpdateLastOperationNo(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnAfterValidateEvent', 'Operation No.', false, false)]
+    local procedure ItemJournalLineOnAfterValidateOperationNo(var Rec: Record "Item Journal Line"; var xRec: Record "Item Journal Line"; CurrFieldNo: Integer)
+    begin
+        NexxtSpineFunctions.UpdateLastOperationNo(Rec);
+    end;
 
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
