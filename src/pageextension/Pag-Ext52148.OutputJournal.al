@@ -15,12 +15,15 @@ pageextension 52148 "NTS Output Journal" extends "Output Journal"
     {
         addlast(Processing)
         {
-            action("NTS Delete Item Tracking for Selected Lines")
+            action("NTS Update Last Operation and Delete Tracking for Selected Lines")
             {
                 ApplicationArea = Manufacturing;
-                Caption = 'Delete Item Tracking for Selected Lines';
+                Caption = 'Update Last Operation & Delete Tracking';
                 Image = Delete;
-                ToolTip = 'Delete tracking and reservation entries for the selected output journal lines.';
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                ToolTip = 'Delete tracking,reservation entries and update Last Operation No.for the selected output journal lines.';
 
                 trigger OnAction()
                 var
@@ -29,6 +32,7 @@ pageextension 52148 "NTS Output Journal" extends "Output Journal"
                     SingleInstanceCU: Codeunit "NTS Single Instance";
                     DeletedCount: Integer;
                 begin
+                    Clear(DeletedCount);
                     if not Confirm(TrackingLineDeleteConfirmMsg, false) then
                         exit;
                     CurrPage.SetSelectionFilter(ItemJnlLine);
@@ -36,10 +40,13 @@ pageextension 52148 "NTS Output Journal" extends "Output Journal"
                     if ItemJnlLine.FindSet() then
                         repeat
                             SingleInstanceCU.SetHideDeleteItemTrackingConfirm(true);
-                            ItemJnlLineReserve.DeleteLine(ItemJnlLine);
-                            DeletedCount += 1;
-                            SingleInstanceCU.SetHideDeleteItemTrackingConfirm(false);
-
+                            NexxtSpineFunctions.UpdateLastOperationNo(ItemJnlLine);
+                            ItemJnlLine.Modify(true);
+                            if not ItemJnlLine."NTS Is Last Operation" then begin
+                                ItemJnlLineReserve.DeleteLine(ItemJnlLine);
+                                SingleInstanceCU.SetHideDeleteItemTrackingConfirm(false);
+                                DeletedCount += 1;
+                            end;
                         until ItemJnlLine.Next() = 0;
                     if DeletedCount > 0 then
                         Message(StrSubstNo(TrackingLinesDeleteSuccessMsg, DeletedCount))
@@ -51,8 +58,8 @@ pageextension 52148 "NTS Output Journal" extends "Output Journal"
         }
     }
     var
-        TrackingLineDeleteConfirmMsg: Label 'Do you want to delete the tracking lines for the selected Journal Lines?';
-        TrackingLinesDeleteSuccessMsg: Label '%1 Item tracking Line(s) deleted successfully';
-        NothingToDeleteMsg: Label 'There is nothing to delete';
-
+        TrackingLineDeleteConfirmMsg: Label 'Do you want to delete item tracking and reservation entries for the selected lines and update the Last Operation No.?';
+        TrackingLinesDeleteSuccessMsg: Label '%1 Item tracking Line(s) deleted successfully and Last Operation No. updated.';
+        NothingToDeleteMsg: Label 'There is nothing to delete and the Last Operation No. was updated for the selected line(s).';
+        NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
 }
