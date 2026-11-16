@@ -284,16 +284,19 @@ report 52101 "NTS Standard Statement"
                             column(PostDate_DtldCustLedgEntries; Format("Posting Date"))
                             {
                             }
-                            column(DocNo_DtldCustLedgEntries; "Document No.")
+                            //column(DocNo_DtldCustLedgEntries; "Document No.")
+                            //{}
+                            column(DocNo_DtldCustLedgEntries; CorrectedDocumentNo)
                             {
                             }
-                            column(Description; Description)
-                            {
-                            }
+                            //column(Description; Description)
+                            //{                            }
+                            column(Description; CorrectedExternalDocumentNo)
+                            { }
                             column(PurchaseOrderNo; SalesInvoiceHeader."External Document No.")
-                            {
-
-                            }
+                            { }
+                            //column(PurchaseOrderNo; CorrectedExternalDocumentNo)
+                            //{ }
 
                             column(YourReference_DtldCustLedgEntries; YourReference)
                             {
@@ -399,6 +402,21 @@ report 52101 "NTS Standard Statement"
                                     IsNewCustCurrencyGroup := IsFirstPrintLine;
                                     IsFirstPrintLine := false;
                                     ClearCompanyPicture();
+                                end;
+                                // Default values for current records
+                                CorrectedExternalDocumentNo := ''; // PO No.
+                                CorrectedDocumentNo := "Document No."; // Invoice/Credit Memo No.
+
+                                // Get Customer Ledger Entry
+                                if CustLedgerEntry.Get("Cust. Ledger Entry No.") then begin
+                                    // Apply correction for legacy entries before 12 October 2026
+                                    if "Posting Date" < DMY2Date(12, 10, 2026) then begin
+                                        CorrectedDocumentNo := CustLedgerEntry."External Document No."; // Invoice/Credit Memo No.
+                                        CorrectedExternalDocumentNo := Description; // PO No.
+                                    end else begin
+                                        CorrectedDocumentNo := CustLedgerEntry."Document No."; // Invoice/Credit Memo No.
+                                        CorrectedExternalDocumentNo := CustLedgerEntry."External Document No."; // PO No.
+                                    end;
                                 end;
                             end;
 
@@ -1471,6 +1489,6 @@ report 52101 "NTS Standard Statement"
 
 
     var
-
+        CorrectedDocumentNo: Code[50];
+        CorrectedExternalDocumentNo: Text[100];
 }
-
