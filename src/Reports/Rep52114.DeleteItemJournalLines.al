@@ -1,8 +1,7 @@
 report 52114 "NTS Delete Item Journal Lines"
 {
     ProcessingOnly = true;
-    ApplicationArea = All;
-    UsageCategory = Tasks;
+    UsageCategory = None;
     Caption = 'Delete Item Journal Lines';
 
     dataset
