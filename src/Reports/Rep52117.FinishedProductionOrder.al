@@ -299,6 +299,29 @@ report 52117 "NTS Finished Production Order"
                     { }
                     column(Prod_Order_RoutingLine_Employee; "Prod. Order Routing Line"."SFI Employee No.")
                     { }
+                    dataitem("Capacity Ledger Entry"; "Capacity Ledger Entry")
+                    {
+                        DataItemLink = "Order No." = FIELD("Prod. Order No."), "Operation No." = field("Operation No."),
+                                        "Routing No." = field("Routing No."), "Routing Reference No." = field("Routing Reference No.");
+                        DataItemTableView = sorting("Order Type", "Order No.", "Order Line No.");
+                        column(CLE_Operation_No_; "Operation No.")
+                        { }
+                        column(Entry_No_; "Entry No.")
+                        { }
+                        column(CLE_Quantity; Quantity)
+                        { }
+                        column(CLE_No_; "No.")
+                        { }
+                        column(CLE_Description; Description)
+                        { }
+                        column(CLE_Setup_Time; "Setup Time")
+                        { }
+                        column(CLE_Scrap_Quantity; "Scrap Quantity")
+                        { }
+                        column(CLE_Run_Time; "Run Time")
+                        { }
+
+                    }
                     dataitem("Integer"; "Integer")
                     {
                         DataItemTableView = SORTING(Number) ORDER(Ascending);
