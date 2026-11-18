@@ -12,6 +12,7 @@ pageextension 52134 "NTS Item Journal" extends "Item Journal"
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedIsBig = true;
+                Visible = false;
                 trigger OnAction()
                 var
                     CreateNegativeAdj: Report "NTS Create Negative Adj.";
