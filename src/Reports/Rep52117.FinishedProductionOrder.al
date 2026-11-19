@@ -320,6 +320,8 @@ report 52117 "NTS Finished Production Order"
                         { }
                         column(CLE_Run_Time; "Run Time")
                         { }
+                        column(CLE_Output_Quantity; "Output Quantity")
+                        { }
 
                     }
                     dataitem("Integer"; "Integer")
