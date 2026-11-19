@@ -661,7 +661,7 @@ codeunit 52101 "NTS Event Management"
         IsHandled := true;
         if not SkipUpdateDescription then begin
             ProdOrderRoutingLine.Description := MachineCenter.Name;
-            ProdOrderRoutingLine."Description 2" := MachineCenter."Name 2";
+            //ProdOrderRoutingLine."Description 2" := MachineCenter."Name 2";
         end;
         ProdOrderRoutingLine."Wait Time" := MachineCenter."Wait Time";
         ProdOrderRoutingLine."Move Time" := MachineCenter."Move Time";
@@ -753,6 +753,34 @@ codeunit 52101 "NTS Event Management"
             DeleteItemTracking := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post Line", OnBeforeAllowProdApplication, '', false, false)]
+    local procedure ItemJnlPostLine_OnBeforeAllowProdApplication(OldItemLedgerEntry: Record "Item Ledger Entry"; ItemLedgerEntry: Record "Item Ledger Entry"; var AllowApplication: Boolean)
+    begin
+        if (OldItemLedgerEntry."Entry Type" <> OldItemLedgerEntry."Entry Type"::Output) or
+           (ItemLedgerEntry."Entry Type" <> ItemLedgerEntry."Entry Type"::Consumption)
+        then
+            exit;
+
+        if (OldItemLedgerEntry."Item No." <> ItemLedgerEntry."Item No.") or
+           (OldItemLedgerEntry."Order Type" <> OldItemLedgerEntry."Order Type"::Production) or
+           (ItemLedgerEntry."Order Type" <> ItemLedgerEntry."Order Type"::Production) or
+           (OldItemLedgerEntry."Order No." <> ItemLedgerEntry."Order No.") or
+           (OldItemLedgerEntry."Order Line No." <> ItemLedgerEntry."Order Line No.")
+        then
+            exit;
+
+        AllowApplication := true;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Item Application Entry", OnBeforeCheckCyclicProdCyclicalLoop, '', false, false)]
+    local procedure ItemApplicationEntry_OnBeforeCheckCyclicProdCyclicalLoop(var ItemApplicationEntry: Record "Item Application Entry"; CheckItemLedgerEntry: Record "Item Ledger Entry";
+     ItemLedgerEntry: Record "Item Ledger Entry"; var Result: Boolean; var IsHandled: Boolean)
+    begin
+        if IsCyclicProdCyclicalLoop(CheckItemLedgerEntry, ItemLedgerEntry) then begin
+            Result := false;
+            IsHandled := true;
+        end;
+    end;
 
     var
         NexxtSpineFunctions: Codeunit "NTS NexxtSpine Functions";
@@ -760,5 +788,42 @@ codeunit 52101 "NTS Event Management"
         NexxtSingleInstance: Codeunit "NTS Single Instance";
         ReservEntry: Record "Reservation Entry";
         LotInfo: Text;
+
+
+    local procedure IsItemEntryTypeEverPosted(ItemNo: Code[20]; ItemLedgerEntryType: Enum "Item Ledger Entry Type"): Boolean
+    var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+    begin
+        ItemLedgerEntry.SetCurrentKey("Item No.", "Entry Type");
+        ItemLedgerEntry.SetRange("Item No.", ItemNo);
+        ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntryType);
+
+        exit(not ItemLedgerEntry.IsEmpty());
+    end;
+
+    local procedure IsCyclicProdCyclicalLoop(CheckItemLedgerEntry: Record "Item Ledger Entry"; ItemLedgerEntry: Record "Item Ledger Entry"): Boolean
+    begin
+        if not IsItemEntryTypeEverPosted(ItemLedgerEntry."Item No.", ItemLedgerEntry."Entry Type"::Output)
+        then
+            exit(false);
+
+        if ItemLedgerEntry."Order Type" <> ItemLedgerEntry."Order Type"::Production then
+            exit(false);
+
+        if ItemLedgerEntry."Entry Type" = ItemLedgerEntry."Entry Type"::Output then
+            exit(false);
+
+        if ItemLedgerEntry.Positive then
+            exit(false);
+
+        if (CheckItemLedgerEntry."Entry Type" = CheckItemLedgerEntry."Entry Type"::Output) and
+           (ItemLedgerEntry."Order Type" = CheckItemLedgerEntry."Order Type") and
+           (ItemLedgerEntry."Order No." = CheckItemLedgerEntry."Order No.") and
+           (ItemLedgerEntry."Order Line No." = CheckItemLedgerEntry."Order Line No.")
+        then
+            exit(true);
+
+        exit(false);
+    end;
 
 }
