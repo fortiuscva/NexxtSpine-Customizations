@@ -297,7 +297,7 @@ report 52117 "NTS Finished Production Order"
                     { }
                     column(Prod_Order_RoutingLine_Date; "Prod. Order Routing Line"."Ending Date")
                     { }
-                    column(Prod_Order_RoutingLine_Employee; "Prod. Order Routing Line"."SFI Employee No.")
+                    column(Prod_Order_RoutingLine_Employee; SFIEmployeeName)
                     { }
                     dataitem("Integer"; "Integer")
                     {
@@ -426,6 +426,18 @@ report 52117 "NTS Finished Production Order"
                         recQualityMeasures.SetRange("Routing No.", "Routing No.");
                         recQualityMeasures.SetRange("Operation No.", "Operation No.");
                         if recQualityMeasures.FIND('-') then;
+                        Clear(SFIEmployeeName);
+                        // CapacityLedgerEntry.Reset();
+                        CapacityLedgerEntry.SetRange("Order Type", CapacityLedgerEntry."Order Type"::Production);
+                        CapacityLedgerEntry.SetRange("Document No.", "Prod. Order No.");
+                        CapacityLedgerEntry.SetRange("Operation No.", "Operation No.");
+                        CapacityLedgerEntry.SetRange("Routing No.", "Routing No.");
+                        CapacityLedgerEntry.SetRange("Routing Reference No.", "Routing Reference No.");
+
+                        if CapacityLedgerEntry.FIND('-') then begin
+                            CapacityLedgerEntry.CalcFields("SFI Employee No.");
+                            SFIEmployeeName := CapacityLedgerEntry."SFI Employee No.";
+                        end;
                     end;
 
                     trigger OnPreDataItem()
@@ -479,6 +491,8 @@ report 52117 "NTS Finished Production Order"
         ItemTrackingCode: Text;
         TotalPostedSetupTime: Decimal;
         ItemTrackingNo: Text;
+        CapacityLedgerEntry: Record "Capacity Ledger Entry";
+        SFIEmployeeName: Text;
 
     local procedure getShelfNo(pcodItemNo: Code[20]): Code[40]
     var
