@@ -322,6 +322,8 @@ report 52117 "NTS Finished Production Order"
                         { }
                         column(CLE_Output_Quantity; "Output Quantity")
                         { }
+                        column(CLE_SFI_Employee_No_; "SFI Shop Floor Employee No.")
+                        { }
 
                     }
                     dataitem("Integer"; "Integer")
