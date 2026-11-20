@@ -637,22 +637,20 @@ codeunit 52101 "NTS Event Management"
         DocumentNo: Code[20];
         LineNo: Integer;
         AssemblyHeader: Record "Assembly Header";
+        UserSetup: Record "User Setup";
     begin
-        if SingleInstanceCu.GetAssemblyLine(DocumentType, DocumentNo, LineNo) then begin
-            if not AssemblyHeader.Get(DocumentType, DocumentNo) then
+        CurrTrackingSpec.Copy(TrackingSpecification, true);
+        if UserSetup.Get(UserId()) then
+            if UserSetup."NTS Allow To Valid. Exp. Date" then
                 exit;
+        if CurrTrackingSpec.findset() then
+            repeat
+                if (CurrTrackingSpec."Expiration Date" < Today) and (CurrTrackingSpec."Expiration Date" <> 0D) then
+                    Error('%1 %2 should not be less than %3', CurrTrackingSpec.FieldCaption("Expiration Date"), CurrTrackingSpec."Expiration Date", Today);
+            until CurrTrackingSpec.Next() = 0;
 
-            CurrTrackingSpec.Copy(TrackingSpecification, true);
-
-            if CurrTrackingSpec.findset() then
-                repeat
-                    if (CurrTrackingSpec."Expiration Date" < Today) and (CurrTrackingSpec."Expiration Date" <> 0D) then
-                        Error('%1 %2 should not be less than %3', CurrTrackingSpec.FieldCaption("Expiration Date"), CurrTrackingSpec."Expiration Date", Today);
-                until CurrTrackingSpec.Next() = 0;
-
-            IsHandled := true;
-            Result := true;
-        end;
+        IsHandled := true;
+        Result := true;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Prod. Order Routing Line", OnMachineCtrTransferFieldsOnAfterWorkCenterTransferFields, '', false, false)]
